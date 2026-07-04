@@ -55,6 +55,9 @@ build/
 # Archives generated during export
 *.rar
 
+# Installer packages
+*.msi
+
 # Keep zip files optional:
 # If Gerber.zip needs to be versioned later, remove this rule.
 *.zip
