@@ -1,0 +1,64 @@
+# System files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+
+# Altium temporary files
+__Previews/
+History/
+Project Logs for*/
+*.PrjPcbStructure
+*.PcbDocPreview
+*.SchDocPreview
+*.DsnWrk
+*.Autosave
+*.~*
+*.bak
+*.log
+*.htm
+*.html
+
+# Altium generated temporary output
+*.REP
+*.DRR
+*.APR_LIB
+*.err
+
+# Keil temporary and build files
+*.uvguix.*
+*.uvoptx
+Listings/
+Objects/
+RTE/_Target_*/
+*.dep
+*.crf
+*.d
+*.o
+*.axf
+*.hex
+*.map
+*.lst
+*.lnp
+*.build_log.htm
+
+# STM32Cube generated temporary files
+Debug/
+Release/
+build/
+*.elf
+*.bin
+
+# Archives generated during export
+*.rar
+
+# Keep zip files optional:
+# If Gerber.zip needs to be versioned later, remove this rule.
+*.zip
+
+# Python / scripts cache
+__pycache__/
+*.pyc
