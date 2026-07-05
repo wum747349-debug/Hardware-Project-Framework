@@ -70,13 +70,7 @@ AI 应按当前任务阶段读取对应 Skill。
 
 ## 新项目初始化规则
 
-当用户要求新增硬件项目时，AI 应优先读取：
-
-1. `PROJECT_RULES.md`
-2. `AGENTS.md`
-3. `docs/08_Project_Workflow.md`
-4. `docs/Project_Template_Guide.md`
-5. `templates/hardware_project_template/`
+当用户要求新增硬件项目时，应按 `docs/AI_Context_Guide.md` 中“新增项目”任务类型读取上下文。
 
 然后在 `projects/` 下创建新的项目目录，并根据项目需求初始化：
 

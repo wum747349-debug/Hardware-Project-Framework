@@ -68,6 +68,8 @@ projects/05_Project_Name/
 
 ## 6. AI 协作建议
 
+新增项目的具体上下文读取范围以 `docs/AI_Context_Guide.md` 中“新增项目”任务类型为准。
+
 新增项目时，应让 AI 先读取：
 
 1. `PROJECT_RULES.md`
