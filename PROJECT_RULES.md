@@ -32,7 +32,16 @@
 - 任何设计修改都要记录原因和结果。
 - 不允许只保留 Altium 源文件，必须同时输出 PDF、图片、BOM、Gerber 和说明文档。
 
-## 5. 文件管理规则
+## 5. 开源项目参考规则
+
+- 开源项目只能用于参考功能结构、模块划分、接口组织、PCB 布局思路、文档组织和制造输出组织方式。
+- 禁止直接复制开源项目的原理图、PCB、BOM、Gerber、生产文件或文字说明作为本项目成果。
+- 引用开源项目时必须记录来源仓库地址、参考用途和学习点。
+- 所有关键参数必须回到 datasheet / reference manual / application note 核对。
+- 对锂电池、电源、MOSFET、ADC 输入、运放、参考电压等风险模块，必须经过对应 checklist 检查。
+- 如果未来确实需要复用开源项目中的某个具体电路片段，必须先检查 license，并在文档中记录来源、修改点和验证结果。
+
+## 6. 文件管理规则
 
 - 每个项目必须包含 `README.md`、`requirements.md`、`block_diagram.md`、`design_notes.md` 和 `references.md`。
 - Altium 工程文件统一放在 `hardware/altium_project/`。
@@ -43,21 +52,22 @@
 - 改版记录统一放在 `docs/revision_history.md`。
 - 项目截图统一放在 `hardware/images/`。
 
-## 6. AI 协作规则
+## 7. AI 协作规则
 
 AI 在协助本仓库时，应优先阅读：
 
 1. `PROJECT_RULES.md`
 2. `AGENTS.md`
 3. `docs/00_Project_Roadmap.md`
-4. 当前项目的 `requirements.md`
-5. 当前项目的 `design_notes.md`
-6. 当前项目的 `references.md`
-7. 当前项目的 `schematic_review.md` / `pcb_review.md` / `bringup_log.md`
+4. `references/open_source_hardware_projects.md`
+5. 当前项目的 `requirements.md`
+6. 当前项目的 `design_notes.md`
+7. 当前项目的 `references.md`
+8. 当前项目的 `schematic_review.md` / `pcb_review.md` / `bringup_log.md`
 
 AI 不应直接给出未经依据的硬件结论。涉及芯片连接、电源参数、充电电流、ADC 输入范围、MOSFET 驱动能力、运放供电范围、ADC 参考电压等内容时，必须提示需要核对 datasheet。
 
-## 7. 安全规则
+## 8. 安全规则
 
 - 锂电池项目必须使用限流电源首次上电。
 - 不允许无人看管充电测试。

@@ -19,8 +19,6 @@ Project Logs for*/
 *.~*
 *.bak
 *.log
-*.htm
-*.html
 
 # Altium generated temporary output
 *.REP
@@ -58,9 +56,9 @@ build/
 # Installer packages
 *.msi
 
-# Keep zip files optional:
-# If Gerber.zip needs to be versioned later, remove this rule.
-*.zip
+# Keep generated manufacturing archives versionable when they are stage outputs.
+!projects/**/hardware/outputs/gerber/*.zip
+!projects/**/hardware/outputs/fabrication_package/*.zip
 
 # Python / scripts cache
 __pycache__/

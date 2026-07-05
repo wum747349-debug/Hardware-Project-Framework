@@ -37,10 +37,18 @@
 
 - `docs/`：通用项目路线、工具链、设计规范和调试模板
 - `references/`：数据手册、应用笔记、开源项目和学习资料索引
+- `references/open_source_hardware_projects.md`：开源硬件参考项目索引，只用于记录结构、设计思路、文档组织和输出文件组织方式
 - `common/`：通用模板、复用电路和测试工具说明
 - `projects/`：三个硬件实战项目
+- `projects/*/references.md`：每个项目的官方资料、开源参考项目、需要提取的学习点和不可照抄内容
 - `checklists/`：原理图、PCB、上电、发布检查表
 - `prompts/`：用于 AI 协助硬件设计的提示词模板
+
+## 参考资料原则
+
+- 开源硬件项目只作为结构、设计思路、文档组织和输出文件组织方式参考，不直接照抄原理图、PCB、BOM、Gerber、生产文件或源工程文件。
+- 本仓库最终设计必须以 datasheet、reference manual、application note 和实际项目需求为依据。
+- 每个项目的 `references.md` 需要记录官方资料、开源参考项目、学习点和不可直接复用的内容。
 
 ## 当前优先级
 
