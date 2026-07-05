@@ -51,3 +51,44 @@
 1. `01_STM32_DAQ_Control_Board`
 2. `02_LiIon_Charger_Protection_Board`
 3. `03_STM32_OpAmp_ADC_Acquisition_Board`
+
+## Skill 调用规则
+
+AI 在处理本仓库任务时，应根据当前阶段优先读取对应 Skill。
+
+| 阶段 | 优先读取 Skill |
+|---|---|
+| datasheet 阅读 / 资料提取 | `skills/hardware-datasheet-reading/SKILL.md` |
+| 器件选型 / 替代料 / BOM 初稿 | `skills/hardware-component-selection/SKILL.md` |
+| 原理图设计检查 / 画 PCB 前审查 | `skills/hardware-schematic-review/SKILL.md` |
+
+如果一个任务涉及多个阶段，应按上游到下游顺序读取 Skill：
+
+- 选型前先读取 `hardware-datasheet-reading`，再读取 `hardware-component-selection`。
+- 原理图审查前先读取 `hardware-datasheet-reading`、`hardware-component-selection`，再读取 `hardware-schematic-review`。
+- 如果用户的问题涉及电源、锂电池、MOSFET、ADC、运放、参考电压等关键模块，必须回到 datasheet 或项目 references 核对，不要只凭经验判断。
+
+## 新项目初始化规则
+
+当用户要求新增硬件项目时，AI 应优先读取：
+
+1. `PROJECT_RULES.md`
+2. `AGENTS.md`
+3. `docs/08_Project_Workflow.md`
+4. `docs/Project_Template_Guide.md`
+5. `templates/hardware_project_template/`
+
+然后在 `projects/` 下创建新的项目目录，并根据项目需求初始化：
+
+- `README.md`
+- `requirements.md`
+- `block_diagram.md`
+- `design_notes.md`
+- `references.md`
+- `hardware/`
+- `firmware/`
+- `docs/`
+
+新增项目默认应适配低压嵌入式硬件、MCU 控制、传感器采集、电源管理、模拟前端或通信接口扩展类项目。
+
+如果新增项目涉及高压、射频、高速数字、隔离电源、汽车电子、医疗电子或安规认证，应提醒需要新增专项 Skill 和专项 checklist。

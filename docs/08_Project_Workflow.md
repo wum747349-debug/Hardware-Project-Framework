@@ -1,5 +1,26 @@
 # 项目工作流程
 
+## 阶段 Skill 对照表
+
+| 工作阶段 | 对应 Skill | 主要输出文档 |
+|---|---|---|
+| 资料收集 | `skills/hardware-datasheet-reading/SKILL.md` | `references.md` / `design_notes.md` |
+| 器件选型 | `skills/hardware-component-selection/SKILL.md` | `design_notes.md` / BOM 草稿 |
+| 原理图设计 | `skills/hardware-datasheet-reading/SKILL.md` / `skills/hardware-component-selection/SKILL.md` | `design_notes.md` |
+| 原理图审查 | `skills/hardware-schematic-review/SKILL.md` | `docs/schematic_review.md` |
+| PCB Layout | 后续可补充 `skills/hardware-pcb-layout-review/SKILL.md` | `docs/pcb_review.md` |
+| 上电调试 | 后续可补充 `skills/hardware-bringup-debug/SKILL.md` | `docs/bringup_log.md` |
+| 测试总结 | 后续可补充 `skills/hardware-test-report/SKILL.md` | `docs/test_report.md` |
+| 改版记录 | 后续可补充 `skills/hardware-revision-review/SKILL.md` | `docs/revision_history.md` |
+
+当前已配置前三个核心 Skill：
+
+1. `hardware-datasheet-reading`
+2. `hardware-component-selection`
+3. `hardware-schematic-review`
+
+后续进入 PCB、打样、焊接和调试阶段时，再补充 PCB Layout 审查、上电调试和测试报告相关 Skill。
+
 ## 1. 需求定义
 
 - 明确项目目标、输入输出接口、电源范围、尺寸约束、调试方式和第一版边界。
