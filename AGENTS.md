@@ -18,10 +18,11 @@
 
 1. `PROJECT_RULES.md`
 2. `docs/00_Project_Roadmap.md`
-3. `references/open_source_hardware_projects.md`
-4. 当前项目的 `requirements.md`
-5. 当前项目的 `design_notes.md`
-6. 当前项目的 `references.md`
+3. `docs/08_Project_Workflow.md`
+4. `references/open_source_hardware_projects.md`
+5. 当前项目的 `requirements.md`
+6. 当前项目的 `design_notes.md`
+7. 当前项目的 `references.md`
 
 回答具体设计问题前，应优先检查当前项目的 `references.md` 和 `references/open_source_hardware_projects.md`。参考开源项目时，只能提炼学习点、风险点和检查项，不要让用户直接照抄。如果用户要求“照着某个开源项目画”，应提醒需要结合本项目需求、器件 datasheet、封装、供电、接口和 PCB 工艺重新设计。
 

@@ -46,6 +46,8 @@
 - 每个项目必须包含 `README.md`、`requirements.md`、`block_diagram.md`、`design_notes.md` 和 `references.md`。
 - Altium 工程文件统一放在 `hardware/altium_project/`。
 - Gerber、BOM、PDF、贴片坐标等输出文件统一放在 `hardware/outputs/`。
+- `hardware/outputs/gerber/*.zip` 和 `hardware/outputs/fabrication_package/*.zip` 可以作为制造阶段成果提交。
+- Altium 生成的 DRC/ERC 报告、BOM、iBOM、HTML/PDF 报告如属于阶段成果，可以保留。
 - 固件工程统一放在 `firmware/`。
 - 调试记录统一放在 `docs/bringup_log.md`。
 - 测试报告统一放在 `docs/test_report.md`。
@@ -59,11 +61,12 @@ AI 在协助本仓库时，应优先阅读：
 1. `PROJECT_RULES.md`
 2. `AGENTS.md`
 3. `docs/00_Project_Roadmap.md`
-4. `references/open_source_hardware_projects.md`
-5. 当前项目的 `requirements.md`
-6. 当前项目的 `design_notes.md`
-7. 当前项目的 `references.md`
-8. 当前项目的 `schematic_review.md` / `pcb_review.md` / `bringup_log.md`
+4. `docs/08_Project_Workflow.md`
+5. `references/open_source_hardware_projects.md`
+6. 当前项目的 `requirements.md`
+7. 当前项目的 `design_notes.md`
+8. 当前项目的 `references.md`
+9. 当前项目的 `schematic_review.md` / `pcb_review.md` / `bringup_log.md`
 
 AI 不应直接给出未经依据的硬件结论。涉及芯片连接、电源参数、充电电流、ADC 输入范围、MOSFET 驱动能力、运放供电范围、ADC 参考电压等内容时，必须提示需要核对 datasheet。
 
