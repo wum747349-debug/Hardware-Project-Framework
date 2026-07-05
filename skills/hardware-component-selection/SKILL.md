@@ -18,18 +18,23 @@
 
 如果新增项目涉及高压、射频、高速数字、隔离电源、汽车电子、医疗电子或安规认证，需要在本 Skill 基础上增加专项检查项。
 
-## 使用前必须读取
+## 最小读取上下文
 
-在进行器件选型前，AI 应优先读取：
+进行器件选型前，AI 默认读取：
 
 1. `PROJECT_RULES.md`
 2. `AGENTS.md`
-3. `docs/00_Project_Roadmap.md`
-4. `docs/08_Project_Workflow.md`
-5. `skills/hardware-datasheet-reading/SKILL.md`
-6. 当前项目的 `requirements.md`
-7. 当前项目的 `design_notes.md`
-8. 当前项目的 `references.md`
+3. `docs/AI_Context_Guide.md`
+4. `skills/hardware-component-selection/SKILL.md`
+5. 当前项目的 `requirements.md`
+6. 当前项目的 `design_notes.md`
+7. 当前项目的 `references.md`
+
+按需读取：
+
+- `skills/hardware-datasheet-reading/SKILL.md`，仅在需要重新提取或核对 datasheet 关键参数时读取
+- 相关 checklist
+- BOM 草稿
 
 ## 选型原则
 

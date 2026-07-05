@@ -18,16 +18,21 @@
 
 如果新增项目涉及高压、射频、高速数字、隔离电源、汽车电子、医疗电子或安规认证，需要在本 Skill 基础上增加专项检查项。
 
-## 使用前必须读取
+## 最小读取上下文
 
-在使用本 Skill 前，AI 应优先读取：
+使用本 Skill 前，AI 默认读取：
 
 1. `PROJECT_RULES.md`
 2. `AGENTS.md`
-3. `docs/08_Project_Workflow.md`
+3. `docs/AI_Context_Guide.md`
 4. 当前项目的 `requirements.md`
-5. 当前项目的 `design_notes.md`
-6. 当前项目的 `references.md`
+5. 当前项目的 `references.md`
+
+按需读取：
+
+- 当前项目的 `design_notes.md`
+- `docs/08_Project_Workflow.md`
+- 相关 checklist
 
 如果当前项目文件尚未创建，应先提醒补充项目需求，再进行初步资料整理。
 

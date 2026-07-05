@@ -56,17 +56,13 @@
 
 ## 7. AI 协作规则
 
-AI 在协助本仓库时，应优先阅读：
+AI 在协助本仓库时，应遵循最小必要上下文策略，先识别当前任务所属项目和阶段，再按 `docs/AI_Context_Guide.md` 读取必要文件。
 
-1. `PROJECT_RULES.md`
-2. `AGENTS.md`
-3. `docs/00_Project_Roadmap.md`
-4. `docs/08_Project_Workflow.md`
-5. `references/open_source_hardware_projects.md`
-6. 当前项目的 `requirements.md`
-7. 当前项目的 `design_notes.md`
-8. 当前项目的 `references.md`
-9. 当前项目的 `schematic_review.md` / `pcb_review.md` / `bringup_log.md`
+- 默认不读取所有项目目录、所有 Skill、所有模板和所有历史记录。
+- 当前任务只涉及一个项目时，只读取当前项目目录下的相关文件。
+- 当前任务只涉及一个阶段时，只读取当前阶段对应 Skill。
+- `templates/` 仅在新增项目或维护模板时读取。
+- `references/open_source_hardware_projects.md` 仅在涉及开源参考、结构借鉴或用户明确要求时读取。
 
 AI 不应直接给出未经依据的硬件结论。涉及芯片连接、电源参数、充电电流、ADC 输入范围、MOSFET 驱动能力、运放供电范围、ADC 参考电压等内容时，必须提示需要核对 datasheet。
 

@@ -4,7 +4,7 @@
 
 本仓库不仅用于当前三个硬件实战项目，也可作为后续低压嵌入式硬件项目的模板工作区。
 
-## 项目列表
+## 当前项目列表
 
 1. STM32 数据采集/控制开发板
 2. 单节锂电池充电与保护电源板
@@ -39,12 +39,13 @@
 
 - `docs/`：通用项目路线、工具链、设计规范和调试模板
 - `docs/08_Project_Workflow.md`：硬件项目标准执行流程，覆盖需求、设计、审查、制造、调试、测试和简历整理
+- `docs/AI_Context_Guide.md`：AI 协作上下文读取规则，用于限制不同任务下应读取的项目文件、Skill、模板和历史记录
 - `references/`：数据手册、应用笔记、开源项目和学习资料索引
 - `references/open_source_hardware_projects.md`：开源硬件参考项目索引，只用于记录结构、设计思路、文档组织和输出文件组织方式
 - `common/`：通用模板、复用电路和测试工具说明
-- `projects/`：三个硬件实战项目
+- `projects/`：当前硬件实战项目及后续新增项目
 - `projects/*/references.md`：每个项目的官方资料、开源参考项目、需要提取的学习点和不可照抄内容
-- `skills/`：硬件项目阶段 Skill，用于 datasheet 阅读、器件选型和原理图审查等 AI 协作流程
+- `skills/`：硬件项目阶段 Skill，只保存阶段方法、输入输出格式和关键风险提醒；细化检查项优先放入 `checklists/`
 - `templates/`：可复用硬件项目模板，后续新增项目时可复制使用
 - `docs/Project_Template_Guide.md`：硬件项目模板使用说明和新增项目流程
 - `checklists/`：原理图、PCB、上电、发布检查表

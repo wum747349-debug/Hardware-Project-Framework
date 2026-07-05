@@ -18,20 +18,25 @@
 
 如果新增项目涉及高压、射频、高速数字、隔离电源、汽车电子、医疗电子或安规认证，需要在本 Skill 基础上增加专项检查项。
 
-## 使用前必须读取
+## 最小读取上下文
 
-在原理图审查前，AI 应优先读取：
+进行原理图审查前，AI 默认读取：
 
 1. `PROJECT_RULES.md`
 2. `AGENTS.md`
-3. `docs/00_Project_Roadmap.md`
-4. `docs/08_Project_Workflow.md`
-5. `skills/hardware-datasheet-reading/SKILL.md`
-6. `skills/hardware-component-selection/SKILL.md`
-7. 当前项目的 `requirements.md`
-8. 当前项目的 `design_notes.md`
-9. 当前项目的 `references.md`
-10. 当前项目已有的 `docs/schematic_review.md`
+3. `docs/AI_Context_Guide.md`
+4. `skills/hardware-schematic-review/SKILL.md`
+5. 当前项目的 `requirements.md`
+6. 当前项目的 `design_notes.md`
+7. 当前项目的 `references.md`
+8. 当前项目的原理图文件或原理图导出 PDF / 图片
+
+按需读取：
+
+- `skills/hardware-datasheet-reading/SKILL.md`，仅在需要核对关键器件参数时读取
+- `skills/hardware-component-selection/SKILL.md`，仅在需要追溯选型依据时读取
+- 当前项目已有的 `docs/schematic_review.md`，仅在继续审查或追踪历史问题时读取
+- 相关 checklist
 
 如果当前项目没有 `docs/schematic_review.md`，应在审查完成后创建。
 
