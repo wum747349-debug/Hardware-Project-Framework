@@ -24,25 +24,25 @@
 
 复制下面任一提示词前，建议先替换这些字段：
 
-| 字段 | 替换为 |
-|---|---|
-| 当前项目 | 本次任务对应的 `projects/...` 路径 |
-| 当前阶段 | 需求整理 / datasheet 阅读 / 器件选型 / 原理图设计 / 原理图审查 / PCB Layout / PCB 审查 / 上电调试 / 测试报告 / 文档整理 |
-| 目标器件 | 本次要阅读、选型或审查的具体器件型号 |
-| 输入资料 | 原理图 PDF、PCB 截图、datasheet 链接、测试记录或用户补充说明 |
-| 修改范围 | 本次允许 AI 修改的文件或目录 |
-| 禁止范围 | 其他项目目录、`templates/`、Altium 工程、firmware 或硬件输出文件等 |
-| 完成后输出 | 是否需要提交；如提交则输出 commit hash，如不修改仓库文件则说明未修改 |
+| 字段    | 替换为                                                                                   |
+| ----- | ------------------------------------------------------------------------------------- |
+| 当前项目  | 本次任务对应的 `projects/...` 路径                                                             |
+| 当前阶段  | 需求整理 / datasheet 阅读 / 器件选型 / 原理图设计 / 原理图审查 / PCB Layout / PCB 审查 / 上电调试 / 测试报告 / 文档整理 |
+| 目标器件  | 本次要阅读、选型或审查的具体器件型号                                                                    |
+| 输入资料  | 原理图 PDF、PCB 截图、datasheet 链接、测试记录或用户补充说明                                               |
+| 修改范围  | 本次允许 AI 修改的文件或目录                                                                      |
+| 禁止范围  | 其他项目目录、`templates/`、Altium 工程、firmware 或硬件输出文件等                                       |
+| 完成后输出 | 是否需要提交；如提交则输出 commit hash，如不修改仓库文件则说明未修改                                              |
 
 ---
 
 ## 2. 当前项目路径速查表
 
-| 项目 | 路径 | 优先关注 |
-|---|---|---|
-| STM32 数据采集/控制开发板 | `projects/01_STM32_DAQ_Control_Board` | MCU 最小系统、USB-C 供电、3.3V 电源、ADC 输入保护、MOSFET 低边驱动、通信接口和测试点 |
-| 单节锂电池充电与保护板 | `projects/02_LiIon_Charger_Protection_Board` | 充电管理、保护路径、电池接口、输入输出保护、热风险、安全测试和限流上电 |
-| STM32 + 运放 + ADC 模拟采集板 | `projects/03_STM32_OpAmp_ADC_Acquisition_Board` | 模拟前端、运放供电范围、ADC 输入范围、参考电压、输入保护、噪声和布局隔离 |
+| 项目                     | 路径                                              | 优先关注                                                    |
+| ---------------------- | ----------------------------------------------- | ------------------------------------------------------- |
+| STM32 数据采集/控制开发板       | `projects/01_STM32_DAQ_Control_Board`           | MCU 最小系统、USB-C 供电、3.3V 电源、ADC 输入保护、MOSFET 低边驱动、通信接口和测试点 |
+| 单节锂电池充电与保护板            | `projects/02_LiIon_Charger_Protection_Board`    | 充电管理、保护路径、电池接口、输入输出保护、热风险、安全测试和限流上电                     |
+| STM32 + 运放 + ADC 模拟采集板 | `projects/03_STM32_OpAmp_ADC_Acquisition_Board` | 模拟前端、运放供电范围、ADC 输入范围、参考电压、输入保护、噪声和布局隔离                  |
 
 提示：
 
@@ -368,8 +368,11 @@ projects/02_LiIon_Charger_Protection_Board
 8. 如本阶段需要，再读取该项目的 block_diagram.md 或 docs/ 下对应记录
 
 任务：
-1. 围绕单节锂电池充电与保护板，审查当前阶段是否具备进入下一步的依据。
-2. 重点关注：
+1. 需求审查：确认电池类型、使用场景、输入接口、输出接口、状态指示、测试点、安全边界和第一版不做的功能是否已经写清楚。
+2. 充电 / 保护芯片 datasheet 提取：围绕充电管理芯片、保护芯片、MOSFET、连接器和保护器件，提取推荐工作条件、典型应用、外围器件要求、热设计注意事项、封装和 PCB Layout 注意事项。
+3. 原理图审查：检查输入路径、充电路径、电池路径、保护路径、状态指示、测试点、连接器极性、封装和可调试性。
+4. 上电调试安全检查：整理限流电源、短路检查、极性检查、输入电压/电流记录、芯片温升观察、有人看管充电测试和异常断电条件。
+5. 重点关注：
    - 输入接口和电源路径；
    - 充电管理芯片资料；
    - 电池保护芯片资料；
@@ -378,9 +381,9 @@ projects/02_LiIon_Charger_Protection_Board
    - 热风险；
    - 测试点；
    - 限流上电和有人看管测试流程。
-3. 只记录已由 datasheet / application note 支撑的结论。
-4. 对充电电流、保护阈值、热设计、MOSFET 参数等关键内容，标注资料来源或待核对项。
-5. 根据当前阶段更新 requirements.md、design_notes.md、references.md 或对应 docs 记录。
+6. 只记录已由 datasheet / reference manual / application note 支撑的结论。
+7. 对充电电流、保护阈值、热设计、MOSFET 参数等关键内容，标注资料来源或待核对项。
+8. 根据当前阶段更新 requirements.md、design_notes.md、references.md 或对应 docs 记录。
 
 注意：
 - 不要直接照抄开源锂电池项目电路或 BOM。
@@ -392,7 +395,7 @@ projects/02_LiIon_Charger_Protection_Board
 1. 当前结论；
 2. 已确认依据；
 3. 高风险项；
-4. 待核对 datasheet / application note 项目；
+4. 待核对 datasheet / reference manual / application note 项目；
 5. 已修改文件；
 6. 如果本次有文件修改并提交，则输出 commit hash；如果只是审查或分析，则说明未修改仓库文件。
 ```
@@ -426,8 +429,11 @@ projects/03_STM32_OpAmp_ADC_Acquisition_Board
 8. 如本阶段需要，再读取该项目的 block_diagram.md 或 docs/ 下对应记录
 
 任务：
-1. 围绕 STM32 + 运放 + ADC 模拟信号采集板，审查当前阶段是否具备进入下一步的依据。
-2. 重点关注：
+1. 需求审查：确认模拟输入类型、输入范围、采样目标、精度目标、供电方式、接口方式、测试点和第一版边界是否已经写清楚。
+2. datasheet / reference manual 提取：围绕 STM32、运放、ADC、参考电压、输入保护和连接器，提取推荐工作条件、输入输出范围、接口时序、参考电压要求、典型应用和 PCB Layout 注意事项。
+3. 信号链检查：梳理输入保护、限流、滤波、缓冲/放大、ADC 输入、参考电压、MCU 接口和测试点之间的连接关系。
+4. 原理图审查：检查模拟输入范围、运放供电范围、输入共模范围、输出摆幅、ADC 输入范围、ADC 参考电压、输入保护、接口电平和噪声隔离。
+5. 重点关注：
    - 输入信号范围和保护；
    - 运放供电范围、输入共模范围和输出摆幅；
    - ADC 输入范围、采样接口和参考电压；
@@ -435,9 +441,9 @@ projects/03_STM32_OpAmp_ADC_Acquisition_Board
    - 模拟地、数字地、参考电压和噪声隔离；
    - 测试点和校准记录；
    - PCB Layout 前的模拟/数字区域规划。
-3. 只记录已由 datasheet / reference manual / application note 支撑的结论。
-4. 对运放输入输出范围、ADC 满量程、参考电压精度、滤波参数和保护参数等关键内容，标注资料来源或待核对项。
-5. 根据当前阶段更新 requirements.md、design_notes.md、references.md 或对应 docs 记录。
+6. 只记录已由 datasheet / reference manual / application note 支撑的结论。
+7. 对运放输入输出范围、ADC 满量程、参考电压精度、滤波参数和保护参数等关键内容，标注资料来源或待核对项。
+8. 根据当前阶段更新 requirements.md、design_notes.md、references.md 或对应 docs 记录。
 
 注意：
 - 不要在没有 datasheet 依据时确定运放、ADC、参考电压或输入保护的关键参数。
