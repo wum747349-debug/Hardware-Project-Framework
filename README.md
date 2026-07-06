@@ -49,7 +49,7 @@
 - `templates/`：可复用硬件项目模板，后续新增项目时可复制使用
 - `docs/Project_Template_Guide.md`：硬件项目模板使用说明和新增项目流程
 - `checklists/`：原理图、PCB、上电、发布检查表
-- `prompts/`：用于 AI 协助硬件设计的提示词模板
+- `prompts/`：面向用户的 AI 协作说明、硬件项目流程总结和可复制的 AI 任务提示词模板
 
 ## 参考资料原则
 

@@ -6,21 +6,56 @@
 使用原则：
 
 - 每次任务先说明“当前项目”和“当前阶段”。
-    
+
 - 默认要求 AI 按 `docs/AI_Context_Guide.md` 读取最小必要上下文。
-    
+
 - 不要让 AI 默认读取所有项目目录、所有 Skill、所有模板和所有历史记录。
-    
+
 - 不要让 AI 直接修改无关项目。
-    
+
 - 涉及关键硬件参数时，必须回到 datasheet、reference manual 或 application note 核对。
-    
-- 每次修改后要求 AI 输出：修改文件、修改原因、风险点、下一步建议和 commit hash。
-    
+
+- 如果本次有文件修改并提交，要求 AI 输出修改文件、修改原因、风险点、下一步建议和 commit hash；如果只是审查或分析，则说明未修改仓库文件。
+
 
 ---
 
-## 1. 通用任务开头模板
+## 1. 使用前需要替换的字段
+
+复制下面任一提示词前，建议先替换这些字段：
+
+| 字段 | 替换为 |
+|---|---|
+| 当前项目 | 本次任务对应的 `projects/...` 路径 |
+| 当前阶段 | 需求整理 / datasheet 阅读 / 器件选型 / 原理图设计 / 原理图审查 / PCB Layout / PCB 审查 / 上电调试 / 测试报告 / 文档整理 |
+| 目标器件 | 本次要阅读、选型或审查的具体器件型号 |
+| 输入资料 | 原理图 PDF、PCB 截图、datasheet 链接、测试记录或用户补充说明 |
+| 修改范围 | 本次允许 AI 修改的文件或目录 |
+| 禁止范围 | 其他项目目录、`templates/`、Altium 工程、firmware 或硬件输出文件等 |
+| 完成后输出 | 是否需要提交；如提交则输出 commit hash，如不修改仓库文件则说明未修改 |
+
+---
+
+## 2. 当前项目路径速查表
+
+| 项目 | 路径 | 优先关注 |
+|---|---|---|
+| STM32 数据采集/控制开发板 | `projects/01_STM32_DAQ_Control_Board` | MCU 最小系统、USB-C 供电、3.3V 电源、ADC 输入保护、MOSFET 低边驱动、通信接口和测试点 |
+| 单节锂电池充电与保护板 | `projects/02_LiIon_Charger_Protection_Board` | 充电管理、保护路径、电池接口、输入输出保护、热风险、安全测试和限流上电 |
+| STM32 + 运放 + ADC 模拟采集板 | `projects/03_STM32_OpAmp_ADC_Acquisition_Board` | 模拟前端、运放供电范围、ADC 输入范围、参考电压、输入保护、噪声和布局隔离 |
+
+提示：
+
+- 当前任务只涉及一个项目时，只读取该项目目录下与任务相关的文件。
+
+- 不要因为仓库有三个项目，就默认读取全部项目目录。
+
+- `templates/` 只在新增项目或维护模板时读取。
+
+
+---
+
+## 3. 通用任务开头模板
 
 适用于所有任务。每次给 Codex / Claude 发任务时，建议先加这一段。
 
@@ -45,12 +80,12 @@ projects/01_STM32_DAQ_Control_Board
 3. 不要默认读取所有 Skill，只读取当前阶段需要的 Skill。
 4. 不要修改与本任务无关的文件。
 5. 涉及关键硬件参数时，必须提示需要核对 datasheet / reference manual / application note。
-6. 修改完成后，请输出修改文件、主要修改点、风险点、下一步建议和 commit hash。
+6. 如果本次有文件修改并提交，请输出修改文件、主要修改点、风险点、下一步建议和 commit hash；如果只是审查或分析，请说明未修改仓库文件。
 ```
 
 ---
 
-## 2. 新聊天接手仓库 / 刷新上下文提示词
+## 4. 新聊天接手仓库 / 刷新上下文提示词
 
 适用于新开 Codex / Claude 会话，或你刚刚 push 了仓库，需要 AI 重新认识当前仓库规则。
 
@@ -82,7 +117,7 @@ wum747349-debug/Hardware-Practice-Projects
 
 ---
 
-## 3. 当前项目需求细化提示词
+## 5. 当前项目需求细化提示词
 
 适用于项目刚开始，还没有进入 datasheet 阅读和器件选型前。
 
@@ -127,12 +162,12 @@ projects/01_STM32_DAQ_Control_Board
 2. 需求中已经明确的内容；
 3. 仍然待确认的问题；
 4. 是否可以进入 datasheet 阅读和器件选型阶段；
-5. commit hash。
+5. 如果本次有文件修改并提交，则输出 commit hash；如果只是审查或分析，则说明未修改仓库文件。
 ```
 
 ---
 
-## 4. MCU 初步选型提示词
+## 6. MCU 初步选型提示词
 
 适用于在 STM32F103C8T6、STM32G030/G031、STM32G431 等候选型号之间做第一版选择。
 
@@ -183,12 +218,12 @@ MCU 初步选型
 3. 不推荐或暂缓使用的型号及原因；
 4. 已修改文件；
 5. 下一步 datasheet 阅读任务建议；
-6. commit hash。
+6. 如果本次有文件修改并提交，则输出 commit hash；如果只是审查或分析，则说明未修改仓库文件。
 ```
 
 ---
 
-## 5. Datasheet 阅读 / 官方资料提取提示词
+## 7. Datasheet 阅读 / 官方资料提取提示词
 
 适用于确定某个关键器件后，提取 datasheet 关键参数。
 
@@ -240,12 +275,12 @@ datasheet 阅读 / 官方资料提取
 3. 当前项目适配性；
 4. 风险与待确认项；
 5. 已修改文件；
-6. commit hash。
+6. 如果本次有文件修改并提交，则输出 commit hash；如果只是审查或分析，则说明未修改仓库文件。
 ```
 
 ---
 
-## 6. 器件选型 / BOM 初稿提示词
+## 8. 器件选型 / BOM 初稿提示词
 
 适用于确定 MCU、电源、MOSFET、接口、保护器件等关键器件。
 
@@ -301,12 +336,127 @@ projects/01_STM32_DAQ_Control_Board
 3. 选型风险；
 4. 待核对 datasheet 项目；
 5. 已修改文件；
-6. commit hash。
+6. 如果本次有文件修改并提交，则输出 commit hash；如果只是审查或分析，则说明未修改仓库文件。
 ```
 
 ---
 
-## 7. 原理图绘制前准备提示词
+## 9. 单节锂电池充电与保护板专用提示词
+
+适用于推进第二个项目的需求细化、资料提取、器件选型或原理图设计前检查。
+
+```text
+当前项目：
+projects/02_LiIon_Charger_Protection_Board
+
+当前阶段：
+【在这里填写：需求整理 / datasheet 阅读 / 器件选型 / 原理图设计准备 / 原理图审查 / PCB Layout 前检查 / 上电调试 / 测试报告】
+
+请按 docs/AI_Context_Guide.md 读取最小必要上下文，不要读取其他项目目录，不要读取 templates/。
+
+请读取：
+1. PROJECT_RULES.md
+2. AGENTS.md
+3. docs/AI_Context_Guide.md
+4. 当前阶段对应的 Skill：
+   - datasheet 阅读：skills/hardware-datasheet-reading/SKILL.md
+   - 器件选型 / BOM 初稿：skills/hardware-component-selection/SKILL.md
+   - 原理图审查：skills/hardware-schematic-review/SKILL.md
+5. projects/02_LiIon_Charger_Protection_Board/requirements.md
+6. projects/02_LiIon_Charger_Protection_Board/design_notes.md
+7. projects/02_LiIon_Charger_Protection_Board/references.md
+8. 如本阶段需要，再读取该项目的 block_diagram.md 或 docs/ 下对应记录
+
+任务：
+1. 围绕单节锂电池充电与保护板，审查当前阶段是否具备进入下一步的依据。
+2. 重点关注：
+   - 输入接口和电源路径；
+   - 充电管理芯片资料；
+   - 电池保护芯片资料；
+   - 电池连接器和极性；
+   - MOSFET、保险/保护器件和状态指示；
+   - 热风险；
+   - 测试点；
+   - 限流上电和有人看管测试流程。
+3. 只记录已由 datasheet / application note 支撑的结论。
+4. 对充电电流、保护阈值、热设计、MOSFET 参数等关键内容，标注资料来源或待核对项。
+5. 根据当前阶段更新 requirements.md、design_notes.md、references.md 或对应 docs 记录。
+
+注意：
+- 不要直接照抄开源锂电池项目电路或 BOM。
+- 不要在没有 datasheet 依据时确定充电电流、保护阈值、热设计或 MOSFET 选型结论。
+- 不要修改其他项目目录。
+- 不要读取 templates/。
+
+完成后请输出：
+1. 当前结论；
+2. 已确认依据；
+3. 高风险项；
+4. 待核对 datasheet / application note 项目；
+5. 已修改文件；
+6. 如果本次有文件修改并提交，则输出 commit hash；如果只是审查或分析，则说明未修改仓库文件。
+```
+
+---
+
+## 10. STM32 + 运放 + ADC 模拟信号采集板专用提示词
+
+适用于推进第三个项目的需求细化、资料提取、器件选型、原理图设计前检查或原理图审查。
+
+```text
+当前项目：
+projects/03_STM32_OpAmp_ADC_Acquisition_Board
+
+当前阶段：
+【在这里填写：需求整理 / datasheet 阅读 / 器件选型 / 原理图设计准备 / 原理图审查 / PCB Layout 前检查 / 上电调试 / 测试报告】
+
+请按 docs/AI_Context_Guide.md 读取最小必要上下文，不要读取其他项目目录，不要读取 templates/。
+
+请读取：
+1. PROJECT_RULES.md
+2. AGENTS.md
+3. docs/AI_Context_Guide.md
+4. 当前阶段对应的 Skill：
+   - datasheet 阅读：skills/hardware-datasheet-reading/SKILL.md
+   - 器件选型 / BOM 初稿：skills/hardware-component-selection/SKILL.md
+   - 原理图审查：skills/hardware-schematic-review/SKILL.md
+5. projects/03_STM32_OpAmp_ADC_Acquisition_Board/requirements.md
+6. projects/03_STM32_OpAmp_ADC_Acquisition_Board/design_notes.md
+7. projects/03_STM32_OpAmp_ADC_Acquisition_Board/references.md
+8. 如本阶段需要，再读取该项目的 block_diagram.md 或 docs/ 下对应记录
+
+任务：
+1. 围绕 STM32 + 运放 + ADC 模拟信号采集板，审查当前阶段是否具备进入下一步的依据。
+2. 重点关注：
+   - 输入信号范围和保护；
+   - 运放供电范围、输入共模范围和输出摆幅；
+   - ADC 输入范围、采样接口和参考电压；
+   - STM32 与 ADC 的接口电平和通信方式；
+   - 模拟地、数字地、参考电压和噪声隔离；
+   - 测试点和校准记录；
+   - PCB Layout 前的模拟/数字区域规划。
+3. 只记录已由 datasheet / reference manual / application note 支撑的结论。
+4. 对运放输入输出范围、ADC 满量程、参考电压精度、滤波参数和保护参数等关键内容，标注资料来源或待核对项。
+5. 根据当前阶段更新 requirements.md、design_notes.md、references.md 或对应 docs 记录。
+
+注意：
+- 不要在没有 datasheet 依据时确定运放、ADC、参考电压或输入保护的关键参数。
+- 不要忽略输入保护、限流、参考电压稳定性、模拟噪声和 PCB 回流路径。
+- 不要修改其他项目目录。
+- 不要读取 templates/。
+
+完成后请输出：
+1. 当前结论；
+2. 已确认依据；
+3. 信号链风险点；
+4. 待核对 datasheet / reference manual / application note 项目；
+5. 已修改文件；
+6. 如果本次有文件修改并提交，则输出 commit hash；如果只是审查或分析，则说明未修改仓库文件。
+```
+
+---
+
+## 11. 原理图绘制前准备提示词
 
 适用于正式打开 Altium 画原理图前，先规划模块、网络名和页面结构。
 
@@ -358,12 +508,12 @@ projects/01_STM32_DAQ_Control_Board
 3. 网络命名建议；
 4. 测试点建议；
 5. 已修改文件；
-6. commit hash。
+6. 如果本次有文件修改并提交，则输出 commit hash；如果只是审查或分析，则说明未修改仓库文件。
 ```
 
 ---
 
-## 8. 原理图审查提示词
+## 12. 原理图审查提示词
 
 适用于你已经在 Altium 中画出原理图，导出 PDF 或截图后，让 AI 审查。
 
@@ -426,12 +576,12 @@ projects/01_STM32_DAQ_Control_Board
 5. 建议增加的测试点；
 6. 是否可以进入 PCB Layout；
 7. 已修改文件；
-8. commit hash。
+8. 如果本次有文件修改并提交，则输出 commit hash；如果只是审查或分析，则说明未修改仓库文件。
 ```
 
 ---
 
-## 9. PCB Layout 前检查提示词
+## 13. PCB Layout 前检查提示词
 
 适用于原理图审查通过后，进入 PCB Layout 前做布局规划。
 
@@ -482,12 +632,12 @@ PCB Layout 前检查
 3. 风险点；
 4. 需要在 PCB 审查阶段重点检查的项目；
 5. 已修改文件；
-6. commit hash。
+6. 如果本次有文件修改并提交，则输出 commit hash；如果只是审查或分析，则说明未修改仓库文件。
 ```
 
 ---
 
-## 10. PCB 审查提示词
+## 14. PCB 审查提示词
 
 适用于 PCB Layout 初版完成后，让 AI 根据截图、PDF 或导出文件审查。
 
@@ -539,12 +689,12 @@ PCB 审查
 4. 建议修改；
 5. 是否可以输出 Gerber；
 6. 已修改文件；
-7. commit hash。
+7. 如果本次有文件修改并提交，则输出 commit hash；如果只是审查或分析，则说明未修改仓库文件。
 ```
 
 ---
 
-## 11. 制造文件输出检查提示词
+## 15. 制造文件输出检查提示词
 
 适用于准备打样前，检查输出文件是否完整。
 
@@ -590,12 +740,12 @@ projects/01_STM32_DAQ_Control_Board
 3. 下单前必须确认的问题；
 4. 是否可以打样；
 5. 已修改文件；
-6. commit hash。
+6. 如果本次有文件修改并提交，则输出 commit hash；如果只是审查或分析，则说明未修改仓库文件。
 ```
 
 ---
 
-## 12. 上电调试提示词
+## 16. 上电调试提示词
 
 适用于板子焊接完成后，记录首次上电和功能验证。
 
@@ -650,12 +800,12 @@ projects/01_STM32_DAQ_Control_Board
 3. 已记录的测试结果；
 4. 异常问题清单；
 5. 下一步测试建议；
-6. commit hash。
+6. 如果本次有文件修改并提交，则输出 commit hash；如果只是审查或分析，则说明未修改仓库文件。
 ```
 
 ---
 
-## 13. 测试报告提示词
+## 17. 测试报告提示词
 
 适用于功能测试完成后整理测试报告。
 
@@ -698,12 +848,12 @@ projects/01_STM32_DAQ_Control_Board
 3. 未通过或未测试项目；
 4. 风险点；
 5. 已修改文件；
-6. commit hash。
+6. 如果本次有文件修改并提交，则输出 commit hash；如果只是审查或分析，则说明未修改仓库文件。
 ```
 
 ---
 
-## 14. 改版记录提示词
+## 18. 改版记录提示词
 
 适用于发现硬件问题后，整理 V1.1 / V2 修改依据。
 
@@ -747,12 +897,12 @@ projects/01_STM32_DAQ_Control_Board
 3. 建议优化项；
 4. 下一版设计重点；
 5. 已修改文件；
-6. commit hash。
+6. 如果本次有文件修改并提交，则输出 commit hash；如果只是审查或分析，则说明未修改仓库文件。
 ```
 
 ---
 
-## 15. 简历项目整理提示词
+## 19. 简历项目整理提示词
 
 适用于项目完成一个闭环后，整理成简历项目描述。
 
@@ -791,12 +941,12 @@ projects/01_STM32_DAQ_Control_Board
 3. 可量化成果占位；
 4. 仍需补充的实测数据；
 5. 已修改文件；
-6. commit hash。
+6. 如果本次有文件修改并提交，则输出 commit hash；如果只是审查或分析，则说明未修改仓库文件。
 ```
 
 ---
 
-## 16. 通用审查 Codex / Claude 执行结果提示词
+## 20. 通用审查 Codex / Claude 执行结果提示词
 
 适用于 Codex / Claude 做完任务后，把它的结果发给另一个 AI 审查。
 
