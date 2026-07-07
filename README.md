@@ -38,8 +38,8 @@
 ## 仓库结构
 
 - `docs/`：通用项目路线、工具链、设计规范和调试模板
-- `docs/08_Project_Workflow.md`：硬件项目标准执行流程，覆盖需求、设计、审查、制造、调试、测试和简历整理
-- `docs/AI_Context_Guide.md`：AI 协作上下文读取规则，用于限制不同任务下应读取的项目文件、Skill、模板和历史记录
+- `docs/08_Project_Workflow.md`：仓库标准执行流程和 AI/Codex 阶段边界规则，用于判断各阶段输入输出、是否需要 datasheet、是否允许生成 BOM 或画原理图
+- `docs/AI_Context_Guide.md`：AI 最小必要上下文读取规则，用于限制不同任务下应读取的项目文件、Skill、流程文档、模板和历史记录
 - `references/`：数据手册、应用笔记、开源项目和学习资料索引
 - `references/open_source_hardware_projects.md`：开源硬件参考项目索引，只用于记录结构、设计思路、文档组织和输出文件组织方式
 - `common/`：通用模板、复用电路和测试工具说明
@@ -49,7 +49,7 @@
 - `templates/`：可复用硬件项目模板，后续新增项目时可复制使用
 - `docs/Project_Template_Guide.md`：硬件项目模板使用说明和新增项目流程
 - `checklists/`：原理图、PCB、上电、发布检查表
-- `prompts/`：面向用户的 AI 协作说明、硬件项目流程总结和可复制的 AI 任务提示词模板
+- `prompts/`：面向用户的 AI 协作说明、硬件项目流程学习/复盘总结和可复制的 AI 任务提示词模板，不作为 AI 普通任务默认上下文
 
 ## 参考资料原则
 
