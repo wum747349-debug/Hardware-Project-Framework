@@ -131,6 +131,50 @@ MOSFET、接口、续流二极管/TVS、丝印和安全说明都需要围绕 5V-
 
 测试点优先覆盖 5V、3.3V、GND、NRST、SWDIO、SWCLK、USART TX/RX、USB 转 UART 芯片关键电源、ADC 分压后节点、MOSFET 栅极和 MOSFET 输出端。
 
+## 关键器件初选结论
+
+本阶段只是关键器件候选和 datasheet 初步核对，用于支撑后续原理图前的方案收敛；不生成最终 BOM，不进入完整原理图设计。普通阻容、LED、排针、测试点、普通按键等后置外围器件仍等待模块参数明确后再选。
+
+### 1. MCU
+
+`STM32F103C8T6` 已确定为本项目 MCU。后续继续核对官方 datasheet / reference manual / 硬件设计指南，重点包括 LQFP48 引脚、电源脚与去耦、BOOT、NRST、SWD、USART1、ADC、HSE 和 VDDA/VSSA 处理。
+
+### 2. USB-C
+
+`TYPE-C 16PIN 2MD(073)` 进入 USB-C 供电和 USB2.0 数据接口候选。初步核对显示其额定 DC 5V 3A 满足本项目 USB-C 5V 输入需求。
+
+原理图阶段需要正确处理 A4/A9/B4/B9 到 `VBUS_5V`，A1/A12/B1/B12 到 GND，CC1、CC2 各接 5.1kΩ 下拉到 GND，A6/B6 合并为 USB D+，A7/B7 合并为 USB D-，SBU 暂不使用。还需评估 USB ESD、电源保护、Shield 接地方式、0.5mm pitch 封装可制造性和可检查性。
+
+### 3. USB 转 UART
+
+`CH340C` 进入 USB 转 UART 主选。它支持 USB2.0 全速设备接口，UART 波特率覆盖本项目串口调试需求，并且内置时钟，不需要外部 12MHz 晶振，适合降低第一版复杂度。
+
+本项目要求 CH340C 与 STM32 之间为 3.3V UART 电平，因此 CH340C 应按 3.3V 供电方案设计：VCC 接 3.3V，V3 与 VCC / 3.3V 连接。CH340C TXD 接 STM32 PA10 / USART1_RX，CH340C RXD 接 STM32 PA9 / USART1_TX，TX/RX 必须交叉。不建议 CH340C 使用 5V 供电后直接连接 STM32 串口，以避免电平风险。D+ / D- 按 datasheet 建议连接到 USB-C D+ / D-，同时评估 USB ESD 防护。
+
+### 4. 3.3V 电源
+
+`AP2112K-3.3TRG1` 进入 3.3V LDO 主选。它输出 3.3V，输出电流能力 600mA，适合 USB-C 5V 输入转 3.3V。典型应用要求输入、输出各 1µF 电容，建议使用 X5R/X7R 陶瓷电容。EN 引脚需要在原理图阶段明确处理，可直接上拉使能或预留控制。
+
+`HR73L33V` 作为 LDO 备选，不作为当前第一版主选。它的优势是输入耐压高、静态电流低，适合低功耗和宽输入场景；限制是输出电流 300mA，余量小于 AP2112，典型外围电容为 10µF。本项目是 USB 5V 输入的 STM32 开发板，AP2112 更适合作为第一版主选。
+
+电源风险重点是热耗散和总电流预算。5V 转 3.3V 是线性稳压，功耗约为 `P=(5V-3.3V)*Iout`。第一版建议 3.3V 总电流长期控制在 150mA-200mA 以内更稳妥，外部 3.3V 取电仍按 `<=100mA` 限制。
+
+### 5. HSE 晶振
+
+`XC53G2-8.000-F12NJHP` 进入 STM32F103C8T6 的 8MHz HSE 晶振候选。规格书显示该系列为 5.0mm x 3.2mm x 1.3mm 两焊盘贴片无源晶振，频率范围 8MHz-80MHz，8MHz 属于基频范围，8MHz-12MHz 对应 ESR 约 80Ω。
+
+当前资料没有完整型号编码表，暂不能只根据型号中的 F12 直接确认负载电容 `CL=12pF`。负载电容、匹配电容和 STM32 HSE 匹配性仍需结合 STM32 datasheet / reference manual / 硬件设计指南进一步核对。原理图阶段应预留两颗负载电容，晶振靠近 STM32 OSC_IN / OSC_OUT，走线短、对称，远离 USB D+/D-、MOSFET 输出和其它干扰源。
+
+### 6. MOSFET 输出
+
+`AO3400A` 进入 2 路 N-MOSFET 低边输出主选。VDS=30V，满足本项目 VLOAD 5V-12V、最大不超过 12V 的需求。RDS(on) 在 VGS=4.5V 时小于约 32mΩ，在 VGS=2.5V 时小于约 48mΩ，说明适合 STM32 3.3V GPIO 直接驱动的小电流低边开关场景。
+
+本项目推荐使用电流 `<=300mA`，设计预留 `<=500mA`，AO3400A 导通损耗很低，SOT-23 封装基本够用。风险是若驱动继电器、电机、电磁阀等感性负载，必须额外考虑续流二极管或 TVS，不能只依赖 MOSFET 本体。原理图阶段建议预留栅极串联电阻、栅极下拉电阻、Gate 测试点、OUT 测试点和 GND 测试点。
+
+### 7. ADC 输入保护
+
+ADC 输入保护当前仍只确定设计方向：外部 0-5V 信号通过分压缩放到 0-3.3V 以内，配合串联限流、RC 滤波和保护器件预留。最终保护器件暂不确定，后续需要结合 STM32 ADC 采样时间、输入阻抗、保护器件漏电、钳位电流、TVS 电容和误差预算继续核对。
+
 ## 后续需核对事项
 
 - STM32F103C8T6 datasheet / reference manual 中的供电、时钟、复位、BOOT、SWD、USART 和 ADC 要求。
