@@ -77,7 +77,7 @@ AI 应按当前任务阶段读取对应 Skill。
 | 阶段 | 默认读取 Skill |
 |---|---|
 | datasheet 阅读 / 资料提取 | `skills/hardware-datasheet-reading/SKILL.md` |
-| 器件选型 / 替代料 / BOM 草稿 | `skills/hardware-component-selection/SKILL.md` |
+| 关键器件候选 / 外围器件反推 / BOM 草稿 | `skills/hardware-component-selection/SKILL.md` |
 | 原理图设计检查 / 画 PCB 前审查 | `skills/hardware-schematic-review/SKILL.md` |
 
 跨阶段任务可按需要读取上游 Skill，但不应默认读取全部 Skill。
