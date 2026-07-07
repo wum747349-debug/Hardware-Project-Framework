@@ -37,16 +37,17 @@
 | `C84681_USB转换芯片_CH340C_规格书_CH340DS1_CN.PDF` | USB 转 UART | CH340C USB 转 UART 规格书 | `references/datasheets/usb_uart/C84681_USB转换芯片_CH340C_规格书_CH340DS1_CN.PDF` | 疑似立创商城下载，来源待确认 | USB2.0 全速、UART 波特率、内置时钟、3.3V 供电和 TX/RX 连接核对 | 已初步阅读 / 待进一步核对关键参数 | 进入主选；应按 3.3V 供电方案设计，VCC 接 3.3V，V3 与 VCC/3.3V 连接；TXD 接 STM32 PA10/USART1_RX，RXD 接 PA9/USART1_TX；不建议 5V 供电后直连 STM32 UART |
 | `C720477_轻触开关_TS-1088-AR02016_规格书_WJ1589447.PDF` | 接口、人机、测试点 | TS-1088-AR02016 轻触按键规格书 | `references/datasheets/connectors/C720477_轻触开关_TS-1088-AR02016_规格书_WJ1589447.PDF` | 疑似立创商城下载，来源待确认 | 按键封装和机械尺寸核对 | 未系统阅读 | 普通外围器件，非第一轮重点 |
 
-## 4. 下一步优先收集资料
+## 4. 下一步优先核对资料 / 仍需补充资料
 
-只列第一轮关键器件资料，不列所有外围器件：
+当前 CH340C、AP2112K-3.3TRG1、HR73L33V、AO3400A、USB-C 母座和 8MHz 晶振已进入初步阅读记录。下一步重点从“收集候选资料”转为“关闭原理图前关键问题”，同时按需补充尚未下载或尚未确定的保护器件资料。
 
-- STM32F103C8T6 官方资料补充/核对：确认 datasheet、reference manual、硬件设计 application note 的版本和适用范围。
-- USB 转 UART 候选 datasheet：CH340C、CH340N、CP2102N、FT232RL、FT230X 等。
-- 3.3V LDO 候选 datasheet：根据 5V 输入、3.3V 输出、负载电流、压差、热耗散和输入输出电容要求筛选。
-- USB-C 母座 datasheet / 封装图：确认 VBUS/GND/CC1/CC2/D+/D-、固定脚、焊盘尺寸和机械强度。
-- 8MHz 晶振 datasheet：确认负载电容、ESR、频率精度、封装和 STM32 HSE 匹配性。
-- 逻辑电平 N-MOSFET datasheet：确认 3.3V 栅极驱动下的 Rds(on)、Vds、Id、封装热能力和感性负载保护需求。
+- STM32F103C8T6 官方资料：继续核对 datasheet、reference manual、硬件设计 application note 的版本、适用范围、最小系统、HSE、ADC、USART、BOOT、NRST、SWD 和 VDDA/VSSA 要求。
+- USB-C 与 USB2.0 保护资料：补充或核对 USB ESD/TVS、VBUS TVS、保险丝/自恢复保险丝、电源开关和输入滤波器件资料。
+- CH340C 应用资料：重点核对 3.3V 供电方案、V3/VCC 连接、D+/D- 接法、去耦和 USB ESD 防护。
+- AP2112K-3.3TRG1 电源资料：继续核对 EN、输入/输出电容、ESR/陶瓷电容要求、热阻、功耗和 3.3V 总电流预算。
+- HSE 晶振资料：继续核对 XC53G2-8.000-F12NJHP 的负载电容 CL、匹配电容、ESR、频率精度和 STM32 HSE 匹配性。
+- MOSFET 输出保护资料：补充续流二极管或 TVS 候选资料，并结合 AO3400A 栅极驱动、封装热能力和感性负载策略核对。
+- ADC 输入保护资料：补充分压、限流、RC 滤波、钳位/TVS 方案相关 datasheet，重点关注漏电、电容、钳位电流和采样误差。
 
 ## 5. 立创商城搜索记录
 
