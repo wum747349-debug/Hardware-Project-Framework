@@ -42,10 +42,12 @@
 当前 CH340C、AP2112K-3.3TRG1、HR73L33V、AO3400A、USB-C 母座和 8MHz 晶振已进入初步阅读记录。下一步重点从“收集候选资料”转为“关闭原理图前关键问题”，同时按需补充尚未下载或尚未确定的保护器件资料。
 
 - STM32F103C8T6 官方资料：继续核对 datasheet、reference manual、硬件设计 application note 的版本、适用范围、最小系统、HSE、ADC、USART、BOOT、NRST、SWD 和 VDDA/VSSA 要求。
+- MCU 最小系统草图核对：重点确认 LQFP48 的 pin5/pin6 HSE、pin7 NRST、pin8 VSSA、pin9 VDDA、VDD/VSS/VBAT、BOOT0、PA13/PA14 SWD 连接是否与官方资料一致。
 - USB-C 与 USB2.0 保护资料：补充或核对 USB ESD/TVS、VBUS TVS、保险丝/自恢复保险丝、电源开关和输入滤波器件资料。
 - CH340C 应用资料：重点核对 3.3V 供电方案、V3/VCC 连接、D+/D- 接法、去耦和 USB ESD 防护。
 - AP2112K-3.3TRG1 电源资料：继续核对 EN、输入/输出电容、ESR/陶瓷电容要求、热阻、功耗和 3.3V 总电流预算。
 - HSE 晶振资料：继续核对 XC53G2-8.000-F12NJHP 的负载电容 CL、匹配电容、ESR、频率精度和 STM32 HSE 匹配性。
+- 原理图前待核对项：确认 `C6/C7=10pF` 仅为草图值，最终需由晶振 `CL`、PCB 寄生电容和 STM32 硬件设计资料反推；确认 `PC14/PC15` 为 LSE 32.768kHz 引脚，本项目 8MHz HSE 不使用它们。
 - MOSFET 输出保护资料：补充续流二极管或 TVS 候选资料，并结合 AO3400A 栅极驱动、封装热能力和感性负载策略核对。
 - ADC 输入保护资料：补充分压、限流、RC 滤波、钳位/TVS 方案相关 datasheet，重点关注漏电、电容、钳位电流和采样误差。
 
