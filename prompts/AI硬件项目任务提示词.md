@@ -11,6 +11,12 @@
 
 - 不要让 AI 默认读取所有项目目录、所有 Skill、所有模板和所有历史记录。
 
+- `docs/08_Project_Workflow.md` 不是普通任务默认上下文，只在阶段边界或流程权限不清楚时按需读取。
+
+- `prompts/硬件项目工作流程总结.md` 是用户学习和复盘文档，不应作为 AI 执行任务的默认上下文。
+
+- 复制提示词时，应只复制当前任务所需段落，不要把整个 prompts 文档全文粘贴给 AI。
+
 - 不要让 AI 直接修改无关项目。
 
 - 涉及关键硬件参数时，必须回到 datasheet、reference manual 或 application note 核对。
@@ -100,18 +106,20 @@ wum747349-debug/Hardware-Practice-Projects
 
 本次只做上下文刷新和仓库规则理解，不要修改文件。
 
-请读取：
+默认读取：
 1. PROJECT_RULES.md
 2. AGENTS.md
 3. docs/AI_Context_Guide.md
 4. README.md
-5. docs/08_Project_Workflow.md
+
+按需读取：
+- docs/08_Project_Workflow.md：仅在需要判断完整流程、当前阶段、阶段边界、是否允许生成 BOM、是否允许画原理图、是否需要 datasheet、是否允许进入打样时读取。
 
 请输出：
 1. 当前仓库定位；
 2. 当前核心项目；
 3. AI 协作时的最小必要上下文策略；
-4. 硬件项目的标准推进流程；
+4. 后续需要判断完整流程或阶段边界时如何按需读取 `docs/08_Project_Workflow.md`；
 5. 后续处理具体任务时应如何选择读取文件。
 ```
 
@@ -307,24 +315,28 @@ projects/01_STM32_DAQ_Control_Board
 
 任务：
 1. 为第一版 STM32 数据采集/控制开发板确定关键器件初稿。
-2. 至少覆盖：
+2. 第一轮关键器件重点：
    - STM32 MCU；
-   - USB-C 供电接口；
-   - 3.3V LDO；
-   - SWD 调试接口；
-   - UART / I2C / SPI 排针；
-   - ADC 输入保护和滤波器件；
-   - MOSFET 低边驱动器件；
-   - LED；
-   - 按键；
-   - 测试点；
-   - 常用电阻电容。
-3. 每类关键器件给出主选型号和至少一个替代型号。
-4. 说明推荐原因、风险等级和需要核对的 datasheet 项目。
-5. 更新 design_notes.md。
-6. 如仓库已有 BOM 草稿位置，则新增或更新 BOM 草稿；如果没有，先建议 BOM 草稿文件路径，不要随意新建复杂格式。
+   - 主电源芯片，例如 3.3V LDO / DC-DC；
+   - 关键接口芯片或关键接口连接器，例如 USB-C 供电接口；
+   - 关键时钟器件；
+   - 功率开关器件，例如 MOSFET；
+   - 关键模拟 / 保护器件，例如 ADC 输入保护、ESD/TVS、保险或保护芯片；
+   - 影响结构、供电、安全、接口或关键电路参数的连接器。
+3. 后置外围器件：
+   - 普通电阻、电容；
+   - LED、普通按键；
+   - 普通排针、测试点、跳帽；
+   - 不影响模块架构的通用小器件。
+4. 后置外围器件只在模块参数明确后整理为 BOM 草稿，不作为第一轮重点资料收集对象。
+5. 每类关键器件给出主选型号和至少一个替代型号。
+6. 说明推荐原因、风险等级和需要核对的 datasheet 项目。
+7. 更新 design_notes.md。
+8. 如仓库已有 BOM 草稿位置，则新增或更新 BOM 草稿；如果没有，先建议 BOM 草稿文件路径，不要随意新建复杂格式。
 
 注意：
+- 资料收集不是一次性前置阶段，只围绕当前模块、当前候选器件和当前设计决策按需进行。
+- 立创商城由用户手动搜索、筛选、检查库存/价格/封装/基础库状态并下载资料；AI/Codex 负责整理关键词、筛选条件、候选表、参数提取、风险点和待核对项。
 - 不要直接照抄开源项目 BOM。
 - 不要推荐明显采购困难、封装过难或资料不完整的器件作为第一版主选。
 - 不要忽略替代料。
@@ -604,11 +616,13 @@ PCB Layout 前检查
 1. PROJECT_RULES.md
 2. AGENTS.md
 3. docs/AI_Context_Guide.md
-4. docs/08_Project_Workflow.md
-5. projects/01_STM32_DAQ_Control_Board/requirements.md
-6. projects/01_STM32_DAQ_Control_Board/design_notes.md
-7. projects/01_STM32_DAQ_Control_Board/docs/schematic_review.md
-8. 当前项目原理图 PDF / 图片
+4. projects/01_STM32_DAQ_Control_Board/requirements.md
+5. projects/01_STM32_DAQ_Control_Board/design_notes.md
+6. projects/01_STM32_DAQ_Control_Board/docs/schematic_review.md
+7. 当前项目原理图 PDF / 图片
+
+按需读取：
+- docs/08_Project_Workflow.md：仅当需要判断阶段边界、是否允许进入 PCB Layout、是否允许补充上游阶段记录或是否需要 datasheet 时读取。
 
 任务：
 1. 根据原理图和审查结果，给出 PCB Layout 前的布局规划建议。
@@ -660,11 +674,13 @@ PCB 审查
 1. PROJECT_RULES.md
 2. AGENTS.md
 3. docs/AI_Context_Guide.md
-4. docs/08_Project_Workflow.md
-5. projects/01_STM32_DAQ_Control_Board/requirements.md
-6. projects/01_STM32_DAQ_Control_Board/design_notes.md
-7. projects/01_STM32_DAQ_Control_Board/docs/schematic_review.md
-8. 当前项目 PCB 截图 / PDF / Altium 导出文件
+4. projects/01_STM32_DAQ_Control_Board/requirements.md
+5. projects/01_STM32_DAQ_Control_Board/design_notes.md
+6. projects/01_STM32_DAQ_Control_Board/docs/schematic_review.md
+7. 当前项目 PCB 截图 / PDF / Altium 导出文件
+
+按需读取：
+- docs/08_Project_Workflow.md：仅当需要判断阶段边界、是否允许输出制造文件、是否允许进入打样、是否允许形成最终 BOM 或是否需要补充上游阶段记录时读取。
 
 任务：
 1. 审查 PCB Layout 是否适合进入打样。
@@ -717,12 +733,14 @@ projects/01_STM32_DAQ_Control_Board
 1. PROJECT_RULES.md
 2. AGENTS.md
 3. docs/AI_Context_Guide.md
-4. docs/08_Project_Workflow.md
-5. projects/01_STM32_DAQ_Control_Board/requirements.md
-6. projects/01_STM32_DAQ_Control_Board/design_notes.md
-7. projects/01_STM32_DAQ_Control_Board/docs/schematic_review.md
-8. projects/01_STM32_DAQ_Control_Board/docs/pcb_review.md
-9. projects/01_STM32_DAQ_Control_Board/hardware/outputs/ 下的输出文件
+4. projects/01_STM32_DAQ_Control_Board/requirements.md
+5. projects/01_STM32_DAQ_Control_Board/design_notes.md
+6. projects/01_STM32_DAQ_Control_Board/docs/schematic_review.md
+7. projects/01_STM32_DAQ_Control_Board/docs/pcb_review.md
+8. projects/01_STM32_DAQ_Control_Board/hardware/outputs/ 下的输出文件
+
+按需读取：
+- docs/08_Project_Workflow.md：仅当需要判断阶段边界、是否允许输出制造文件、是否允许进入打样、是否允许形成最终 BOM 或是否需要补充上游阶段记录时读取。
 
 任务：
 1. 检查制造输出是否完整。
@@ -768,12 +786,14 @@ projects/01_STM32_DAQ_Control_Board
 1. PROJECT_RULES.md
 2. AGENTS.md
 3. docs/AI_Context_Guide.md
-4. docs/08_Project_Workflow.md
-5. projects/01_STM32_DAQ_Control_Board/requirements.md
-6. projects/01_STM32_DAQ_Control_Board/design_notes.md
-7. projects/01_STM32_DAQ_Control_Board/docs/schematic_review.md
-8. projects/01_STM32_DAQ_Control_Board/docs/pcb_review.md
-9. projects/01_STM32_DAQ_Control_Board/docs/bringup_log.md
+4. projects/01_STM32_DAQ_Control_Board/requirements.md
+5. projects/01_STM32_DAQ_Control_Board/design_notes.md
+6. projects/01_STM32_DAQ_Control_Board/docs/schematic_review.md
+7. projects/01_STM32_DAQ_Control_Board/docs/pcb_review.md
+8. projects/01_STM32_DAQ_Control_Board/docs/bringup_log.md
+
+按需读取：
+- docs/08_Project_Workflow.md：仅当需要判断阶段边界、是否允许进入上电调试、是否需要补充上游阶段记录或是否需要 datasheet 时读取。
 
 任务：
 1. 生成或更新上电调试计划。
@@ -828,10 +848,12 @@ projects/01_STM32_DAQ_Control_Board
 1. PROJECT_RULES.md
 2. AGENTS.md
 3. docs/AI_Context_Guide.md
-4. docs/08_Project_Workflow.md
-5. projects/01_STM32_DAQ_Control_Board/requirements.md
-6. projects/01_STM32_DAQ_Control_Board/docs/bringup_log.md
-7. projects/01_STM32_DAQ_Control_Board/docs/test_report.md
+4. projects/01_STM32_DAQ_Control_Board/requirements.md
+5. projects/01_STM32_DAQ_Control_Board/docs/bringup_log.md
+6. projects/01_STM32_DAQ_Control_Board/docs/test_report.md
+
+按需读取：
+- docs/08_Project_Workflow.md：仅当需要判断阶段边界、是否需要补充上游阶段记录、是否允许形成阶段结论或是否需要 datasheet 时读取。
 
 任务：
 1. 根据需求和调试记录整理测试报告。
