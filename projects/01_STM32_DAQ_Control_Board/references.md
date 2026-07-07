@@ -1,49 +1,54 @@
 # 参考资料
 
-## 官方资料与器件资料
+## 1. 资料使用原则
 
-后续进入器件选型和原理图设计阶段时，需要优先查阅官方 datasheet、reference manual 和 application note。关键参数不得仅凭教程或开源项目确定。
+- 官方 datasheet / reference manual / application note 优先。
+- 立创商城用于用户手动搜索器件、检查库存/价格/封装/基础库状态、记录 C 编号和下载 datasheet。
+- AI/Codex 不默认自动爬取或批量下载立创商城资料。
+- 立创商品页不能替代 datasheet。
+- 开源项目只能作为结构、模块划分、接口组织和检查项参考，不能照抄原理图、PCB、BOM、Gerber 或文字说明。
+- 如果资料来源、版本或器件型号不确定，应标记“来源待确认”，并在关键参数定稿前回到厂商官网核对。
 
-需要查阅的资料包括：
+## 2. 本地 datasheet 目录
 
-- STM32F103C8T6 datasheet
-- STM32F103 reference manual
-- ST 硬件设计指南 / application note
-- STM32 最小系统、HSE 晶振、BOOT、NRST、SWD、VDDA/VSSA 和 ADC 相关官方资料
-- USB-C 取电与 CC 电阻相关资料
-- USB-C ESD/TVS 保护器件 datasheet
-- USB 转 UART 芯片 datasheet
-- 3.3V LDO datasheet
-- 保险丝或自恢复保险丝 datasheet
-- ADC 输入保护、钳位或 TVS 器件 datasheet
-- N-MOSFET datasheet
-- 排针、USB-C 座、按键、LED 等连接器和结构器件资料
+| 目录 | 用途 |
+|---|---|
+| `references/datasheets/mcu/` | STM32 datasheet、reference manual、application note、硬件设计指南 |
+| `references/datasheets/usb_uart/` | USB 转 UART 芯片 datasheet 和应用资料 |
+| `references/datasheets/power/` | LDO、电源开关、保险丝、TVS、电源保护等资料 |
+| `references/datasheets/usb_c/` | USB-C 母座、封装图、USB-C 取电相关资料 |
+| `references/datasheets/crystal/` | HSE 晶振、负载电容和封装资料 |
+| `references/datasheets/adc_input/` | ADC 输入保护、钳位、专用 TVS 等资料 |
+| `references/datasheets/mosfet_output/` | MOSFET、续流二极管、输出 TVS 等资料 |
+| `references/datasheets/connectors/` | 排针、按键、LED、测试点、跳帽和普通连接器等资料 |
 
-## 开源硬件参考项目
+## 3. 当前已收集资料
 
-> 开源项目只作为结构、设计思路、接口组织、文档组织和制造输出组织参考，不能直接复制原理图、PCB、BOM、Gerber、生产文件、源工程文件或文字说明。
+| 文件名 | 所属模块 | 资料/器件名称 | 本地路径 | 来源说明 | 用途 | 是否已阅读 | 备注 |
+|---|---|---|---|---|---|---|---|
+| `STM32F103产品手册（中文）.pdf` | MCU 最小系统 | STM32F103 产品手册中文资料 | `references/datasheets/mcu/STM32F103产品手册（中文）.pdf` | ST 官方资料，来源路径待确认 | MCU 供电、引脚、外设、ADC、时钟等参数核对 | 未系统阅读 | 需确认版本/日期 |
+| `STM32F103产品手册（英文）.pdf` | MCU 最小系统 | STM32F103 datasheet 英文资料 | `references/datasheets/mcu/STM32F103产品手册（英文）.pdf` | ST 官方资料，来源路径待确认 | MCU 参数主依据 | 未系统阅读 | 优先以英文版核对关键参数 |
+| `STM32中文参考手册V10.pdf` | MCU 最小系统 | STM32F10x reference manual 中文资料 | `references/datasheets/mcu/STM32中文参考手册V10.pdf` | ST 官方资料，来源路径待确认 | 外设、时钟、ADC、USART、GPIO 配置依据 | 未系统阅读 | 需确认适用系列和版本 |
+| `C2765186_USB连接器_TYPE-C+16PIN+2MD(073)_规格书_TYPE-C+16PIN+2MD(073).PDF` | USB-C 输入与保护 | USB-C 16P 母座规格书 | `references/datasheets/usb_c/C2765186_USB连接器_TYPE-C+16PIN+2MD(073)_规格书_TYPE-C+16PIN+2MD(073).PDF` | 疑似立创商城下载，来源待确认 | USB-C 封装、引脚、机械尺寸核对 | 未系统阅读 | 商品页不能替代规格书 |
+| `C2842269_无源晶振_XC53G2-8.000-F12NJHP_规格书_WJ72563.PDF` | 晶振 | XC53G2-8.000-F12NJHP 8MHz 晶振规格书 | `references/datasheets/crystal/C2842269_无源晶振_XC53G2-8.000-F12NJHP_规格书_WJ72563.PDF` | 疑似立创商城下载，来源待确认 | HSE 晶振频率、负载电容、ESR、封装核对 | 未系统阅读 | 需结合 STM32 HSE 要求核对 |
+| `C54560861_线性稳压器(LDO)_HR73L33V_规格书_HR73+SERIES_REV1.0.PDF` | 3.3V 电源 | HR73L33V / HR73 系列 LDO 规格书 | `references/datasheets/power/C54560861_线性稳压器(LDO)_HR73L33V_规格书_HR73+SERIES_REV1.0.PDF` | 疑似立创商城下载，来源待确认 | 3.3V LDO 输入输出、电容、热耗散核对 | 未系统阅读 | 需确认具体 MPN、封装和输出电流 |
+| `C720477_轻触开关_TS-1088-AR02016_规格书_WJ1589447.PDF` | 接口、人机、测试点 | TS-1088-AR02016 轻触按键规格书 | `references/datasheets/connectors/C720477_轻触开关_TS-1088-AR02016_规格书_WJ1589447.PDF` | 疑似立创商城下载，来源待确认 | 按键封装和机械尺寸核对 | 未系统阅读 | 普通外围器件，非第一轮重点 |
 
-更多开源参考项目统一记录在：`references/open_source_hardware_projects.md`
+## 4. 下一步优先收集资料
 
-| 仓库名称 | GitHub 地址 | 参考用途 | 注意事项 |
-| --- | --- | --- | --- |
-| `devnithw/stm32-devboard` | <https://github.com/devnithw/stm32-devboard> | 参考 STM32F103 最小系统、USB 供电、3.3V 稳压、SWD、UART/I2C 引出和 KiCad 文档组织。 | 本仓库使用 Altium Designer，只参考结构；STM32 具体型号、时钟、BOOT、复位、SWD、USB 和接口必须重新核对 datasheet / reference manual。 |
-| `phonght32/openSTM32F4_LQFP64` | <https://github.com/phonght32/openSTM32F4_LQFP64> | 参考完整 STM32 控制板结构、多电源输入、3.3V 电源、调试和外设接口组织，以及 BOM/Gerber/文档输出组织。 | 复杂度高于第一版项目，不能照搬；第一版仍优先简单、可焊接、可调试。 |
+只列第一轮关键器件资料，不列所有外围器件：
 
-## 可提炼的学习点
+- STM32F103C8T6 官方资料补充/核对：确认 datasheet、reference manual、硬件设计 application note 的版本和适用范围。
+- USB 转 UART 候选 datasheet：CH340C、CH340N、CP2102N、FT232RL、FT230X 等。
+- 3.3V LDO 候选 datasheet：根据 5V 输入、3.3V 输出、负载电流、压差、热耗散和输入输出电容要求筛选。
+- USB-C 母座 datasheet / 封装图：确认 VBUS/GND/CC1/CC2/D+/D-、固定脚、焊盘尺寸和机械强度。
+- 8MHz 晶振 datasheet：确认负载电容、ESR、频率精度、封装和 STM32 HSE 匹配性。
+- 逻辑电平 N-MOSFET datasheet：确认 3.3V 栅极驱动下的 Rds(on)、Vds、Id、封装热能力和感性负载保护需求。
 
-- MCU 最小系统需要覆盖供电、去耦、时钟、复位、BOOT、下载调试接口和测试点。
-- USB-C 供电需要明确 5V 输入、CC 电阻、ESD/TVS、保险丝、电源开关、输入滤波和 3.3V 稳压。
-- 第一版 USB 通信采用 USB 转 UART，不采用 STM32 原生 USB CDC；USB-C D+ / D- 不接 STM32 PA11 / PA12。
-- UART、I2C、SPI、ADC、MOSFET 输出等接口应按功能分组，方便调试和后续扩展。
-- ADC 外部 0-5V 输入必须经过分压、滤波、限流和保护后再进入 STM32 ADC 引脚。
-- MOSFET 低边输出应明确 VLOAD / OUT / GND，共地要求、栅极电阻、下拉电阻和感性负载续流路径。
-- 制造输出应包含 PDF 原理图、BOM、Gerber、贴片坐标、装配说明和版本记录。
+## 5. 立创商城搜索记录
 
-## 不可直接照抄的内容
+立创商城搜索记录统一维护在：
 
-- 第三方原理图、PCB、BOM、Gerber、生产文件和源工程文件。
-- 第三方项目的文字说明、README 和设计文档。
-- MCU 供电、晶振、BOOT、复位、SWD、USB、接口保护和测试点参数。
-- 与本项目目标型号、封装、层数、板厂工艺、接口定义不一致的布局布线细节。
-- 未经本项目需求、器件 datasheet、封装、供电、接口和 PCB 工艺重新核对的任何开源电路片段。
+`projects/01_STM32_DAQ_Control_Board/references/lcsc_parts/lcsc_search_notes.md`
+
+搜索记录只作为候选筛选和资料入口记录。最终设计参数必须回到 datasheet、reference manual 或 application note 核对。
