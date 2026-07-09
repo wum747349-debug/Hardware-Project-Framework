@@ -22,7 +22,20 @@
 | `references/datasheets/mosfet_output/` | MOSFET、续流二极管、输出 TVS 等资料 |
 | `references/datasheets/connectors/` | 排针、按键、LED、测试点、跳帽和普通连接器等资料 |
 
-## 3. 当前已收集资料
+## 3. 模块设计文档索引
+
+以下文档用于承接设计说明和原理图审查入口；datasheet 路径、来源和阅读状态仍以本文后续资料表为准。
+
+| 模块 | 模块设计文档 |
+|---|---|
+| MCU 最小系统 | `docs/module_design/01_mcu_minimum_system.md` |
+| USB-C 供电与 AP2112K 电源 | `docs/module_design/02_usb_c_power_ap2112.md` |
+| USB 转 UART / CH340C | `docs/module_design/03_usb_uart_ch340c.md` |
+| ADC 输入保护 | `docs/module_design/04_adc_input_protection.md` |
+| MOSFET 低边输出 | `docs/module_design/05_mosfet_low_side_output.md` |
+| 接口、测试点与丝印 | `docs/module_design/06_interfaces_testpoints.md` |
+
+## 4. 当前已收集资料
 
 | 文件名 | 所属模块 | 资料/器件名称 | 本地路径 | 来源说明 | 用途 | 是否已阅读 | 备注 |
 |---|---|---|---|---|---|---|---|
@@ -40,7 +53,7 @@
 | `C7420333_肖特基二极管_BAT54S_规格书_BAT54+THRU+BAT54S_REV2.0.PDF` | ADC 输入保护 | BAT54S 肖特基二极管规格书 | `references/datasheets/adc_input/C7420333_肖特基二极管_BAT54S_规格书_BAT54+THRU+BAT54S_REV2.0.PDF` | 疑似立创商城下载，来源待确认 | ADC 输入上下轨钳位、封装、VF、漏电、结电容和钳位电流核对 | 已初步阅读 / 待进一步核对封装与引脚映射 | 进入 ADC 输入上下轨钳位主选；SOT-23；Pin3 接 ADC 节点，Pin1 接 GND，Pin2 接 VDDA_3V3；关键参数包括 VR=30V、IF(AV)=200mA、VF=320mV max @1mA、CT=10pF max |
 | `C720477_轻触开关_TS-1088-AR02016_规格书_WJ1589447.PDF` | 接口、人机、测试点 | TS-1088-AR02016 轻触按键规格书 | `references/datasheets/connectors/C720477_轻触开关_TS-1088-AR02016_规格书_WJ1589447.PDF` | 疑似立创商城下载，来源待确认 | 按键封装和机械尺寸核对 | 未系统阅读 | 普通外围器件，非第一轮重点 |
 
-## 4. 下一步优先核对资料 / 仍需补充资料
+## 5. 下一步优先核对资料 / 仍需补充资料
 
 当前 CH340C、AP2112K-3.3TRG1、HR73L33V、AO3400A、USB-C 母座和 8MHz 晶振已进入初步阅读记录。下一步重点从“收集候选资料”转为“关闭原理图前关键问题”，同时按需补充尚未下载或尚未确定的保护器件资料。
 
@@ -56,7 +69,7 @@
 - MOSFET 输出保护资料：SS14 datasheet 已补充并初步阅读，当前确认其用于 D4/D5 感性负载续流保护；后续 PCB 前重点复核 SMA / DO-214AC 封装、色带端/阴极接 `VLOAD_EXT`、阳极接 `MOS_OUT`、焊盘方向和丝印方向；若未来驱动更高能量感性负载，再评估 TVS、栅极保护、走线宽度和热耗散。
 - ADC 输入保护资料：补充分压、限流、RC 滤波、钳位/TVS 方案相关 datasheet，重点关注漏电、电容、钳位电流和采样误差。
 
-## 5. 立创商城搜索记录
+## 6. 立创商城搜索记录
 
 立创商城搜索记录统一维护在：
 
