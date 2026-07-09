@@ -595,6 +595,20 @@ MOSFET 导通时电流路径为：
 
 `D4 / D5` 使用 `SS14`，作为感性负载的续流保护器件。
 
+当前已补充 SS14 datasheet，本项目只提取与续流保护相关的参数：
+
+| 参数 | datasheet 规格 | 本项目意义 |
+|---|---|---|
+| 器件 | `SS14` | 用作 D4/D5 感性负载续流二极管 |
+| 封装 | `SMA / DO-214AC` | 需按实际封装和焊盘检查 PCB 库 |
+| 应用方向 | Free Wheeling / Polarity Protection | 符合本项目续流保护用途 |
+| 最大重复反向电压 | `VRRM = 40V` | 覆盖本项目 `VLOAD 5V-12V` 边界 |
+| 平均正向电流 | `IF(AV) = 1.0A` | 高于本项目 `<=300mA` 推荐、`<=500mA` 预留目标 |
+| 非重复浪涌电流 | `IFSM = 40A` | 对短时续流冲击有余量，但不能替代负载能量评估 |
+| 正向压降 | SS12-SS14 组 `VF max = 500mV @ IF=1A` | 用于估算续流时 MOS_OUT 被钳位到约 `VLOAD_EXT + VF` |
+| 功耗 / 热阻 | `PD = 1.1W`，`RθJA = 88°C/W` | 后续若驱动更高能量感性负载需重新评估温升 |
+| 极性标识 | Color band denotes cathode | PCB Layout 和焊接时色带端应接 `VLOAD_EXT` |
+
 正确方向：
 
 - 阴极 K，也就是封装色带端 / 原理图竖线端，接 `VLOAD_EXT`。
