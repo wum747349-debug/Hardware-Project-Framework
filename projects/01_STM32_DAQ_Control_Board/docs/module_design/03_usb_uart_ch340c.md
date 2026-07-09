@@ -14,7 +14,7 @@
 
 采用 USB 转 UART，而不是 STM32 原生 USB，原因是降低第一版固件和 USB 硬件调试复杂度，电脑端 COM 串口更适合早期打印日志、调试命令和数据上传。
 
-## 3. CH340C 草图方案
+## 3. CH340C 模块设计方案
 
 当前 USB 转 UART 方案已从候选比较收敛为 `CH340C` 主选，位号暂定 `U3`，封装按 `SOP-16`。CH340C 用于电脑端 COM 串口调试、日志输出、ADC 数据上传和控制命令下发。
 
@@ -35,12 +35,13 @@ CH340C 支持 USB2.0 全速设备接口，UART 波特率覆盖本项目串口调
 
 - USB-C 模块引出的 `USB_DP` 接 CH340C `Pin5 D+ / UD+`。
 - USB-C 模块引出的 `USB_DM` 接 CH340C `Pin6 D- / UD-`。
-- CH340C datasheet 建议 `UD+ / UD-` 直接连接 USB 总线，本项目草图不在 `USB_DP / USB_DM` 上串联 `22Ω` 电阻。
+- CH340C datasheet 建议 `UD+ / UD-` 直接连接 USB 总线，本项目模块设计不在 `USB_DP / USB_DM` 上串联 `22Ω` 电阻。
 - USB-C 的 `D+ / D-` 不连接 STM32 `PA11 / PA12`。
 
 ## 6. USB 数据线 ESD 保护
 
 - `D2` 使用 `TPD2EUSB30DRTR-N`，作为 `USB_DP / USB_DM` 的双路低电容 ESD 保护器件。
+- `TPD2EUSB30DRTR-N` 当前是 USB 数据线 ESD 主选，但本地 datasheet 路径仍待补充，资料项未关闭。
 - `D2 Pin1 / I/O` 接 `USB_DP`。
 - `D2 Pin2 / I/O` 接 `USB_DM`。
 - `D2 Pin3 / GND` 接 `GND`。
@@ -48,7 +49,7 @@ CH340C 支持 USB2.0 全速设备接口，UART 波特率覆盖本项目串口调
 - 当前记录的规格书关键参数：`VRWM=5V`，I/O-to-GND 结电容典型 `0.45pF`、最大 `0.6pF`，IEC 61000-4-2 接触放电 `±20kV`、空气放电 `±25kV`。
 - PCB Layout 时 D2 应靠近 USB-C 接口放置，GND 回流路径要短，优先就近接地铜或地过孔。
 - D2 不接 `3.3V`，也不接 `VBUS / 5V`。
-- 后续需在用户保存本地 datasheet 后复核封装、方向、焊盘和实际丝印。
+- 后续需在用户保存本地 datasheet 后复核封装、方向、GND 引脚、焊盘和实际丝印。
 
 ## 7. UART 到 STM32
 

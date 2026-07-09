@@ -6,7 +6,7 @@
 
 当前状态：待审查 / 待确认。
 
-本文件不是“审查通过”结论。下一步需要基于实际 Altium 原理图、PDF 原理图输出、datasheet、[design_notes.md](../design_notes.md) 和 [docs/module_design/](module_design/) 逐项审查并记录问题。
+本文件不是“审查通过”结论。下一步需要基于实际 Altium 原理图、PDF 原理图输出、datasheet、[design_notes.md](../design_notes.md) 和 [module_design/](module_design/) 逐项审查并记录问题。
 
 ## 2. 审查输入
 
@@ -73,7 +73,7 @@
 | CH340C 是否按 3.3V 供电，VCC/V3/GND 是否正确 | 待审查 | 避免 5V UART 电平风险 |
 | C13/C14/C15 是否靠近 VCC/V3 | 待审查 | 去耦和局部储能 |
 | `USB_DP/USB_DM` 是否只接 CH340C 和 ESD，不接 STM32 PA11/PA12 | 待审查 | 第一版不使用 STM32 原生 USB |
-| TPD2EUSB30DRTR-N 是否为并联钳位，GND 是否短路径接地 | 待审查 | 不接 3.3V/VBUS |
+| TPD2EUSB30DRTR-N 是否为并联钳位，GND 是否短路径接地 | 待审查 | 不接 3.3V/VBUS；封装、方向、GND 引脚、焊盘和实际 datasheet 仍需复核 |
 | CH340C TXD/RXD 与 STM32 PA10/PA9 是否交叉连接 | 待审查 | 网络名需从 MCU 视角说明 |
 | `R232` 是否接 GND | 待审查 | TTL UART 模式 |
 | 未用握手脚和 NC 脚是否加 No Connect 标记 | 待审查 | 不做 DTR/RTS 自动下载 |

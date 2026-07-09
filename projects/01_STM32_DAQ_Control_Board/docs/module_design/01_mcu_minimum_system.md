@@ -42,7 +42,7 @@ MCU 确定为 `STM32F103C8T6`，封装方向按常见 `LQFP48`。
 - `NRST` 接复位按键到 `GND`。
 - `NRST` 对 `GND` 放置 `100nF` 电容。
 - `NRST` 同时引出到 SWD 接口。
-- STM32 NRST 内部已有弱上拉，因此外部 `10k` 上拉可不放或预留 DNP；当前草图以按键 + `100nF` 为主。
+- STM32 NRST 内部已有弱上拉，因此外部 `10k` 上拉可不放或预留 DNP；当前模块设计说明以按键 + `100nF` 为主。
 - 后续原理图审查时确认 `NRST` 网络标签必须接到 pin7 `NRST`，不能误接到 HSE 晶振脚。
 
 ## 6. BOOT0 启动配置
@@ -60,7 +60,7 @@ MCU 确定为 `STM32F103C8T6`，封装方向按常见 `LQFP48`。
 - `STM32F103C8T6 LQFP48` 中 pin5 = `PD0 / OSC_IN`，pin6 = `PD1 / OSC_OUT`。
 - 8MHz 晶振 `X1` 接在 `OSC_IN` 与 `OSC_OUT` 之间。
 - `OSC_IN` 对 `GND` 放置负载电容 `C6`，`OSC_OUT` 对 `GND` 放置负载电容 `C7`。
-- 当前草图 `C6/C7` 暂按 `10pF` 标注，后续根据具体晶振 datasheet 的负载电容 `CL`、PCB 寄生电容和 STM32 硬件设计资料反推最终值。
+- 当前 `C6/C7` 暂按 `10pF` 标注，属于原理图审查前临时参数，后续根据具体晶振 datasheet 的负载电容 `CL`、PCB 寄生电容和 STM32 硬件设计资料反推最终值。
 - `PC14/PC15` 是 LSE 32.768kHz 低速晶振脚，不是本项目 8MHz HSE 晶振脚。本项目暂不使用 LSE，`PC14/PC15` 可先悬空。
 - Layout 时晶振和负载电容尽量靠近 `OSC_IN/OSC_OUT`，走线短、对称，远离高速/大电流信号。
 
@@ -73,9 +73,9 @@ MCU 确定为 `STM32F103C8T6`，封装方向按常见 `LQFP48`。
 - 网络名统一使用 `SWDIO`、`SWCLK`、`NRST`，不建议使用容易混淆的 `CLK`。
 - 后续建议预留测试点：`3.3V`、`GND`、`NRST`、`SWDIO`、`SWCLK`。
 
-## 9. 当前草图检查结论
+## 9. 原理图审查前检查项
 
-MCU 最小系统草图已完成第一轮修改。已完成内容包括：VDD/VSS 连接、基础去耦、VBAT 接 3.3V、VDDA/VSSA 简单模拟电源、NRST 复位、BOOT0 跳帽、HSE 8MHz、SWD 接口。
+MCU 最小系统模块设计说明已完成。已记录内容包括：VDD/VSS 连接、基础去耦、VBAT 接 3.3V、VDDA/VSSA 简单模拟电源、NRST 复位、BOOT0 跳帽、HSE 8MHz、SWD 接口。
 
 后续原理图审查 / PCB Layout 前重点检查：
 

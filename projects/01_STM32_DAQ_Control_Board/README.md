@@ -43,6 +43,7 @@
 | [requirements.md](requirements.md) | 项目需求、功能边界和待确认问题 |
 | [block_diagram.md](block_diagram.md) | 系统框图、模块连接和关键边界 |
 | [design_notes.md](design_notes.md) | 设计总览、主选器件摘要、关键网络和风险入口 |
+| [docs/README.md](docs/README.md) | docs 目录结构和阶段文档入口 |
 | [docs/module_design/](docs/module_design/) | 分模块详细设计说明 |
 | [references.md](references.md) | datasheet、资料路径和阅读状态索引 |
 | [docs/component_selection_plan.md](docs/component_selection_plan.md) | 第一轮关键器件选型计划和历史依据 |
