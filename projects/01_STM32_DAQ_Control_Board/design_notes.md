@@ -1,6 +1,6 @@
 # 设计说明总览
 
-> 文档状态：当前有效，整板设计事实源
+> 文档状态：当前有效，整板设计意图与接口约定主文档
 > 当前阶段：整板原理图系统审查
 > 适用对象：STM32 DAQ Control Board Rev A
 > 最后核对依据：当前仓库原理图目录与已确认设计决定
@@ -11,7 +11,19 @@
 
 第一版优先保证可实现、可焊接、可调试和文档完整，不追求复杂功能，不做高速接口，不做大电流输出，不做高精度模拟前端。
 
-当前文档结构已调整为“整板事实源 + 分模块详细设计”。本文件集中维护当前已经采用的整板设计方案摘要，包括主选器件、关键网络、MCU 引脚分配、接口定义、有效电平、已确认设计决定、风险和待确认项；详细计算、连接依据和 datasheet 摘要见 `docs/module_design/` 与 `references.md`。
+当前文档结构已调整为“设计意图主文档 + 分模块详细依据 + 实际 EDA 实现输入”。本文件集中维护当前已经采用的整板设计方案摘要，包括主选器件、关键网络、MCU 引脚分配、接口定义、有效电平、已确认设计决定、风险和待确认项；详细计算、连接依据和 datasheet 摘要见 `docs/module_design/` 与 `references.md`。
+
+实际电气实现以当前 Altium 原理图、对应审查版 PDF 及必要时导出的网表为准；本文件用于维护设计意图、Pin Map、接口约定、网络命名和已确认设计决定。如果本文档与实际原理图不一致，应在 [docs/schematic_review.md](docs/schematic_review.md) 中记录冲突，不得静默假设两者已经同步。
+
+## 1.1 文档事实源层级
+
+| 文件 / 输入 | 主要职责 |
+|---|---|
+| [requirements.md](requirements.md) | 功能需求、设计边界和验收标准 |
+| [design_notes.md](design_notes.md) | 设计意图、当前主选方案摘要、Pin Map、接口约定、网络命名和已确认设计决定 |
+| Altium `.SchDoc`、当前审查版 PDF、必要时的网表 | 确认实际电气实现，包括实际器件位号、接线、网络和元件参数 |
+| [docs/module_design/](docs/module_design/) | 模块级连接依据、参数计算、datasheet 依据、风险和 PCB 检查项 |
+| [docs/schematic_review.md](docs/schematic_review.md) | 原理图审查状态、问题、风险、证据和关闭情况 |
 
 ## 2. 当前阶段
 
@@ -131,7 +143,7 @@
 
 下一步建议按以下顺序推进：
 
-1. 准备实际 Altium 原理图和 PDF 原理图输出。
+1. 基于实际 Altium 原理图、当前审查版 PDF 和必要时导出的网表进行逐项核对。
 2. 使用 [docs/schematic_review.md](docs/schematic_review.md) 按模块填写审查记录。
 3. 对照 [docs/module_design/](docs/module_design/) 核查连接、网络名、器件方向、接口定义和测试点。
 4. 对照 [references.md](references.md) 核查 datasheet 路径、阅读状态和来源待确认项。

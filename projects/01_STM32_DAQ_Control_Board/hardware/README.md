@@ -12,7 +12,7 @@
 | 路径 | 用途 | 当前说明 |
 |---|---|---|
 | `altium_project/` | Altium 工程源文件目录 | 当前源文件位于 `altium_project/PCB_Project/`；不在本次任务中移动 |
-| `outputs/schematic_pdf/` | 原理图 PDF 导出文件 | 当前未发现正式原理图 PDF；后续导出后放这里 |
+| `outputs/schematic_pdf/` | 原理图 PDF 导出文件 | 当前审查输入为 `outputs/schematic_pdf/STM32_DAQ_Control_Board_Schematic_RevA.pdf`；文件存在不表示原理图已审查通过 |
 | `outputs/gerber/` | Gerber 输出 | PCB 阶段使用 |
 | `outputs/bom/` | BOM 导出 | 原理图审查和 BOM 核对后使用 |
 | `outputs/pick_place/` | 坐标文件 | 装配输出阶段使用 |
@@ -39,5 +39,6 @@ STM32_DAQ_Control_Board_Schematic_RevA_Reviewed.pdf
 
 - Git 中只保留当前有效版本和必要的正式审查版本。
 - 中间临时导出版本不必全部提交。
+- 当前 `STM32_DAQ_Control_Board_Schematic_RevA.pdf` 作为 Rev A 原理图审查输入；若后续重新导出，应同步更新引用路径和审查记录。
 - Altium `History/`、`Project Logs for*/`、预览、自动保存、缓存和锁文件不提交。
 - 如果未来重命名或移动正式输出文件，必须同步更新 Markdown 链接。

@@ -67,6 +67,7 @@ AI 默认只读取“仓库基础规则 + 当前项目文件 + 当前阶段 Skil
 | 外围器件反推 / BOM 草稿     | 基础上下文 + 器件选型 Skill + 当前项目 `requirements.md`、`design_notes.md`、`references.md`                                     | 当前模块 datasheet、相关 checklist              | 最终 BOM、无关模块资料                  |
 | 原理图设计               | 基础上下文 + 当前项目需求、设计说明、关键 datasheet 和候选记录                                                                            | 器件选型 Skill / datasheet Skill             | PCB 审查记录、其他项目                  |
 | 原理图审查               | 基础上下文 + `skills/hardware-schematic-review/SKILL.md` + 当前项目需求、设计说明、资料和原理图文件                                        | datasheet Skill / 器件选型 Skill，仅在追溯依据时读取   | 所有 Skill、所有项目、`templates/`     |
+| 原理图变更后的文档同步        | 基础上下文 + 当前项目最新 `.SchDoc` 或原理图 PDF + 当前项目 `design_notes.md` + 与变更相关的 `module_design` 文档 + `docs/schematic_review.md` | `requirements.md`，仅当功能边界或验收标准受到影响；`references.md`，仅当器件或参数依据发生变化；`docs/revision_history.md`，记录重要设计决定或硬件版本变化；datasheet Skill，仅当需要核对关键器件参数 | 其他项目、全部 Skill、全部 datasheet、无关历史记录、`templates/` |
 | PCB Layout / PCB 审查 | 基础上下文 + 当前项目原理图、PCB 相关文件和 PCB checklist                                                                           | datasheet / 原理图审查记录                      | 其他项目目录、模板目录                    |
 | 调试测试                | 基础上下文 + 当前项目 `docs/bringup_log.md` / `docs/test_report.md`                                                        | 原理图审查记录、PCB 审查记录、关键 datasheet            | 其他项目历史记录                       |
 | 新增项目                | 基础上下文 + `docs/Project_Template_Guide.md` + `templates/hardware_project_template/`                                 | `docs/08_Project_Workflow.md`            | 其他项目历史记录                       |
@@ -75,6 +76,13 @@ AI 默认只读取“仓库基础规则 + 当前项目文件 + 当前阶段 Skil
 | 开源项目参考分析            | 基础上下文 + `references/open_source_hardware_projects.md`                                                             | 当前项目 `references.md` / `design_notes.md` | 其他无关项目目录                       |
 
 ## 6. 流程文档读取规则
+
+原理图变更后的文档同步遵循以下原则：
+
+- 不得仅根据旧 `design_notes.md` 推断当前 EDA 实现。
+- 必须读取实际变更后的 SchDoc、PDF、图片或网表中的至少一种可靠实现输入。
+- 如果无法可靠解析实现文件，应将状态标记为“待 EDA 核对”，不能声明已经同步完成。
+- 文档变更只影响相关事实源，不应机械修改所有项目文档。
 
 `docs/08_Project_Workflow.md` 只在以下场景按需读取：
 

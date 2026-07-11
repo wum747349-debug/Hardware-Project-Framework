@@ -11,12 +11,15 @@
 
 本文件不是“审查通过”结论。下一步需要基于实际 Altium 原理图、PDF 原理图输出、datasheet、[design_notes.md](../design_notes.md) 和 [module_design/](module_design/) 逐项审查并记录问题。
 
+设计决定、EDA 实现核对、datasheet / 封装映射核对和问题关闭是四类不同状态。已确认设计决定不等于实际原理图已经逐项审查通过。
+
 ## 2. 审查输入
 
 | 输入 | 状态 | 备注 |
 |---|---|---|
-| Altium 原理图工程 | 待提供 / 待确认 | 需以实际工程为准 |
-| PDF 原理图输出 | 待提供 / 待确认 | 建议用于逐页审查和记录问题 |
+| Altium 工程目录 | 已有 / 待整理 | `../hardware/altium_project/PCB_Project/`；当前可见 `.PrjPcb`、`.PcbDoc`、`.SchLib`、历史 `.SchDoc.Zip`，但未发现当前有效 `.SchDoc` 源文件 |
+| Altium `.SchDoc` 源文件 | 未发现 / 待补充 | 当前目录中未发现可直接作为源文件审查的 `.SchDoc`；不能仅凭历史压缩文件确认当前 EDA 实现 |
+| PDF 原理图输出 | 已有 / 当前审查输入 | `../hardware/outputs/schematic_pdf/STM32_DAQ_Control_Board_Schematic_RevA.pdf` |
 | 设计总览 | 已有 | [../design_notes.md](../design_notes.md) |
 | 模块设计文档 | 已有 | [module_design/](module_design/) |
 | datasheet / reference manual | 部分已收集 | 见 [../references.md](../references.md) |
@@ -27,6 +30,7 @@
 - 每个问题应记录所在模块、问题描述、风险等级、修改建议、状态和证据或关联文件。
 - 关键参数必须回到 datasheet、reference manual 或 application note 核对。
 - 立创商品页只能作为 C 编号、库存、价格、封装和资料入口参考，不能替代 datasheet。
+- PDF 文本层可用于辅助检查网络名，但不能替代图形连线、封装映射和 ERC 审查。
 - 原理图审查完成并处理关键问题前，不进入 PCB Layout 结论。
 
 ## 4. 问题记录表
@@ -36,7 +40,8 @@
 | SCH-001 | 接口 / I2C | I2C1 当前是否需要板载 `R_SCL/R_SDA` 上拉仍未决策，不能写成已完成。 | 中 | 复审时结合外接模块类型、总线速度和线长决定是否补预留焊盘；若依赖模块自带上拉，需在丝印/调试说明中提示。 | 待决策 | [module_design/06_interfaces_testpoints.md](module_design/06_interfaces_testpoints.md) |
 | SCH-002 | MCU 最小系统 / HSE | `C6/C7=10pF` 仍为临时标注值，8MHz 晶振负载电容未最终核对。 | 中 | 根据晶振 `CL`、PCB 寄生电容和 STM32 硬件设计资料反推最终值。 | 待核对 | [module_design/01_mcu_minimum_system.md](module_design/01_mcu_minimum_system.md)、[../references.md](../references.md) |
 | SCH-003 | 封装 / 可制造性 | USB-C、CH340C、AP2112K、AO3400A、SS14、BAT54S、按键和连接器封装/引脚映射仍需 PCB 前逐项核对。 | 中 | 对照 datasheet、封装库和实际采购型号检查 pin mapping、极性、焊盘和丝印方向。 | 待核对 | [../references.md](../references.md)、`hardware/altium_project/` |
-| SCH-004 | 硬件输出 | 当前仓库未发现正式原理图 PDF 导出文件。 | 低 | 后续导出时使用 `STM32_DAQ_Control_Board_Schematic_RevA_Draftxx.pdf` 或正式命名，并放入 `hardware/outputs/schematic_pdf/`。 | 待补充 | [../hardware/README.md](../hardware/README.md) |
+| SCH-004 | 硬件输出 | 原“缺少原理图 PDF”问题已处理，当前 PDF 文件已补充为 `hardware/outputs/schematic_pdf/STM32_DAQ_Control_Board_Schematic_RevA.pdf`。 | 低 | 将该 PDF 作为当前实际电气实现的审查输入；继续完成正式逐项审查。 | 已补充 / 文件问题关闭，审查未完成 | [../hardware/README.md](../hardware/README.md) |
+| SCH-005 | MCU 最小系统 / HSE | PDF 文本层显示 HSE 负载电容为 `C3/C4 10pf`，而当前文档多处写作 `C6/C7=10pF`；位号和最终电容值均需 EDA 核对。 | 中 | 以当前原理图源文件 / PDF 图形 / 网表为准核对实际位号、连接和参数；文档不得静默假设 `C6/C7` 与 PDF 一致。 | 待 EDA 核对 | `../hardware/outputs/schematic_pdf/STM32_DAQ_Control_Board_Schematic_RevA.pdf`、[module_design/01_mcu_minimum_system.md](module_design/01_mcu_minimum_system.md) |
 
 ## 5. 本轮已确认事项
 
@@ -102,12 +107,12 @@
 
 | 审查项 | 当前状态 | 备注 |
 |---|---|---|
-| ADC1/ADC2 是否分别接 PA0/ADC12_IN0、PA1/ADC12_IN1 | 已确认 / 待原理图核对 | 避免交叉命名 |
+| ADC1/ADC2 是否分别接 PA0/ADC12_IN0、PA1/ADC12_IN1 | 设计决定已确认，EDA 实现待核对 | 避免交叉命名；PDF 文本层可见 `ADC12_IN0/ADC12_IN1`、`TP_ADC1/TP_ADC2` |
 | 外部输入是否先经 `10kΩ/18kΩ` 分压 | 待审查 | 5V 输入约 3.21V |
 | `330Ω` 串联限流是否在 ADC 节点前 | 待审查 | 不应被短接或绕过 |
 | `10nF` 滤波电容是否接 ADC 节点到 GND | 待审查 | 低速采集使用 |
 | BAT54S 是否为正确型号和引脚映射 | 待审查 | Pin3 ADC 节点，Pin1 GND，Pin2 VDDA_3V3 |
-| `TP_ADC1/TP_ADC2` 是否接 MCU 实际 ADC 输入节点 | 已确认 / 待原理图核对 | `TP_ADC1 -> ADC12_IN0 / PA0`，`TP_ADC2 -> ADC12_IN1 / PA1` |
+| `TP_ADC1/TP_ADC2` 是否接 MCU 实际 ADC 输入节点 | 设计决定已确认，EDA 实现待核对 | `TP_ADC1 -> ADC12_IN0 / PA0`，`TP_ADC2 -> ADC12_IN1 / PA1`；仍需图形连线核对 |
 | ADC 接口是否标注 `ADC IN 0-5V` | 待审查 | 不支持长期过压 |
 | 是否记录未上电反灌 VDDA 风险 | 待审查 | 上钳位导入 VDDA_3V3 |
 
@@ -117,7 +122,7 @@
 
 | 审查项 | 当前状态 | 备注 |
 |---|---|---|
-| PB0/PB1 是否分别控制 `MOS_CTRL1/MOS_CTRL2` | 已确认 / 待原理图核对 | 保留 TIM3_CH3/TIM3_CH4 双路硬件 PWM 能力，不改 PB2/PB10 |
+| PB0/PB1 是否分别控制 `MOS_CTRL1/MOS_CTRL2` | 设计决定已确认，EDA 实现待核对 | 保留 TIM3_CH3/TIM3_CH4 双路硬件 PWM 能力，不改 PB2/PB10；PDF 文本层可见 `PB0/PB1` 与 `MOS_CTRL1/MOS_CTRL2` |
 | AO3400A 引脚映射是否正确 | 待审查 | Gate/Source/Drain 不可接错 |
 | 每路 Gate 是否有 `100Ω` 串联电阻和 `100kΩ` 下拉 | 待审查 | 默认关断 |
 | H3/H4 是否为 `VLOAD_EXT / MOS_OUT / GND` 三针 | 待审查 | 引脚顺序需丝印清楚 |
@@ -140,7 +145,7 @@
 | `H_EXT_PWR_GPIO` 2x5 排针脚位是否符合规划 | 待审查 | 1/3 为 3.3V，2/4 为 GND，5/6/7/8/9 为 GPIO，10 为 `+5V_SYS` |
 | `+5V_SYS` 外引是否有反灌风险提示 | 待审查 | 不建议外部从该脚反向给板子供电 |
 | SWD、UART、I2C、SPI、ADC、MOSFET 排针脚位是否与网络一致 | 待审查 | 避免丝印和网络不一致 |
-| 用户 LED 是否为 `3.3V -> 1kΩ -> LED_USER -> PB5` | 已确认 / 待原理图核对 | 低电平点亮，用于 GPIO 输出和状态指示 |
+| 用户 LED 是否为 `3.3V -> 1kΩ -> LED_USER -> PB5` | 设计决定已确认，EDA 实现待核对 | 低电平点亮，用于 GPIO 输出和状态指示；仍需图形连线核对 |
 | 用户按键是否为 `PB8 -> KEY_USER -> GND` | 待审查 | 固件内部上拉，未按下高电平，按下低电平；当前无外部上拉 |
 | 关键测试点是否覆盖电源、复位、SWD、UART、ADC、MOSFET | 待审查 | 便于上电和调试 |
 | USB-C、CH340C、AP2112K、AO3400A、SS14、BAT54S 封装是否与 datasheet 匹配 | 待审查 | 需检查封装库 |
@@ -149,11 +154,13 @@
 
 ## 12. 审查结论
 
-当前结论：待审查。
+当前结论：修改后再进入 PCB Layout。
 
-后续在完成实际原理图逐项审查后，应在这里记录：
+依据：
 
-- 是否允许进入 PCB Layout。
-- 必须修改的问题。
-- 可接受但需 PCB 阶段关注的问题。
-- 仍需 datasheet / 封装 / 采购可得性复核的问题。
+- 当前 PDF 已补充，可作为审查输入，但 PDF 文本层解析只能支持有限网络名核对，不能替代图形连线、封装映射和 ERC。
+- 当前目录未发现可直接审查的 `.SchDoc` 源文件。
+- I2C 上拉、HSE 负载电容、关键器件封装 / pin mapping、接口丝印和正式 ERC 仍未关闭。
+- PDF 文本层显示 HSE 负载电容位号与文档记录存在 `C3/C4` vs `C6/C7` 的待核对差异。
+
+完成上述问题核对并更新关闭状态后，才能重新判断是否可以进入 PCB Layout。

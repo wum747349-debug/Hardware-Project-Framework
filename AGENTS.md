@@ -42,6 +42,15 @@ AI 在处理本仓库任务时，应遵循最小必要上下文策略：
 
 回答涉及开源项目参考的问题前，应按需检查当前项目的 `references.md` 和 `references/open_source_hardware_projects.md`。参考开源项目时，只能提炼学习点、风险点和检查项，不要让用户直接照抄。如果用户要求“照着某个开源项目画”，应提醒需要结合本项目需求、器件 datasheet、封装、供电、接口和 PCB 工艺重新设计。
 
+## 电路设计信息来源优先级
+
+- 实际 Altium 源文件、当前审查版 PDF 和必要时的网表，用于确认实际电气实现。
+- `design_notes.md` 用于维护设计意图、Pin Map、接口约定和已确认设计决定。
+- `docs/module_design/*.md` 用于维护模块参数、计算和设计依据。
+- `docs/schematic_review.md` 用于维护审查状态、问题和关闭情况。
+- 如果文档与实际原理图不一致，必须指出冲突并记录到审查文档，不得仅依据旧文档推断 EDA 已经同步。
+- 涉及关键参数时仍必须回到 datasheet、reference manual 或 application note 核对。
+
 ## 禁止事项
 
 - 不要把开源项目内容直接复制成本项目设计。

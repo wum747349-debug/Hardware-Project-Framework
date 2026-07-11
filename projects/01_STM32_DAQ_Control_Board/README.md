@@ -50,7 +50,7 @@
 |---|---|
 | [requirements.md](requirements.md) | 项目需求、功能边界和待确认问题 |
 | [block_diagram.md](block_diagram.md) | 系统框图、模块连接和关键边界 |
-| [design_notes.md](design_notes.md) | 当前整板设计事实源：主选器件、关键网络、Pin Map、接口定义和风险入口 |
+| [design_notes.md](design_notes.md) | 当前整板设计意图与接口约定主文档：主选器件、关键网络、Pin Map、接口定义和风险入口 |
 | [docs/README.md](docs/README.md) | docs 目录结构和阶段文档入口 |
 | [docs/module_design/](docs/module_design/) | 分模块详细设计说明 |
 | [references.md](references.md) | datasheet、资料路径和阅读状态索引 |
@@ -65,7 +65,7 @@
 1. 先读本文，确认项目目标、阶段和边界。
 2. 读 [requirements.md](requirements.md)，确认需求、约束和验收边界。
 3. 读 [block_diagram.md](block_diagram.md)，建立系统模块和信号流向。
-4. 读 [design_notes.md](design_notes.md)，以当前整板设计事实源核对主选器件、Pin Map 和接口定义。
+4. 读 [design_notes.md](design_notes.md)，核对当前设计意图、主选器件、Pin Map 和接口定义。
 5. 按模块阅读 [docs/module_design/](docs/module_design/)。
 6. 使用 [docs/schematic_review.md](docs/schematic_review.md) 记录原理图审查问题和关闭状态。
 
@@ -80,7 +80,7 @@
 
 ## 下一步
 
-1. 导出或整理实际 Altium 原理图和 PDF 原理图输出。
+1. 基于实际 Altium 原理图、当前审查版 PDF 和必要时导出的网表进行逐项核对。
 2. 按 [docs/schematic_review.md](docs/schematic_review.md) 分模块审查。
 3. 对照 [design_notes.md](design_notes.md)、[docs/module_design/](docs/module_design/) 和 [references.md](references.md) 核对关键器件、连接、封装和风险项。
 4. 原理图审查通过并记录修改后，再进入 PCB Layout。
