@@ -1,10 +1,13 @@
 # 原理图审查记录
 
+> 文档状态：当前进行中
+> 当前阶段：整板原理图系统审查
+> 适用对象：STM32 DAQ Control Board Rev A
+> 最后核对依据：当前仓库原理图目录与已确认设计决定
+
 ## 1. 文档定位
 
 本文用于记录 `STM32F103C8T6 数据采集/控制开发板` 的原理图系统审查过程。
-
-当前状态：待审查 / 待确认。
 
 本文件不是“审查通过”结论。下一步需要基于实际 Altium 原理图、PDF 原理图输出、datasheet、[design_notes.md](../design_notes.md) 和 [module_design/](module_design/) 逐项审查并记录问题。
 
@@ -21,18 +24,31 @@
 ## 3. 总体审查原则
 
 - 不伪造“已通过”结论。
-- 每个问题应记录所在模块、网络/器件、问题描述、风险、建议修改和状态。
+- 每个问题应记录所在模块、问题描述、风险等级、修改建议、状态和证据或关联文件。
 - 关键参数必须回到 datasheet、reference manual 或 application note 核对。
 - 立创商品页只能作为 C 编号、库存、价格、封装和资料入口参考，不能替代 datasheet。
 - 原理图审查完成并处理关键问题前，不进入 PCB Layout 结论。
 
 ## 4. 问题记录表
 
-| 编号 | 模块 | 网络 / 器件 | 问题描述 | 风险 | 建议修改 | 状态 |
+| 编号 | 模块 | 问题描述 | 风险等级 | 修改建议 | 状态 | 证据或关联文件 |
 |---|---|---|---|---|---|---|
-| SCH-001 | 待填写 | 待填写 | 待填写 | 待填写 | 待填写 | 待审查 |
+| SCH-001 | 接口 / I2C | I2C1 当前是否需要板载 `R_SCL/R_SDA` 上拉仍未决策，不能写成已完成。 | 中 | 复审时结合外接模块类型、总线速度和线长决定是否补预留焊盘；若依赖模块自带上拉，需在丝印/调试说明中提示。 | 待决策 | [module_design/06_interfaces_testpoints.md](module_design/06_interfaces_testpoints.md) |
+| SCH-002 | MCU 最小系统 / HSE | `C6/C7=10pF` 仍为临时标注值，8MHz 晶振负载电容未最终核对。 | 中 | 根据晶振 `CL`、PCB 寄生电容和 STM32 硬件设计资料反推最终值。 | 待核对 | [module_design/01_mcu_minimum_system.md](module_design/01_mcu_minimum_system.md)、[../references.md](../references.md) |
+| SCH-003 | 封装 / 可制造性 | USB-C、CH340C、AP2112K、AO3400A、SS14、BAT54S、按键和连接器封装/引脚映射仍需 PCB 前逐项核对。 | 中 | 对照 datasheet、封装库和实际采购型号检查 pin mapping、极性、焊盘和丝印方向。 | 待核对 | [../references.md](../references.md)、`hardware/altium_project/` |
+| SCH-004 | 硬件输出 | 当前仓库未发现正式原理图 PDF 导出文件。 | 低 | 后续导出时使用 `STM32_DAQ_Control_Board_Schematic_RevA_Draftxx.pdf` 或正式命名，并放入 `hardware/outputs/schematic_pdf/`。 | 待补充 | [../hardware/README.md](../hardware/README.md) |
 
-## 5. MCU 最小系统审查项
+## 5. 本轮已确认事项
+
+| 事项 | 当前结论 | 状态 | 关联文件 |
+|---|---|---|---|
+| 用户 LED | `PB5`，低电平点亮，电路为 `3.3V -> 1kΩ -> LED_USER -> PB5`。 | 已确认 | [../design_notes.md](../design_notes.md)、[module_design/06_interfaces_testpoints.md](module_design/06_interfaces_testpoints.md) |
+| MOSFET 控制脚 | `MOS_CTRL1 = PB0`，`MOS_CTRL2 = PB1`，不改为 PB2/PB10。 | 已确认 | [../design_notes.md](../design_notes.md)、[module_design/05_mosfet_low_side_output.md](module_design/05_mosfet_low_side_output.md) |
+| MOSFET PWM 能力 | PB0/PB1 保留 TIM3_CH3/TIM3_CH4 双路硬件 PWM 能力。 | 已确认 | [module_design/05_mosfet_low_side_output.md](module_design/05_mosfet_low_side_output.md) |
+| ADC 测试点 | `PA0 / ADC12_IN0 -> TP_ADC1`，`PA1 / ADC12_IN1 -> TP_ADC2`。 | 已确认 | [module_design/04_adc_input_protection.md](module_design/04_adc_input_protection.md) |
+| 原理图组织 | 当前整板原理图保持单页模块化结构，不拆成多张层次原理图。 | 已确认 | [../design_notes.md](../design_notes.md) |
+
+## 6. MCU 最小系统审查项
 
 参考：[module_design/01_mcu_minimum_system.md](module_design/01_mcu_minimum_system.md)
 
@@ -47,7 +63,7 @@
 | HSE 8MHz 是否接 `PD0/OSC_IN` 和 `PD1/OSC_OUT` | 待审查 | `C6/C7=10pF` 仍需复核 |
 | SWDIO/SWCLK/NRST/GND/3.3V 接口是否清晰 | 待审查 | 网络名避免 `CLK` 混淆 |
 
-## 6. 电源与 USB-C 审查项
+## 7. 电源与 USB-C 审查项
 
 参考：[module_design/02_usb_c_power_ap2112.md](module_design/02_usb_c_power_ap2112.md)
 
@@ -65,7 +81,7 @@
 | 3.3V 外供 `<=100mA` 和热耗散边界是否在文档/丝印体现 | 待审查 | 不能按 600mA 长期满载 |
 | 是否预留 `TP_VBUS`、`TP_5V`、`TP_3V3`、`TP_GND` | 待审查 | 便于上电测量 |
 
-## 7. CH340C / USB 转 UART 审查项
+## 8. CH340C / USB 转 UART 审查项
 
 参考：[module_design/03_usb_uart_ch340c.md](module_design/03_usb_uart_ch340c.md)
 
@@ -80,28 +96,28 @@
 | `R232` 是否接 GND | 待审查 | TTL UART 模式 |
 | 未用握手脚和 NC 脚是否加 No Connect 标记 | 待审查 | 不做 DTR/RTS 自动下载 |
 
-## 8. ADC 输入审查项
+## 9. ADC 输入审查项
 
 参考：[module_design/04_adc_input_protection.md](module_design/04_adc_input_protection.md)
 
 | 审查项 | 当前状态 | 备注 |
 |---|---|---|
-| ADC1/ADC2 是否分别接 PA0/ADC12_IN0、PA1/ADC12_IN1 | 待审查 | 避免交叉命名 |
+| ADC1/ADC2 是否分别接 PA0/ADC12_IN0、PA1/ADC12_IN1 | 已确认 / 待原理图核对 | 避免交叉命名 |
 | 外部输入是否先经 `10kΩ/18kΩ` 分压 | 待审查 | 5V 输入约 3.21V |
 | `330Ω` 串联限流是否在 ADC 节点前 | 待审查 | 不应被短接或绕过 |
 | `10nF` 滤波电容是否接 ADC 节点到 GND | 待审查 | 低速采集使用 |
 | BAT54S 是否为正确型号和引脚映射 | 待审查 | Pin3 ADC 节点，Pin1 GND，Pin2 VDDA_3V3 |
-| `TP_ADC1/TP_ADC2` 是否接 MCU 实际 ADC 输入节点 | 待审查 | 不接分压前节点 |
+| `TP_ADC1/TP_ADC2` 是否接 MCU 实际 ADC 输入节点 | 已确认 / 待原理图核对 | `TP_ADC1 -> ADC12_IN0 / PA0`，`TP_ADC2 -> ADC12_IN1 / PA1` |
 | ADC 接口是否标注 `ADC IN 0-5V` | 待审查 | 不支持长期过压 |
 | 是否记录未上电反灌 VDDA 风险 | 待审查 | 上钳位导入 VDDA_3V3 |
 
-## 9. MOSFET 低边输出审查项
+## 10. MOSFET 低边输出审查项
 
 参考：[module_design/05_mosfet_low_side_output.md](module_design/05_mosfet_low_side_output.md)
 
 | 审查项 | 当前状态 | 备注 |
 |---|---|---|
-| PB0/PB1 是否分别控制 `MOS_CTRL1/MOS_CTRL2` | 待审查 | 避开 ADC、USART、SWD |
+| PB0/PB1 是否分别控制 `MOS_CTRL1/MOS_CTRL2` | 已确认 / 待原理图核对 | 保留 TIM3_CH3/TIM3_CH4 双路硬件 PWM 能力，不改 PB2/PB10 |
 | AO3400A 引脚映射是否正确 | 待审查 | Gate/Source/Drain 不可接错 |
 | 每路 Gate 是否有 `100Ω` 串联电阻和 `100kΩ` 下拉 | 待审查 | 默认关断 |
 | H3/H4 是否为 `VLOAD_EXT / MOS_OUT / GND` 三针 | 待审查 | 引脚顺序需丝印清楚 |
@@ -110,7 +126,7 @@
 | 外部 VLOAD 是否要求与板子 GND 共地 | 待审查 | 丝印建议 `COMMON GND` |
 | `TP_GATE1/2`、`TP_OUT1/2` 是否便于测量 | 待审查 | 关注开关节点干扰 |
 
-## 10. 接口 / 测试点 / 封装 / 丝印审查项
+## 11. 接口 / 测试点 / 封装 / 丝印审查项
 
 参考：[module_design/06_interfaces_testpoints.md](module_design/06_interfaces_testpoints.md)
 
@@ -124,14 +140,14 @@
 | `H_EXT_PWR_GPIO` 2x5 排针脚位是否符合规划 | 待审查 | 1/3 为 3.3V，2/4 为 GND，5/6/7/8/9 为 GPIO，10 为 `+5V_SYS` |
 | `+5V_SYS` 外引是否有反灌风险提示 | 待审查 | 不建议外部从该脚反向给板子供电 |
 | SWD、UART、I2C、SPI、ADC、MOSFET 排针脚位是否与网络一致 | 待审查 | 避免丝印和网络不一致 |
-| 用户 LED 是否为 `PB5 -> 1kΩ -> LED_USER -> GND` | 待审查 | 高电平点亮，用于 GPIO 输出和状态指示 |
+| 用户 LED 是否为 `3.3V -> 1kΩ -> LED_USER -> PB5` | 已确认 / 待原理图核对 | 低电平点亮，用于 GPIO 输出和状态指示 |
 | 用户按键是否为 `PB8 -> KEY_USER -> GND` | 待审查 | 固件内部上拉，未按下高电平，按下低电平；当前无外部上拉 |
 | 关键测试点是否覆盖电源、复位、SWD、UART、ADC、MOSFET | 待审查 | 便于上电和调试 |
 | USB-C、CH340C、AP2112K、AO3400A、SS14、BAT54S 封装是否与 datasheet 匹配 | 待审查 | 需检查封装库 |
 | 丝印是否包含 `USB-C 5V ONLY`、`ADC IN 0-5V`、`VLOAD 5-12V`、`COMMON GND`、`3.3V LOGIC` | 待审查 | 空间不足时优先保留安全边界 |
 | `H_UART2`、`H_SPI`、`H_I2C` 丝印是否体现关键脚名 | 待审查 | 建议分别标注 `GND/TX2/RX2`、`GND/CS/SCK/MISO/MOSI`、`3V3/GND/SCL/SDA` |
 
-## 11. 审查结论
+## 12. 审查结论
 
 当前结论：待审查。
 

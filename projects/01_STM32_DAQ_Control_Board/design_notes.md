@@ -1,12 +1,17 @@
 # 设计说明总览
 
+> 文档状态：当前有效，整板设计事实源
+> 当前阶段：整板原理图系统审查
+> 适用对象：STM32 DAQ Control Board Rev A
+> 最后核对依据：当前仓库原理图目录与已确认设计决定
+
 ## 1. 当前设计定位
 
 本项目第一版定位为 `STM32F103C8T6 数据采集/控制开发板`，重点训练低压嵌入式硬件设计的完整流程：需求定义、最小系统、电源输入与保护、通信接口、ADC 输入、MOSFET 输出、PCB Layout、上电调试和测试验证。
 
 第一版优先保证可实现、可焊接、可调试和文档完整，不追求复杂功能，不做高速接口，不做大电流输出，不做高精度模拟前端。
 
-当前文档结构已调整为“设计总览 + 分模块详细设计”。本文件只保留总览、主选器件、关键网络和审查入口；模块细节见 `docs/module_design/`。
+当前文档结构已调整为“整板事实源 + 分模块详细设计”。本文件集中维护当前已经采用的整板设计方案摘要，包括主选器件、关键网络、MCU 引脚分配、接口定义、有效电平、已确认设计决定、风险和待确认项；详细计算、连接依据和 datasheet 摘要见 `docs/module_design/` 与 `references.md`。
 
 ## 2. 当前阶段
 
@@ -29,8 +34,8 @@
 | USB-C 供电与 3.3V 电源 | USB-C 5V ONLY，`VBUS_RAW -> F1 -> VBUS_FUSED -> SW2 -> +5V_SYS -> AP2112K -> 3.3V` | [02_usb_c_power_ap2112.md](docs/module_design/02_usb_c_power_ap2112.md) |
 | USB 转 UART | `CH340C`，3.3V 供电，USB_DP/USB_DM 接 CH340C，USART1 PA9/PA10 与 MCU 通信 | [03_usb_uart_ch340c.md](docs/module_design/03_usb_uart_ch340c.md) |
 | ADC 输入保护 | 2 路 `0-5V` 输入，经 `10kΩ/18kΩ` 分压、`330Ω` 限流、`10nF` 滤波和 `BAT54S` 钳位进入 PA0/PA1 | [04_adc_input_protection.md](docs/module_design/04_adc_input_protection.md) |
-| MOSFET 低边输出 | 2 路 `AO3400A` 低边开关，PB0/PB1 控制，`100Ω` 栅极电阻，`100kΩ` 下拉，`SS14` 续流 | [05_mosfet_low_side_output.md](docs/module_design/05_mosfet_low_side_output.md) |
-| 接口、测试点与丝印 | USART2、I2C1、SPI1、公用电源 + GPIO 3.3V 排针、SWD、PB5 用户 LED、PB8 用户按键、电源/ADC/MOSFET 测试点和安全丝印 | [06_interfaces_testpoints.md](docs/module_design/06_interfaces_testpoints.md) |
+| MOSFET 低边输出 | 2 路 `AO3400A` 低边开关，PB0/PB1 控制，保留 TIM3_CH3/TIM3_CH4 双路硬件 PWM 能力，`SS14` 续流 | [05_mosfet_low_side_output.md](docs/module_design/05_mosfet_low_side_output.md) |
+| 接口、测试点与丝印 | USART2、I2C1、SPI1、公用电源 + GPIO 3.3V 排针、SWD、PB5 低电平点亮用户 LED、PB8 用户按键、电源/ADC/MOSFET 测试点和安全丝印 | [06_interfaces_testpoints.md](docs/module_design/06_interfaces_testpoints.md) |
 
 ## 4. 当前主选器件摘要
 
@@ -64,8 +69,8 @@
 | `UART2_TX / UART2_RX` | 外部 USART2 扩展 | PA2 为 MCU 发送 TX2，接外部模块 RX；PA3 为 MCU 接收 RX2，接外部模块 TX |
 | `I2C1_SCL / I2C1_SDA` | 外部 I2C1 扩展 | PB6/PB7；当前未预留板载 4.7k 上拉，依赖外接模块上拉或后续复审补预留焊盘 |
 | `SPI1_CS / SPI1_SCK / SPI1_MISO / SPI1_MOSI` | 外部 SPI1 扩展 | PA4/PA5/PA6/PA7；接口当前只带 GND 和信号，外设 3.3V 从公用扩展排针取电 |
-| `ADC12_IN0 / ADC12_IN1` | MCU 实际 ADC 输入节点 | 分压、限流、滤波、BAT54S 钳位后进入 PA0/PA1 |
-| `MOS_CTRL1 / MOS_CTRL2` | MOSFET 控制 GPIO | PB0/PB1 经 `100Ω` 到 Gate，并由 `100kΩ` 下拉 |
+| `ADC12_IN0 / ADC12_IN1` | MCU 实际 ADC 输入节点 | PA0/ADC12_IN0 对应 `TP_ADC1`；PA1/ADC12_IN1 对应 `TP_ADC2` |
+| `MOS_CTRL1 / MOS_CTRL2` | MOSFET 控制 GPIO | PB0/PB1 控制两路低边输出，保留 TIM3_CH3/TIM3_CH4 双路硬件 PWM 能力 |
 | `MOS_OUT1 / MOS_OUT2` | MOSFET 低边输出节点 | 接 AO3400A Drain、接口 OUT、SS14 阳极 |
 | `VLOAD_EXT1 / VLOAD_EXT2` | 外部负载电源正端 | 建议 `5V-12V`，最大不超过 `12V` |
 
@@ -88,7 +93,7 @@
 | `PA14` | `SWCLK` | SWD 下载调试 |
 | `PB0` | `MOS_CTRL1` | 第一路 MOSFET 控制 |
 | `PB1` | `MOS_CTRL2` | 第二路 MOSFET 控制 |
-| `PB5` | `USER_LED` | 用户 LED，高电平点亮 |
+| `PB5` | `USER_LED` | 用户 LED，低电平点亮 |
 | `PB6` | `I2C1_SCL` | I2C1 时钟 |
 | `PB7` | `I2C1_SDA` | I2C1 数据 |
 | `PB8` | `USER_KEY` | 用户按键，内部上拉输入，按下为低 |
@@ -97,7 +102,18 @@
 | `PB14` | `GPIO_EXT` | 公用 GPIO 扩展 |
 | `PB15` | `GPIO_EXT` | 公用 GPIO 扩展 |
 
-## 7. 主要风险点
+## 7. 当前已确认设计决定
+
+- MCU 为 `STM32F103C8T6`，当前封装方向按 LQFP48 审查。
+- 当前整板原理图继续保持单页模块化结构，不拆成多张层次原理图。
+- 用户 LED 使用 `PB5`，当前低电平点亮：`3.3V -> 1kΩ -> LED_USER -> PB5`。
+- `MOS_CTRL1 = PB0`，`MOS_CTRL2 = PB1`，不改为 PB2/PB10；PB0/PB1 保留 TIM3_CH3/TIM3_CH4 双路硬件 PWM 能力。
+- ADC 测试点对应关系固定为 `PA0 / ADC12_IN0 -> TP_ADC1`，`PA1 / ADC12_IN1 -> TP_ADC2`。
+- PA9/PA10 保持作为板载 CH340C 的 USART1 USB-UART；外部 UART 扩展使用 USART2。
+- I2C 是否增加板载上拉仍为待确认项，不能写成已经最终确定。
+- 8MHz HSE 晶振负载电容最终值仍需根据晶振参数、PCB 寄生电容和 STM32 资料核对。
+
+## 8. 主要风险点
 
 - USB-C 只支持 5V 输入，不支持 USB-PD 9V/12V；PCB 丝印建议标注 `USB-C 5V ONLY`。
 - AP2112K 不能按 600mA 长期满载设计，3.3V 总电流和外部 3.3V 取电需要保守。
@@ -111,7 +127,7 @@
 - HSE 负载电容仍需根据具体晶振 datasheet、PCB 寄生电容和 STM32 硬件设计资料反推。
 - 原理图审查前不能把当前文档当作“已通过审查”的结论。
 
-## 8. 后续审查入口
+## 9. 后续审查入口
 
 下一步建议按以下顺序推进：
 
@@ -121,7 +137,7 @@
 4. 对照 [references.md](references.md) 核查 datasheet 路径、阅读状态和来源待确认项。
 5. 原理图审查记录完成并处理问题后，再进入 PCB Layout。
 
-## 9. 相关文档
+## 10. 相关文档
 
 - [requirements.md](requirements.md)
 - [block_diagram.md](block_diagram.md)

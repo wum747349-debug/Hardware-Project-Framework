@@ -1,5 +1,10 @@
 # STM32F103C8T6 数据采集/控制开发板
 
+> 文档状态：当前有效
+> 当前阶段：整板原理图系统审查
+> 适用对象：STM32 DAQ Control Board Rev A
+> 最后核对依据：当前仓库原理图目录与已确认设计决定
+
 ## 项目简介
 
 本项目设计一块基于 `STM32F103C8T6` 的 2 层 PCB 开发板，用于训练 STM32 最小系统、电源输入与保护、USB 转 UART 通信、ADC 输入采集、MOSFET 低边控制输出、常用通信接口扩展、PCB Layout、上电调试和测试验证能力。
@@ -22,7 +27,7 @@
 - CH340C 实现 USB 转 UART，电脑端作为 COM 串口。
 - 2 路板级 `0-5V` ADC 输入，经分压、限流、滤波和 BAT54S 钳位后进入 MCU。
 - 2 路 AO3400A N-MOSFET 低边输出，面向 `5V-12V` 小电流负载。
-- CH340C 占用 USART1 PA9/PA10；外部 UART 扩展改用 USART2 PA2/PA3，避免与板载 USB-UART 冲突。
+- CH340C 占用 USART1，外部 UART 扩展改用 USART2，避免与板载 USB-UART 冲突。
 - I2C1、SPI1、USART2 和公用电源 + GPIO 排针扩展接口，第一版均为 `3.3V` 逻辑。
 - 电源指示 LED、PB5 用户 LED、复位按键、PB8 用户按键和关键测试点。
 
@@ -45,14 +50,24 @@
 |---|---|
 | [requirements.md](requirements.md) | 项目需求、功能边界和待确认问题 |
 | [block_diagram.md](block_diagram.md) | 系统框图、模块连接和关键边界 |
-| [design_notes.md](design_notes.md) | 设计总览、主选器件摘要、关键网络和风险入口 |
+| [design_notes.md](design_notes.md) | 当前整板设计事实源：主选器件、关键网络、Pin Map、接口定义和风险入口 |
 | [docs/README.md](docs/README.md) | docs 目录结构和阶段文档入口 |
 | [docs/module_design/](docs/module_design/) | 分模块详细设计说明 |
 | [references.md](references.md) | datasheet、资料路径和阅读状态索引 |
 | [docs/component_selection_plan.md](docs/component_selection_plan.md) | 第一轮关键器件选型计划和历史依据 |
 | [docs/schematic_review.md](docs/schematic_review.md) | 原理图系统审查记录模板 |
+| [hardware/README.md](hardware/README.md) | Altium 源文件、导出文件和图片目录约定 |
 | [docs/user/project_overview.md](docs/user/project_overview.md) | 面向展示/复盘的项目简介 |
 | [docs/user/learning_record.md](docs/user/learning_record.md) | 学习记录和复盘入口 |
+
+## 推荐阅读顺序
+
+1. 先读本文，确认项目目标、阶段和边界。
+2. 读 [requirements.md](requirements.md)，确认需求、约束和验收边界。
+3. 读 [block_diagram.md](block_diagram.md)，建立系统模块和信号流向。
+4. 读 [design_notes.md](design_notes.md)，以当前整板设计事实源核对主选器件、Pin Map 和接口定义。
+5. 按模块阅读 [docs/module_design/](docs/module_design/)。
+6. 使用 [docs/schematic_review.md](docs/schematic_review.md) 记录原理图审查问题和关闭状态。
 
 ## 模块设计文档
 

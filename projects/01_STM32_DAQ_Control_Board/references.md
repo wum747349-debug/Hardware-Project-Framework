@@ -1,5 +1,10 @@
 # 参考资料
 
+> 文档状态：当前有效
+> 当前阶段：整板原理图系统审查
+> 适用对象：STM32 DAQ Control Board Rev A
+> 最后核对依据：当前本地 datasheet 目录与资料阅读记录
+
 ## 1. 资料使用原则
 
 - 官方 datasheet / reference manual / application note 优先。
@@ -8,6 +13,7 @@
 - 立创商品页不能替代 datasheet。
 - 开源项目只能作为结构、模块划分、接口组织和检查项参考，不能照抄原理图、PCB、BOM、Gerber 或文字说明。
 - 如果资料来源、版本或器件型号不确定，应标记“来源待确认”，并在关键参数定稿前回到厂商官网核对。
+- 本文件只维护资料位置、用途、阅读状态和关键备注；当前电路方案以 [design_notes.md](design_notes.md) 和 [docs/module_design/](docs/module_design/) 为准。
 
 ## 2. 本地 datasheet 目录
 

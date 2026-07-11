@@ -1,5 +1,10 @@
 # USB 转 UART / CH340C 设计说明
 
+> 文档状态：当前有效，模块详细依据
+> 当前阶段：整板原理图系统审查
+> 适用对象：STM32 DAQ Control Board Rev A
+> 最后核对依据：当前仓库原理图目录与已确认设计决定
+
 ## 1. 模块定位
 
 本模块记录 USB-C 数据线、CH340C USB 转 UART、USB 数据线 ESD、UART TX/RX 和未用脚处理。第一版使用 USB-C 供电 + USB 转 UART，不使用 STM32 原生 USB。

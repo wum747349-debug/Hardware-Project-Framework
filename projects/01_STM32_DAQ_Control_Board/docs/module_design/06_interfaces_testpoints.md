@@ -1,5 +1,10 @@
 # 接口、测试点与丝印设计说明
 
+> 文档状态：当前有效，模块详细依据
+> 当前阶段：整板原理图系统审查
+> 适用对象：STM32 DAQ Control Board Rev A
+> 最后核对依据：当前仓库原理图目录与已确认设计决定
+
 ## 1. 模块定位
 
 本模块记录第一版接口形式、测试点覆盖范围、接口电平边界和丝印提醒。具体电源、ADC、MOSFET、CH340C 细节分别见对应模块设计文档。
@@ -140,36 +145,12 @@ SWD 接口建议保留 `1x5`：
 
 - 电源指示 LED 当前在 AP2112 输出侧：`3.3V -> R6 1kΩ -> LED1 -> GND`。
 - 复位按键接 `NRST` 到 `GND`，并配合 `100nF` 电容。
-- 用户 LED 分配到 `PB5`，推荐电路为 `PB5 -> 限流电阻 1kΩ -> LED_USER -> GND`，高电平点亮，用于基础 GPIO 输出测试、程序运行状态指示和固件调试。
+- 用户 LED 分配到 `PB5`，当前低电平点亮，电路为 `3.3V -> 1kΩ -> LED_USER -> PB5`。PB5 输出低电平时 LED 点亮，输出高电平时熄灭，用于基础 GPIO 输出测试、程序运行状态指示和固件调试。
 - 用户按键分配到 `PB8`，推荐电路为 `PB8 -> KEY_USER -> GND`。固件中将 `PB8` 配置为内部上拉输入，未按下为高电平，按下为低电平；当前不额外增加外部上拉电阻。
 
-## 7. 当前 MCU 引脚分配
+## 7. Pin Map 事实源
 
-| 引脚 | 功能 / 网络 | 说明 |
-|---|---|---|
-| `PA0` | `ADC1` 输入 | 第一路 ADC 输入 |
-| `PA1` | `ADC2` 输入 | 第二路 ADC 输入 |
-| `PA2` | `UART2_TX` | 外部 UART2，MCU 发送，接模块 RX |
-| `PA3` | `UART2_RX` | 外部 UART2，MCU 接收，接模块 TX |
-| `PA4` | `SPI1_CS` | SPI1 片选 / NSS |
-| `PA5` | `SPI1_SCK` | SPI1 时钟 |
-| `PA6` | `SPI1_MISO` | SPI1 主入从出 |
-| `PA7` | `SPI1_MOSI` | SPI1 主出从入 |
-| `PA8` | `GPIO_EXT` | 公用 GPIO 扩展 |
-| `PA9` | `CH340 / USART1_TX` | 板载 CH340C USB-UART，不接外部 UART 排针 |
-| `PA10` | `CH340 / USART1_RX` | 板载 CH340C USB-UART，不接外部 UART 排针 |
-| `PA13` | `SWDIO` | SWD 下载调试 |
-| `PA14` | `SWCLK` | SWD 下载调试 |
-| `PB0` | `MOS_CTRL1` | 第一路 MOSFET 控制 |
-| `PB1` | `MOS_CTRL2` | 第二路 MOSFET 控制 |
-| `PB5` | `USER_LED` | 用户 LED，高电平点亮 |
-| `PB6` | `I2C1_SCL` | I2C1 时钟 |
-| `PB7` | `I2C1_SDA` | I2C1 数据 |
-| `PB8` | `USER_KEY` | 用户按键，内部上拉输入，按下为低 |
-| `PB12` | `GPIO_EXT` | 公用 GPIO 扩展 |
-| `PB13` | `GPIO_EXT` | 公用 GPIO 扩展 |
-| `PB14` | `GPIO_EXT` | 公用 GPIO 扩展 |
-| `PB15` | `GPIO_EXT` | 公用 GPIO 扩展 |
+完整 MCU 引脚分配表只维护在 [../../design_notes.md](../../design_notes.md)。本文件仅记录接口、测试点、丝印和用户 IO 的模块级细节，避免多个文档维护互相独立的 Pin Map。
 
 ## 8. 测试点覆盖范围
 
@@ -225,7 +206,7 @@ SWD 接口建议保留 `1x5`：
 - `H_EXT_PWR_GPIO` 的 `+5V_SYS` 是否仅作为 5V 输出取电点标注，是否避免被误认为外部供电输入。
 - `H_UART2` 是否使用 `PA2/PA3`，且 `PA9/PA10` 未被外部 UART 排针复用。
 - `H_I2C` 当前无板载上拉是否已记录为待复审事项；是否需要补 `R_SCL/R_SDA` 预留焊盘。
-- `PB5 USER_LED` 是否为高电平点亮，`PB8 USER_KEY` 是否按内部上拉、按下为低的固件约定设计。
+- `PB5 USER_LED` 是否为低电平点亮，`PB8 USER_KEY` 是否按内部上拉、按下为低的固件约定设计。
 - 所有 3.3V 逻辑接口是否避免被误认为 5V 兼容。
 - 测试点是否靠近被测节点，同时不影响关键走线和可制造性。
 - 丝印是否准确反映 `USB-C 5V ONLY`、`ADC IN 0-5V`、`VLOAD 5-12V`、`COMMON GND` 等安全边界。
