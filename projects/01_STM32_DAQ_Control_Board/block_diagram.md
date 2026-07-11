@@ -21,11 +21,12 @@ USB-C 接口
    │      ├─ NRST 复位
    │      ├─ BOOT 配置
    │      ├─ SWD 下载调试接口
-   │      ├─ 用户 LED
-   │      ├─ 用户按键
-   │      ├─ UART 排针，3.3V 逻辑
-   │      ├─ I2C 传感器接口排针，3.3V 逻辑
-   │      ├─ SPI 扩展接口排针，3.3V 逻辑
+   │      ├─ PB5 用户 LED，高电平点亮
+   │      ├─ PB8 用户按键，内部上拉，按下为低
+   │      ├─ USART2 扩展排针 H_UART2，PA2/TX2、PA3/RX2，3.3V 逻辑
+   │      ├─ I2C1 传感器接口排针 H_I2C，PB6/SCL、PB7/SDA，3.3V 逻辑
+   │      ├─ SPI1 扩展接口排针 H_SPI，PA4/CS、PA5/SCK、PA6/MISO、PA7/MOSI，3.3V 逻辑
+   │      ├─ 公用电源 + GPIO 扩展 H_EXT_PWR_GPIO，3.3V/GND/PA8/PB12-PB15/+5V_SYS
    │      ├─ ADC1 输入  ◄── 分压 / 限流 / RC 滤波 / 保护 ◄── ADC IN1 0-5V + GND
    │      ├─ ADC2 输入  ◄── 分压 / 限流 / RC 滤波 / 保护 ◄── ADC IN2 0-5V + GND
    │      ├─ GPIO ─────► MOSFET 低边输出 CH1 ── OUT1 / VLOAD1 5V-12V / GND
@@ -45,6 +46,9 @@ PCB 目标：
 
 注意：
 - USB-C D+ / D- 只接 USB 转 UART 芯片，不接 STM32 PA11 / PA12。
+- PA9 / PA10 保持作为板载 CH340C 的 USART1，不接外部 UART 扩展排针。
+- I2C1 当前未预留板载 4.7k 上拉，依赖外接模块自带上拉或后续复审补 R_SCL/R_SDA 预留焊盘。
+- +5V_SYS 从 USB-C 输入经过保护/开关后引出，更适合作为 5V 输出取电点，不建议作为外部反灌供电入口。
 - ADC 外部接口可接 0-5V，但进入 STM32 ADC 引脚前必须限制在 0-3.3V。
 - ADC 第一版用于每通道 10Hz-1kHz 级别低速采集和功能验证。
 - UART / I2C / SPI 扩展接口均为 3.3V 逻辑，不直接兼容 5V 逻辑。

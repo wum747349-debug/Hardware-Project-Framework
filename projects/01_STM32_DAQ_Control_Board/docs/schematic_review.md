@@ -57,6 +57,7 @@
 | CC1/CC2 是否各自通过 5.1kΩ 下拉到 GND | 待审查 | UFP 取电设备 |
 | SBU 是否 NC，Shield 是否按 `R7 0Ω -> GND` | 待审查 | Shield 策略后续可调整 |
 | `VBUS_RAW -> F1 -> VBUS_FUSED -> SW2 -> +5V_SYS` 是否正确 | 待审查 | 确认电源开关脚位 |
+| `+5V_SYS` 接到 `H_EXT_PWR_GPIO` 时是否标注为 5V 输出取电点 | 待审查 | 不建议作为外部反灌供电入口 |
 | `SMF5.0A` TVS 极性是否正确，是否只保护 VBUS | 待审查 | 阴极接 VBUS_FUSED，阳极接 GND |
 | PPTC Vmax=6V 是否仅用于当前 5V USB 输入边界 | 待审查 | 不支持 9V/12V |
 | AP2112K VIN/GND/EN/NC/VOUT 连接是否正确 | 待审查 | EN 通过 10k 上拉到 +5V_SYS |
@@ -75,6 +76,7 @@
 | `USB_DP/USB_DM` 是否只接 CH340C 和 ESD，不接 STM32 PA11/PA12 | 待审查 | 第一版不使用 STM32 原生 USB |
 | TPD2EUSB30DRTR-N 是否为并联钳位，GND 是否短路径接地 | 待审查 | 不接 3.3V/VBUS；封装、方向、GND 引脚、焊盘和实际 datasheet 仍需复核 |
 | CH340C TXD/RXD 与 STM32 PA10/PA9 是否交叉连接 | 待审查 | 网络名需从 MCU 视角说明 |
+| PA9/PA10 是否只作为板载 CH340C 的 USART1 使用 | 待审查 | 不再接外部 UART 扩展排针，避免双驱动冲突 |
 | `R232` 是否接 GND | 待审查 | TTL UART 模式 |
 | 未用握手脚和 NC 脚是否加 No Connect 标记 | 待审查 | 不做 DTR/RTS 自动下载 |
 
@@ -115,11 +117,19 @@
 | 审查项 | 当前状态 | 备注 |
 |---|---|---|
 | UART/I2C/SPI 扩展接口是否均标注 3.3V 逻辑 | 待审查 | 不直接兼容 5V |
+| `H_UART2` 是否使用 `PA2/USART2_TX`、`PA3/USART2_RX` | 待审查 | TX2 为 MCU 发送接模块 RX，RX2 为 MCU 接收接模块 TX |
+| `H_I2C` 是否使用 `PB6/I2C1_SCL`、`PB7/I2C1_SDA` | 待审查 | 当前未预留板载 4.7k 上拉，依赖外接模块上拉或后续补 `R_SCL/R_SDA` |
+| 外接裸 I2C 器件时是否确认 `SCL/SDA` 具备合适 3.3V 上拉 | 待复审 | 当前不能写成已完成 |
+| `H_SPI` 是否使用 `PA4/CS`、`PA5/SCK`、`PA6/MISO`、`PA7/MOSI` | 待审查 | 当前只带 GND 和信号，外设 3.3V 从 `H_EXT_PWR_GPIO` 取电 |
+| `H_EXT_PWR_GPIO` 2x5 排针脚位是否符合规划 | 待审查 | 1/3 为 3.3V，2/4 为 GND，5/6/7/8/9 为 GPIO，10 为 `+5V_SYS` |
+| `+5V_SYS` 外引是否有反灌风险提示 | 待审查 | 不建议外部从该脚反向给板子供电 |
 | SWD、UART、I2C、SPI、ADC、MOSFET 排针脚位是否与网络一致 | 待审查 | 避免丝印和网络不一致 |
-| 用户 LED / 用户按键 GPIO 是否避开关键功能脚冲突 | 待审查 | 需结合实际原理图 |
+| 用户 LED 是否为 `PB5 -> 1kΩ -> LED_USER -> GND` | 待审查 | 高电平点亮，用于 GPIO 输出和状态指示 |
+| 用户按键是否为 `PB8 -> KEY_USER -> GND` | 待审查 | 固件内部上拉，未按下高电平，按下低电平；当前无外部上拉 |
 | 关键测试点是否覆盖电源、复位、SWD、UART、ADC、MOSFET | 待审查 | 便于上电和调试 |
 | USB-C、CH340C、AP2112K、AO3400A、SS14、BAT54S 封装是否与 datasheet 匹配 | 待审查 | 需检查封装库 |
-| 丝印是否包含 `USB-C 5V ONLY`、`ADC IN 0-5V`、`VLOAD 5-12V`、`COMMON GND` | 待审查 | 空间不足时优先保留安全边界 |
+| 丝印是否包含 `USB-C 5V ONLY`、`ADC IN 0-5V`、`VLOAD 5-12V`、`COMMON GND`、`3.3V LOGIC` | 待审查 | 空间不足时优先保留安全边界 |
+| `H_UART2`、`H_SPI`、`H_I2C` 丝印是否体现关键脚名 | 待审查 | 建议分别标注 `GND/TX2/RX2`、`GND/CS/SCK/MISO/MOSI`、`3V3/GND/SCL/SDA` |
 
 ## 11. 审查结论
 
