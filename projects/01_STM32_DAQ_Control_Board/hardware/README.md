@@ -11,32 +11,63 @@
 
 | 路径 | 用途 | 当前说明 |
 |---|---|---|
-| `altium_project/` | Altium 工程源文件目录 | 当前源文件位于 `altium_project/PCB_Project/`；不在本次任务中移动 |
-| `outputs/schematic_pdf/` | 原理图 PDF 导出文件 | 当前审查输入为 `outputs/schematic_pdf/STM32_DAQ_Control_Board_Schematic_RevA.pdf`；文件存在不表示原理图已审查通过 |
-| `outputs/gerber/` | Gerber 输出 | PCB 阶段使用 |
-| `outputs/bom/` | BOM 导出 | 原理图审查和 BOM 核对后使用 |
-| `outputs/pick_place/` | 坐标文件 | 装配输出阶段使用 |
-| `outputs/fabrication_package/` | 制造归档包 | Gerber、钻孔、BOM、坐标等正式打包输出 |
-| `images/` | 原理图截图、PCB 截图、装配照片、测试照片 | 当前仅保留目录占位 |
+| `altium_project/PCB_Project/` | Altium 权威工程源文件 | 当前工作区存在工程文件；不在本次任务中移动 |
+| `outputs/schematic_pdf/` | 完整原理图 PDF | 当前审查输入为 `outputs/schematic_pdf/STM32_DAQ_Control_Board_Schematic_RevA.pdf`；文件存在不表示原理图已审查通过 |
+| `outputs/netlist/` | 网络连接导出，用于核对网络归属和连接关系 | 目录已规划，当前未导出 |
+| `outputs/erc/` | ERC 报告或错误导出 | 目录已规划，当前未导出 |
+| `outputs/bom/` | BOM 导出 | 目录已规划，当前未导出正式 BOM |
+| `outputs/component_reports/` | 元件、位号、型号等报告 | 目录已规划，当前未导出 |
+| `outputs/footprint_reports/` | 原理图器件与 PCB 封装映射、封装核对报告 | 目录已规划，当前未导出 |
+| `outputs/gerber/` | Gerber 和钻孔输出 | 目录已规划，PCB 阶段使用 |
+| `outputs/pick_place/` | 贴片坐标 | 目录已规划，装配输出阶段使用 |
+| `outputs/fabrication_package/` | 正式制造归档包 | 目录已规划，Gerber、钻孔、BOM、坐标等正式打包输出 |
+| `images/` | 原理图局部截图、PCB 截图、装配和测试照片 | 当前仅保留目录占位 |
+
+标准目录：
+
+```text
+hardware/
+├─ altium_project/
+│  └─ PCB_Project/
+├─ outputs/
+│  ├─ schematic_pdf/
+│  ├─ netlist/
+│  ├─ erc/
+│  ├─ bom/
+│  ├─ component_reports/
+│  ├─ footprint_reports/
+│  ├─ gerber/
+│  ├─ pick_place/
+│  └─ fabrication_package/
+└─ images/
+```
 
 ## 输出命名规范
 
-正式原理图导出建议命名为：
+正式输出建议使用：
+
+```text
+<Project>_<OutputType>_<Revision>.<ext>
+```
+
+当前项目示例：
 
 ```text
 STM32_DAQ_Control_Board_Schematic_RevA.pdf
-```
-
-审查阶段草稿可使用：
-
-```text
-STM32_DAQ_Control_Board_Schematic_RevA_Draft01.pdf
-STM32_DAQ_Control_Board_Schematic_RevA_Draft02.pdf
-STM32_DAQ_Control_Board_Schematic_RevA_Reviewed.pdf
+STM32_DAQ_Control_Board_Netlist_RevA.<ext>
+STM32_DAQ_Control_Board_ERC_RevA.<ext>
+STM32_DAQ_Control_Board_BOM_RevA.<ext>
+STM32_DAQ_Control_Board_Component_Report_RevA.<ext>
+STM32_DAQ_Control_Board_Footprint_Report_RevA.<ext>
 ```
 
 原则：
 
+- 正式输出应包含项目名称、输出类型和硬件版本。
+- 临时审查文件可增加 `Draft01`、`Draft02`；正式复核文件可增加 `Reviewed`。
+- 示例文件名只表示命名格式，不表示文件已经存在。
+- 文档中记录实际文件名，不得把示例名称写成已存在文件。
+- 同一轮审查使用的不同输出应对应同一源版本。
 - Git 中只保留当前有效版本和必要的正式审查版本。
 - 中间临时导出版本不必全部提交。
 - 当前 `STM32_DAQ_Control_Board_Schematic_RevA.pdf` 作为 Rev A 原理图审查输入；若后续重新导出，应同步更新引用路径和审查记录。

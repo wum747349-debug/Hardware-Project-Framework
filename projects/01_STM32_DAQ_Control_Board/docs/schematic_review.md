@@ -15,14 +15,20 @@
 
 ## 2. 审查输入
 
-| 输入 | 状态 | 备注 |
-|---|---|---|
-| Altium 工程目录 | 已有 / 待整理 | `../hardware/altium_project/PCB_Project/`；当前可见 `.PrjPcb`、`.PcbDoc`、`.SchLib`、历史 `.SchDoc.Zip`，但未发现当前有效 `.SchDoc` 源文件 |
-| Altium `.SchDoc` 源文件 | 未发现 / 待补充 | 当前目录中未发现可直接作为源文件审查的 `.SchDoc`；不能仅凭历史压缩文件确认当前 EDA 实现 |
-| PDF 原理图输出 | 已有 / 当前审查输入 | `../hardware/outputs/schematic_pdf/STM32_DAQ_Control_Board_Schematic_RevA.pdf` |
-| 设计总览 | 已有 | [../design_notes.md](../design_notes.md) |
-| 模块设计文档 | 已有 | [module_design/](module_design/) |
-| datasheet / reference manual | 部分已收集 | 见 [../references.md](../references.md) |
+| 输入类型 | 状态 | 当前文件或目录 | 对应源版本 | 审查用途 | 限制或备注 |
+|---|---|---|---|---|---|
+| Altium 工程目录 | 工作区已有 / 未纳入 Git | `../hardware/altium_project/PCB_Project/` | 版本待确认 | 人工编辑、版本追踪和后续导出来源 | 当前目录为未跟踪工作区内容；不表示已归档到仓库 |
+| `.SchDoc` 源文件 | 工作区存在 / 待纳入版本管理 | `../hardware/altium_project/PCB_Project/STM32_DAQ_Control_Board.SchDoc` | 版本待确认 | Altium 原理图权威源文件 | AI 当前未解析 `.SchDoc` 内部电路；不能仅凭文件存在关闭问题 |
+| 原理图 PDF | 已有 / 当前审查输入 | `../hardware/outputs/schematic_pdf/STM32_DAQ_Control_Board_Schematic_RevA.pdf` | 版本待确认 | 整板系统审查、图形连线和网络名辅助核对 | 只有 PDF 时属于有限审查；不能替代网表、ERC、BOM 和封装映射核对 |
+| 网表 | 未导出 | `../hardware/outputs/netlist/` | 无 | 网络连接、网络归属和跨页连接核对 | 目录已规划 / 当前无有效输出 |
+| ERC 报告 | 未导出 | `../hardware/outputs/erc/` | 无 | EDA 规则错误、未连接脚、冲突和电气类型检查 | 目录已规划 / 当前无有效输出 |
+| BOM | 未导出正式审查版本 | `../hardware/outputs/bom/` | 无 | 器件型号、位号、数量和采购核对 | 目录已规划 / 当前无有效输出；Altium 工程目录中存在 `.BomDoc` 源/配置文件，不等同 BOM 导出 |
+| 元件报告 | 未导出 | `../hardware/outputs/component_reports/` | 无 | 元件、位号、型号、参数一致性核对 | 目录已规划 / 当前无有效输出 |
+| 封装映射报告 | 未导出 | `../hardware/outputs/footprint_reports/` | 无 | 原理图器件与 PCB 封装映射、封装核对 | 目录已规划 / 当前无有效输出 |
+| 原理图截图 | 未收集 | `../hardware/images/` | 无 | 补充局部连线、位号或界面证据 | 局部截图只能补充局部证据，不能代替完整原理图 PDF |
+| 设计总览 | 已有 | [../design_notes.md](../design_notes.md) | 文档版本 | 设计意图、Pin Map、接口约定和已确认设计决定 | 不能单独证明 EDA 实现已经同步 |
+| 模块设计文档 | 已有 | [module_design/](module_design/) | 文档版本 | 模块参数、计算依据和待核对项 | 不能单独证明 EDA 实现已经同步 |
+| datasheet / reference manual | 部分已收集 | [../references.md](../references.md)、`../references/datasheets/` | 资料版本按文件记录 | 关键参数、封装、典型应用和限制条件核对 | 立创商品页不能替代 datasheet / reference manual / application note |
 
 ## 3. 总体审查原则
 
@@ -159,7 +165,7 @@
 依据：
 
 - 当前 PDF 已补充，可作为审查输入，但 PDF 文本层解析只能支持有限网络名核对，不能替代图形连线、封装映射和 ERC。
-- 当前目录未发现可直接审查的 `.SchDoc` 源文件。
+- 当前工作区存在 `.SchDoc` 源文件，但尚未纳入 Git，且 AI 当前未解析其内部电路。
 - I2C 上拉、HSE 负载电容、关键器件封装 / pin mapping、接口丝印和正式 ERC 仍未关闭。
 - PDF 文本层显示 HSE 负载电容位号与文档记录存在 `C3/C4` vs `C6/C7` 的待核对差异。
 

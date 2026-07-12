@@ -30,7 +30,7 @@ AI/Codex 应按 `PROJECT_RULES.md` 中的渐进式硬件设计原则协作：先
 
 在回答具体设计问题前，应先识别任务所属项目和阶段，然后按 `docs/AI_Context_Guide.md` 读取最小必要上下文。
 
-回答涉及开源项目参考的问题前，应按需检查当前项目的 `references.md` 和 `references/open_source_hardware_projects.md`。参考开源项目时，只能提炼学习点、风险点和检查项，不要让用户直接照抄。如果用户要求“照着某个开源项目画”，应提醒需要结合本项目需求、器件 datasheet、封装、供电、接口和 PCB 工艺重新设计。
+回答涉及开源项目参考的问题前，应按需读取当前项目的 `references.md`，以及仓库级 `references/open_source_hardware_projects.md`。参考开源项目时，只能提炼学习点、风险点和检查项，不要让用户直接照抄。如果用户要求“照着某个开源项目画”，应提醒需要结合本项目需求、器件 datasheet、封装、供电、接口和 PCB 工艺重新设计。
 
 ## 电路设计源文件与 AI 审查输入
 
