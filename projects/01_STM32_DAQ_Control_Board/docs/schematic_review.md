@@ -19,10 +19,10 @@
 | ---------------------------- | --------------- | ------------------------------------------------------------------------------ | --------- | ------------------------- | ---------------------------------------------------------- |
 | Altium 工程目录                  | 工作区已有 / 未纳入 Git | `../hardware/altium_project/PCB_Project/`                                      | 版本待确认     | 人工编辑、版本追踪和后续导出来源          | 当前目录为未跟踪工作区内容；不表示已归档到仓库                                    |
 | `.SchDoc` 源文件                | 工作区存在 / 待纳入版本管理 | `../hardware/altium_project/PCB_Project/STM32_DAQ_Control_Board.SchDoc`        | 版本待确认     | Altium 原理图权威源文件           | AI 当前未解析 `.SchDoc` 内部电路；不能仅凭文件存在关闭问题                       |
-| 原理图 PDF                      | 已有 / 默认必需审查输入   | `../hardware/outputs/schematic_pdf/STM32_DAQ_Control_Board_Schematic_RevA.pdf` | 版本待确认     | 整板系统审查、图形连线和网络名辅助核对       | 需追溯到当前 `.SchDoc` 版本；局部截图不能代替完整 PDF                           |
-| BOM                          | 未导出正式审查版本 / 默认必需审查输入 | `../hardware/outputs/bom/`                                                     | 无         | 位号、数量、参数或型号、器件料号和 PCB 封装核对 | 当前缺少可追溯 BOM，相关器件型号、数量和封装结论需标记限制；Altium 工程目录中存在 `.BomDoc` 源/配置文件，不等同 BOM 导出 |
+| 原理图 PDF                      | 已有 / 最新版本 / 默认必需审查输入 | `../hardware/outputs/schematic_pdf/STM32_DAQ_Control_Board_Schematic_RevA.pdf` | 对应当前 `.SchDoc` 版本 | 整板系统审查、图形连线和网络名辅助核对       | 局部截图不能代替完整 PDF                                            |
+| BOM                          | 已有 / 最新版本 / 默认必需审查输入 | `../hardware/outputs/bom/STM32_DAQ_Control_Board.csv`                          | 对应当前 `.SchDoc` 版本 | 位号、数量、参数或型号、PCB 封装核对        | 字段包含 `Designator`、`Quantity`、`Comment/Description`、`Footprint`，满足当前最低字段要求；关键器件型号主要记录在 `Comment` 或 `LibRef` |
 | 网表                           | 条件触发 / 未导出       | `../hardware/outputs/netlist/`                                                 | 无         | 复杂网络、跨页网络、网络标签或实际引脚连接核对  | 当前无有效输出；仅在 PDF 和 BOM 无法判断对应连接时按需提供                         |
-| ERC 报告 / Messages 导出          | 条件触发 / 未导出       | `../hardware/outputs/erc/`                                                     | 无         | EDA 规则错误、未连接脚、冲突和电气类型检查   | 用户仍应在 Altium 中执行 ERC 或项目验证；无需要 AI 分析的错误时不强制导出报告             |
+| ERC 报告 / Messages 导出          | 条件触发 / 未提供       | `../hardware/outputs/erc/`                                                     | 无         | 用户提供时补充分析 EDA 规则错误、未连接脚、冲突和电气类型检查 | ERC 输出不是默认必需输入；AI 当前未获得 ERC 输出，不能声称已核对 ERC                  |
 | 元件报告                         | 条件触发 / 未导出       | `../hardware/outputs/component_reports/`                                       | 无         | 元件属性、位号、型号、参数一致性核对        | BOM 信息不足或需要额外核对元件属性时按需提供                                  |
 | 封装映射报告                       | 条件触发 / 未导出       | `../hardware/outputs/footprint_reports/`                                       | 无         | 原理图器件与 PCB 封装映射、封装核对      | 关键器件引脚、原理图库与 PCB 封装映射存在风险时按需提供                            |
 | 原理图截图                        | 条件触发 / 未收集       | `../hardware/images/`                                                          | 无         | 补充局部连线、位号、属性或界面证据        | 局部截图只能补充局部证据，不能代替完整原理图 PDF                                 |
@@ -36,8 +36,8 @@
 - 每个问题应记录所在模块、问题描述、风险等级、修改建议、状态和证据或关联文件。
 - 关键参数必须回到 datasheet、reference manual 或 application note 核对。
 - 立创商品页只能作为 C 编号、库存、价格、封装和资料入口参考，不能替代 datasheet。
-- PDF 文本层可用于辅助检查网络名；无法从 PDF 和 BOM 判断的图形连线、实际网络连接、封装映射或 ERC 状态，应标记“待 EDA 核对”或按需补充对应证据。
-- 未提交 ERC 报告本身不判定为原理图审查未完成；只有 ERC 出现错误、无法解释的警告，或结论依赖 ERC 结果时，才需要提供 ERC 报告、Messages 导出或必要截图。
+- 完整原理图 PDF 和当前版本 BOM 可以支持常规原理图系统审查；无法由二者确认的实际网络、引脚映射、封装映射或其他 EDA 实现事项，应说明结论限制或标记为“待 EDA 核对”。
+- ERC 输出不是默认必需输入；AI 只有在用户提供 ERC 报告、Messages 导出或相关截图时，才分析 ERC 问题。未提供 ERC 输出时，不声称已经核对 ERC，也不把“未提供 ERC 输出”本身作为审查未完成或不能进入 PCB Layout 的理由。
 - 原理图审查完成并处理关键问题前，不进入 PCB Layout 结论。
 
 ## 4. 问题记录表
@@ -165,9 +165,10 @@
 
 依据：
 
-- 当前 PDF 已补充，可作为默认必需审查输入之一；当前仍缺少可追溯 BOM，因此器件型号、数量和 PCB 封装信息核对存在限制。
+- 当前完整原理图 PDF 已存在且为最新版本，可作为默认必需审查输入。
+- 当前 BOM 已存在且为最新版本：`../hardware/outputs/bom/STM32_DAQ_Control_Board.csv`；其字段覆盖位号、数量、参数或型号、PCB 封装，满足当前最低字段要求。测试点行 `Comment` 为空，但 `Description` / `Footprint` 可识别为通用测试点，不视为关键器件料号缺失。
 - 当前工作区存在 `.SchDoc` 源文件，但尚未纳入 Git，且 AI 当前未解析其内部电路。
-- I2C 上拉、HSE 负载电容、关键器件封装 / pin mapping、接口丝印仍未关闭；若 ERC 出现错误、无法解释的警告或审查结论依赖 ERC 结果，再补充 ERC 输出。
+- I2C 上拉、HSE 负载电容、关键器件封装 / pin mapping、接口丝印仍未关闭；如其中某个具体问题必须依赖 ERC、网表或封装映射结果才能判断，应标记“待 EDA 核对”并等待用户提供对应证据。
 - PDF 文本层显示 HSE 负载电容位号与文档记录存在 `C3/C4` vs `C6/C7` 的待核对差异。
 
 完成上述问题核对并更新关闭状态后，才能重新判断是否可以进入 PCB Layout。
