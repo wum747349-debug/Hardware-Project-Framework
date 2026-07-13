@@ -13,11 +13,11 @@
 |---|---|---|
 | `altium_project/PCB_Project/` | Altium 权威工程源文件 | 当前工作区存在工程文件；不在本次任务中移动 |
 | `outputs/schematic_pdf/` | 完整原理图 PDF | 当前审查输入为 `outputs/schematic_pdf/STM32_DAQ_Control_Board_Schematic_RevA.pdf`；文件存在不表示原理图已审查通过 |
-| `outputs/netlist/` | 网络连接导出，用于核对网络归属和连接关系 | 目录已规划，当前未导出 |
-| `outputs/erc/` | ERC 报告或错误导出 | 目录已规划，当前未导出 |
-| `outputs/bom/` | BOM 导出 | 目录已规划，当前未导出正式 BOM |
-| `outputs/component_reports/` | 元件、位号、型号等报告 | 目录已规划，当前未导出 |
-| `outputs/footprint_reports/` | 原理图器件与 PCB 封装映射、封装核对报告 | 目录已规划，当前未导出 |
+| `outputs/netlist/` | 条件触发输出，用于核对复杂网络、跨页网络、网络标签或实际引脚连接关系 | 目录已规划，当前未导出；仅在 PDF 和 BOM 无法判断对应问题时按需提供 |
+| `outputs/erc/` | 条件触发输出，用于保存 ERC 报告、Messages 导出或错误截图 | 目录已规划，当前未导出；用户仍应在 Altium 中执行 ERC 或项目验证，无异常时不强制导出报告 |
+| `outputs/bom/` | 默认必需审查输入，用于导出当前版本 BOM | 目录已规划，当前未导出正式 BOM；BOM 至少应包含位号、数量、参数或型号、器件料号和 PCB 封装信息 |
+| `outputs/component_reports/` | 条件触发输出，用于补充元件、位号、型号等属性报告 | 目录已规划，当前未导出；BOM 信息不足或需额外核对元件属性时按需提供 |
+| `outputs/footprint_reports/` | 条件触发输出，用于原理图器件与 PCB 封装映射、封装核对报告 | 目录已规划，当前未导出；关键器件引脚或封装映射存在风险时按需提供 |
 | `outputs/gerber/` | Gerber 和钻孔输出 | 目录已规划，PCB 阶段使用 |
 | `outputs/pick_place/` | 贴片坐标 | 目录已规划，装配输出阶段使用 |
 | `outputs/fabrication_package/` | 正式制造归档包 | 目录已规划，Gerber、钻孔、BOM、坐标等正式打包输出 |

@@ -29,7 +29,7 @@
 5. 当前项目的 `requirements.md`
 6. 当前项目的 `design_notes.md`
 7. 当前项目的 `references.md`
-8. 当前可解析的实现证据，如原理图 PDF、网表、ERC 报告、BOM、元件报告、引脚或封装映射报告、必要截图
+8. 默认必需实现证据：可追溯到当前 `.SchDoc` 版本的完整原理图 PDF，以及当前版本 BOM；BOM 至少包含位号、数量、参数或型号、器件料号和 PCB 封装信息
 
 按需读取：
 
@@ -37,6 +37,7 @@
 - `skills/hardware-component-selection/SKILL.md`，仅在需要追溯选型依据时读取
 - 当前项目已有的 `docs/schematic_review.md`，仅在继续审查或追踪历史问题时读取
 - 相关 checklist
+- 条件触发证据：网表用于核对复杂网络、跨页网络、网络标签或实际引脚连接关系；ERC 报告、Messages 导出或截图用于分析错误、无法解释的警告或依赖 ERC 的结论；元件报告用于 BOM 信息不足或需核对额外属性；引脚或封装映射报告用于关键器件引脚、原理图库与 PCB 封装映射存在风险；局部截图用于补充 Altium 属性、引脚编号、封装模型、ERC 消息或局部连接证据
 
 如果当前项目没有 `docs/schematic_review.md`，应在审查完成后创建。
 
@@ -44,8 +45,9 @@
 
 - `.SchDoc` 是 Altium 原理图的权威设计源文件，用于人工编辑、版本追踪和工程归档。
 - 在没有可靠 Altium 解析器、脚本或自动化接口时，AI 不得声称已经读取、解析或核对 `.SchDoc` 内部电路。
-- 原理图 PDF 主要用于图形连线、网络名和页面结构审查；只有 PDF 时属于有限审查，不能替代 ERC、网表和封装映射核对。
-- 网表适合核对网络连接，ERC 报告适合核对 EDA 规则问题，BOM / 元件报告适合核对器件、封装和位号，截图适合补充局部证据。
+- 原理图 PDF 主要用于图形连线、网络名和页面结构审查；BOM 用于核对位号、数量、参数或型号、器件料号和 PCB 封装信息。只有 PDF 和 BOM 时可以完成常规原理图系统审查，但不能声称已核对无法从 PDF/BOM 判断的 ERC 状态、实际网络连接、引脚映射或封装映射。
+- 用户仍应在 Altium 中执行 ERC 或项目验证；如果 ERC 没有需要 AI 分析的错误，或只有用户已确认可接受的提示，不强制导出、提交或长期保存 ERC 报告。若 ERC 出现错误、无法解释的警告，或审查结论依赖 ERC 结果，则按需提供 ERC 报告、Messages 导出或必要截图；未提交 ERC 报告本身不应判定为原理图审查未完成。
+- 网表、元件报告、引脚或封装映射报告和局部截图均为条件触发证据。局部截图只能补充局部证据，不能代替完整原理图 PDF。
 - `requirements.md`、`design_notes.md` 和 `docs/module_design/*.md` 是需求和设计意图，不能单独证明 EDA 实现已经同步。
 
 ## 审查目标
@@ -68,17 +70,17 @@
 
 按以下模块分类审查，并根据项目类型读取对应 checklist：
 
-| 分类 | 主要用途 | 推荐 checklist |
-|---|---|---|
-| 总体结构 | 模块边界、电源路径、信号流向、网络命名、跨页连接 | `checklists/schematic_checklist.md` |
-| 电源 | 输入保护、稳压、去耦、热耗散、电源测试点 | `checklists/schematic_checklist.md` |
-| MCU 最小系统 | 供电、复位、BOOT、时钟、SWD、未用脚 | `checklists/stm32_board_checklist.md` |
-| 通信接口 | UART / I2C / SPI / USB 方向、电平、保护、丝印 | `checklists/stm32_board_checklist.md`、`checklists/schematic_checklist.md` |
-| ADC / 模拟输入 | 输入范围、限流、滤波、钳位、参考电压 | `checklists/schematic_checklist.md`、`checklists/analog_frontend_checklist.md` |
-| MOSFET / 功率输出 | 栅极驱动、默认状态、续流路径、负载接口、散热 | `checklists/schematic_checklist.md` |
-| 电池 | 充电、保护、接口极性、限流上电和测试安全 | `checklists/power_board_safety_checklist.md` |
-| 运放 / 外置 ADC | 供电范围、共模范围、输出摆幅、带宽、参考电压 | `checklists/analog_frontend_checklist.md` |
-| 封装、测试点和可制造性 | 封装映射、极性、测试可达性、丝印和手焊风险 | `checklists/schematic_checklist.md` |
+| 分类            | 主要用途                               | 推荐 checklist                                                                  |
+| ------------- | ---------------------------------- | ----------------------------------------------------------------------------- |
+| 总体结构          | 模块边界、电源路径、信号流向、网络命名、跨页连接           | `checklists/schematic_checklist.md`                                           |
+| 电源            | 输入保护、稳压、去耦、热耗散、电源测试点               | `checklists/schematic_checklist.md`                                           |
+| MCU 最小系统      | 供电、复位、BOOT、时钟、SWD、未用脚              | `checklists/stm32_board_checklist.md`                                         |
+| 通信接口          | UART / I2C / SPI / USB 方向、电平、保护、丝印 | `checklists/stm32_board_checklist.md`、`checklists/schematic_checklist.md`     |
+| ADC / 模拟输入    | 输入范围、限流、滤波、钳位、参考电压                 | `checklists/schematic_checklist.md`、`checklists/analog_frontend_checklist.md` |
+| MOSFET / 功率输出 | 栅极驱动、默认状态、续流路径、负载接口、散热             | `checklists/schematic_checklist.md`                                           |
+| 电池            | 充电、保护、接口极性、限流上电和测试安全               | `checklists/power_board_safety_checklist.md`                                  |
+| 运放 / 外置 ADC   | 供电范围、共模范围、输出摆幅、带宽、参考电压             | `checklists/analog_frontend_checklist.md`                                     |
+| 封装、测试点和可制造性   | 封装映射、极性、测试可达性、丝印和手焊风险              | `checklists/schematic_checklist.md`                                           |
 
 Skill 只规定审查方法和输出结构；逐项检查句应维护在 `checklists/` 中。
 
@@ -134,7 +136,7 @@ Skill 只规定审查方法和输出结构；逐项检查句应维护在 `checkl
 - 当前项目的 `docs/schematic_review.md`
 - 必要时更新当前项目的 `design_notes.md`、BOM 草稿、`requirements.md` 或 `docs/revision_history.md`
 
-只有在实现证据足够、修改已由用户在 EDA 中完成并通过 PDF、网表、ERC、BOM、报告或截图复核后，才能关闭对应问题；证据不足时标记为“待 EDA 核对”。
+只有在实现证据足够、修改已由用户在 EDA 中完成并通过默认必需证据或与问题类型匹配的条件触发证据复核后，才能关闭对应问题；证据不足时标记为“待 EDA 核对”。高风险问题如果依赖 ERC、网表或封装映射才能关闭，则必须补充对应证据。
 
 ## 禁止事项
 

@@ -48,8 +48,8 @@ AI 默认只读取“仓库基础规则 + 当前项目文件 + 当前阶段 Skil
 | 模块电路设计说明            | 基础上下文 + 当前项目 `requirements.md`、`design_notes.md`、`references.md` + 当前模块关键资料                                       | 器件选型 Skill / datasheet Skill             | 所有历史记录、所有外围器件资料                |
 | 外围器件反推 / BOM 草稿     | 基础上下文 + 器件选型 Skill + 当前项目 `requirements.md`、`design_notes.md`、`references.md`                                     | 当前模块 datasheet、相关 checklist              | 最终 BOM、无关模块资料                  |
 | 原理图设计               | 基础上下文 + 当前项目需求、设计说明、关键 datasheet 和候选记录                                                                            | 器件选型 Skill / datasheet Skill             | PCB 审查记录、其他项目                  |
-| 原理图审查               | 基础上下文 + `skills/hardware-schematic-review/SKILL.md` + 当前项目需求、设计说明、资料和当前可解析的实现证据，如原理图 PDF、网表、ERC 报告、BOM、元件报告或截图；`.SchDoc` 仅在当前环境具备可靠解析能力时作为 AI 读取输入 | datasheet Skill / 器件选型 Skill，仅在追溯依据时读取   | 所有 Skill、所有项目、`templates/`     |
-| 原理图变更后的文档同步        | 基础上下文 + 当前可解析的实现证据，如原理图 PDF、网表、ERC 报告、BOM、元件报告或截图 + 当前项目 `design_notes.md` + 与变更相关的 `module_design` 文档 + `docs/schematic_review.md`；`.SchDoc` 仅在当前环境具备可靠解析能力时作为 AI 读取输入 | `requirements.md`，仅当功能边界或验收标准受到影响；`references.md`，仅当器件或参数依据发生变化；`docs/revision_history.md`，记录重要设计决定或硬件版本变化；datasheet Skill，仅当需要核对关键器件参数 | 其他项目、全部 Skill、全部 datasheet、无关历史记录、`templates/` |
+| 原理图审查               | 基础上下文 + `skills/hardware-schematic-review/SKILL.md` + 当前项目需求、设计说明、资料和默认必需实现证据：可追溯到当前 `.SchDoc` 版本的完整原理图 PDF、当前版本 BOM；`.SchDoc` 仅在当前环境具备可靠解析能力时作为 AI 读取输入 | datasheet Skill / 器件选型 Skill，仅在追溯依据时读取；网表、ERC 输出、元件报告、引脚或封装映射报告、局部截图仅在对应问题无法通过 PDF 和 BOM 判断时按需读取 | 所有 Skill、所有项目、`templates/`     |
+| 原理图变更后的文档同步        | 基础上下文 + 当前可解析的默认必需实现证据：更新后的完整原理图 PDF、当前版本 BOM + 当前项目 `design_notes.md` + 与变更相关的 `module_design` 文档 + `docs/schematic_review.md`；`.SchDoc` 仅在当前环境具备可靠解析能力时作为 AI 读取输入 | `requirements.md`，仅当功能边界或验收标准受到影响；`references.md`，仅当器件或参数依据发生变化；`docs/revision_history.md`，记录重要设计决定或硬件版本变化；datasheet Skill，仅当需要核对关键器件参数；网表、ERC 输出、元件报告、引脚或封装映射报告、局部截图仅按问题需要补充 | 其他项目、全部 Skill、全部 datasheet、无关历史记录、`templates/` |
 | PCB Layout / PCB 审查 | 基础上下文 + 当前项目原理图、PCB 相关文件和 PCB checklist                                                                           | datasheet / 原理图审查记录                      | 其他项目目录、模板目录                    |
 | 调试测试                | 基础上下文 + 当前项目 `docs/bringup_log.md` / `docs/test_report.md`                                                        | 原理图审查记录、PCB 审查记录、关键 datasheet            | 其他项目历史记录                       |
 | 新增项目                | 基础上下文 + `docs/Project_Template_Guide.md` + `templates/hardware_project_template/`                                 | `docs/08_Project_Workflow.md`            | 其他项目历史记录                       |
@@ -65,6 +65,6 @@ AI 默认只读取“仓库基础规则 + 当前项目文件 + 当前阶段 Skil
 - 一个任务默认只读取当前阶段对应的一个 Skill；跨阶段任务才按需读取上游 Skill。
 - 当前任务明确属于某个项目时，只读取该项目目录下与任务相关的文件；跨项目对比、经验复用或总结所有项目时才读取其他项目。
 - 历史审查、PCB 审查、bringup、测试报告和改版记录只在追踪历史问题、继续审查、总结项目或准备简历材料时读取。
-- 原理图变更后的文档同步必须以用户在 Altium 中修改后的实现输出为依据；AI 通过更新后的 PDF、网表、ERC、BOM、报告或截图核对实现，无可靠证据时标记“待 EDA 核对”。
+- 原理图变更后的文档同步必须以用户在 Altium 中修改后的实现输出为依据；AI 默认通过更新后的完整原理图 PDF 和当前版本 BOM 核对实现，网表、ERC 输出、报告或截图仅在对应问题需要时补充；无可靠证据时标记“待 EDA 核对”。
 - `.SchDoc` 是权威源文件，但只有在当前环境具备可靠 Altium 解析器、脚本或自动化接口时，才能作为 AI 直接读取和核对的实现输入。
 - 文档变更只影响相关事实源，不应机械修改所有项目文档。
