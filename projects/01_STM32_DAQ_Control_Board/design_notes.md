@@ -3,7 +3,7 @@
 > 文档状态：当前有效，整板设计意图与接口约定主文档
 > 当前阶段：整板原理图系统审查
 > 适用对象：STM32 DAQ Control Board Rev A
-> 最后核对依据：当前仓库原理图目录与已确认设计决定
+> 最后核对依据：当前原理图 PDF、当前 BOM 与已确认设计决定
 
 ## 1. 当前设计定位
 
@@ -43,9 +43,9 @@
 | 模块 | 当前设计摘要 | 详细文档 |
 |---|---|---|
 | MCU 最小系统 | `STM32F103C8T6`，LQFP48，3.3V 供电，8MHz HSE，NRST，BOOT0，SWD，VDDA/VSSA 处理 | [01_mcu_minimum_system.md](docs/module_design/01_mcu_minimum_system.md) |
-| USB-C 供电与 3.3V 电源 | USB-C 5V ONLY，`VBUS_RAW -> F1 -> VBUS_FUSED -> SW2 -> +5V_SYS -> AP2112K -> 3.3V` | [02_usb_c_power_ap2112.md](docs/module_design/02_usb_c_power_ap2112.md) |
+| USB-C 供电与 3.3V 电源 | USB-C 5V ONLY，`VBUS_RAW -> F1 -> VBUS_FUSED -> SW3 -> +5V_SYS -> U8 AP2112K -> 3.3V` | [02_usb_c_power_ap2112.md](docs/module_design/02_usb_c_power_ap2112.md) |
 | USB 转 UART | `CH340C`，3.3V 供电，USB_DP/USB_DM 接 CH340C，USART1 PA9/PA10 与 MCU 通信 | [03_usb_uart_ch340c.md](docs/module_design/03_usb_uart_ch340c.md) |
-| ADC 输入保护 | 2 路 `0-5V` 输入，经 `10kΩ/18kΩ` 分压、`330Ω` 限流、`10nF` 滤波和 `BAT54S` 钳位进入 PA0/PA1 | [04_adc_input_protection.md](docs/module_design/04_adc_input_protection.md) |
+| ADC 输入保护 | 2 路 `0-5V` 输入，经 `12kΩ/18kΩ` 分压、`330Ω` 限流、`10nF` 滤波和 `BAT54S` 钳位进入 PA0/PA1，5V 标称输入映射到约 3.0V | [04_adc_input_protection.md](docs/module_design/04_adc_input_protection.md) |
 | MOSFET 低边输出 | 2 路 `AO3400A` 低边开关，PB0/PB1 控制，保留 TIM3_CH3/TIM3_CH4 双路硬件 PWM 能力，`SS14` 续流 | [05_mosfet_low_side_output.md](docs/module_design/05_mosfet_low_side_output.md) |
 | 接口、测试点与丝印 | USART2、I2C1、SPI1、公用电源 + GPIO 3.3V 排针、SWD、PB5 低电平点亮用户 LED、PB8 用户按键、电源/ADC/MOSFET 测试点和安全丝印 | [06_interfaces_testpoints.md](docs/module_design/06_interfaces_testpoints.md) |
 
@@ -60,7 +60,7 @@
 | 3.3V LDO | `AP2112K-3.3TRG1` | 5V 转 3.3V；外部 3.3V 取电限制 `<=100mA`；注意 SOT25 热耗散 |
 | USB 转 UART | `CH340C` | 3.3V 供电；不使用 DTR/RTS 自动下载；TX/RX 与 MCU 交叉连接 |
 | USB 数据 ESD | `TPD2EUSB30DRTR-N` | 只保护 USB_DP/USB_DM；靠近 USB-C 接口放置 |
-| HSE 晶振 | `XC53G2-8.000-F12NJHP` 候选 | 8MHz；负载电容仍需结合晶振 CL 和 STM32 资料反推 |
+| HSE 晶振 | `XC53G2-8.000-F12NJHP` | 8MHz 基频无源晶振，标称 `CL=12pF`；当前 `C3/C4=5.1pF`，采购选 C0G/NP0 |
 | VBUS TVS | `SMF5.0A` | 用于 VBUS 瞬态保护，不替代长期过压保护 |
 | 自恢复保险丝 | `C46640983` PPTC | 仅适合当前 5V USB 输入边界；Vmax=6V |
 | ADC 钳位 | `BAT54S` | SOT-23，上下轨钳位到 GND / VDDA_3V3；注意反灌风险 |
@@ -71,15 +71,15 @@
 
 | 网络 | 含义 / 用途 | 主要审查点 |
 |---|---|---|
-| `VBUS_RAW` | USB-C 母座刚输入的原始 5V | 仅来自 USB-C VBUS；测试点 `TP_VBUS` |
-| `VBUS_FUSED` | 经过 F1 自恢复保险丝后的 5V | D1 TVS 并联到 GND；后接电源开关 |
-| `+5V_SYS` | 经过 F1 和 SW2 后的系统 5V | 供 AP2112 VIN；测试点 `TP_5V` |
+| `VBUS_RAW` | USB-C 母座刚输入的原始 5V | 仅来自 USB-C VBUS；测试点 `TP_VBUS1` |
+| `VBUS_FUSED` | 经过 F1 自恢复保险丝后的 5V | D5 TVS 并联到 GND；后接 SW3 电源开关 |
+| `+5V_SYS` | 经过 F1 和 SW3 后的系统 5V | 供 AP2112 VIN；测试点 `TP_1`，表示 5V 测试点 |
 | `3.3V` | AP2112K 输出的板级 3.3V | 供 MCU、CH340C、接口上拉、LED 等 |
 | `VDDA_3V3` | MCU 模拟电源网络 | 由 `3.3V` 经 `0Ω` 接入；靠近 VDDA/VSSA 去耦 |
 | `USB_DP / USB_DM` | USB2.0 数据线 | 只接 CH340C 和 USB ESD，不接 STM32 PA11/PA12 |
 | `MCU_TX / MCU_RX` | MCU 视角 USART1 TX/RX | CH340C TXD -> PA10，CH340C RXD <- PA9 |
 | `UART2_TX / UART2_RX` | 外部 USART2 扩展 | PA2 为 MCU 发送 TX2，接外部模块 RX；PA3 为 MCU 接收 RX2，接外部模块 TX |
-| `I2C1_SCL / I2C1_SDA` | 外部 I2C1 扩展 | PB6/PB7；当前未预留板载 4.7k 上拉，依赖外接模块上拉或后续复审补预留焊盘 |
+| `I2C1_SCL / I2C1_SDA` | 外部 I2C1 扩展 | PB6/PB7；`R19/R20=4.7kΩ` 默认装配，上拉到 3.3V |
 | `SPI1_CS / SPI1_SCK / SPI1_MISO / SPI1_MOSI` | 外部 SPI1 扩展 | PA4/PA5/PA6/PA7；接口当前只带 GND 和信号，外设 3.3V 从公用扩展排针取电 |
 | `ADC12_IN0 / ADC12_IN1` | MCU 实际 ADC 输入节点 | PA0/ADC12_IN0 对应 `TP_ADC1`；PA1/ADC12_IN1 对应 `TP_ADC2` |
 | `MOS_CTRL1 / MOS_CTRL2` | MOSFET 控制 GPIO | PB0/PB1 控制两路低边输出，保留 TIM3_CH3/TIM3_CH4 双路硬件 PWM 能力 |
@@ -122,8 +122,10 @@
 - `MOS_CTRL1 = PB0`，`MOS_CTRL2 = PB1`，不改为 PB2/PB10；PB0/PB1 保留 TIM3_CH3/TIM3_CH4 双路硬件 PWM 能力。
 - ADC 测试点对应关系固定为 `PA0 / ADC12_IN0 -> TP_ADC1`，`PA1 / ADC12_IN1 -> TP_ADC2`。
 - PA9/PA10 保持作为板载 CH340C 的 USART1 USB-UART；外部 UART 扩展使用 USART2。
-- I2C 是否增加板载上拉仍为待确认项，不能写成已经最终确定。
-- 8MHz HSE 晶振负载电容最终值仍需根据晶振参数、PCB 寄生电容和 STM32 资料核对。
+- I2C1 使用 PB6/PB7，`R19/R20=4.7kΩ` 板载上拉到 3.3V，当前默认装配。
+- BOOT0 由 `R2=10kΩ` 下拉到 GND，并通过 `H2` 三针排针选择启动状态；`PB2/BOOT1` 已通过 `R21=10kΩ` 下拉到 GND，确保 BOOT0 拉高时 BOOT1 仍保持低电平，便于进入系统 Bootloader。
+- HSE 晶振为 `X1 XC53G2-8.000-F12NJHP`，8MHz，`CL=12pF`；当前负载电容为 `C3/C4=5.1pF`，采购时选择 C0G/NP0。
+- VDDA_3V3 通过 `R5=0Ω` 由 3.3V 供电，VDDA 去耦为 `C7=100nF` 和 `C8=1uF`；数字 VDD 去耦包括 `C2/C5/C9=100nF`，`C1=4.7uF` 作为局部储能。
 
 ## 8. 主要风险点
 
@@ -132,22 +134,22 @@
 - `+5V_SYS` 来自 USB-C 输入经过保护/开关后的系统 5V，接到扩展排针时更适合作为 5V 输出取电点，不建议作为外部反灌供电入口。
 - CH340C 必须按 3.3V UART 电平设计，避免 5V 串口电平直接进入 STM32。
 - PA9/PA10 保持作为板载 CH340C 的 USART1 USB-UART，不再接外部 UART 扩展排针，避免外部模块和 CH340C 同时驱动导致冲突。
-- I2C1 当前未预留板载 4.7k 上拉；外接裸 I2C 器件时必须确认 SCL/SDA 是否具备合适的 3.3V 上拉，后续复审可考虑补 R_SCL/R_SDA 预留焊盘。
+- I2C1 当前已有板载 4.7kΩ 上拉；如果外部模块也自带上拉，多个上拉会并联，连接多个模块前应检查等效上拉阻值和低电平灌电流。
 - ADC 外部输入仅限 `0-5V` 正常输入，不支持长期过压；BAT54S 上钳位存在未上电反灌 VDDA 风险。
 - MOSFET 输出只用于小电流低边开关；外部 VLOAD 必须与板子 GND 共地。
 - SS14 续流二极管极性不能反接，色带端/阴极应接 `VLOAD_EXT`。
-- HSE 负载电容仍需根据具体晶振 datasheet、PCB 寄生电容和 STM32 硬件设计资料反推。
-- 原理图审查前不能把当前文档当作“已通过审查”的结论。
+- HSE 晶振 PCB 布局要求仍需落实：晶振和负载电容靠近 `OSC_IN/OSC_OUT`，走线短且对称、无过孔、远离大电流和高速信号；可低风险预留 `OSC_OUT` 串联电阻焊盘，但不是必须修改项，也不表示当前已实现。
+- 当前主要电气问题已经完成修改，原理图电气设计基本定稿；但关键器件封装、引脚、焊盘映射、接口朝向、丝印和测试点可达性仍需 Altium 人工核对，不能写成已具备直接打样条件。
 
 ## 9. 后续审查入口
 
 下一步建议按以下顺序推进：
 
-1. 基于实际 Altium 原理图、当前审查版 PDF 和必要时导出的网表进行逐项核对。
-2. 使用 [docs/schematic_review.md](docs/schematic_review.md) 按模块填写审查记录。
+1. 以当前原理图 PDF `hardware/outputs/schematic_pdf/STM32_DAQ_Control_Board_Schematic.pdf` 和 BOM `hardware/outputs/bom/STM32_DAQ_Control_Board.xlsx` 为文档同步依据。
+2. 使用 [docs/schematic_review.md](docs/schematic_review.md) 记录已关闭问题和仍待 Altium 人工核对事项。
 3. 对照 [docs/module_design/](docs/module_design/) 核查连接、网络名、器件方向、接口定义和测试点。
 4. 对照 [references.md](references.md) 核查 datasheet 路径、阅读状态和来源待确认项。
-5. 原理图审查记录完成并处理问题后，再进入 PCB Layout。
+5. 完成关键器件封装、引脚和焊盘映射人工核对后，再进入 PCB Layout。
 
 ## 10. 相关文档
 

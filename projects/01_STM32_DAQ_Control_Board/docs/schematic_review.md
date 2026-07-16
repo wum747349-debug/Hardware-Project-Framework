@@ -1,174 +1,82 @@
 # 原理图审查记录
 
 > 文档状态：当前进行中
-> 当前阶段：整板原理图系统审查
+> 当前阶段：原理图电气设计基本定稿，PCB Layout 前人工核对
 > 适用对象：STM32 DAQ Control Board Rev A
-> 最后核对依据：当前仓库原理图目录与已确认设计决定
+> 最后核对依据：当前原理图 PDF、当前 BOM 与用户人工确认事项
 
 ## 1. 文档定位
 
-本文用于记录 `STM32F103C8T6 数据采集/控制开发板` 的原理图系统审查过程。
+本文用于记录 `STM32F103C8T6 数据采集/控制开发板` 的原理图系统审查状态、已关闭问题和 PCB Layout 前仍需人工核对的事项。
 
-本文件不是“审查通过”结论。下一步需要基于实际 Altium 原理图、PDF 原理图输出、datasheet、[design_notes.md](../design_notes.md) 和 [module_design/](module_design/) 逐项审查并记录问题。
-
-设计决定、EDA 实现核对、datasheet / 封装映射核对和问题关闭是四类不同状态。已确认设计决定不等于实际原理图已经逐项审查通过。
+本文件不表示 AI 已经读取或解析 `.SchDoc` 内部电路。当前结论基于完整原理图 PDF、当前 BOM、项目文档和用户人工确认事项；关键器件原理图库 Pin 与 PCB 封装 Pad Mapping、封装方向、接口朝向、丝印和测试点可达性仍需用户在 Altium 中人工核对。
 
 ## 2. 审查输入
 
-| 输入类型                         | 状态              | 当前文件或目录                                                                        | 对应源版本     | 审查用途                      | 限制或备注                                                      |
-| ---------------------------- | --------------- | ------------------------------------------------------------------------------ | --------- | ------------------------- | ---------------------------------------------------------- |
-| Altium 工程目录                  | 工作区已有 / 未纳入 Git | `../hardware/altium_project/PCB_Project/`                                      | 版本待确认     | 人工编辑、版本追踪和后续导出来源          | 当前目录为未跟踪工作区内容；不表示已归档到仓库                                    |
-| `.SchDoc` 源文件                | 工作区存在 / 待纳入版本管理 | `../hardware/altium_project/PCB_Project/STM32_DAQ_Control_Board.SchDoc`        | 版本待确认     | Altium 原理图权威源文件           | AI 当前未解析 `.SchDoc` 内部电路；不能仅凭文件存在关闭问题                       |
-| 原理图 PDF                      | 已有 / 最新版本 / 默认必需审查输入 | `../hardware/outputs/schematic_pdf/STM32_DAQ_Control_Board_Schematic_RevA.pdf` | 对应当前 `.SchDoc` 版本 | 整板系统审查、图形连线和网络名辅助核对       | 局部截图不能代替完整 PDF                                            |
-| BOM                          | 已有 / 最新版本 / 默认必需审查输入 | `../hardware/outputs/bom/STM32_DAQ_Control_Board.csv`                          | 对应当前 `.SchDoc` 版本 | 位号、数量、参数或型号、PCB 封装核对        | 字段包含 `Designator`、`Quantity`、`Comment/Description`、`Footprint`，满足当前最低字段要求；关键器件型号主要记录在 `Comment` 或 `LibRef` |
-| 网表                           | 条件触发 / 未导出       | `../hardware/outputs/netlist/`                                                 | 无         | 复杂网络、跨页网络、网络标签或实际引脚连接核对  | 当前无有效输出；仅在 PDF 和 BOM 无法判断对应连接时按需提供                         |
-| ERC 报告 / Messages 导出          | 条件触发 / 未提供       | `../hardware/outputs/erc/`                                                     | 无         | 用户提供时补充分析 EDA 规则错误、未连接脚、冲突和电气类型检查 | ERC 输出不是默认必需输入；AI 当前未获得 ERC 输出，不能声称已核对 ERC                  |
-| 元件报告                         | 条件触发 / 未导出       | `../hardware/outputs/component_reports/`                                       | 无         | 元件属性、位号、型号、参数一致性核对        | BOM 信息不足或需要额外核对元件属性时按需提供                                  |
-| 封装映射报告                       | 条件触发 / 未导出       | `../hardware/outputs/footprint_reports/`                                       | 无         | 原理图器件与 PCB 封装映射、封装核对      | 关键器件引脚、原理图库与 PCB 封装映射存在风险时按需提供                            |
-| 原理图截图                        | 条件触发 / 未收集       | `../hardware/images/`                                                          | 无         | 补充局部连线、位号、属性或界面证据        | 局部截图只能补充局部证据，不能代替完整原理图 PDF                                 |
-| 设计总览                         | 已有              | [../design_notes.md](../design_notes.md)                                       | 文档版本      | 设计意图、Pin Map、接口约定和已确认设计决定 | 不能单独证明 EDA 实现已经同步                                          |
-| 模块设计文档                       | 已有              | [module_design/](module_design/)                                               | 文档版本      | 模块参数、计算依据和待核对项            | 不能单独证明 EDA 实现已经同步                                          |
-| datasheet / reference manual | 部分已收集           | [../references.md](../references.md)、`../references/datasheets/`               | 资料版本按文件记录 | 关键参数、封装、典型应用和限制条件核对       | 立创商品页不能替代 datasheet / reference manual / application note  |
+| 输入类型 | 状态 | 当前文件或目录 | 审查用途 | 限制或备注 |
+|---|---|---|---|---|
+| Altium 工程目录 | 工作区已有 | `../hardware/altium_project/PCB_Project/` | 人工编辑、版本追踪和后续导出来源 | AI 当前未解析 `.SchDoc` 内部电路 |
+| `.SchDoc` 源文件 | 工作区存在 | `../hardware/altium_project/PCB_Project/STM32_DAQ_Control_Board.SchDoc` | Altium 原理图权威源文件 | 只能由 Altium 或可靠解析器核对内部实现 |
+| 原理图 PDF | 当前审查输入 | `../hardware/outputs/schematic_pdf/STM32_DAQ_Control_Board_Schematic.pdf` | 整板系统审查、图形连线和网络名辅助核对 | 局部截图不能代替完整 PDF |
+| BOM | 当前审查输入 | `../hardware/outputs/bom/STM32_DAQ_Control_Board.xlsx` | 位号、数量、参数或型号、PCB 封装核对 | 普通阻容不强制制造商料号；关键器件型号和封装需人工复核 |
+| 网表 | 条件触发 / 未导出 | `../hardware/outputs/netlist/` | 复杂网络、跨页网络、网络标签或实际引脚连接核对 | 当前无有效输出；按需提供 |
+| ERC 报告 / Messages 导出 | 条件触发 / 未提供 | `../hardware/outputs/erc/` | 用户提供时补充分析 ERC 问题 | 当前不能声称 ERC 已核对 |
+| 元件报告 | 条件触发 / 未导出 | `../hardware/outputs/component_reports/` | 元件属性、位号、型号一致性核对 | BOM 信息不足时按需提供 |
+| 封装映射报告 | 条件触发 / 未导出 | `../hardware/outputs/footprint_reports/` | 原理图器件与 PCB 封装映射核对 | 当前关键封装仍待人工核对 |
+| 设计总览 | 已有 | [../design_notes.md](../design_notes.md) | 设计意图、Pin Map、接口约定和已确认设计决定 | 不能单独证明 EDA 实现已经同步 |
+| 模块设计文档 | 已有 | [module_design/](module_design/) | 模块参数、计算依据和 PCB 检查项 | 不能单独证明 EDA 实现已经同步 |
 
-## 3. 总体审查原则
+## 3. 当前结论
 
-- 不伪造“已通过”结论。
-- 每个问题应记录所在模块、问题描述、风险等级、修改建议、状态和证据或关联文件。
-- 关键参数必须回到 datasheet、reference manual 或 application note 核对。
-- 立创商品页只能作为 C 编号、库存、价格、封装和资料入口参考，不能替代 datasheet。
-- 完整原理图 PDF 和当前版本 BOM 可以支持常规原理图系统审查；无法由二者确认的实际网络、引脚映射、封装映射或其他 EDA 实现事项，应说明结论限制或标记为“待 EDA 核对”。
-- ERC 输出不是默认必需输入；AI 只有在用户提供 ERC 报告、Messages 导出或相关截图时，才分析 ERC 问题。未提供 ERC 输出时，不声称已经核对 ERC，也不把“未提供 ERC 输出”本身作为审查未完成或不能进入 PCB Layout 的理由。
-- 原理图审查完成并处理关键问题前，不进入 PCB Layout 结论。
+当前原理图的主要电气问题已经完成修改，原理图电气设计基本定稿。完成关键器件封装、引脚和焊盘映射的 Altium 人工核对后，可以进入 PCB Layout。未完成这些人工核对前，不得写成已具备直接打样条件。
 
-## 4. 问题记录表
+## 4. 已关闭问题
 
-| 编号 | 模块 | 问题描述 | 风险等级 | 修改建议 | 状态 | 证据或关联文件 |
-|---|---|---|---|---|---|---|
-| SCH-001 | 接口 / I2C | I2C1 当前是否需要板载 `R_SCL/R_SDA` 上拉仍未决策，不能写成已完成。 | 中 | 复审时结合外接模块类型、总线速度和线长决定是否补预留焊盘；若依赖模块自带上拉，需在丝印/调试说明中提示。 | 待决策 | [module_design/06_interfaces_testpoints.md](module_design/06_interfaces_testpoints.md) |
-| SCH-002 | MCU 最小系统 / HSE | `C6/C7=10pF` 仍为临时标注值，8MHz 晶振负载电容未最终核对。 | 中 | 根据晶振 `CL`、PCB 寄生电容和 STM32 硬件设计资料反推最终值。 | 待核对 | [module_design/01_mcu_minimum_system.md](module_design/01_mcu_minimum_system.md)、[../references.md](../references.md) |
-| SCH-003 | 封装 / 可制造性 | USB-C、CH340C、AP2112K、AO3400A、SS14、BAT54S、按键和连接器封装/引脚映射仍需 PCB 前逐项核对。 | 中 | 对照 datasheet、封装库和实际采购型号检查 pin mapping、极性、焊盘和丝印方向。 | 待核对 | [../references.md](../references.md)、`hardware/altium_project/` |
-| SCH-004 | 硬件输出 | 原“缺少原理图 PDF”问题已处理，当前 PDF 文件已补充为 `hardware/outputs/schematic_pdf/STM32_DAQ_Control_Board_Schematic_RevA.pdf`。 | 低 | 将该 PDF 作为当前实际电气实现的审查输入；继续完成正式逐项审查。 | 已补充 / 文件问题关闭，审查未完成 | [../hardware/README.md](../hardware/README.md) |
-| SCH-005 | MCU 最小系统 / HSE | PDF 文本层显示 HSE 负载电容为 `C3/C4 10pf`，而当前文档多处写作 `C6/C7=10pF`；位号和最终电容值均需 EDA 核对。 | 中 | 以当前原理图源文件 / PDF 图形 / 网表为准核对实际位号、连接和参数；文档不得静默假设 `C6/C7` 与 PDF 一致。 | 待 EDA 核对 | `../hardware/outputs/schematic_pdf/STM32_DAQ_Control_Board_Schematic_RevA.pdf`、[module_design/01_mcu_minimum_system.md](module_design/01_mcu_minimum_system.md) |
+| 编号 | 模块 | 问题描述 | 关闭依据 | 当前状态 |
+|---|---|---|---|---|
+| SCH-001 | I2C | I2C1 原先缺少板载上拉或依赖外部模块上拉。 | 当前 BOM/PDF 显示 `R19/R20=4.7kΩ`，上拉到 3.3V。 | 已关闭 |
+| SCH-002 | HSE | 晶振型号、负载电容和旧 `C6/C7=10pF` 表述不一致。 | 当前 BOM/PDF 显示 `X1=8MHz`、`XC53G2-8.000-F12NJHP`、`C3/C4=5.1pF`；用户确认 `CL=12pF`，C3/C4 采购选 C0G/NP0。 | 已关闭 |
+| SCH-003 | BOOT | `PB2/BOOT1` 原先存在悬空风险。 | 当前 BOM/PDF 显示 `R21=10kΩ`；用户确认 PB2/BOOT1 已下拉到 GND。 | 已关闭 |
+| SCH-004 | ADC | ADC 分压旧方案 `10kΩ/18kΩ` 使 5V 输入约 3.21V。 | 当前 BOM/PDF 显示 `R8/R9=12kΩ`、`R12/R13=18kΩ`，5V 标称输入映射为 `5V * 18kΩ / (12kΩ + 18kΩ) = 3.0V`。 | 已关闭 |
+| SCH-005 | USB-C VBUS TVS | D5 网络和极性映射需要确认。 | 用户人工确认 D5 为 `SMF5.0A`，阴极接 `VBUS_FUSED`、阳极接 GND，符号、封装焊盘和实物极性映射一致。 | 已关闭 |
+| SCH-006 | 硬件输出 | 最新原理图 PDF 和 BOM 需要重新导出并放入项目输出目录。 | 当前工作区存在 `hardware/outputs/schematic_pdf/STM32_DAQ_Control_Board_Schematic.pdf` 和 `hardware/outputs/bom/STM32_DAQ_Control_Board.xlsx`。 | 已关闭 / 版本管理状态仍需用户确认 |
 
-## 5. 本轮已确认事项
+## 5. 仍待 Altium 人工核对
 
-| 事项 | 当前结论 | 状态 | 关联文件 |
-|---|---|---|---|
-| 用户 LED | `PB5`，低电平点亮，电路为 `3.3V -> 1kΩ -> LED_USER -> PB5`。 | 已确认 | [../design_notes.md](../design_notes.md)、[module_design/06_interfaces_testpoints.md](module_design/06_interfaces_testpoints.md) |
-| MOSFET 控制脚 | `MOS_CTRL1 = PB0`，`MOS_CTRL2 = PB1`，不改为 PB2/PB10。 | 已确认 | [../design_notes.md](../design_notes.md)、[module_design/05_mosfet_low_side_output.md](module_design/05_mosfet_low_side_output.md) |
-| MOSFET PWM 能力 | PB0/PB1 保留 TIM3_CH3/TIM3_CH4 双路硬件 PWM 能力。 | 已确认 | [module_design/05_mosfet_low_side_output.md](module_design/05_mosfet_low_side_output.md) |
-| ADC 测试点 | `PA0 / ADC12_IN0 -> TP_ADC1`，`PA1 / ADC12_IN1 -> TP_ADC2`。 | 已确认 | [module_design/04_adc_input_protection.md](module_design/04_adc_input_protection.md) |
-| 原理图组织 | 当前整板原理图保持单页模块化结构，不拆成多张层次原理图。 | 已确认 | [../design_notes.md](../design_notes.md) |
+| 编号 | 模块 | 待核对事项 | 风险等级 | 建议动作 | 状态 |
+|---|---|---|---|---|---|
+| EDA-001 | 关键器件封装 | STM32F103C8T6、AP2112K、CH340C、TPD2EUSB30、AO3400A、BAT54S、SS14、USB-C、开关和连接器的原理图库 Pin 与 PCB 封装 Pad Mapping。 | 中 | 在 Altium 中逐个核对库引脚号、焊盘号、封装模型和实际采购料号。 | 待 EDA 人工核对 |
+| EDA-002 | USB-C | USB-C 机械方向、固定焊盘、外壳焊盘、D+/D-、CC1/CC2、VBUS/GND 和 Shield 连接。 | 中 | 对照连接器规格书、PCB 封装和板边方向核对。 | 待 EDA 人工核对 |
+| EDA-003 | U6 USB ESD | `TPD2EUSB30DRTR-N` 完整型号与实际 datasheet 的一致性，以及 U6 原理图针号与 SOT-723 封装焊盘映射。 | 中 | 对照 datasheet 和 Altium 封装逐脚核对。 | 待 EDA 人工核对 |
+| EDA-004 | 极性和方向 | AO3400A、BAT54S、SS14、AP2112、CH340C、开关和连接器的封装方向、极性、丝印方向。 | 中 | PCB 前逐项核对封装 1 脚、二极管色带、MOSFET G/S/D、LDO pin1 和 USB-C 方向。 | 待 EDA 人工核对 |
+| EDA-005 | 接口与测试点 | PCB 接口朝向、丝印可读性、`TP_VBUS1/TP_1/TP_2/TP_GND1` 与 ADC/MOSFET 测试点可达性。 | 低/中 | 结合 PCB 布局检查接线习惯、探针空间和安全边界丝印。 | 待 EDA 人工核对 |
+| EDA-006 | ERC | Altium ERC 是否存在未连接、重复驱动、电源端口、电气类型或 NC 标记问题。 | 视结果而定 | 仅在导出最新 ERC 报告或 Messages 截图后记录结果。 | 未提供报告，不声称已完成 |
 
-## 6. MCU 最小系统审查项
+## 6. 关键模块复核摘要
 
-参考：[module_design/01_mcu_minimum_system.md](module_design/01_mcu_minimum_system.md)
-
-| 审查项 | 当前状态 | 备注 |
+| 模块 | 当前实现摘要 | 后续关注 |
 |---|---|---|
-| STM32F103C8T6 料号、封装和 LQFP48 引脚定义是否匹配 | 待审查 | 需对照官方 datasheet |
-| VDD/VSS 是否全部正确连接到 `3.3V` / `GND` | 待审查 | 每个 VDD 附近应有 100nF 去耦 |
-| `VBAT` 未用时是否接 `3.3V` 并避免悬空 | 待审查 | 可预留去耦 |
-| `VDDA_3V3`、`VSSA`、R2 0Ω 和去耦是否正确 | 待审查 | 注意 VDDA/VSSA 不可接反 |
-| `NRST` 是否接按键、100nF、电路网络和 SWD 接口 | 待审查 | 确认没有误接 HSE 脚 |
-| `BOOT0` 10k 下拉和 3Pin 跳帽是否不会短接 3.3V/GND | 待审查 | 默认 Flash 启动 |
-| HSE 8MHz 是否接 `PD0/OSC_IN` 和 `PD1/OSC_OUT` | 待审查 | `C6/C7=10pF` 仍需复核 |
-| SWDIO/SWCLK/NRST/GND/3.3V 接口是否清晰 | 待审查 | 网络名避免 `CLK` 混淆 |
+| MCU 最小系统 | `U1=STM32F103C8T6 LQFP48`；`R2=10kΩ` 下拉 BOOT0，`H2` 选择启动状态；`R21=10kΩ` 下拉 PB2/BOOT1；`SW2+C6=100nF` 复位；`H4` 为 SWD。 | LQFP48 pin mapping、BOOT 跳帽丝印、SWD 方向。 |
+| HSE | `X1=8MHz XC53G2-8.000-F12NJHP`，`CL=12pF`，`C3/C4=5.1pF`。 | 晶振靠近 OSC_IN/OSC_OUT，短且对称、无过孔、远离大电流和高速信号；可选预留 OSC_OUT 串联电阻焊盘。 |
+| VDDA / 去耦 | `R5=0Ω` 连接 3.3V 到 `VDDA_3V3`；`C7=100nF`、`C8=1uF`；数字 VDD 去耦 `C2/C5/C9=100nF`，`C1=4.7uF`。 | 去耦位置和回流路径。 |
+| ADC | CH1：`U2`、`R8=12kΩ`、`R12=18kΩ`、`R10=330Ω`、`C10=10nF`、`D3=BAT54S`、`TP_ADC1 -> PA0`；CH2：`U3`、`R9=12kΩ`、`R13=18kΩ`、`R11=330Ω`、`C11=10nF`、`D4=BAT54S`、`TP_ADC2 -> PA1`。 | BAT54S 上钳位存在板卡断电、外部输入带电时反灌 VDDA 风险；固件采样时间建议 28.5 周期或更长。 |
+| I2C | `U5` 使用 PB6/PB7，`R19/R20=4.7kΩ` 上拉到 3.3V，默认装配。 | 外部模块若自带上拉，会与板载上拉并联；连接多个模块前检查等效上拉和低电平灌电流。 |
+| USB-C / 电源 | `USB1`、`R14/R16=5.1kΩ` CC 下拉、`R15=0Ω` Shield-GND、`F1`、`D5=SMF5.0A`、`SW3`，路径为 `VBUS_RAW -> F1 -> VBUS_FUSED -> SW3 -> +5V_SYS`；`U8=AP2112K-3.3TRG1`，`R17=10kΩ` EN 上拉，`C15/C16=1uF`，`C17=4.7uF`，`R18+LED2` 电源指示。 | USB-C 仅 5V，AP2112 热耗散，D5 极性已确认但封装方向仍需 PCB 前复核。 |
+| CH340C / USB ESD | `U7=CH340C`，`U6=TPD2EUSB30DRTR-N`，`C12/C14=100nF`，`C13=1uF`；CH340C TXD 接 `MCU_RX/PA10`，RXD 接 `MCU_TX/PA9`；CH340C 不需要外部晶振。 | U6 完整型号、SOT-723 pad mapping、USB-C/CH340C 封装方向。 |
+| MOSFET 输出 | CH1：`R1=100Ω`、`R3=100kΩ`、`Q1=AO3400A`、`D1=SS14`、`H1`、`TP_GATE1/TP_OUT1`；CH2：`R6=100Ω`、`R7=100kΩ`、`Q2=AO3400A`、`D2=SS14`、`H3`、`TP_GATE2/TP_OUT2`。 | AO3400A G/S/D、SS14 色带方向、接口丝印和外部共地提示。 |
+| 扩展接口 / 测试点 | `U4=SPI`，`U5=I2C`，`H6=USART2`，`H5=公用电源+GPIO`，`SW1` 用户按键，`LED1/R4` 用户 LED；电源测试点为 `TP_VBUS1 -> VBUS_RAW`、`TP_1 -> +5V_SYS`、`TP_2 -> 3.3V`、`TP_GND1 -> GND`。 | 不修改原理图测试点名称；文档中说明 `TP_1/TP_2` 分别代表 5V 和 3.3V。 |
 
-## 7. 电源与 USB-C 审查项
+## 7. BOM 记录原则
 
-参考：[module_design/02_usb_c_power_ap2112.md](module_design/02_usb_c_power_ap2112.md)
+- 普通电阻、电容只要求具有明确阻值/容值。
+- 普通阻容封装统一为 0603。
+- 电阻采购时优先选择 1% 精度，ADC 分压电阻必须优先选择 1% 精度。
+- 本轮不要求给所有普通阻容补齐完整耐压、功率、介质和容差字段。
+- `C3/C4` 晶振负载电容采购时选 C0G/NP0。
+- MCU、电源芯片、接口芯片、MOSFET、二极管、连接器等关键器件仍需明确型号、封装和方向。
 
-| 审查项 | 当前状态 | 备注 |
-|---|---|---|
-| USB-C A4/A9/B4/B9 是否合并为 `VBUS_RAW` | 待审查 | 仅 5V 输入 |
-| CC1/CC2 是否各自通过 5.1kΩ 下拉到 GND | 待审查 | UFP 取电设备 |
-| SBU 是否 NC，Shield 是否按 `R7 0Ω -> GND` | 待审查 | Shield 策略后续可调整 |
-| `VBUS_RAW -> F1 -> VBUS_FUSED -> SW2 -> +5V_SYS` 是否正确 | 待审查 | 确认电源开关脚位 |
-| `+5V_SYS` 接到 `H_EXT_PWR_GPIO` 时是否标注为 5V 输出取电点 | 待审查 | 不建议作为外部反灌供电入口 |
-| `SMF5.0A` TVS 极性是否正确，是否只保护 VBUS | 待审查 | 阴极接 VBUS_FUSED，阳极接 GND |
-| PPTC Vmax=6V 是否仅用于当前 5V USB 输入边界 | 待审查 | 不支持 9V/12V |
-| AP2112K VIN/GND/EN/NC/VOUT 连接是否正确 | 待审查 | EN 通过 10k 上拉到 +5V_SYS |
-| C10/C11/C12 是否容量正确并靠近相关电源脚 | 待审查 | 输入/输出电容需核对 datasheet |
-| 3.3V 外供 `<=100mA` 和热耗散边界是否在文档/丝印体现 | 待审查 | 不能按 600mA 长期满载 |
-| 是否预留 `TP_VBUS`、`TP_5V`、`TP_3V3`、`TP_GND` | 待审查 | 便于上电测量 |
+## 8. 下一步操作
 
-## 8. CH340C / USB 转 UART 审查项
-
-参考：[module_design/03_usb_uart_ch340c.md](module_design/03_usb_uart_ch340c.md)
-
-| 审查项 | 当前状态 | 备注 |
-|---|---|---|
-| CH340C 是否按 3.3V 供电，VCC/V3/GND 是否正确 | 待审查 | 避免 5V UART 电平风险 |
-| C13/C14/C15 是否靠近 VCC/V3 | 待审查 | 去耦和局部储能 |
-| `USB_DP/USB_DM` 是否只接 CH340C 和 ESD，不接 STM32 PA11/PA12 | 待审查 | 第一版不使用 STM32 原生 USB |
-| TPD2EUSB30DRTR-N 是否为并联钳位，GND 是否短路径接地 | 待审查 | 不接 3.3V/VBUS；封装、方向、GND 引脚、焊盘和实际 datasheet 仍需复核 |
-| CH340C TXD/RXD 与 STM32 PA10/PA9 是否交叉连接 | 待审查 | 网络名需从 MCU 视角说明 |
-| PA9/PA10 是否只作为板载 CH340C 的 USART1 使用 | 待审查 | 不再接外部 UART 扩展排针，避免双驱动冲突 |
-| `R232` 是否接 GND | 待审查 | TTL UART 模式 |
-| 未用握手脚和 NC 脚是否加 No Connect 标记 | 待审查 | 不做 DTR/RTS 自动下载 |
-
-## 9. ADC 输入审查项
-
-参考：[module_design/04_adc_input_protection.md](module_design/04_adc_input_protection.md)
-
-| 审查项 | 当前状态 | 备注 |
-|---|---|---|
-| ADC1/ADC2 是否分别接 PA0/ADC12_IN0、PA1/ADC12_IN1 | 设计决定已确认，EDA 实现待核对 | 避免交叉命名；PDF 文本层可见 `ADC12_IN0/ADC12_IN1`、`TP_ADC1/TP_ADC2` |
-| 外部输入是否先经 `10kΩ/18kΩ` 分压 | 待审查 | 5V 输入约 3.21V |
-| `330Ω` 串联限流是否在 ADC 节点前 | 待审查 | 不应被短接或绕过 |
-| `10nF` 滤波电容是否接 ADC 节点到 GND | 待审查 | 低速采集使用 |
-| BAT54S 是否为正确型号和引脚映射 | 待审查 | Pin3 ADC 节点，Pin1 GND，Pin2 VDDA_3V3 |
-| `TP_ADC1/TP_ADC2` 是否接 MCU 实际 ADC 输入节点 | 设计决定已确认，EDA 实现待核对 | `TP_ADC1 -> ADC12_IN0 / PA0`，`TP_ADC2 -> ADC12_IN1 / PA1`；仍需图形连线核对 |
-| ADC 接口是否标注 `ADC IN 0-5V` | 待审查 | 不支持长期过压 |
-| 是否记录未上电反灌 VDDA 风险 | 待审查 | 上钳位导入 VDDA_3V3 |
-
-## 10. MOSFET 低边输出审查项
-
-参考：[module_design/05_mosfet_low_side_output.md](module_design/05_mosfet_low_side_output.md)
-
-| 审查项 | 当前状态 | 备注 |
-|---|---|---|
-| PB0/PB1 是否分别控制 `MOS_CTRL1/MOS_CTRL2` | 设计决定已确认，EDA 实现待核对 | 保留 TIM3_CH3/TIM3_CH4 双路硬件 PWM 能力，不改 PB2/PB10；PDF 文本层可见 `PB0/PB1` 与 `MOS_CTRL1/MOS_CTRL2` |
-| AO3400A 引脚映射是否正确 | 待审查 | Gate/Source/Drain 不可接错 |
-| 每路 Gate 是否有 `100Ω` 串联电阻和 `100kΩ` 下拉 | 待审查 | 默认关断 |
-| H3/H4 是否为 `VLOAD_EXT / MOS_OUT / GND` 三针 | 待审查 | 引脚顺序需丝印清楚 |
-| SS14 极性是否正确 | 待审查 | 阴极/色带端接 VLOAD_EXT，阳极接 MOS_OUT |
-| VLOAD 是否限制为 `5V-12V`，最大不超过 `12V` | 待审查 | 不做大电流输出 |
-| 外部 VLOAD 是否要求与板子 GND 共地 | 待审查 | 丝印建议 `COMMON GND` |
-| `TP_GATE1/2`、`TP_OUT1/2` 是否便于测量 | 待审查 | 关注开关节点干扰 |
-
-## 11. 接口 / 测试点 / 封装 / 丝印审查项
-
-参考：[module_design/06_interfaces_testpoints.md](module_design/06_interfaces_testpoints.md)
-
-| 审查项 | 当前状态 | 备注 |
-|---|---|---|
-| UART/I2C/SPI 扩展接口是否均标注 3.3V 逻辑 | 待审查 | 不直接兼容 5V |
-| `H_UART2` 是否使用 `PA2/USART2_TX`、`PA3/USART2_RX` | 待审查 | TX2 为 MCU 发送接模块 RX，RX2 为 MCU 接收接模块 TX |
-| `H_I2C` 是否使用 `PB6/I2C1_SCL`、`PB7/I2C1_SDA` | 待审查 | 当前未预留板载 4.7k 上拉，依赖外接模块上拉或后续补 `R_SCL/R_SDA` |
-| 外接裸 I2C 器件时是否确认 `SCL/SDA` 具备合适 3.3V 上拉 | 待复审 | 当前不能写成已完成 |
-| `H_SPI` 是否使用 `PA4/CS`、`PA5/SCK`、`PA6/MISO`、`PA7/MOSI` | 待审查 | 当前只带 GND 和信号，外设 3.3V 从 `H_EXT_PWR_GPIO` 取电 |
-| `H_EXT_PWR_GPIO` 2x5 排针脚位是否符合规划 | 待审查 | 1/3 为 3.3V，2/4 为 GND，5/6/7/8/9 为 GPIO，10 为 `+5V_SYS` |
-| `+5V_SYS` 外引是否有反灌风险提示 | 待审查 | 不建议外部从该脚反向给板子供电 |
-| SWD、UART、I2C、SPI、ADC、MOSFET 排针脚位是否与网络一致 | 待审查 | 避免丝印和网络不一致 |
-| 用户 LED 是否为 `3.3V -> 1kΩ -> LED_USER -> PB5` | 设计决定已确认，EDA 实现待核对 | 低电平点亮，用于 GPIO 输出和状态指示；仍需图形连线核对 |
-| 用户按键是否为 `PB8 -> KEY_USER -> GND` | 待审查 | 固件内部上拉，未按下高电平，按下低电平；当前无外部上拉 |
-| 关键测试点是否覆盖电源、复位、SWD、UART、ADC、MOSFET | 待审查 | 便于上电和调试 |
-| USB-C、CH340C、AP2112K、AO3400A、SS14、BAT54S 封装是否与 datasheet 匹配 | 待审查 | 需检查封装库 |
-| 丝印是否包含 `USB-C 5V ONLY`、`ADC IN 0-5V`、`VLOAD 5-12V`、`COMMON GND`、`3.3V LOGIC` | 待审查 | 空间不足时优先保留安全边界 |
-| `H_UART2`、`H_SPI`、`H_I2C` 丝印是否体现关键脚名 | 待审查 | 建议分别标注 `GND/TX2/RX2`、`GND/CS/SCK/MISO/MOSI`、`3V3/GND/SCL/SDA` |
-
-## 12. 审查结论
-
-当前结论：修改后再进入 PCB Layout。
-
-依据：
-
-- 当前完整原理图 PDF 已存在且为最新版本，可作为默认必需审查输入。
-- 当前 BOM 已存在且为最新版本：`../hardware/outputs/bom/STM32_DAQ_Control_Board.csv`；其字段覆盖位号、数量、参数或型号、PCB 封装，满足当前最低字段要求。测试点行 `Comment` 为空，但 `Description` / `Footprint` 可识别为通用测试点，不视为关键器件料号缺失。
-- 当前工作区存在 `.SchDoc` 源文件，但尚未纳入 Git，且 AI 当前未解析其内部电路。
-- I2C 上拉、HSE 负载电容、关键器件封装 / pin mapping、接口丝印仍未关闭；如其中某个具体问题必须依赖 ERC、网表或封装映射结果才能判断，应标记“待 EDA 核对”并等待用户提供对应证据。
-- PDF 文本层显示 HSE 负载电容位号与文档记录存在 `C3/C4` vs `C6/C7` 的待核对差异。
-
-完成上述问题核对并更新关闭状态后，才能重新判断是否可以进入 PCB Layout。
+1. 在 Altium 中完成关键器件 pin/pad mapping、封装方向、USB-C 机械方向、接口朝向、丝印和测试点可达性人工核对。
+2. 如导出 ERC、网表、元件报告或封装映射报告，再补充到对应输出目录并更新本文件。
+3. 完成上述人工核对后，可以进入 PCB Layout；在此之前不得写成已具备直接打样条件。

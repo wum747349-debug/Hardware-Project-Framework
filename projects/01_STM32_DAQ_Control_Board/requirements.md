@@ -3,7 +3,7 @@
 > 文档状态：当前有效
 > 当前阶段：整板原理图系统审查
 > 适用对象：STM32 DAQ Control Board Rev A
-> 最后核对依据：当前仓库原理图目录与已确认设计决定
+> 最后核对依据：当前原理图 PDF、当前 BOM 与已确认设计决定
 
 ## 项目名称
 
@@ -34,7 +34,7 @@ STM32F103C8T6 数据采集/控制开发板
 ### 1. MCU 最小系统
 
 - MCU 型号确定为 `STM32F103C8T6`。
-- 封装优先按常见 LQFP48 方向考虑，后续原理图阶段需核对具体料号、封装和引脚定义。
+- 当前采用 LQFP48；进入 PCB Layout 前仍需核对原理图库引脚号、PCB 焊盘号和实际采购料号的一致性。
 - 需要包含 STM32 最小系统：
   - 3.3V 供电
   - VDD / VDDA / VSS / VSSA 处理
@@ -47,7 +47,9 @@ STM32F103C8T6 数据采集/控制开发板
 ### 2. 外部晶振
 
 - 外部高速晶振频率确定为 `8MHz`。
-- HSE 晶振、电容、负载电容和启动配置后续必须根据 STM32F103C8T6 datasheet / reference manual 核对。
+- 当前 HSE 晶振为 `XC53G2-8.000-F12NJHP`，标称负载电容 `CL=12pF`。
+- 当前 HSE 负载电容为 `C3/C4 = 5.1pF`，采购时选用 C0G/NP0 材质。
+- HSE 晶振 PCB 布局仍需靠近 `OSC_IN/OSC_OUT`，走线短且对称、无过孔，并远离大电流和高速信号。
 
 ### 3. USB-C 供电与 USB 转 UART 通信
 
@@ -190,7 +192,7 @@ STM32F103C8T6 数据采集/控制开发板
 | 项目 | 当前结论 |
 | --- | --- |
 | MCU | STM32F103C8T6 |
-| MCU 封装方向 | 优先按常见 LQFP48 考虑，后续核对 |
+| MCU 封装 | 当前采用 LQFP48；进入 PCB Layout 前仍需核对原理图库引脚号、PCB 焊盘号和实际采购料号的一致性 |
 | PCB 层数 | 2 层 |
 | PCB 尺寸目标 | 约 70mm x 50mm，后续可微调 |
 | 安装孔 | 可预留 2-4 个 |
@@ -199,7 +201,7 @@ STM32F103C8T6 数据采集/控制开发板
 | USB 转 UART | CH340C，USART1 PA9 / PA10 |
 | 板载 USB-UART 串口 | USART1，PA9 / PA10，连接 CH340C |
 | 外部 UART 扩展 | USART2，PA2 / PA3 |
-| I2C 扩展 | I2C1，PB6 / PB7；当前未预留板载上拉，待复审 |
+| I2C 扩展 | I2C1，PB6 / PB7；`R19/R20 = 4.7kΩ` 板载上拉到 3.3V |
 | SPI 扩展 | SPI1，PA4 / PA5 / PA6 / PA7 |
 | ADC 通道 | 2 路 |
 | ADC 外部输入范围 | 0-5V |
@@ -222,15 +224,13 @@ STM32F103C8T6 数据采集/控制开发板
 - ADC 外部输入 `0-5V`、MCU ADC 输入 `0-3.3V`、`TP_ADC1/TP_ADC2` 对应关系清楚。
 - MOSFET 输出 `VLOAD 5V-12V`、推荐 `<=300mA`、预留 `<=500mA`、外部共地和感性负载续流要求清楚。
 - SWD、USB-UART、UART2、I2C1、SPI1、ADC、MOSFET、用户 LED/按键和测试点均有明确网络名或接口标识。
-- 关键器件封装、引脚映射和关键参数在进入 PCB Layout 前完成 datasheet / reference manual 复核。
+- 关键器件封装、引脚映射、焊盘映射、封装方向和关键参数在进入 PCB Layout 前完成 datasheet / reference manual / Altium 人工核对。
 
 ## 待确认问题
 
-- I2C 是否增加 `R_SCL/R_SDA` 上拉预留焊盘。
-- HSE 晶振具体型号、`CL`、负载电容最终值和布局要求。
-- 关键器件原理图库与 PCB 封装的 pin mapping、极性和实际采购型号。
+- 关键器件原理图库与 PCB 封装的 pin mapping、pad mapping、极性和实际采购型号。
 - USB-C、CH340C、AP2112K、AO3400A、SS14、BAT54S、按键和连接器封装复核。
 - PCB 尺寸、安装孔、接口朝向和测试点可达性。
 - 安全丝印和接口丝印。
-- BOM 中采购型号、封装和可得性。
-- Altium ERC、正式原理图审查和问题关闭。
+- BOM 中关键器件采购型号、封装和可得性。
+- Altium ERC 仅在用户导出最新报告后记录核对结果；当前不自行假设 ERC 已完成。

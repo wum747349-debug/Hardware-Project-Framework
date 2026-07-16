@@ -1,9 +1,7 @@
 # USB-C 供电与 AP2112K 电源设计说明
 
 > 文档状态：当前有效，模块详细依据
-> 当前阶段：整板原理图系统审查
-> 适用对象：STM32 DAQ Control Board Rev A
-> 最后核对依据：当前仓库原理图目录与已确认设计决定
+> 适用版本：Rev A
 
 ## 1. 模块定位
 
@@ -24,12 +22,12 @@
 |---|---|---|
 | A4 / A9 / B4 / B9 | `VBUS_RAW` | USB-C 母座刚输入的原始 5V |
 | A1 / A12 / B1 / B12 | `GND` | 电源地 |
-| A5 / CC1 | `R3 5.1kΩ -> GND` | Type-C UFP 取电设备 CC 下拉 |
-| B5 / CC2 | `R4 5.1kΩ -> GND` | Type-C UFP 取电设备 CC 下拉 |
+| A5 / CC1 | `R14 5.1kΩ -> GND` | Type-C UFP 取电设备 CC 下拉 |
+| B5 / CC2 | `R16 5.1kΩ -> GND` | Type-C UFP 取电设备 CC 下拉 |
 | A6 / B6 | `USB_DP` | USB2.0 D+，后续接 USB 转 UART |
 | A7 / B7 | `USB_DM` | USB2.0 D-，后续接 USB 转 UART |
 | SBU1 / SBU2 | NC | 本项目暂不使用，原理图应加 NC 标记 |
-| EH / Shield | `SHIELD -> R7 0Ω -> GND` | Shield 先通过 0Ω 接地，后续按 EMI/ESD 结果调整 |
+| EH / Shield | `SHIELD -> R15 0Ω -> GND` | Shield 先通过 0Ω 接地，后续按 EMI/ESD 结果调整 |
 
 CC1/CC2 分别使用 `5.1kΩ` 下拉到 GND，使本板作为 Type-C 取电设备。Shield 通过 `0Ω` 电阻接 GND，便于后续根据 EMI/ESD 测试改为 DNP、磁珠或其他连接方式。
 
@@ -40,11 +38,11 @@ CC1/CC2 分别使用 `5.1kΩ` 下拉到 GND，使本板作为 Type-C 取电设�
 ```text
 USB-C VBUS
 -> VBUS_RAW
--> TP_VBUS
+-> TP_VBUS1
 -> F1 自恢复保险丝
 -> VBUS_FUSED
-   ├─ D1 SMF5.0A TVS -> GND
-   └─ SW2 单刀单掷电源开关 -> +5V_SYS -> TP_5V -> AP2112 VIN
+   ├─ D5 SMF5.0A TVS -> GND
+   └─ SW3 单刀单掷电源开关 -> +5V_SYS -> TP_1 -> AP2112 VIN
 ```
 
 关键网络定义：
@@ -53,7 +51,7 @@ USB-C VBUS
 |---|---|
 | `VBUS_RAW` | USB-C 母座刚输入的原始 5V |
 | `VBUS_FUSED` | 经过 F1 自恢复保险丝后的 5V 节点 |
-| `+5V_SYS` | 经过 F1 和 SW2 后的板级系统 5V，供 AP2112 VIN 等后级使用 |
+| `+5V_SYS` | 经过 F1 和 SW3 后的板级系统 5V，供 AP2112 VIN 等后级使用 |
 | `AP2112 VIN` | AP2112 的 5V 输入脚，用于将 `+5V_SYS` 转换为 3.3V |
 | `3.3V` | AP2112 输出的板级 3.3V 电源 |
 | `GND` | 板级参考地 |
@@ -62,17 +60,17 @@ USB-C VBUS
 
 | 位号 | 当前主选 | 类型 / 封装 | 关键参数 | 用途 | 注意事项 |
 |---|---|---|---|---|---|
-| D1 / D_VBUS_TVS | R+O / 宏嘉诚 `SMF5.0A` | 单向 TVS，SOD-123FL | VRWM=5V，VBR=6.4V~7.0V，VC=9.2V，IPP=21.7A，IR=400µA | USB-C VBUS 瞬态电压 / ESD 保护 | 只用于 VBUS 电源线保护，不用于 `USB_DP/USB_DM` |
+| D5 / D_VBUS_TVS | R+O / 宏嘉诚 `SMF5.0A` | 单向 TVS，SOD-123FL | VRWM=5V，VBR=6.4V~7.0V，VC=9.2V，IPP=21.7A，IR=400µA | USB-C VBUS 瞬态电压 / ESD 保护 | 只用于 VBUS 电源线保护，不用于 `USB_DP/USB_DM` |
 | F1 | R+O / 宏嘉诚 `C46640983` | PPTC 自恢复保险丝，0805 | Vmax=6V，Imax=40A，Ihold=500mA，Itrip=1A | USB 输入短路、后级严重过流、TVS 失效短路时限流保护 | Vmax=6V，仅适合当前 5V USB 输入设计 |
-| SW2 | HCTL / 华灿天禄插件船型开关 | 单刀单掷，约 15mm x 10.5mm | 实际引脚导通关系、孔距和封装尺寸待 PCB 前复核 | `VBUS_FUSED -> SW2 -> +5V_SYS` 电源开关 | 体积较大，但第一版练习板可以接受 |
+| SW3 | HCTL / 华灿天禄插件船型开关 | 单刀单掷，约 15mm x 10.5mm | 实际引脚导通关系、孔距和封装尺寸待 PCB 前复核 | `VBUS_FUSED -> SW3 -> +5V_SYS` 电源开关 | 体积较大，但第一版练习板可以接受 |
 
-`SMF5.0A` 连接方式：阴极 K / 色环端接 `VBUS_FUSED`，阳极 A 接 `GND`。`USB_DP/USB_DM` 由低电容 USB ESD 器件单独保护。
+`D5 SMF5.0A` 连接方式：阴极 K / 色环端接 `VBUS_FUSED`，阳极 A 接 `GND`。该符号、封装焊盘和实物极性映射已经由用户人工确认。`USB_DP/USB_DM` 由低电容 USB ESD 器件单独保护。
 
 ## 6. AP2112K 3.3V 电源设计
 
 | 项目 | 当前设计 |
 |---|---|
-| U2 | `AP2112K-3.3TRG1` |
+| U8 | `AP2112K-3.3TRG1` |
 | 类型 | 固定 3.3V LDO |
 | 封装 | SOT25 |
 | 标称输出能力 | 600mA |
@@ -86,7 +84,7 @@ USB-C VBUS
 |---|---|
 | VIN | `+5V_SYS` |
 | GND | `GND` |
-| EN | `R5 10kΩ -> +5V_SYS` |
+| EN | `R17 10kΩ -> +5V_SYS` |
 | NC | NC |
 | VOUT | `3.3V` |
 
@@ -94,11 +92,11 @@ USB-C VBUS
 
 | 位号 | 参数 | 连接 | 说明 |
 |---|---|---|---|
-| C10 | 1µF | `+5V_SYS -> GND` | 靠近 VIN |
-| C11 | 1µF | `3.3V -> GND` | 靠近 VOUT |
-| C12 | 4.7µF | `3.3V -> GND` | 3.3V 总线储能 |
-| R6 | 1kΩ | `3.3V -> R6 -> LED1 -> GND` | 3.3V 电源指示灯限流 |
-| LED1 | 电源指示灯 | `3.3V -> R6 -> LED1 -> GND` | 指示 AP2112 输出存在 |
+| C15 | 1µF | `+5V_SYS -> GND` | 靠近 VIN |
+| C16 | 1µF | `3.3V -> GND` | 靠近 VOUT |
+| C17 | 4.7µF | `3.3V -> GND` | 3.3V 总线储能 |
+| R18 | 1kΩ | `3.3V -> R18 -> LED2 -> GND` | 3.3V 电源指示灯限流 |
+| LED2 | 电源指示灯 | `3.3V -> R18 -> LED2 -> GND` | 指示 AP2112 输出存在 |
 
 AP2112K 虽然标称 600mA，但 5V 转 3.3V 时会产生线性损耗，不建议长期接近满载使用。功耗估算可按 `P=(5V-3.3V)*Iout` 计算；SOT25 θJA 约 `184°C/W`。例如 `Iout=100mA` 时，功耗约 `0.17W`，理想估算温升约 `31°C`；`Iout=200mA` 时，功耗约 `0.34W`，理想估算温升约 `63°C`。因此第一版建议 3.3V 长期总电流控制在约 `150mA~200mA` 以内，外部 3.3V 排针继续限制 `<=100mA`。
 
@@ -108,10 +106,10 @@ AP2112K 虽然标称 600mA，但 5V 转 3.3V 时会产生线性损耗，不建�
 
 | 测试点 | 网络 | 用途 |
 |---|---|---|
-| `TP_VBUS` | `VBUS_RAW` | 测 USB-C 原始输入 5V |
-| `TP_5V` | `+5V_SYS` | 测开关后系统 5V |
-| `TP_3V3` | `3.3V` | 测 AP2112 输出 3.3V |
-| `TP_GND` | `GND` | 万用表黑表笔或示波器地夹参考点 |
+| `TP_VBUS1` | `VBUS_RAW` | 测 USB-C 原始输入 5V |
+| `TP_1` | `+5V_SYS` | 测开关后系统 5V；当前原理图测试点位号不改名 |
+| `TP_2` | `3.3V` | 测 AP2112 输出 3.3V；当前原理图测试点位号不改名 |
+| `TP_GND1` | `GND` | 万用表黑表笔或示波器地夹参考点 |
 
 ## 8. 风险与注意事项
 
@@ -119,14 +117,14 @@ AP2112K 虽然标称 600mA，但 5V 转 3.3V 时会产生线性损耗，不建�
 - `SMF5.0A` 是瞬态保护器件，不能替代长期过压保护。
 - `F1` 为自恢复保险丝，不是精确限流器。
 - `AP2112K-3.3TRG1` 不能按 600mA 长期满载设计，需考虑热耗散。
-- `SW2` 船型开关封装和引脚导通关系需在 PCB 前复核。
+- `SW3` 船型开关封装和引脚导通关系需在 PCB 前复核。
 - 所有电源网络命名需保持一致，推荐使用 `VBUS_RAW`、`VBUS_FUSED`、`+5V_SYS`、`3.3V`、`GND`。本项目后续原理图优先统一使用 `3.3V` 作为 3.3V 电源网络名，不再混用 `+3V3`。
 
 ## 9. 后续 PCB 检查项
 
 1. USB-C 母座封装、固定脚、0.5mm pitch 焊盘、阻焊和可检查性。
-2. `VBUS_RAW -> F1 -> VBUS_FUSED -> SW2 -> +5V_SYS` 走线宽度和回流路径。
-3. D1 TVS 从 `VBUS_FUSED` 并联到 `GND`，且靠近 VBUS 入口，GND 回流短直。
-4. F1 与 SW2 的封装、电流能力、孔距和实际导通关系。
-5. AP2112K 的 C10/C11 是否靠近 VIN/VOUT，C12 是否靠近 3.3V 总线入口。
-6. `TP_VBUS`、`TP_5V`、`TP_3V3`、`TP_GND` 是否便于万用表和示波器探测。
+2. `VBUS_RAW -> F1 -> VBUS_FUSED -> SW3 -> +5V_SYS` 走线宽度和回流路径。
+3. D5 TVS 从 `VBUS_FUSED` 并联到 `GND`，且靠近 VBUS 入口，GND 回流短直。
+4. F1 与 SW3 的封装、电流能力、孔距和实际导通关系。
+5. AP2112K 的 C15/C16 是否靠近 VIN/VOUT，C17 是否靠近 3.3V 总线入口。
+6. `TP_VBUS1`、`TP_1`、`TP_2`、`TP_GND1` 是否便于万用表和示波器探测。
