@@ -1,0 +1,3 @@
+# Keep text documentation stable across Windows and Unix environments.
+*.md text eol=lf
+*.csv text eol=lf
