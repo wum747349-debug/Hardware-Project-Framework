@@ -91,7 +91,7 @@ Pin/Pad Mapping、封装映射、3D 视图、安装孔局部图和机械图均�
 
 ## PCB 规则与 DRC 协作方式
 
-- `docs/pcb_design_rules.md` 用于记录经需求和制造规格确认的 PCB 规则建议。
+- [项目级 PCB 规则文档](../docs/pcb_design_rules.md) 用于记录经需求和制造规格确认的 PCB 规则建议，是用户在 Altium Designer 中人工配置规则的依据。
 - AI 负责协助确定规则值、适用对象、Scope、优先级和风险。
 - 用户负责在 Altium Designer 中手动配置并核对实际规则。
 - 默认不要求导出规则文件（包括 `.RUL`）、规则截图或规则汇总表。

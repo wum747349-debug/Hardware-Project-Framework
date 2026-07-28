@@ -13,6 +13,7 @@
 | `user/`                       | 面向展示、学习复盘和项目说明的文档                                  |
 | `schematic_review.md`         | 当前进行中的原理图系统审查记录，重点维护问题清单和关闭状态                      |
 | `component_selection_plan.md` | 历史选型记录，保留第一轮关键器件搜索关键词、筛选维度和候选记录模板                  |
+| `pcb_design_rules.md`         | 当前有效的 PCB 制造基线和 Altium Designer 人工配置规则；尚未在实际 `.PcbDoc` 中配置和验证，不代表 PCB Review 或 DRC 已完成 |
 | `pcb_review.md`               | 尚未开始的 PCB 审查记录                                     |
 | `bringup_log.md`              | 尚未开始的焊接和上电调试记录                                     |
 | `test_report.md`              | 尚未开始的测试报告                                          |
@@ -29,3 +30,4 @@
 - datasheet 路径、阅读状态和来源备注维护在 [../references.md](../references.md)。
 - 历史选型过程维护在 [component_selection_plan.md](component_selection_plan.md)，不作为最终 BOM。
 - 原理图问题、风险等级、修改建议和关闭状态维护在 [schematic_review.md](schematic_review.md)。
+- PCB 制造基线、规则值、Scope、优先级和 DRC 应检查项维护在 [pcb_design_rules.md](pcb_design_rules.md)。
