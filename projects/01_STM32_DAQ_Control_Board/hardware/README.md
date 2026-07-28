@@ -1,8 +1,11 @@
 # Hardware 目录说明
 
 > 文档状态：当前有效
+>
 > 当前阶段：整板原理图系统审查
+>
 > 适用对象：STM32 DAQ Control Board Rev A
+>
 > 最后核对依据：当前 hardware 目录结构
 
 本目录保存当前项目的 Altium 源文件、硬件导出文件和图片资料。不要把 datasheet 放入本目录；datasheet 统一维护在 `../references/`。
@@ -11,36 +14,109 @@
 
 | 路径 | 用途 | 当前说明 |
 |---|---|---|
-| `altium_project/PCB_Project/` | Altium 权威工程源文件 | 当前工作区存在工程文件；不在本次任务中移动 |
+| `altium_project/PCB_Project/` | Altium 权威工程源文件 | 当前工作区存在工程文件；不在本次任务中移动或修改 |
 | `outputs/schematic_pdf/` | 完整原理图 PDF | 当前审查输入为 `outputs/schematic_pdf/STM32_DAQ_Control_Board_Schematic.pdf`；文件存在不表示原理图已审查通过 |
-| `outputs/netlist/` | 条件触发输出，用于核对复杂网络、跨页网络、网络标签或实际引脚连接关系 | 目录已规划，当前未导出；仅在 PDF 和 BOM 无法判断对应问题时按需提供 |
-| `outputs/erc/` | 条件触发输出，用于保存用户提供并要求 AI 分析的 ERC 报告、Messages 导出或错误截图 | 目录已规划，当前未提供 ERC 输出；ERC 输出不是默认必需审查输入 |
-| `outputs/bom/` | 默认必需审查输入，用于导出当前版本 BOM | 当前 BOM 为 `outputs/bom/STM32_DAQ_Control_Board.xlsx`；BOM 至少应包含位号、数量、参数或型号、PCB 封装 |
-| `outputs/component_reports/` | 条件触发输出，用于补充元件、位号、型号等属性报告 | 目录已规划，当前未导出；BOM 信息不足或需额外核对元件属性时按需提供 |
-| `outputs/footprint_reports/` | 条件触发输出，用于原理图器件与 PCB 封装映射、封装核对报告 | 目录已规划，当前未导出；关键器件引脚或封装映射存在风险时按需提供 |
-| `outputs/gerber/` | Gerber 和钻孔输出 | 目录已规划，PCB 阶段使用 |
-| `outputs/pick_place/` | 贴片坐标 | 目录已规划，装配输出阶段使用 |
-| `outputs/fabrication_package/` | 正式制造归档包 | 目录已规划，Gerber、钻孔、BOM、坐标等正式打包输出 |
-| `images/` | 原理图局部截图、PCB 截图、装配和测试照片 | 当前仅保留目录占位 |
+| `outputs/bom/` | 当前版本 BOM | 当前 BOM 为 `outputs/bom/STM32_DAQ_Control_Board.xlsx`；BOM 至少应包含位号、数量、参数或型号、PCB 封装 |
+| `outputs/netlist/` | 条件触发的网表输出 | 仅在默认输入或对话信息不足以判断具体网络问题时按需提供 |
+| `outputs/erc/` | 条件触发的 ERC 报告、Messages 导出或相关截图 | 仅在用户提供并要求分析具体 ERC 问题时使用 |
+| `outputs/component_reports/` | 条件触发的元件属性报告 | BOM 信息不足或需额外核对元件属性时按需提供 |
+| `outputs/footprint_reports/` | 条件触发的封装或映射报告 | 关键器件引脚、焊盘或封装映射存在具体问题时按需提供 |
+| `outputs/gerber/` | Gerber 层文件 | 进入正式制造输出阶段后使用 |
+| `outputs/drill/` | NC Drill、PTH/NPTH 钻孔文件及相关钻孔输出 | 进入正式制造输出阶段后使用 |
+| `outputs/pick_place/` | 贴片坐标 | 进入正式装配输出阶段后使用 |
+| `outputs/fabrication_package/` | 最终制造归档包 | 进入正式制造归档阶段后使用 |
+| `images/pcb/` | 少量供人工和 AI 辅助审查的 PCB 图片 | 在重要审查节点或具体问题需要时更新 |
 
 标准目录：
 
 ```text
 hardware/
+├─ README.md
 ├─ altium_project/
 │  └─ PCB_Project/
 ├─ outputs/
 │  ├─ schematic_pdf/
+│  ├─ bom/
 │  ├─ netlist/
 │  ├─ erc/
-│  ├─ bom/
 │  ├─ component_reports/
 │  ├─ footprint_reports/
 │  ├─ gerber/
+│  ├─ drill/
 │  ├─ pick_place/
 │  └─ fabrication_package/
 └─ images/
+   └─ pcb/
 ```
+
+## 默认审查输入
+
+AI 日常默认只读取：
+
+- 完整原理图 PDF；
+- 当前 BOM；
+- PCB 阶段必要的顶层、底层及无铺铜视图。
+
+PCB 图片建议放在：
+
+```text
+hardware/images/pcb/
+```
+
+以下文件名仅为命名示例，不表示文件已经存在：
+
+```text
+STM32_DAQ_Control_Board_PCB_Top_RevA.png
+STM32_DAQ_Control_Board_PCB_Bottom_RevA.png
+STM32_DAQ_Control_Board_PCB_Top_NoPolygon_RevA.png
+STM32_DAQ_Control_Board_PCB_Bottom_NoPolygon_RevA.png
+```
+
+- 顶层和底层视图用于总体布局、布线、铺铜和器件分区审查。
+- 无铺铜视图用于更清楚地查看实际走线、过孔、换层和未布线关系。
+- 不要求每次小改动都重新导出；只在重要审查节点或具体问题需要时更新。
+
+## 条件触发内容
+
+以下目录保留，但不是默认必需输入：
+
+- `outputs/netlist/`
+- `outputs/erc/`
+- `outputs/component_reports/`
+- `outputs/footprint_reports/`
+
+只有在原理图 PDF、BOM、PCB 图片或对话信息不足以判断具体问题时，才按需提供相应报告或截图。
+
+Pin/Pad Mapping、封装映射、3D 视图、安装孔局部图和机械图均不是默认导出项；出现具体问题时再单独提供。
+
+## PCB 规则与 DRC 协作方式
+
+- `docs/pcb_design_rules.md` 用于记录经需求和制造规格确认的 PCB 规则建议。
+- AI 负责协助确定规则值、适用对象、Scope、优先级和风险。
+- 用户负责在 Altium Designer 中手动配置并核对实际规则。
+- 默认不要求导出规则文件（包括 `.RUL`）、规则截图或规则汇总表。
+- 用户负责在 Altium Designer 中运行 Batch DRC。
+- 默认不创建或归档专门的 DRC 输出文件，DRC 报告也不是默认导出项。
+- 用户可直接在对话中提供 DRC 总数、违规类别、关键报错文本或必要截图，由 AI 辅助判断。
+- 最终由用户确认 DRC 已完整运行，所有问题均已解决或有明确、合理的豁免。
+
+在本协作模式中，AI 或 Codex 不得声称实际运行过 Altium Designer、配置过规则或完成过 DRC。
+
+## 制造输出
+
+- `outputs/gerber/`：Gerber 层文件。
+- `outputs/drill/`：NC Drill、PTH/NPTH 钻孔输出。
+- `outputs/pick_place/`：贴片坐标。
+- `outputs/fabrication_package/`：最终制造归档包。
+
+这些目录在进入正式制造输出阶段后使用。目录存在不代表对应文件已经生成，也不代表项目已经达到可制造状态。
+
+## AI、用户和 Codex 的职责边界
+
+- AI：需求分析、规则建议、辅助审查、问题分类和文档审查。
+- 用户：Altium GUI 操作、封装及方向核对、布局布线、铺铜、规则配置、DRC 和制造文件导出。
+- Codex：目录与文本维护、链接同步、Git 验证、commit 和 push。
+- 任何代理不得把计划、人工操作或未提供的证据写成已完成事实。
 
 ## 输出命名规范
 
@@ -50,7 +126,7 @@ hardware/
 <Project>_<OutputType>_<Revision>.<ext>
 ```
 
-当前项目示例：
+当前项目命名示例：
 
 ```text
 STM32_DAQ_Control_Board_Schematic.pdf
