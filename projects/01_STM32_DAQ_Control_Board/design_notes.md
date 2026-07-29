@@ -123,6 +123,9 @@
 - ADC 测试点对应关系固定为 `PA0 / ADC12_IN0 -> TP_ADC1`，`PA1 / ADC12_IN1 -> TP_ADC2`。
 - PA9/PA10 保持作为板载 CH340C 的 USART1 USB-UART；外部 UART 扩展使用 USART2。
 - I2C1 使用 PB6/PB7，`R19/R20=4.7kΩ` 板载上拉到 3.3V，当前默认装配。
+- Rev A 当前暂不建立 `USB_FS` Differential Pair，不配置 USB Differential Pair Routing、Matched Length 或阻抗规则。
+- 原因是当前 `USB_DP/USB_DM` 走向存在交叉，先按普通信号规则和人工布局检查处理；这不表示 USB 布线已经完成或已经验证可用。
+- 后续调整器件方向或走线关系后，再单独讨论是否建立差分对规则。
 - BOOT0 由 `R2=10kΩ` 下拉到 GND，并通过 `H2` 三针排针选择启动状态；`PB2/BOOT1` 已通过 `R21=10kΩ` 下拉到 GND，确保 BOOT0 拉高时 BOOT1 仍保持低电平，便于进入系统 Bootloader。
 - HSE 晶振为 `X1 XC53G2-8.000-F12NJHP`，8MHz，`CL=12pF`；当前负载电容为 `C3/C4=5.1pF`，采购时选择 C0G/NP0。
 - VDDA_3V3 通过 `R5=0Ω` 由 3.3V 供电，VDDA 去耦为 `C7=100nF` 和 `C8=1uF`；数字 VDD 去耦包括 `C2/C5/C9=100nF`，`C1=4.7uF` 作为局部储能。
