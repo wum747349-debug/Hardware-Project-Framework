@@ -1,7 +1,7 @@
 # STM32F103C8T6 数据采集/控制开发板
 
 > 文档状态：当前有效
-> 当前阶段：整板原理图系统审查
+> 当前阶段：阶段 11：PCB 审查问题修正与关闭
 > 适用对象：STM32 DAQ Control Board Rev A
 > 最后核对依据：当前原理图 PDF、当前 BOM 与已确认设计决定
 
@@ -13,11 +13,9 @@
 
 ## 当前阶段
 
-当前项目已完成需求整理、模块方案拆分、关键器件第一轮选型、关键 datasheet 初步核对、模块原理图设计说明、原理图主要电气问题修改和当前文档同步。
+当前项目已完成 PCB Layout 和首轮 PCB 辅助审查，现处于阶段 11 的审查问题修正与关闭阶段。USB-C 当前型号、Shield RC 实现和板框尺寸已经按用户 Altium 确认同步；其余 DRC 规则、接口安全边界、安装孔/机械间隙、版本追溯、BOM Footprint 和装配标识等制造门禁仍未关闭。
 
-下一步应进入：关键器件封装、引脚和焊盘映射的 Altium 人工核对，然后再进入 PCB Layout。
-
-注意：当前原理图电气设计基本定稿，但不代表已经具备直接打样条件。AI 未解析 `.SchDoc` 内部电路，ERC、关键封装方向和 pin/pad mapping 仍需用户在 Altium 中人工核对。
+注意：当前不代表 PCB、DRC 或制造输出已经通过。AI/Codex 未解析 `.PcbDoc`、未运行 Altium、Repour 或 Batch DRC；制造门禁关闭前不生成制造文件，也不推进到阶段 12。
 
 ## 第一版功能
 
@@ -80,7 +78,7 @@
 
 ## 下一步
 
-1. 以当前原理图 PDF `hardware/outputs/schematic_pdf/STM32_DAQ_Control_Board_Schematic.pdf` 和当前 BOM `hardware/outputs/bom/STM32_DAQ_Control_Board.xlsx` 作为文档同步后的实现证据。
-2. 按 [docs/schematic_review.md](docs/schematic_review.md) 完成关键器件封装、引脚、焊盘映射、USB-C 机械方向、接口朝向、丝印和测试点可达性人工核对。
-3. 若 Altium ERC、网表或封装映射报告后续导出，再按证据更新审查记录。
-4. 完成上述人工核对后，再进入 PCB Layout。
+1. 按 [docs/pcb_review.md](docs/pcb_review.md) 继续关闭阶段 11 的未关闭问题。
+2. 由用户在 Altium 中核对实际规则，Repour 后运行完整 Batch DRC，并留下可追溯记录。
+3. 继续确认安装孔和机械间隙、接口安全边界、BOM Footprint、极性和 Pin 1 标识。
+4. 制造门禁关闭前不生成 Gerber、钻孔、坐标或制造包，不推进到阶段 12。

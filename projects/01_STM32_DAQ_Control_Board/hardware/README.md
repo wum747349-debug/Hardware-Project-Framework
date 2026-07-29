@@ -2,7 +2,7 @@
 
 > 文档状态：当前有效
 >
-> 当前阶段：整板原理图系统审查
+> 当前阶段：阶段 11：PCB 审查问题修正与关闭
 >
 > 适用对象：STM32 DAQ Control Board Rev A
 >
@@ -12,20 +12,20 @@
 
 ## 当前目录结构
 
-| 路径 | 用途 | 当前说明 |
-|---|---|---|
-| `altium_project/PCB_Project/` | Altium 权威工程源文件 | 当前工作区存在工程文件；不在本次任务中移动或修改 |
-| `outputs/schematic_pdf/` | 完整原理图 PDF | 当前审查输入为 `outputs/schematic_pdf/STM32_DAQ_Control_Board_Schematic.pdf`；文件存在不表示原理图已审查通过 |
-| `outputs/bom/` | 当前版本 BOM | 当前 BOM 为 `outputs/bom/STM32_DAQ_Control_Board.xlsx`；BOM 至少应包含位号、数量、参数或型号、PCB 封装 |
-| `outputs/netlist/` | 条件触发的网表输出 | 仅在默认输入或对话信息不足以判断具体网络问题时按需提供 |
-| `outputs/erc/` | 条件触发的 ERC 报告、Messages 导出或相关截图 | 仅在用户提供并要求分析具体 ERC 问题时使用 |
-| `outputs/component_reports/` | 条件触发的元件属性报告 | BOM 信息不足或需额外核对元件属性时按需提供 |
-| `outputs/footprint_reports/` | 条件触发的封装或映射报告 | 关键器件引脚、焊盘或封装映射存在具体问题时按需提供 |
-| `outputs/gerber/` | Gerber 层文件 | 进入正式制造输出阶段后使用 |
-| `outputs/drill/` | NC Drill、PTH/NPTH 钻孔文件及相关钻孔输出 | 进入正式制造输出阶段后使用 |
-| `outputs/pick_place/` | 贴片坐标 | 进入正式装配输出阶段后使用 |
-| `outputs/fabrication_package/` | 最终制造归档包 | 进入正式制造归档阶段后使用 |
-| `images/pcb/` | 少量供人工和 AI 辅助审查的 PCB 图片 | 在重要审查节点或具体问题需要时更新 |
+| 路径                             | 用途                            | 当前说明                                                                                  |
+| ------------------------------ | ----------------------------- | ------------------------------------------------------------------------------------- |
+| `altium_project/PCB_Project/`  | Altium 权威工程源文件                | 当前工作区存在工程文件；不在本次任务中移动或修改                                                              |
+| `outputs/schematic_pdf/`       | 完整原理图 PDF                     | 当前审查输入为 `outputs/schematic_pdf/STM32_DAQ_Control_Board_Schematic.pdf`；文件存在不表示原理图已审查通过 |
+| `outputs/bom/`                 | 当前版本 BOM                      | 当前 BOM 为 `outputs/bom/STM32_DAQ_Control_Board.xlsx`；BOM 至少应包含位号、数量、参数或型号、PCB 封装       |
+| `outputs/netlist/`             | 条件触发的网表输出                     | 仅在默认输入或对话信息不足以判断具体网络问题时按需提供                                                           |
+| `outputs/erc/`                 | 条件触发的 ERC 报告、Messages 导出或相关截图 | 仅在用户提供并要求分析具体 ERC 问题时使用                                                               |
+| `outputs/component_reports/`   | 条件触发的元件属性报告                   | BOM 信息不足或需额外核对元件属性时按需提供                                                               |
+| `outputs/footprint_reports/`   | 条件触发的封装或映射报告                  | 关键器件引脚、焊盘或封装映射存在具体问题时按需提供                                                             |
+| `outputs/gerber/`              | Gerber 层文件                    | 进入正式制造输出阶段后使用                                                                         |
+| `outputs/drill/`               | NC Drill、PTH/NPTH 钻孔文件及相关钻孔输出 | 进入正式制造输出阶段后使用                                                                         |
+| `outputs/pick_place/`          | 贴片坐标                          | 进入正式装配输出阶段后使用                                                                         |
+| `outputs/fabrication_package/` | 最终制造归档包                       | 进入正式制造归档阶段后使用                                                                         |
+| `images/pcb/`                  | 少量供人工和 AI 辅助审查的 PCB 图片        | 在重要审查节点或具体问题需要时更新                                                                     |
 
 标准目录：
 

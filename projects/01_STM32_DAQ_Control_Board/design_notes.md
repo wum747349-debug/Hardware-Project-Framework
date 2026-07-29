@@ -1,7 +1,7 @@
 # 设计说明总览
 
 > 文档状态：当前有效，整板设计意图与接口约定主文档
-> 当前阶段：整板原理图系统审查
+> 当前阶段：阶段 11：PCB 审查问题修正与关闭
 > 适用对象：STM32 DAQ Control Board Rev A
 > 最后核对依据：当前原理图 PDF、当前 BOM 与已确认设计决定
 
@@ -27,16 +27,9 @@
 
 ## 2. 当前阶段
 
-当前项目已完成：
+当前项目已完成 PCB Layout，并已形成首轮 PCB 辅助审查记录。当前处于阶段 11 的问题修正与关闭阶段，重点是依据用户在 Altium 中的确认、当前规格书、原理图 PDF、BOM 和 PCB 审查输入，逐项关闭可关闭问题并保留制造门禁。
 
-- 需求整理和模块拆分。
-- 第一轮关键器件候选与主选收敛。
-- 关键 datasheet 初步阅读和参数提取。
-- MCU、电源、USB 转 UART、ADC 输入、MOSFET 输出、接口/测试点的模块原理图设计说明。
-
-下一步应进入：原理图系统审查 / PCB Layout 前检查。
-
-注意：本阶段不表示原理图已经审查通过，不生成最终 BOM，不进入打样结论。
+注意：本阶段不表示 PCB、DRC 或制造输出已经通过；不得生成正式制造文件，也不推进到阶段 12。
 
 ## 3. 系统模块总览
 
@@ -56,7 +49,7 @@
 | 模块 | 当前主选 / 候选 | 关键边界 |
 |---|---|---|
 | MCU | `STM32F103C8T6` | LQFP48 方向；需继续核对官方 datasheet / reference manual |
-| USB-C 母座 | `TYPE-C 16PIN 2MD(073)` | 只使用 5V VBUS 和 USB2.0 D+/D-；CC1/CC2 各接 5.1kΩ 下拉 |
+| USB-C 母座 | `TYPE-C-31-M-12`，立创 `C165948` | Rev A 唯一当前型号；只使用 5V VBUS 和 USB2.0 D+/D-；CC1/CC2 各接 5.1kΩ 下拉 |
 | 3.3V LDO | `AP2112K-3.3TRG1` | 5V 转 3.3V；外部 3.3V 取电限制 `<=100mA`；注意 SOT25 热耗散 |
 | USB 转 UART | `CH340C` | 3.3V 供电；不使用 DTR/RTS 自动下载；TX/RX 与 MCU 交叉连接 |
 | USB 数据 ESD | `TPD2EUSB30DRTR-N` | 只保护 USB_DP/USB_DM；靠近 USB-C 接口放置 |
@@ -77,6 +70,7 @@
 | `3.3V` | AP2112K 输出的板级 3.3V | 供 MCU、CH340C、接口上拉、LED 等 |
 | `VDDA_3V3` | MCU 模拟电源网络 | 由 `3.3V` 经 `0Ω` 接入；靠近 VDDA/VSSA 去耦 |
 | `USB_DP / USB_DM` | USB2.0 数据线 | 只接 CH340C 和 USB ESD，不接 STM32 PA11/PA12 |
+| `SHIELD` | USB-C 外壳屏蔽网络 | `SHIELD -> (R15 1MΩ || C18 1nF) -> GND`；R15 提供直流参考/泄放，C18 提供高频噪声回流，不替代专用 ESD 保护 |
 | `MCU_TX / MCU_RX` | MCU 视角 USART1 TX/RX | CH340C TXD -> PA10，CH340C RXD <- PA9 |
 | `UART2_TX / UART2_RX` | 外部 USART2 扩展 | PA2 为 MCU 发送 TX2，接外部模块 RX；PA3 为 MCU 接收 RX2，接外部模块 TX |
 | `I2C1_SCL / I2C1_SDA` | 外部 I2C1 扩展 | PB6/PB7；`R19/R20=4.7kΩ` 默认装配，上拉到 3.3V |
@@ -117,6 +111,8 @@
 ## 7. 当前已确认设计决定
 
 - MCU 为 `STM32F103C8T6`，当前封装方向按 LQFP48 审查。
+- Rev A 当前唯一 USB-C 为 `TYPE-C-31-M-12`，立创 `C165948`；旧 `TYPE-C 16PIN 2MD(073)` 因只适合约 `0.8mm` 板厚而被替代，仅保留历史资料。
+- USB-C Shield 当前实现为 `SHIELD -> (R15 1MΩ || C18 1nF) -> GND`：`R15` 提供直流参考/泄放，`C18` 提供高频噪声回流；该 RC 支路不替代 `USB_DP/USB_DM` 的专用 ESD 保护。
 - 当前整板原理图继续保持单页模块化结构，不拆成多张层次原理图。
 - 用户 LED 使用 `PB5`，当前低电平点亮：`3.3V -> 1kΩ -> LED_USER -> PB5`。
 - `MOS_CTRL1 = PB0`，`MOS_CTRL2 = PB1`，不改为 PB2/PB10；PB0/PB1 保留 TIM3_CH3/TIM3_CH4 双路硬件 PWM 能力。
@@ -133,6 +129,7 @@
 ## 8. 主要风险点
 
 - USB-C 只支持 5V 输入，不支持 USB-PD 9V/12V；PCB 丝印建议标注 `USB-C 5V ONLY`。
+- `R15/C18` 只定义 Shield 到 GND 的参考与高频回流路径，不得把它描述为 USB 数据线或 VBUS 的专用 ESD 保护。
 - AP2112K 不能按 600mA 长期满载设计，3.3V 总电流和外部 3.3V 取电需要保守。
 - `+5V_SYS` 来自 USB-C 输入经过保护/开关后的系统 5V，接到扩展排针时更适合作为 5V 输出取电点，不建议作为外部反灌供电入口。
 - CH340C 必须按 3.3V UART 电平设计，避免 5V 串口电平直接进入 STM32。
@@ -146,13 +143,13 @@
 
 ## 9. 后续审查入口
 
-下一步建议按以下顺序推进：
+阶段 11 下一步建议按以下顺序推进：
 
-1. 以当前原理图 PDF `hardware/outputs/schematic_pdf/STM32_DAQ_Control_Board_Schematic.pdf` 和 BOM `hardware/outputs/bom/STM32_DAQ_Control_Board.xlsx` 为文档同步依据。
-2. 使用 [docs/schematic_review.md](docs/schematic_review.md) 记录已关闭问题和仍待 Altium 人工核对事项。
-3. 对照 [docs/module_design/](docs/module_design/) 核查连接、网络名、器件方向、接口定义和测试点。
-4. 对照 [references.md](references.md) 核查 datasheet 路径、阅读状态和来源待确认项。
-5. 完成关键器件封装、引脚和焊盘映射人工核对后，再进入 PCB Layout。
+1. 以当前原理图 PDF `hardware/outputs/schematic_pdf/STM32_DAQ_Control_Board_Schematic.pdf`、BOM `hardware/outputs/bom/STM32_DAQ_Control_Board.xlsx`、USB-C 规格书和用户 Altium 确认为问题关闭依据。
+2. 使用 [docs/pcb_review.md](docs/pcb_review.md) 继续关闭阶段 11 的未关闭问题与制造门禁。
+3. 对照 [docs/module_design/](docs/module_design/) 和 [references.md](references.md) 保持 USB-C、Shield、接口定义和资料路径一致。
+4. 由用户在 Altium 中完成剩余规则核对、Repour 和完整 Batch DRC；AI/Codex 不声称代为完成。
+5. 制造门禁关闭前不生成 Gerber、钻孔、坐标或制造包，不推进到阶段 12。
 
 ## 10. 相关文档
 

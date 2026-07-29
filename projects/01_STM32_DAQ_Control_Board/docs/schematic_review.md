@@ -1,13 +1,13 @@
 # 原理图审查记录
 
 > 文档状态：当前进行中
-> 当前阶段：原理图电气设计基本定稿，PCB Layout 前人工核对
+> 当前阶段：阶段 11：PCB 审查问题修正与关闭
 > 适用对象：STM32 DAQ Control Board Rev A
 > 最后核对依据：当前原理图 PDF、当前 BOM 与用户人工确认事项
 
 ## 1. 文档定位
 
-本文用于记录 `STM32F103C8T6 数据采集/控制开发板` 的原理图系统审查状态、已关闭问题和 PCB Layout 前仍需人工核对的事项。
+本文用于记录 `STM32F103C8T6 数据采集/控制开发板` 的原理图系统审查结论、已关闭问题，以及阶段 11 仍需结合 PCB 审查继续跟踪的事项。
 
 本文件不表示 AI 已经读取或解析 `.SchDoc` 内部电路。当前结论基于完整原理图 PDF、当前 BOM、项目文档和用户人工确认事项；关键器件原理图库 Pin 与 PCB 封装 Pad Mapping、封装方向、接口朝向、丝印和测试点可达性仍需用户在 Altium 中人工核对。
 
@@ -28,7 +28,7 @@
 
 ## 3. 当前结论
 
-当前原理图的主要电气问题已经完成修改，原理图电气设计基本定稿。完成关键器件封装、引脚和焊盘映射的 Altium 人工核对后，可以进入 PCB Layout。未完成这些人工核对前，不得写成已具备直接打样条件。
+当前原理图的主要电气问题已经完成修改，项目已进入阶段 11 PCB 审查问题修正与关闭。Rev A USB-C 当前唯一型号和 Shield RC 实现已由用户结合 Altium 确认，并与当前规格书、原理图 PDF 和 BOM 同步；其余未关闭制造门禁继续在 [pcb_review.md](pcb_review.md) 跟踪。不得写成 PCB、DRC 或制造输出已经通过。
 
 ## 4. 已关闭问题
 
@@ -40,13 +40,14 @@
 | SCH-004 | ADC | ADC 分压旧方案 `10kΩ/18kΩ` 使 5V 输入约 3.21V。 | 当前 BOM/PDF 显示 `R8/R9=12kΩ`、`R12/R13=18kΩ`，5V 标称输入映射为 `5V * 18kΩ / (12kΩ + 18kΩ) = 3.0V`。 | 已关闭 |
 | SCH-005 | USB-C VBUS TVS | D5 网络和极性映射需要确认。 | 用户人工确认 D5 为 `SMF5.0A`，阴极接 `VBUS_FUSED`、阳极接 GND，符号、封装焊盘和实物极性映射一致。 | 已关闭 |
 | SCH-006 | 硬件输出 | 最新原理图 PDF 和 BOM 需要重新导出并放入项目输出目录。 | 当前工作区存在 `hardware/outputs/schematic_pdf/STM32_DAQ_Control_Board_Schematic.pdf` 和 `hardware/outputs/bom/STM32_DAQ_Control_Board.xlsx`。 | 已关闭 / 版本管理状态仍需用户确认 |
+| SCH-007 | USB-C 型号 | 设计文档中的旧型号与当前 PDF/BOM 的 `TYPE-C-31-M-12` 不一致。 | 用户在 Altium 中确认 Rev A 当前唯一 USB-C 为 `TYPE-C-31-M-12`、立创 `C165948`；当前规格书、原理图 PDF、BOM 和设计文档已同步。旧 `TYPE-C 16PIN 2MD(073)` 仅保留为历史/已替代资料。 | 已关闭 |
+| SCH-008 | USB Shield | 旧文档将 Shield 记录为 `R15=0Ω`，与 PDF/BOM 的 R15/C18 不一致。 | 用户确认当前实现为 `SHIELD -> (R15 1MΩ || C18 1nF) -> GND`；R15 提供直流参考/泄放，C18 提供高频噪声回流，该支路不替代专用 ESD 保护。 | 已关闭 |
 
 ## 5. 仍待 Altium 人工核对
 
 | 编号 | 模块 | 待核对事项 | 风险等级 | 建议动作 | 状态 |
 |---|---|---|---|---|---|
 | EDA-001 | 关键器件封装 | STM32F103C8T6、AP2112K、CH340C、TPD2EUSB30、AO3400A、BAT54S、SS14、USB-C、开关和连接器的原理图库 Pin 与 PCB 封装 Pad Mapping。 | 中 | 在 Altium 中逐个核对库引脚号、焊盘号、封装模型和实际采购料号。 | 待 EDA 人工核对 |
-| EDA-002 | USB-C | USB-C 机械方向、固定焊盘、外壳焊盘、D+/D-、CC1/CC2、VBUS/GND 和 Shield 连接。 | 中 | 对照连接器规格书、PCB 封装和板边方向核对。 | 待 EDA 人工核对 |
 | EDA-003 | U6 USB ESD | `TPD2EUSB30DRTR-N` 完整型号与实际 datasheet 的一致性，以及 U6 原理图针号与 SOT-723 封装焊盘映射。 | 中 | 对照 datasheet 和 Altium 封装逐脚核对。 | 待 EDA 人工核对 |
 | EDA-004 | 极性和方向 | AO3400A、BAT54S、SS14、AP2112、CH340C、开关和连接器的封装方向、极性、丝印方向。 | 中 | PCB 前逐项核对封装 1 脚、二极管色带、MOSFET G/S/D、LDO pin1 和 USB-C 方向。 | 待 EDA 人工核对 |
 | EDA-005 | 接口与测试点 | PCB 接口朝向、丝印可读性、`TP_VBUS1/TP_1/TP_2/TP_GND1` 与 ADC/MOSFET 测试点可达性。 | 低/中 | 结合 PCB 布局检查接线习惯、探针空间和安全边界丝印。 | 待 EDA 人工核对 |
@@ -61,7 +62,7 @@
 | VDDA / 去耦 | `R5=0Ω` 连接 3.3V 到 `VDDA_3V3`；`C7=100nF`、`C8=1uF`；数字 VDD 去耦 `C2/C5/C9=100nF`，`C1=4.7uF`。 | 去耦位置和回流路径。 |
 | ADC | CH1：`U2`、`R8=12kΩ`、`R12=18kΩ`、`R10=330Ω`、`C10=10nF`、`D3=BAT54S`、`TP_ADC1 -> PA0`；CH2：`U3`、`R9=12kΩ`、`R13=18kΩ`、`R11=330Ω`、`C11=10nF`、`D4=BAT54S`、`TP_ADC2 -> PA1`。 | BAT54S 上钳位存在板卡断电、外部输入带电时反灌 VDDA 风险；固件采样时间建议 28.5 周期或更长。 |
 | I2C | `U5` 使用 PB6/PB7，`R19/R20=4.7kΩ` 上拉到 3.3V，默认装配。 | 外部模块若自带上拉，会与板载上拉并联；连接多个模块前检查等效上拉和低电平灌电流。 |
-| USB-C / 电源 | `USB1`、`R14/R16=5.1kΩ` CC 下拉、`R15=0Ω` Shield-GND、`F1`、`D5=SMF5.0A`、`SW3`，路径为 `VBUS_RAW -> F1 -> VBUS_FUSED -> SW3 -> +5V_SYS`；`U8=AP2112K-3.3TRG1`，`R17=10kΩ` EN 上拉，`C15/C16=1uF`，`C17=4.7uF`，`R18+LED2` 电源指示。 | USB-C 仅 5V，AP2112 热耗散，D5 极性已确认但封装方向仍需 PCB 前复核。 |
+| USB-C / 电源 | `USB1=TYPE-C-31-M-12`（立创 `C165948`）、`R14/R16=5.1kΩ` CC 下拉、`SHIELD -> (R15 1MΩ || C18 1nF) -> GND`、`F1`、`D5=SMF5.0A`、`SW3`，路径为 `VBUS_RAW -> F1 -> VBUS_FUSED -> SW3 -> +5V_SYS`；`U8=AP2112K-3.3TRG1`，`R17=10kΩ` EN 上拉，`C15/C16=1uF`，`C17=4.7uF`，`R18+LED2` 电源指示。 | USB-C 仅 5V；R15 提供直流参考/泄放、C18 提供高频回流且不替代专用 ESD；AP2112 热耗散和剩余制造门禁继续在 PCB 审查中跟踪。 |
 | CH340C / USB ESD | `U7=CH340C`，`U6=TPD2EUSB30DRTR-N`，`C12/C14=100nF`，`C13=1uF`；CH340C TXD 接 `MCU_RX/PA10`，RXD 接 `MCU_TX/PA9`；CH340C 不需要外部晶振。 | U6 完整型号、SOT-723 pad mapping、USB-C/CH340C 封装方向。 |
 | MOSFET 输出 | CH1：`R1=100Ω`、`R3=100kΩ`、`Q1=AO3400A`、`D1=SS14`、`H1`、`TP_GATE1/TP_OUT1`；CH2：`R6=100Ω`、`R7=100kΩ`、`Q2=AO3400A`、`D2=SS14`、`H3`、`TP_GATE2/TP_OUT2`。 | AO3400A G/S/D、SS14 色带方向、接口丝印和外部共地提示。 |
 | 扩展接口 / 测试点 | `U4=SPI`，`U5=I2C`，`H6=USART2`，`H5=公用电源+GPIO`，`SW1` 用户按键，`LED1/R4` 用户 LED；电源测试点为 `TP_VBUS1 -> VBUS_RAW`、`TP_1 -> +5V_SYS`、`TP_2 -> 3.3V`、`TP_GND1 -> GND`。 | 不修改原理图测试点名称；文档中说明 `TP_1/TP_2` 分别代表 5V 和 3.3V。 |
@@ -77,6 +78,6 @@
 
 ## 8. 下一步操作
 
-1. 在 Altium 中完成关键器件 pin/pad mapping、封装方向、USB-C 机械方向、接口朝向、丝印和测试点可达性人工核对。
-2. 如导出 ERC、网表、元件报告或封装映射报告，再补充到对应输出目录并更新本文件。
-3. 完成上述人工核对后，可以进入 PCB Layout；在此之前不得写成已具备直接打样条件。
+1. 在 [pcb_review.md](pcb_review.md) 中继续关闭阶段 11 的未关闭问题和制造门禁。
+2. 由用户在 Altium 中完成剩余规则、封装方向、接口朝向、丝印、机械间隙和测试点可达性核对；AI/Codex 不声称代为完成。
+3. 制造门禁关闭前不得写成 PCB、DRC 或制造输出已通过，不生成制造包，也不推进到阶段 12。
