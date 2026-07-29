@@ -56,6 +56,7 @@
 Rule Name: Clearance_Default
 Scope 1: All
 Scope 2: All
+Connective Checking: Different Nets Only
 Minimum Clearance: 0.20 mm (≈7.9 mil)
 ```
 
@@ -136,7 +137,6 @@ Priority: 最低
 ```text
 Rule Name: ViaStyle_Default
 Scope: All
-Mode: Min/Max Preferred
 
 Via Diameter:
 Min: 0.60 mm (≈23.6 mil)
@@ -148,6 +148,8 @@ Min: 0.30 mm (≈11.8 mil)
 Preferred: 0.30 mm (≈11.8 mil)
 Max: 0.50 mm (≈19.7 mil)
 ```
+
+本规则使用 Min/Preferred/Max 数值模式，不使用模板数值模式；这里是配置方式说明，不将其写成所有 Altium Designer 版本都存在的固定字段。
 
 - 默认过孔为外径 `0.60 mm (≈23.6 mil)`、钻孔 `0.30 mm (≈11.8 mil)`。
 - 默认使用 Top-to-Bottom 通孔。
@@ -186,17 +188,18 @@ Minimum: 0.15 mm (≈5.9 mil)
 
 ```text
 Rule Name: MinimumAnnularRing_Pad
-Scope: IsPadHoleValid
+Scope: IsPadHoleValid And (PadIsPlated = 'True')
 Minimum: 0.20 mm (≈7.9 mil)
 ```
 
-SMD Pad 没有钻孔，不应被错误理解为违反 PTH 最小孔径。Routing Via Style 控制交互布线采用的默认过孔；Hole Size 和 Minimum Annular Ring 用于检查板上已有对象，职责不同，因此不合并或删除。
+`HoleSize_Pad` 继续使用 `IsPadHoleValid`，以便同时检查 PTH 和 NPTH 孔径；`MinimumAnnularRing_Pad` 只检查有镀铜孔壁的 PTH Pad。SMD Pad 没有钻孔，不应被错误理解为违反 PTH 最小孔径。Routing Via Style 控制交互布线采用的默认过孔；Hole Size 和 Minimum Annular Ring 用于检查板上已有对象，职责不同，因此不合并或删除。
 
 ## 7. USB 数据线当前处理
 
 - 根据当前布局决定，`USB_DP` 与 `USB_DM` 暂不建立 Altium Differential Pair。
 - 两个网络暂时受 `Width_Default_Signal` 和 `Clearance_Default` 约束。
 - 只保留人工布局提醒：路径短、尽量少过孔、下方保持连续 GND、ESD 靠近 USB-C。
+- 暂不建立 Differential Pair 规则不等于允许两条数据线任意分开；仍应尽量位于相同走线区域、保持路径短、少过孔和连续 GND 回流。
 - 当前不要求严格并行、长度匹配或实现 `90 Ω`。
 - 后续如调整器件方向或走线关系，再单独讨论是否建立差分对规则。
 
@@ -205,12 +208,20 @@ SMD Pad 没有钻孔，不应被错误理解为违反 PTH 最小孔径。Routing
 ```text
 Rule Name: SolderMaskExpansion_Default
 Scope: All
+Expansion Top / Bottom: Linked
 Expansion: 0.05 mm (≈2.0 mil)
+Solder Mask From The Hole Edge: Disabled
 ```
+
+普通过孔通过默认 Via Template 或 Via Properties 启用 `Tented Top`、`Tented Bottom`；测试用途过孔单独取消盖油。
 
 ```text
 Rule Name: PasteMaskExpansion_Default
-Scope: All
+Scope: IsPad
+Measurement Method: Absolute
+Use Paste For SMD Pads: Enabled
+Use Top Paste For TH Pads: Disabled
+Use Bottom Paste For TH Pads: Disabled
 Expansion: 0.00 mm (0 mil)
 ```
 
@@ -229,7 +240,8 @@ Minimum: 0.10 mm (≈3.9 mil)
 
 ```text
 Rule Name: SilkToSolderMaskClearance_Default
-Scope: All
+Scope 1: All
+Scope 2: All
 Checking Mode: Check Clearance To Solder Mask Openings
 Minimum Clearance: 0.15 mm (≈5.9 mil)
 ```
@@ -254,20 +266,24 @@ Minimum Clearance: 0.25 mm (≈9.8 mil)
 ## 11. 铺铜连接方式（Polygon Connect Style）
 
 ```text
-Rule Name: PolygonConnect_GND_Via
-Scope: IsVia And InNet('GND')
-Connect Style: Direct Connect
-Priority: 高
-```
+Rule Name: PolygonConnect_GND
+Scope: InNet('GND')
+Mode of Operation: Advanced
 
-```text
-Rule Name: PolygonConnect_GND_Pad
-Scope: IsPad And InNet('GND')
-Connect Style: Relief Connect
+Via Connection:
+Direct Connect
+
+Through-Hole Pad Connection:
+Relief Connect
 Conductors: 4
 Air Gap: 0.20 mm (≈7.9 mil)
 Conductor Width: 0.25 mm (≈9.8 mil)
-Priority: 低于 PolygonConnect_GND_Via
+
+SMD Pad Connection:
+Relief Connect
+Conductors: 4
+Air Gap: 0.20 mm (≈7.9 mil)
+Conductor Width: 0.25 mm (≈9.8 mil)
 ```
 
 MOSFET、电源或负载焊盘如需 Direct Connect，按具体焊盘单独处理；当前不建立尚不需要的复杂规则。
@@ -292,7 +308,7 @@ MOSFET、电源或负载焊盘如需 Direct Connect，按具体焊盘单独处�
 - Un-Routed Net
 - Width
 - Routing Via Style
-- Layer Pairs / Via Type
+- Layer Pairs
 - Hole Size
 - Hole-To-Hole Clearance
 - Minimum Annular Ring
@@ -300,7 +316,13 @@ MOSFET、电源或负载焊盘如需 Direct Connect，按具体焊盘单独处�
 - Silk To Solder Mask Clearance
 - Board Outline Clearance
 
-`Layer Pairs / Via Type` 用于确认当前只使用 Top-to-Bottom 通孔。以上仅表示“应检查”，不表示 Batch DRC 已运行或任何检查已通过。最终应由用户在 Altium Designer 中完整运行 Batch DRC，并确认所有问题均已解决或有明确、合理的豁免。
+`Layer Pairs` 配置：
+
+```text
+Enforce Layer Pairs Settings: Enabled
+```
+
+允许的 Via Type 在 Layer Stack Manager 中只保留 Top-to-Bottom 通孔。以上仅表示“应检查”，不表示 Batch DRC 已运行或任何检查已通过。最终应由用户在 Altium Designer 中完整运行 Batch DRC，并确认所有问题均已解决或有明确、合理的豁免。
 
 ## 14. 官方依据
 
