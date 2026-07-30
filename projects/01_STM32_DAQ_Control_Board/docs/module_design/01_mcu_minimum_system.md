@@ -7,7 +7,7 @@
 
 本模块记录 `STM32F103C8T6` 最小系统原理图设计说明，包括供电、去耦、VDDA/VSSA、VBAT、NRST、BOOT0、HSE 8MHz 晶振、SWD 下载调试接口和基础测试点。
 
-当前内容用于原理图审查和 PCB Layout 前检查，不是最终 BOM。
+当前内容作为阶段 11 / 制造前复核的模块设计依据，不是最终 BOM。
 
 ## 2. MCU 选择说明
 
@@ -20,7 +20,7 @@ MCU 确定为 `STM32F103C8T6`，封装方向按常见 `LQFP48`。
 - LQFP48 方向适合手焊练习和 2 层板布局训练。
 - Keil、STM32CubeMX、ST-Link/SWD 调试链路成熟。
 
-后续原理图审查需要根据 STM32F103C8T6 datasheet / reference manual 核对封装、引脚、电源脚、去耦、BOOT、NRST、SWD、HSE 和 ADC 等细节。
+阶段 11 / 制造前仍需根据 STM32F103C8T6 datasheet / reference manual 核对封装、引脚、电源脚、去耦、BOOT、NRST、SWD、HSE 和 ADC 等细节。
 
 ## 3. 数字电源与去耦
 
@@ -46,7 +46,7 @@ MCU 确定为 `STM32F103C8T6`，封装方向按常见 `LQFP48`。
 - `NRST` 对 `GND` 放置 `C6=100nF` 电容。
 - `NRST` 同时引出到 SWD 接口。
 - STM32 NRST 内部已有弱上拉，因此外部 `10k` 上拉可不放或预留 DNP；当前模块设计说明以按键 + `100nF` 为主。
-- 后续原理图审查时确认 `NRST` 网络标签必须接到 pin7 `NRST`，不能误接到 HSE 晶振脚。
+- 阶段 11 / 制造前复核 `NRST` 网络标签必须接到 pin7 `NRST`，不能误接到 HSE 晶振脚。
 
 ## 6. BOOT0 启动配置
 
@@ -78,11 +78,11 @@ MCU 确定为 `STM32F103C8T6`，封装方向按常见 `LQFP48`。
 - 网络名统一使用 `SWDIO`、`SWCLK`、`NRST`，不建议使用容易混淆的 `CLK`。
 - 后续建议预留测试点：`3.3V`、`GND`、`NRST`、`SWDIO`、`SWCLK`。
 
-## 9. 原理图审查前检查项
+## 9. 阶段 11 / 制造前检查项
 
 MCU 最小系统模块设计说明已完成。已记录内容包括：VDD/VSS 连接、基础去耦、VBAT 接 3.3V、VDDA/VSSA 简单模拟电源、NRST 复位、BOOT0 跳帽、HSE 8MHz、SWD 接口。
 
-后续原理图审查 / PCB Layout 前重点检查：
+阶段 11 / 制造前重点复核：
 
 1. `VDDA/VSSA` 是否接反。
 2. `NRST` 是否误接到 `OSC_OUT`。

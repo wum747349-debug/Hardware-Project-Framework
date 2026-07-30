@@ -5,6 +5,7 @@
 > 审查对象：STM32 DAQ Control Board Rev A
 > 审查日期：2026-07-29
 > 审查输入基线：当前本地工作树；初次审查对应 `main` HEAD `49462616d00875fa011b27f3276eecddc76c6d80`
+> 最近问题状态更新：`main` 提交 `b4fc059451667f302f671a7cb8a2b46967a4fb4a`
 
 ## 1. 文档定位与事实边界
 
@@ -155,7 +156,7 @@
 - **模块**：USB-C / 机械封装
 - **问题描述**：设计文档原记录 `TYPE-C 16PIN 2MD(073)`，当前 PDF/BOM 为 `TYPE-C-31-M-12`，存在型号冲突。
 - **风险等级**：高风险
-- **关闭依据**：用户在 Altium 中确认 Rev A 当前唯一 USB-C 为 `TYPE-C-31-M-12`、立创 `C165948`；当前规格书为 [C165948_USB连接器_TYPE-C-31-M-12_规格书_WJ310728.PDF](../references/datasheets/usb_c/C165948_USB连接器_TYPE-C-31-M-12_规格书_WJ310728.PDF)，且已有原理图 PDF/BOM 均记录 `TYPE-C-31-M-12`。设计文档已同步；旧 `TYPE-C 16PIN 2MD(073)` 因只适合约 `0.8mm` 板厚而标记为历史/已替代。
+- **关闭依据**：用户在 Altium 中确认 Rev A 当前唯一 USB-C 为 `TYPE-C-31-M-12`、立创 `C165948`；当前规格书为 [C165948_USB连接器_TYPE-C-31-M-12_规格书_WJ310728.PDF](../references/datasheets/usb_c/C165948_USB连接器_TYPE-C-31-M-12_规格书_WJ310728.PDF)，且已有原理图 PDF/BOM 均记录 `TYPE-C-31-M-12`。设计文档已同步；据用户确认，旧 `TYPE-C 16PIN 2MD(073)` 的安装结构仅适配约 `0.8mm` 板厚，因此标记为历史/已替代。
 - **影响**：可能出现固定脚、焊盘、外壳尺寸或插口位置不匹配，导致无法装配。
 - **结论限制**：关闭依据来自用户 Altium 确认、当前规格书及已有 PDF/BOM；AI/Codex 未解析或独立核对 `.PcbDoc`。
 - **当前状态**：已关闭。
@@ -279,7 +280,7 @@ AI/Codex 未运行 Batch DRC。当前摘要可作为审查输入记录，但存�
 | 必须关闭后才能制造 | PCB-001、PCB-003                 | 未关闭  |
 | 制造前必须确认   | PCB-005、PCB-006、PCB-007、PCB-008 | 未关闭  |
 | 建议同步修正    | PCB-009、PCB-010                 | 未关闭  |
-| 已关闭        | PCB-002、PCB-004                 | 已关闭  |
+| 已关闭       | PCB-002、PCB-004                 | 已关闭  |
 
 当前没有批准的 DRC 规则豁免。Rev A 不建立 USB Differential Pair、不声明 `90 Ω`、不要求长度匹配，是设计基线，不是 Clearance、Width 或制造规则豁免。
 

@@ -31,3 +31,4 @@
 - 历史选型过程维护在 [component_selection_plan.md](component_selection_plan.md)，不作为最终 BOM。
 - 原理图问题、风险等级、修改建议和关闭状态维护在 [schematic_review.md](schematic_review.md)。
 - PCB 制造基线、规则值、Scope、优先级和 DRC 应检查项维护在 [pcb_design_rules.md](pcb_design_rules.md)。
+- 阶段 11 当前问题、关闭依据、风险统计和制造门禁维护在 [pcb_review.md](pcb_review.md)。

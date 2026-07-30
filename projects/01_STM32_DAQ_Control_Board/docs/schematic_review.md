@@ -40,7 +40,7 @@
 | SCH-004 | ADC | ADC 分压旧方案 `10kΩ/18kΩ` 使 5V 输入约 3.21V。 | 当前 BOM/PDF 显示 `R8/R9=12kΩ`、`R12/R13=18kΩ`，5V 标称输入映射为 `5V * 18kΩ / (12kΩ + 18kΩ) = 3.0V`。 | 已关闭 |
 | SCH-005 | USB-C VBUS TVS | D5 网络和极性映射需要确认。 | 用户人工确认 D5 为 `SMF5.0A`，阴极接 `VBUS_FUSED`、阳极接 GND，符号、封装焊盘和实物极性映射一致。 | 已关闭 |
 | SCH-006 | 硬件输出 | 最新原理图 PDF 和 BOM 需要重新导出并放入项目输出目录。 | 当前工作区存在 `hardware/outputs/schematic_pdf/STM32_DAQ_Control_Board_Schematic.pdf` 和 `hardware/outputs/bom/STM32_DAQ_Control_Board.xlsx`。 | 已关闭 / 版本管理状态仍需用户确认 |
-| SCH-007 | USB-C 型号 | 设计文档中的旧型号与当前 PDF/BOM 的 `TYPE-C-31-M-12` 不一致。 | 用户在 Altium 中确认 Rev A 当前唯一 USB-C 为 `TYPE-C-31-M-12`、立创 `C165948`；当前规格书、原理图 PDF、BOM 和设计文档已同步。旧 `TYPE-C 16PIN 2MD(073)` 仅保留为历史/已替代资料。 | 已关闭 |
+| SCH-007 | USB-C 型号 | 设计文档中的旧型号与当前 PDF/BOM 的 `TYPE-C-31-M-12` 不一致。 | 用户在 Altium 中确认 Rev A 当前唯一 USB-C 为 `TYPE-C-31-M-12`、立创 `C165948`；当前规格书、原理图 PDF、BOM 和设计文档已同步。据用户确认，旧 `TYPE-C 16PIN 2MD(073)` 的安装结构仅适配约 `0.8mm` 板厚，现仅保留为历史/已替代资料。 | 已关闭 |
 | SCH-008 | USB Shield | 旧文档将 Shield 记录为 `R15=0Ω`，与 PDF/BOM 的 R15/C18 不一致。 | 用户确认当前实现为 `SHIELD -> (R15 1MΩ || C18 1nF) -> GND`；R15 提供直流参考/泄放，C18 提供高频噪声回流，该支路不替代专用 ESD 保护。 | 已关闭 |
 
 ## 5. 仍待 Altium 人工核对
@@ -49,7 +49,7 @@
 |---|---|---|---|---|---|
 | EDA-001 | 关键器件封装 | STM32F103C8T6、AP2112K、CH340C、TPD2EUSB30、AO3400A、BAT54S、SS14、USB-C、开关和连接器的原理图库 Pin 与 PCB 封装 Pad Mapping。 | 中 | 在 Altium 中逐个核对库引脚号、焊盘号、封装模型和实际采购料号。 | 待 EDA 人工核对 |
 | EDA-003 | U6 USB ESD | `TPD2EUSB30DRTR-N` 完整型号与实际 datasheet 的一致性，以及 U6 原理图针号与 SOT-723 封装焊盘映射。 | 中 | 对照 datasheet 和 Altium 封装逐脚核对。 | 待 EDA 人工核对 |
-| EDA-004 | 极性和方向 | AO3400A、BAT54S、SS14、AP2112、CH340C、开关和连接器的封装方向、极性、丝印方向。 | 中 | PCB 前逐项核对封装 1 脚、二极管色带、MOSFET G/S/D、LDO pin1 和 USB-C 方向。 | 待 EDA 人工核对 |
+| EDA-004 | 极性和方向 | AO3400A、BAT54S、SS14、AP2112、CH340C、开关和连接器的封装方向、极性、丝印方向。 | 中 | 阶段 11 / 制造前逐项核对封装 1 脚、二极管色带、MOSFET G/S/D、LDO pin1 和 USB-C 方向。 | 待 EDA 人工核对 |
 | EDA-005 | 接口与测试点 | PCB 接口朝向、丝印可读性、`TP_VBUS1/TP_1/TP_2/TP_GND1` 与 ADC/MOSFET 测试点可达性。 | 低/中 | 结合 PCB 布局检查接线习惯、探针空间和安全边界丝印。 | 待 EDA 人工核对 |
 | EDA-006 | ERC | Altium ERC 是否存在未连接、重复驱动、电源端口、电气类型或 NC 标记问题。 | 视结果而定 | 仅在导出最新 ERC 报告或 Messages 截图后记录结果。 | 未提供报告，不声称已完成 |
 

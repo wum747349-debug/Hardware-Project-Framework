@@ -53,7 +53,8 @@
 | [docs/module_design/](docs/module_design/) | 分模块详细设计说明 |
 | [references.md](references.md) | datasheet、资料路径和阅读状态索引 |
 | [docs/component_selection_plan.md](docs/component_selection_plan.md) | 第一轮关键器件选型计划和历史依据 |
-| [docs/schematic_review.md](docs/schematic_review.md) | 原理图审查记录与问题追踪 |
+| [docs/schematic_review.md](docs/schematic_review.md) | 原理图审查历史记录与已关闭问题 |
+| [docs/pcb_review.md](docs/pcb_review.md) | 阶段 11 当前问题、关闭依据与制造门禁主记录 |
 | [hardware/README.md](hardware/README.md) | Altium 源文件、导出文件和图片目录约定 |
 | [docs/user/project_overview.md](docs/user/project_overview.md) | 面向展示/复盘的项目简介 |
 | [docs/user/learning_record.md](docs/user/learning_record.md) | 学习记录和复盘入口 |
@@ -65,7 +66,7 @@
 3. 读 [block_diagram.md](block_diagram.md)，建立系统模块和信号流向。
 4. 读 [design_notes.md](design_notes.md)，核对当前设计意图、主选器件、Pin Map 和接口定义。
 5. 按模块阅读 [docs/module_design/](docs/module_design/)。
-6. 使用 [docs/schematic_review.md](docs/schematic_review.md) 记录原理图审查问题和关闭状态。
+6. 使用 [docs/pcb_review.md](docs/pcb_review.md) 跟踪阶段 11 当前问题、关闭状态和制造门禁；[docs/schematic_review.md](docs/schematic_review.md) 用于追溯原理图审查历史。
 
 ## 模块设计文档
 

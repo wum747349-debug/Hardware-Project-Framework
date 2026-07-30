@@ -24,6 +24,7 @@
 | Altium `.SchDoc`、当前审查版 PDF、必要时的网表 | 确认实际电气实现，包括实际器件位号、接线、网络和元件参数 |
 | [docs/module_design/](docs/module_design/) | 模块级连接依据、参数计算、datasheet 依据、风险和 PCB 检查项 |
 | [docs/schematic_review.md](docs/schematic_review.md) | 原理图审查状态、问题、风险、证据和关闭情况 |
+| [docs/pcb_review.md](docs/pcb_review.md) | 阶段 11 当前问题、关闭依据、风险统计和制造门禁 |
 
 ## 2. 当前阶段
 
@@ -111,7 +112,7 @@
 ## 7. 当前已确认设计决定
 
 - MCU 为 `STM32F103C8T6`，当前封装方向按 LQFP48 审查。
-- Rev A 当前唯一 USB-C 为 `TYPE-C-31-M-12`，立创 `C165948`；旧 `TYPE-C 16PIN 2MD(073)` 因只适合约 `0.8mm` 板厚而被替代，仅保留历史资料。
+- Rev A 当前唯一 USB-C 为 `TYPE-C-31-M-12`，立创 `C165948`；据用户确认，旧 `TYPE-C 16PIN 2MD(073)` 的安装结构仅适配约 `0.8mm` 板厚，因此被替代并仅保留历史资料。
 - USB-C Shield 当前实现为 `SHIELD -> (R15 1MΩ || C18 1nF) -> GND`：`R15` 提供直流参考/泄放，`C18` 提供高频噪声回流；该 RC 支路不替代 `USB_DP/USB_DM` 的专用 ESD 保护。
 - 当前整板原理图继续保持单页模块化结构，不拆成多张层次原理图。
 - 用户 LED 使用 `PB5`，当前低电平点亮：`3.3V -> 1kΩ -> LED_USER -> PB5`。
