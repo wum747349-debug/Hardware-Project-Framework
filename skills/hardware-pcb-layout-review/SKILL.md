@@ -37,8 +37,6 @@ description: Review low-voltage embedded PCB readiness, layout, routing, copper,
 
 三种模式的默认、按需和禁止读取范围以 `docs/AI_Context_Guide.md` 的“PCB 三种模式最小上下文”为准；本 Skill 不重复维护文件清单。
 
-三种模式均读取当前项目根 `README.md`，仅用于确认项目身份、当前项目阶段、当前硬件版本、当前入口和下一步摘要。项目 README 不替代 `requirements.md`、`design_notes.md`、`docs/pcb_design_rules.md` 或 `docs/pcb_review.md` 的事实职责。
-
 执行时仍按第 2 节选择 Layout Preflight、Layout / Routing Review 或 PCB Release Review，并按下文对应方法、证据边界和 checklist 完成审查。
 
 ## 4. 能力与证据边界

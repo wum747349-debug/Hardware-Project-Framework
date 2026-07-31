@@ -19,7 +19,7 @@
 | `test_report.md`              | 尚未开始的测试报告                                                                              |
 | `revision_history.md`         | 当前有效的问题追踪和改版记录入口                                                                       |
 
-当前项目阶段以项目根 [README.md](../README.md) 的状态头为准。当前不代表 PCB、DRC 或制造输出已经通过；剩余门禁以 [pcb_review.md](pcb_review.md) 为准。阶段 7 完成并确认制造、装配准备就绪后，才进入阶段 8：焊接和硬件调试阶段。
+当前项目阶段、硬件版本和下一步以项目根 [README.md](../README.md) 为准；PCB 问题、DRC 证据和制造结论以 [pcb_review.md](pcb_review.md) 为准。
 
 ## 文档职责分工
 

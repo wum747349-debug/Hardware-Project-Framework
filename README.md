@@ -31,6 +31,7 @@ PCB Layout Preflight 不要求初始 DRC，布线阶段不要求归档中间 DRC
 - [硬件项目模板](templates/hardware_project_template/README.md)
 - [PCB Layout / Review Skill](skills/hardware-pcb-layout-review/SKILL.md)
 - [PCB Layout Preflight Checklist](checklists/pcb_layout_preflight_checklist.md)
+- [PCB Layout / Routing Checklist](checklists/pcb_layout_checklist.md)
 - [PCB Release Checklist](checklists/pcb_release_checklist.md)
 
 项目 1 是仓库参考实现，不是可原样复制的模板。新项目必须根据自己的需求、器件资料、封装、目标板厂、装配方式和实际 EDA 实现重新确认。
