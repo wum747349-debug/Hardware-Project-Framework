@@ -1,360 +1,186 @@
 ---
 name: hardware-pcb-layout-review
-description: Review low-voltage embedded PCB readiness, layout, routing, copper, DRC evidence, and manufacturing release. Use for PCB Layout Preflight, placement or routing assistance, PCB visual review, Altium rule Scope/Priority review, DRC report analysis, rule exemptions, Gerber/drill/pick-place package checks, or deciding whether a board is ready for fabrication.
+description: Review low-voltage embedded PCB readiness, layout, routing, copper, user-provided DRC evidence, and manufacturing release. Use for Layout Preflight, Layout / Routing Review, PCB Release Review, Altium rule Scope/Priority review, rule exemptions, or manufacturing-output checks.
 ---
 
-# Hardware PCB Layout and Release Review
+# PCB Layout 与制造放行审查
 
-## Purpose
+## 1. 目的与边界
 
-Apply one of three modes:
+本 Skill 用于低压嵌入式、MCU 控制、传感器采集、电源管理、模拟前端和通信接口板，提供三种 PCB 协作模式：
 
-1. **Layout Preflight**: confirm manufacturing, mechanical, footprint, rule, and schematic prerequisites before formal placement.
-2. **Layout / Routing Review**: review placement, critical paths, routing, return paths, vias, and copper during PCB implementation.
-3. **PCB Release Review**: review complete DRC evidence, assembly details, manufacturing outputs, exemptions, and fabrication release.
+1. **Layout Preflight**：确认正式布局前的制造、机械、封装、原理图门禁和规则基线。
+2. **Layout / Routing Review**：审查布局、关键路径、布线、回流、过孔和铺铜。
+3. **PCB Release Review**：审查完整 Batch DRC 结果、装配信息、制造输出、规则豁免和制造放行。
 
-Keep the Skill focused on method and decision logic. Route item-by-item checks to:
+高压、射频、复杂高速数字、隔离电源、汽车、医疗、安规、HDI 或刚挠结合项目只能复用本 Skill 的通用部分，必须增加专项方法、checklist、标准和有资质的审查。
 
-- [PCB Layout Preflight checklist](../../checklists/pcb_layout_preflight_checklist.md)
-- [PCB Layout checklist](../../checklists/pcb_layout_checklist.md)
-- [PCB Release checklist](../../checklists/pcb_release_checklist.md)
+本 Skill 只维护方法、判断逻辑、风险分类、输出结论和能力边界。逐项检查使用：
 
-Record project values in `requirements.md` and `docs/pcb_design_rules.md`; record actual issues, evidence, DRC results, closure state, exemptions, and release conclusions in `docs/pcb_review.md`.
+- [PCB Layout Preflight Checklist](../../checklists/pcb_layout_preflight_checklist.md)
+- [PCB Layout Checklist](../../checklists/pcb_layout_checklist.md)
+- [PCB Release Checklist](../../checklists/pcb_release_checklist.md)
 
-## Applicability
+项目规则值写入 `docs/pcb_design_rules.md`；实际问题、关闭状态、Batch DRC 摘要、豁免引用和制造结论写入 `docs/pcb_review.md`。
 
-Use for low-voltage embedded, MCU control, sensor acquisition, power management, analog front-end, and communication interface boards.
+## 2. 选择模式
 
-For high voltage, RF, advanced high-speed digital, isolated power, automotive, medical, safety-certified, HDI, flex/rigid-flex, or other specialized construction, use this Skill only for the common baseline. Require a project-specific Skill, checklist, qualified reviewer, and applicable standards before release.
-
-## Select the mode
-
-Choose the narrowest mode that matches the request:
-
-| Request | Mode | Required conclusion |
+| 用户请求 | 模式 | 必需结论 |
 |---|---|---|
-| “Can I start PCB layout?” or rule preparation | Layout Preflight | Approved / not approved for formal placement |
-| Placement, routing, copper, return path, or PCB image review | Layout / Routing Review | Findings and required rework before release review |
-| DRC, Gerber, drill, coordinates, manufacturing package, or release | PCB Release Review | Approved / not approved for fabrication |
+| 是否可开始布局、规则准备 | Layout Preflight | `批准开始正式布局` / `不批准开始正式布局` |
+| 布局、布线、铺铜、回流或 PCB 图片审查 | Layout / Routing Review | `可进入 PCB Release Review` / `修改后复审` / `存在高风险，停止推进` |
+| Batch DRC、Gerber、钻孔、坐标、制造包或放行 | PCB Release Review | `批准制造` / `有条件批准` / `不批准制造` |
 
-If a request crosses modes, execute them in order and keep each gate separate. Do not let a later artifact compensate for a failed earlier gate.
-
-## Read minimum context
-
-Read:
-
-1. `PROJECT_RULES.md`
-2. `AGENTS.md`
-3. `docs/AI_Context_Guide.md`
-4. `skills/hardware-pcb-layout-review/SKILL.md`
-5. Current project `requirements.md`
-6. Current project `design_notes.md`
-7. Current project `references.md`
-8. Current project `docs/pcb_design_rules.md`
-9. Current PCB review file, normally `docs/pcb_review.md`
-10. Current PCB implementation evidence supplied for the request
+跨模式请求按 A → B → C 顺序处理并分别给出阶段门结论，后续证据不能抵消前一阶段的阻断项。
 
-Read conditionally:
+## 3. 最小上下文
 
-- complete schematic PDF and current BOM when tracing connectivity, footprint, polarity, interface, or schematic-review issues;
-- current module documents when a finding depends on module intent or special placement;
-- key-device datasheets and application notes when checking layout, thermal, bypass, crystal, analog, USB, MOSFET, or protection requirements;
-- target fabricator official capabilities when defining manufacturing or project design rules and checking order parameters;
-- PCB top/bottom, copper, no-polygon, 3D, mechanical, or local screenshots when visual evidence is needed;
-- DRC summary, report, messages, or screenshots when analyzing actual violations;
-- Gerber, PTH/NPTH drill, pick-and-place, assembly drawing, BOM, stackup, and fabrication notes during release review.
-
-Do not load other projects, all datasheets, all Skills, or all historical outputs by default. Do not load the reference implementation merely to obtain default values.
-
-## Respect capability boundaries
-
-- Treat `.PcbDoc` as the authoritative PCB implementation source.
-- Without a reliable Altium parser, script, or automation interface, do not claim to have read internal objects, nets, rules, layers, polygons, dimensions, or properties from `.PcbDoc`.
-- Use PCB images only for visual findings such as placement, apparent routing, accessibility, labeling, polarity visibility, and obvious mechanical concerns.
-- Do not use images to prove connectivity, exact clearance, trace width, hole diameter, annular ring, rule matching, polygon state, unrouted count, or DRC pass.
-- Do not claim to run Altium Designer, configure rules, route traces, Repour polygons, run Batch DRC, or export manufacturing files.
-- Require the user to perform actual rule configuration, placement, routing, copper work, Repour, DRC, and export.
-- Mark unsupported implementation claims as `待 EDA 核对`.
-- Distinguish “documented rule,” “user-confirmed AD rule,” and “DRC-verified rule.”
+所有模式先读取 `PROJECT_RULES.md`、`AGENTS.md`、`docs/AI_Context_Guide.md` 和本 Skill，然后按模式补充当前项目内容。不得默认加载其他项目、全部 datasheet、全部 Skill 或全部历史输出。
 
-## Build the manufacturing baseline
-
-1. Identify the target fabricator and obtain official capability information for the relevant service and date.
-2. Record material, layer count, finished thickness, copper weight, assembly method, surface finish, solder-mask needs, panel or dimension constraints, and controlled-impedance declaration.
-3. Separate three levels:
-
-   - **Manufacturing capability**: the fabricator-supported range for a selected service.
-   - **Project design default**: the normal value chosen with reliability, cost, assembly, and process margin.
-   - **Manufacturing limit**: an edge condition that may require special pricing, process, approval, or reduced yield margin.
-
-4. Do not copy a manufacturing limit into a default design rule without a documented reason and margin assessment.
-5. Store the baseline summary in `requirements.md`; store executable project rules in `docs/pcb_design_rules.md`.
-6. Recheck current official capability before ordering. Treat marketplace promotions, quotes, and free-service conditions as temporary order data, not repository defaults.
+### 模式 A：Layout Preflight
 
-## Organize PCB rules
+默认读取：
 
-Cover only categories relevant to the project:
-
-- Electrical Clearance
-- Routing Width
-- Routing Via Style
-- Hole Size
-- Minimum Annular Ring
-- Solder Mask
-- Paste Mask
-- Silkscreen
-- Board Outline / Board Clearance
-- Polygon Connect
-- differential, impedance, length, high-speed, analog, power, load, or other conditional rules when actually required
+- 当前项目 `requirements.md`、`design_notes.md`、`references.md`；
+- 当前项目 `docs/schematic_review.md`；
+- 当前项目 `docs/pcb_design_rules.md`，不存在时协助创建；
+- 与当前关键器件直接相关的 Layout 资料。
 
-For each rule, record:
+按需读取：完整原理图 PDF、当前 BOM、相关模块文档、目标板厂官方能力和机械约束。
 
-- source and rationale;
-- units;
-- preferred, minimum, and maximum values when meaningful;
-- query Scope;
-- Priority;
-- relationship to default and other specialized rules;
-- document-defined, AD-configured, Scope-checked, Priority-checked, and DRC-verified status.
-
-Do not create complex classes, differential pairs, length matching, or impedance rules unless the project requires them.
-
-## Choose Net Class or explicit Scope
-
-Use a Net Class when several nets:
-
-- share the same electrical and routing treatment;
-- are stable enough to manage as a group;
-- benefit from readable, auditable class membership.
-
-Use an explicit network Scope when:
+默认不要求：`docs/pcb_review.md`、DRC 报告、制造输出或其他项目。
 
-- only one or a few nets require a narrow exception;
-- membership is unlikely to be reused;
-- an explicit query is clearer and less error-prone.
+### 模式 B：Layout / Routing Review
 
-Before choosing either:
+默认读取：
 
-1. list the target nets and required behavior;
-2. confirm names against user-provided EDA evidence;
-3. ensure the Scope matches only intended objects;
-4. avoid broad wildcards unless their expansion is reviewed;
-5. record the choice in `docs/pcb_design_rules.md`.
+- 当前项目 `requirements.md`、`design_notes.md`、`docs/pcb_design_rules.md`；
+- 当前 PCB 图片或用户提供的其他实现证据。
 
-## Check Scope
+按需读取：相关模块文档、关键 datasheet、`docs/schematic_review.md`；继续已有 PCB 问题时读取 `docs/pcb_review.md`。
 
-For each rule:
+默认不要求：DRC 结果、全部 `references/`、全部 datasheet、完整流程、Release Checklist 或制造输出。
 
-1. Read the query as a set definition.
-2. Identify intended object types, layers, nets, classes, components, regions, or pair relationships.
-3. Ask the user to highlight or report matching objects in Altium when direct inspection is unavailable.
-4. Test representative intended and unintended objects.
-5. Check for empty Scope, overly broad matching, name mismatch, missing class membership, or layer mismatch.
-6. Confirm that a specialized rule does not silently include unrelated objects.
-7. Mark the rule `Scope 已核对` only with user confirmation or suitable EDA evidence.
+### 模式 C：PCB Release Review
 
-## Check Priority and rule coverage
+默认读取：
 
-1. List rules from most specific to most general for each category.
-2. Place intentional specialized rules above overlapping default rules.
-3. Confirm that a default rule covers all objects not matched by a specialized rule.
-4. Check for equal-category overlaps, gaps, disabled rules, conflicting constraints, and a broad rule shadowing a narrow rule.
-5. Use Altium rule-priority or applicable-rule inspection supplied by the user as evidence.
-6. Record the coverage relationship:
+- 当前项目 `requirements.md`、`docs/pcb_design_rules.md`、`docs/pcb_review.md`；
+- 当前 PCB 实现证据和当前 BOM；
+- 用户在对话中提供的完整 Batch DRC 结果；
+- 制造输出清单或待放行的实际输出；
+- PCB Release Checklist。
 
-```text
-specialized rule -> intended subset
-default rule     -> remaining objects
-```
+按需读取：Gerber、Drill、Pick and Place、装配图、制造说明和具体问题的局部截图。
 
-7. Do not mark Priority verified from the document order alone.
+## 4. 能力与证据边界
 
-## Execute Layout Preflight
+- `.PcbDoc` 是 PCB 权威实现源文件。没有可靠解析器、脚本或自动化接口时，不声称读取其内部对象、网络、规则、层、铺铜、尺寸或属性。
+- PCB 图片只支持视觉判断，不能证明网络、精确间距、线宽、孔径、环宽、规则命中、铺铜状态、未布线数量或 DRC 通过。
+- 不声称运行 Altium Designer、配置规则、布线、Repour、Batch DRC 或导出制造文件。
+- 实际规则配置、Scope/Priority 核对、布局布线、Repour、DRC 和导出均由用户执行。
+- 无法由当前证据确认的实现项标记为 `待 EDA 核对`。
+- 始终区分“文档已定义”“用户确认 AD 已配置”“用户提供 DRC 结果”三种状态。
 
-Use `checklists/pcb_layout_preflight_checklist.md`.
+## 5. 模式 A 方法：Layout Preflight
 
-1. Confirm project/version and schematic-review gate.
-2. Confirm fabricator, stackup baseline, assembly, board outline, mounting holes, mechanical boundaries, connector orientation, and accessibility.
-3. Confirm critical footprints, Pin/Pad mapping, polarity, Pin 1, and mechanical models.
-4. Extract critical-device mechanical and Layout requirements.
-5. Define network classification, Net Classes or explicit Scopes.
-6. Complete project rule categories, Scope, Priority, and coverage.
-7. Require user confirmation that actual Altium rules are configured and checked.
-8. Require an initial DRC run.
-9. Record an explicit approval or refusal to start formal placement.
+1. 确认项目、硬件版本、原理图审查结论和未关闭高风险问题。
+2. 确认目标板厂、材料、层数、板厚、铜厚、装配方式、板框、安装孔和机械边界。
+3. 核对关键封装、Pin/Pad mapping、极性、Pin 1、机械模型和器件 Layout 要求。
+4. 根据项目需求形成规则基线，区分板厂制造能力、项目设计默认值和制造极限。
+5. 选择必要的 Net Class 或明确 Scope，记录规则值、依据、单位、Scope、Priority 和覆盖关系。
+6. 由用户确认 Altium 实际规则已配置，并人工核对关键 Scope 与 Priority。
+7. 使用 Preflight Checklist 记录阻断项与结论。
 
-Do not approve formal placement while a required gate is unconfirmed or a high-risk schematic issue remains open.
+Layout Preflight 不要求初始 DRC。用户可以使用 Altium 在线规则检查或临时检查，但不得把 DRC 结果作为批准开始正式布局的默认仓库门禁。
 
-## Review placement
+## 6. 模式 B 方法：Layout / Routing Review
 
-Review in this order:
+1. 先确认审查对象、PCB / Git 版本、视图类型和证据限制。
+2. 从板框、安装孔、连接器、机械边界和功能分区开始检查布局。
+3. 结合项目需求检查关键电源、模拟、晶振、高速、MOSFET、保护、热和测试可达性。
+4. 检查关键电流环路、敏感路径、回流连续性、换层、过孔、细颈和铺铜策略。
+5. 用户在相关修改后执行 Repour，并提供需要复审的当前证据。
+6. 将需要跨回合追踪的重要问题写入 `docs/pcb_review.md`，普通即时建议不强制沉淀。
 
-1. board outline, mounting holes, keepouts, dimensions, height, and enclosure constraints;
-2. connector position, orientation, insertion path, cable clearance, and user access;
-3. power entry, protection, switching, regulation, and main load-current flow;
-4. functional partitioning and cross-domain boundaries;
-5. MCU/core devices, clocks, reset, boot, debug, and local bypass;
-6. analog input, reference, ADC, op-amp, and sensor regions;
-7. USB, other high-speed interfaces, ESD, and return path;
-8. MOSFET, flyback/protection, load connector, gate loop, and thermal copper;
-9. test points, indicators, buttons, programming headers, rework, and probing space;
-10. assembly side, component spacing, polarity, Pin 1, and silkscreen feasibility.
+本模式不要求 DRC 作为默认输入，也不要求保存中间 DRC 记录。具体逐项顺序以 PCB Layout Checklist 为准。
 
-Separate visual findings from EDA-verifiable findings.
+## 7. 模式 C 方法：PCB Release Review
 
-## Review routing and copper
+1. 确认 PCB、BOM、Batch DRC 摘要和制造输出对应同一版本。
+2. 按 Release Checklist 审查规则、实现、机械、装配、BOM 和制造输出。
+3. 分析用户提供的完整 Batch DRC 结果与规则豁免。
+4. 对修改项要求用户实际修改、Repour，并重新运行完整 Batch DRC。
+5. 确认所有实际违规已解决或形成明确、合理、可追溯的豁免。
+6. 由用户确认最终 Batch DRC、制造输出和下单参数。
+7. 在 `docs/pcb_review.md` 给出显式制造结论。
 
-Review in this order:
+文件存在不等于输出正确或已放行。制造输出的逐项核对由 Release Checklist 承担，本 Skill 不重复展开。
 
-1. critical power and load-current loops;
-2. sensitive analog and reference paths;
-3. crystal and clock loops;
-4. high-speed or edge-sensitive interfaces;
-5. reset, boot, debug, and communication signals;
-6. remaining low-speed signals;
-7. return paths under each critical route;
-8. via count, transitions, stubs, neck-downs, current bottlenecks, and layer changes;
-9. plane continuity, splits, slots, copper islands, thermal connections, and stitching;
-10. Repour status, unrouted count, and intermediate DRC.
+## 8. Batch DRC 分析
 
-Require the user to Repour after relevant changes. Do not infer current polygon results from an outdated screenshot.
+正式 Batch DRC 只在 PCB Release Review 中要求：
 
-## Apply specialty checks
+1. 确认用户运行的是当前 PCB 版本的完整 Batch DRC。
+2. 确认对应 Git / PCB 版本和 `docs/pcb_design_rules.md` 规则基线。
+3. 记录运行日期、Warnings 和 Rule Violations 数量。
+4. 记录主要检查类别与关键违规文本；仅有 `0 violations` 但无法确认规则基线或关键类别时，给出受限结论。
+5. 判断问题属于真实设计问题、规则定义/Scope/Priority 问题，还是合理豁免。
+6. 用户修改后重新运行完整 Batch DRC。
+7. 记录用户对最终结果的明确确认。
 
-### Power and load paths
+结果默认可直接来自用户对话，不要求专门 DRC 文件、导出报告或完整截图。只有具体问题无法判断时，才请求局部截图或报告片段。缺少报告文件不构成自动阻断，但制造放行必须有用户明确确认完整 Batch DRC 已运行。
 
-- Trace source-to-load and return loops.
-- Check bottlenecks at pads, vias, fuses, switches, connectors, pours, and neck-downs.
-- Assess voltage drop, current density, thermal spreading, and fault-current consequences using project-specific data.
+## 9. 规则与豁免
 
-### Analog
+`docs/pcb_design_rules.md` 负责规则值、Scope、Priority、AD 配置/人工核对状态和豁免定义，不长期维护“DRC 已验证”列。
 
-- Protect high-impedance and low-level nodes from noisy current loops.
-- Check reference, bias, filter, guard, grounding, and ADC source-impedance requirements against datasheets.
-- Keep placement and return strategy consistent with the intended signal chain.
+每项豁免必须：
 
-### High-speed and USB
+- 只覆盖明确对象；
+- 有技术理由，不能用于隐藏设计错误；
+- 评估电气、机械、制造和装配风险；
+- 说明验证方式并由用户批准；
+- 在规则文档中定义，并由 `docs/pcb_review.md` 引用。
 
-- Confirm whether impedance, differential pair, length, or skew rules are actually declared.
-- Check connector-to-protection-to-receiver order, pair continuity, return path, layer changes, and stubs.
-- Do not impose impedance or length rules on a project that explicitly does not require them.
+项目选择不声明某项规则，不自动构成规则豁免。
 
-### Crystal
+## 10. 风险分类
 
-- Follow MCU/crystal vendor placement and routing guidance.
-- Keep the loop compact, symmetric where required, isolated from aggressors, and free of unnecessary vias.
-- Verify load components and ground treatment from current device evidence.
+- **高风险**：可能损坏硬件、造成不安全使用、反接/短路、关键连接失效、不可制造，或使关键规则/DRC 证据不可信；阻断当前阶段门。
+- **中风险**：可能影响功能、信号/电源完整性、热、装配、可靠性、机械适配或造成高返工成本；制造前解决，或经合理豁免。
+- **低风险**：主要影响可读性、丝印、探测便利或维护性；记录并安排处理。
 
-### MOSFET and switched loads
+证据不足不自动改变问题的电气严重性，但会限制问题关闭或制造放行结论。
 
-- Review gate drive loop, default-off state, switching node area, source return, flyback path, connector current path, and heat spreading.
-- Confirm inductive-load protection direction and energy/current capability from datasheets.
+## 11. 输出格式
 
-## Analyze DRC evidence
+### 当前结论
 
-1. Record the `.PcbDoc` or Git version, run date, rule baseline, and user confirmation that a complete Batch DRC was run.
-2. Record total Warnings and Rule Violations.
-3. Check that required categories were enabled; zero violations under an incomplete rule set is not a release pass.
-4. Group findings by rule category and affected object.
-5. For each finding, determine whether the cause is:
+给出与模式匹配的结论，并紧接说明证据范围和限制。
 
-   - a real implementation violation;
-   - incorrect Scope;
-   - incorrect Priority or rule overlap;
-   - stale polygon or missing Repour;
-   - intentional exception requiring review;
-   - incomplete or mismatched evidence.
+### 输入与版本
 
-6. Fix the design or rule definition at its source; rerun Repour and complete Batch DRC as applicable.
-7. Preserve unresolved items and rerun evidence. Do not accept cropped “0 violations” evidence without version and rule context for release.
-
-## Record rule exemptions
-
-Use a table with:
-
-| ID | Rule | Object | Reason | Risk | Verification | Approver / evidence | Status |
-|---|---|---|---|---|---|---|---|
-
-Require every exemption to be:
-
-- narrow and object-specific;
-- technically justified rather than used to hide errors;
-- assessed for manufacturing, electrical, mechanical, and assembly risk;
-- verified by an appropriate method;
-- approved by the user;
-- recorded in `docs/pcb_design_rules.md` and referenced from `docs/pcb_review.md`.
-
-Do not convert a project design choice, such as intentionally not declaring impedance, into a false “rule exemption.”
-
-## Check manufacturing outputs
-
-During PCB Release Review:
-
-1. confirm all outputs come from the same approved PCB version;
-2. inspect the output manifest and naming;
-3. verify expected Gerber layers, outline handling, solder mask, paste, and silkscreen;
-4. verify separate and complete PTH/NPTH drill outputs where applicable;
-5. verify coordinate units, origin, side, rotation convention, and component population;
-6. cross-check BOM designators, quantities, values/models, manufacturer part numbers where required, and PCB Footprints;
-7. confirm assembly drawing, polarity, Pin 1, connector direction, special process, stackup, surface finish, solder-mask color, assembly side, panelization, and dimensions;
-8. inspect the fabrication package for missing, duplicate, stale, temporary, or cross-version files;
-9. require explicit user confirmation of order parameters and fabrication approval.
-
-Do not treat file presence as proof that the output is current, correct, or released.
-
-## Classify risk
-
-- **High**: may damage hardware, create unsafe use, reverse polarity, short power, invalidate key connectivity, make the board unmanufacturable, or leave critical DRC/rule evidence unreliable. Block the current gate.
-- **Medium**: may impair function, signal/power integrity, thermal performance, assembly, reliability, mechanical fit, or require costly rework. Resolve before release unless a justified exemption is approved.
-- **Low**: mainly affects readability, documentation, silkscreen, probing convenience, or maintainability. Record and schedule deliberately.
-
-Evidence insufficiency does not automatically define electrical severity, but it prevents unsupported closure or release.
-
-## Produce the output
-
-Use this structure:
-
-### Current conclusion
-
-Choose one conclusion matching the mode:
-
-- Layout Preflight: `批准开始正式布局` / `不批准开始正式布局`
-- Layout / Routing Review: `可进入 PCB Release Review` / `修改后复审` / `存在高风险，停止推进`
-- PCB Release Review: `批准制造` / `不批准制造`
-
-State evidence scope and limitations immediately after the conclusion.
-
-### Inputs and version
-
-| Input | Version / date | Purpose | Traceability risk |
+| 输入 | 版本 / 日期 | 用途 | 追溯风险 |
 |---|---|---|---|
 
-### Findings
+### 问题
 
-| ID | Area | Finding | Risk | Evidence | Required action | Owner | Status |
+| ID | 区域 | 问题 | 风险 | 依据 | 所需动作 | 责任人 | 状态 |
 |---|---|---|---|---|---|---|---|
 
-Use status values: `待决策`, `待修改`, `待核对`, `待 EDA 核对`, `待用户确认`, `已修改 / 待复核`, `已关闭`, `已豁免`.
+建议状态：`待决策`、`待修改`、`待核对`、`待 EDA 核对`、`待用户确认`、`已修改 / 待复核`、`已关闭`、`已豁免`。
 
-### Rule and DRC status
+### 阶段门与下一步
 
-| Rule / category | Documented | AD configured | Scope checked | Priority checked | DRC verified | Evidence |
-|---|---|---|---|---|---|---|
+先列阻断项，再列用户 EDA 动作、需要补充的证据和允许进入的下一阶段。Release Review 另记录 Batch DRC 摘要、豁免引用和制造结论。
 
-### Exemptions
+## 12. 禁止事项
 
-Include the exemption table or state `无已批准豁免`.
-
-### Gate decision and next actions
-
-List blockers first, then user EDA actions, evidence to re-export, and the next permitted stage.
-
-## Prohibitions
-
-- Do not copy values, net names, footprints, dimensions, order parameters, findings, or exemptions from another project.
-- Do not use a reference project as a default rule set.
-- Do not invent fabricator capabilities, rule configuration, DRC results, manufacturing outputs, or verification.
-- Do not weaken or disable rules merely to reach zero violations.
-- Do not equate visual cleanliness with electrical or manufacturing correctness.
-- Do not approve fabrication without a complete user-run Batch DRC and explicit user confirmation.
-- Do not describe a board as manufactured, assembled, powered, or tested without actual user evidence.
+- 不复制其他项目的数值、网络名、封装、尺寸、下单参数、问题或豁免。
+- 不把参考项目当作默认规则集。
+- 不虚构板厂能力、规则配置、DRC 结果、制造输出或验证状态。
+- 不为得到零违规而放宽、关闭或删除必要规则。
+- 不把视觉整洁等同于电气正确或可制造。
+- 不在缺少用户完整 Batch DRC 确认时批准制造。
+- 不把未制造、未装配、未上电或未测试的状态描述为已完成。
