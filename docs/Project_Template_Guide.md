@@ -204,7 +204,7 @@ XX_Project_Name
 6. 只在项目确实需要时增加差分、阻抗、长度、高速、模拟或大电流专项规则。
 7. 明确每条规则的 Scope、Priority 和默认/专项覆盖关系。
 8. 由用户在 Altium Designer 中实际配置规则，并分别确认配置、Scope 和 Priority 状态。
-9. Layout 前运行初始 DRC；制造放行前运行完整 Batch DRC。
+9. Layout 前由用户确认关键规则、Scope 和 Priority 已在 Altium 中配置并人工核对；完整 Batch DRC 只在阶段 7 制造放行前运行。
 10. 将实际问题、DRC 结果和制造门禁写入 `docs/pcb_review.md`，不要写回规则定义。
 
 ## 11. 项目事实与通用模板
