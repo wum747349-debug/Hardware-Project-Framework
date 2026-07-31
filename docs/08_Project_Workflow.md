@@ -426,8 +426,8 @@
 
 ### Skill 与 checklist
 
-- 默认调用 `skills/hardware-pcb-layout-review/SKILL.md` 的 Layout Preflight 模式；
-- 使用 `checklists/pcb_layout_preflight_checklist.md`；
+- 默认调用 [PCB Layout / Review Skill](../skills/hardware-pcb-layout-review/SKILL.md) 的 Layout Preflight 模式；
+- 使用 [PCB Layout Preflight Checklist](../checklists/pcb_layout_preflight_checklist.md)；
 - 关键器件布局要求按需调用 datasheet Skill。
 
 ### 回退上游阶段的情况
@@ -504,8 +504,8 @@
 
 ### Skill 与 checklist
 
-- 默认调用 `skills/hardware-pcb-layout-review/SKILL.md` 的 Layout / Routing Review 模式；
-- 使用通用 PCB Layout checklist 和项目专项 checklist；
+- 默认调用 [PCB Layout / Review Skill](../skills/hardware-pcb-layout-review/SKILL.md) 的 Layout / Routing Review 模式；
+- 使用 [通用 PCB Layout Checklist](../checklists/pcb_layout_checklist.md) 和项目专项 checklist；
 - 关键问题按需回读 datasheet。
 
 ### 回退上游阶段的情况
@@ -602,8 +602,8 @@
 
 ### Skill 与 checklist
 
-- 默认调用 `skills/hardware-pcb-layout-review/SKILL.md` 的 PCB Release Review 模式；
-- 使用 `checklists/pcb_release_checklist.md`；
+- 默认调用 [PCB Layout / Review Skill](../skills/hardware-pcb-layout-review/SKILL.md) 的 PCB Release Review 模式；
+- 使用 [PCB Release Checklist](../checklists/pcb_release_checklist.md)；
 - 关键封装和器件 Layout 争议按需调用 datasheet Skill。
 
 ### 回退上游阶段的情况

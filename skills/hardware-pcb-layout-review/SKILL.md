@@ -15,9 +15,9 @@ Apply one of three modes:
 
 Keep the Skill focused on method and decision logic. Route item-by-item checks to:
 
-- `checklists/pcb_layout_preflight_checklist.md`
-- `checklists/pcb_layout_checklist.md`
-- `checklists/pcb_release_checklist.md`
+- [PCB Layout Preflight checklist](../../checklists/pcb_layout_preflight_checklist.md)
+- [PCB Layout checklist](../../checklists/pcb_layout_checklist.md)
+- [PCB Release checklist](../../checklists/pcb_release_checklist.md)
 
 Record project values in `requirements.md` and `docs/pcb_design_rules.md`; record actual issues, evidence, DRC results, closure state, exemptions, and release conclusions in `docs/pcb_review.md`.
 
