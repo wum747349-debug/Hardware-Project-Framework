@@ -49,6 +49,7 @@
 
 ## 7. 文件管理规则
 
+- 项目结构、文件职责、事实源、状态和命名必须遵循 `docs/Project_Structure_Standard.md`。
 - 每个项目必须包含 `README.md`、`requirements.md`、`block_diagram.md`、`design_notes.md` 和 `references.md`。
 - 项目资料统一放在 `references/` 下，datasheet 按模块放入 `references/datasheets/` 的子目录。
 - 立创商城搜索过程记录在项目 `references/lcsc_parts/lcsc_search_notes.md`。
@@ -58,13 +59,23 @@
 - 固件工程统一放在 `firmware/`。
 - 项目截图、装配照片和测试照片统一放在 `hardware/images/`。
 
-## 8. AI 协作规则
+## 8. PCB 设计与制造门禁
+
+- 需求确认阶段必须确定目标板厂，并记录板材、层数、成品板厚、铜厚、装配方式、板框和安装孔等基础 PCB 规格；尚未确认的项目必须明确标记待核对项。
+- 板厂制造极限是可制造性边界，不能直接作为项目默认设计值；设计值应结合成本、可靠性、装配和工艺波动保留合理制造裕量。
+- PCB Layout 前必须形成项目级规则基线，具体规则值、Scope、Priority、DRC 类别和配置状态统一记录在项目 `docs/pcb_design_rules.md`。
+- 用户在 Altium Designer 中配置的实际规则必须与项目规则文档一致；正式布局前必须核对规则 Scope 和 Priority，并运行初始 DRC。
+- PCB 审查和制造放行前必须由用户运行完整 Batch DRC。所有规则违规必须解决，或形成明确、合理、可追溯的规则豁免；豁免统一记录在项目规则文档和 PCB 审查记录中。
+- `.PcbDoc` 是 PCB 权威实现源文件。没有可靠解析器、脚本或自动化接口时，AI/Codex 不得声称已读取或验证其内部对象、规则、Scope、Priority、铺铜或 DRC 状态，也不得声称实际配置过 Altium 规则或运行过 Repour、DRC。
+- `projects/01_STM32_DAQ_Control_Board` 是仓库参考实现，不是可原样复制的模板。不得把该项目的器件、网络名、规则值、板框或板厂参数当作仓库默认值。
+
+## 9. AI 协作规则
 
 AI 在协助本仓库时，应先识别当前任务所属项目和阶段，再按 `docs/AI_Context_Guide.md` 读取最小必要上下文。
 
 具体 AI 行为、能力边界、Skill 路由和输出要求以 `AGENTS.md` 为准；具体读取范围以 `docs/AI_Context_Guide.md` 为准。
 
-## 9. 安全规则
+## 10. 安全规则
 
 - 电源、电池、MOSFET、ADC 输入保护、运放供电范围、参考电压等风险模块必须回到 datasheet / application note 核对。
 - 锂电池项目首次上电必须使用限流电源，禁止无人看管充电测试。
