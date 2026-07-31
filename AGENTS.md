@@ -32,6 +32,20 @@ AI/Codex 应按 `PROJECT_RULES.md` 中的渐进式硬件设计原则协作：先
 
 回答涉及开源项目参考的问题前，应按需读取当前项目的 `references.md`，以及仓库级 `references/open_source_hardware_projects.md`。参考开源项目时，只能提炼学习点、风险点和检查项，不要让用户直接照抄。如果用户要求“照着某个开源项目画”，应提醒需要结合本项目需求、器件 datasheet、封装、供电、接口和 PCB 工艺重新设计。
 
+项目结构、文件职责和事实源遵循 `docs/Project_Structure_Standard.md`；八阶段顺序和阶段门遵循 `docs/08_Project_Workflow.md`。
+
+## AI/Codex 与用户职责
+
+| 工作 | AI/Codex | 用户 |
+|---|---|---|
+| 需求和规则建议 | 协助分析、整理和记录 | 确认需求、制造基线和最终规则 |
+| 原理图连接分析 | 协助分析、核对证据和记录问题 | 在 Altium Designer 中实际绘制和修改 |
+| PCB 规则逻辑 | 协助整理规则值、Scope、Priority 和覆盖关系 | 在 Altium Designer 中实际配置并核对 |
+| PCB 布局布线建议 | 辅助视觉与证据审查、记录风险 | 实际布局、布线、换层和铺铜 |
+| Repour / DRC | 分析用户提供的结果 | 实际执行 Repour、初始 DRC 和完整 Batch DRC |
+| Gerber / Drill / 坐标 | 检查输出完整性、版本和文档一致性 | 实际导出并确认制造输出 |
+| 焊接和测量 | 生成步骤、分析数据、整理记录 | 实际焊接、上电、测量和调试 |
+
 ## 完成任务后的默认 Git 流程
 
 对需要修改仓库文件的实施类任务，用户没有明确禁止提交或推送时，AI 完成修改并通过必要验证后，应：
@@ -49,7 +63,9 @@ AI/Codex 应按 `PROJECT_RULES.md` 中的渐进式硬件设计原则协作：先
 ## 电路设计源文件与 AI 审查输入
 
 - `.SchDoc` 是 Altium 原理图的权威设计源文件，用于人工编辑、版本追踪和工程归档。
+- `.PcbDoc` 是 Altium PCB 的权威设计源文件，用于人工编辑、版本追踪和工程归档。
 - 在没有可靠 Altium 解析器、脚本或自动化接口时，AI 不得声称已经读取、解析或核对 `.SchDoc` 内部电路。
+- 在没有可靠 Altium 解析器、脚本或自动化接口时，AI 不得声称已经读取、解析或核对 `.PcbDoc` 内部对象、规则、Scope、Priority、铺铜或 DRC 状态。
 - 原理图审查的默认必需实现证据为：可追溯到当前 `.SchDoc` 版本的完整原理图 PDF，以及当前版本 BOM；BOM 至少包含位号、数量、参数或型号、PCB 封装。
 - MCU、电源芯片、接口芯片、MOSFET、二极管、连接器等关键器件应尽量包含明确的制造商型号或器件料号；普通电阻、电容、LED、测试点、排针等通用器件不强制填写具体制造商料号，可使用参数、额定值、精度和封装描述，不得为了满足格式要求虚构器件料号。
 - ERC 输出、网表、元件报告、引脚或封装映射报告和必要截图属于条件触发证据，仅在 PDF 和 BOM 无法支撑判断，或用户明确提供并要求 AI 分析时按需使用。
@@ -57,11 +73,15 @@ AI/Codex 应按 `PROJECT_RULES.md` 中的渐进式硬件设计原则协作：先
 - 这些实现证据应能追溯到对应 `.SchDoc` 版本；不能追溯时，应标记版本或证据风险。
 - `requirements.md`、`design_notes.md` 和 `docs/module_design/*.md` 记录需求与设计意图，不能单独证明 EDA 实现已经同步。
 - 审查输入不完整时，AI 必须说明能力范围和结论限制，不得将问题标记为已完全关闭。
+- PCB 图片只能支持视觉审查，不能证明网络、间距、线宽、孔径、环宽、规则命中、铺铜状态或 DRC 通过。
+- 用户负责实际 PCB 规则配置、布局布线、铺铜、Repour、DRC 和制造输出；AI/Codex 只分析用户提供的证据并维护文本与 Git。
 
 ## 禁止事项
 
 - 不要把开源项目内容直接复制成本项目设计。
 - 不要伪造已经读取、解析或核对 `.SchDoc` 内部电路。
+- 不要伪造已经读取、解析或核对 `.PcbDoc` 内部实现。
+- 不要声称运行了 Altium、Repour、ERC、Batch DRC 或制造输出导出，除非用户提供了实际结果且表述明确是用户执行。
 - 不要在没有 datasheet 依据的情况下确定关键参数。
 - 不要忽略电源、电池、MOSFET、ADC 输入保护、运放供电范围等安全风险。
 - 不要删除已有文件，除非用户明确要求。
@@ -90,6 +110,7 @@ AI 应按当前任务阶段读取对应 Skill。
 | datasheet 阅读 / 资料提取 | `skills/hardware-datasheet-reading/SKILL.md` |
 | 关键器件候选 / 外围器件反推 / BOM 草稿 | `skills/hardware-component-selection/SKILL.md` |
 | 原理图设计检查 / 画 PCB 前审查 | `skills/hardware-schematic-review/SKILL.md` |
+| PCB Layout Preflight / 布局布线辅助审查 / PCB Review / 制造放行 | `skills/hardware-pcb-layout-review/SKILL.md` |
 
 跨阶段任务可按需要读取上游 Skill，但不应默认读取全部 Skill。
 
@@ -99,7 +120,7 @@ AI 应按当前任务阶段读取对应 Skill。
 
 当用户要求新增硬件项目时，应按 `docs/AI_Context_Guide.md` 中“新增项目”任务类型读取上下文。
 
-然后在 `projects/` 下创建新的项目目录，并根据项目需求初始化：
+然后按 `docs/Project_Structure_Standard.md` 和 `docs/Project_Template_Guide.md`，在 `projects/` 下创建新的项目目录，并根据项目需求初始化：
 
 - `README.md`
 - `requirements.md`

@@ -1,70 +1,110 @@
 # AI 上下文读取指南
 
+> 文档状态：当前有效
+> 当前阶段：仓库通用规则
+> 适用对象：本仓库 AI/Codex 协作任务
+> 最后核对依据：八阶段工作流程、项目结构标准与当前 Skill 路由
+> 最近更新：2026-07-31
+
 ## 1. 文件定位
 
-本文用于规定 AI 在协助本仓库时的最小必要上下文读取规则，避免随着项目数量、Skill 数量和历史记录增加而出现上下文膨胀。
+本文规定 AI 协助本仓库时的最小必要上下文，避免随项目、Skill、checklist 和历史记录增加而无边界加载。
 
-AI 默认只读取“仓库基础规则 + 当前项目文件 + 当前阶段 Skill”，不默认读取所有项目、所有 Skill、所有模板和所有历史记录。
-
-新聊天接手仓库时，默认读取：
+新聊天接手仓库时默认读取：
 
 - `PROJECT_RULES.md`
 - `AGENTS.md`
 - `docs/AI_Context_Guide.md`
 - `README.md`
 
-`docs/08_Project_Workflow.md` 是仓库标准执行流程和阶段边界规则，只在需要判断完整流程、当前阶段、阶段权限或维护流程文档时按需读取。`prompts/硬件项目工作流程总结.md` 是面向用户的学习、复盘和任务布置参考文档，只在用户明确需要流程总结、阶段复盘或生成提示词时按需读取。
+仅在判断完整流程、当前阶段、阶段权限、回退条件或维护流程时读取 `docs/08_Project_Workflow.md`。仅在新项目初始化、旧项目迁移或模板维护时读取 `docs/Project_Structure_Standard.md`、`docs/Project_Template_Guide.md` 和模板。
 
 ## 2. 核心原则
 
-- 默认只读取当前任务所需的最小上下文。
-- 当前任务只涉及一个项目时，只读取当前项目目录下的相关文件。
-- 当前任务只涉及一个阶段时，只读取当前阶段对应 Skill。
-- 不应为了“保险”读取所有项目、所有 Skill、所有历史记录。
-- 普通任务不默认读取 `docs/08_Project_Workflow.md` 和 `prompts/硬件项目工作流程总结.md`。
-- `templates/` 只在新增项目或维护模板时读取。
-- `references/open_source_hardware_projects.md` 只在涉及开源参考、结构借鉴或用户明确要求时读取。
-- 历史审查记录、测试记录和改版记录只在继续同一问题、追踪历史问题或总结项目时读取。
-- 涉及关键硬件参数时，必须回到 datasheet、reference manual 或 application note 核对。
+- 默认只读取“仓库基础规则 + 当前项目事实文件 + 当前阶段 Skill + 当前任务证据”。
+- 一个项目任务只读取该项目相关内容；不默认加载其他项目。
+- 一个阶段任务只读取该阶段 Skill；跨阶段任务才按需读取上游 Skill。
+- 不默认加载全部 datasheet，只读取当前决策、问题或关键器件所需资料。
+- 不默认加载项目 1，也不把项目 1 的器件、网络、板框、规则值或板厂参数当作通用参数。
+- 不为“保险”读取全部历史审查、调试、测试或改版记录。
+- 涉及关键硬件参数时，回到官方 datasheet、reference manual 或 application note 核对。
+- 涉及制造能力时，使用目标板厂当前官方资料；商品页、报价和促销不能替代官方工艺能力。
+- 文档变更只更新相应事实源，不机械同步全部项目文件。
 
 ## 3. 上下文分层
 
-| 层级      | 说明          | 示例                                                        |
-| ------- | ----------- | --------------------------------------------------------- |
-| 基础上下文   | 仓库级协作规则     | `PROJECT_RULES.md`、`AGENTS.md`、`docs/AI_Context_Guide.md` |
-| 阶段上下文   | 当前任务阶段对应方法  | datasheet 阅读、器件选型、原理图审查 Skill                             |
-| 当前项目上下文 | 当前项目相关文件    | 当前项目 `requirements.md`、`design_notes.md`、`references.md`  |
-| 扩展上下文   | 只有任务明确需要时读取 | `templates/`、开源参考索引、历史记录、专项 checklist                     |
+| 层级 | 内容 | 示例 |
+|---|---|---|
+| 基础上下文 | 仓库稳定规则与读取规则 | `PROJECT_RULES.md`、`AGENTS.md`、本文 |
+| 阶段上下文 | 当前任务的执行方法 | 当前阶段 `skills/*/SKILL.md` |
+| 当前项目上下文 | 当前项目事实与设计意图 | `requirements.md`、`design_notes.md`、`references.md` |
+| 实现证据 | 支撑 EDA、DRC、制造或实测结论的输入 | PDF、BOM、图片、报告、输出、测量记录 |
+| 扩展上下文 | 条件触发资料 | 模块文档、checklist、板厂能力、历史记录、模板、开源索引 |
 
-## 4. 任务类型与读取范围
+## 4. 八阶段任务读取范围
 
-| 任务类型                | 默认读取                                                                                                              | 按需读取                                     | 不应默认读取                         |
-| ------------------- | ----------------------------------------------------------------------------------------------------------------- | ---------------------------------------- | ------------------------------ |
-| 新聊天接手仓库             | `PROJECT_RULES.md`、`AGENTS.md`、`docs/AI_Context_Guide.md`、`README.md`                                             | `docs/08_Project_Workflow.md`、`prompts/硬件项目工作流程总结.md`，仅在下方规则命中时读取 | 所有项目、所有 Skill、`templates/`、所有历史记录 |
-| 需求整理                | 基础上下文 + 当前项目 `requirements.md`                                                                                    | 当前项目 `README.md`、`block_diagram.md`      | 其他项目目录、所有 datasheet            |
-| 模块方案拆分              | 基础上下文 + 当前项目 `requirements.md`、`block_diagram.md`、`design_notes.md`                                               | 当前项目 `references.md`                     | 所有 datasheet、所有 Skill、普通外围器件资料 |
-| 关键器件候选选型            | 基础上下文 + `skills/hardware-component-selection/SKILL.md` + 当前项目 `requirements.md`、`design_notes.md`、`references.md` | datasheet Skill，仅在需要提取已下载资料时读取           | 原理图审查 Skill、其他项目、`templates/`  |
-| 关键 datasheet 阅读     | 基础上下文 + `skills/hardware-datasheet-reading/SKILL.md` + 当前项目 `requirements.md`、`references.md` + 当前模块相关 datasheet  | 当前项目 `design_notes.md`                   | 与当前模块无关的 PDF、所有项目、所有 Skill     |
-| 模块电路设计说明            | 基础上下文 + 当前项目 `requirements.md`、`design_notes.md`、`references.md` + 当前模块关键资料                                       | 器件选型 Skill / datasheet Skill             | 所有历史记录、所有外围器件资料                |
-| 外围器件反推 / BOM 草稿     | 基础上下文 + 器件选型 Skill + 当前项目 `requirements.md`、`design_notes.md`、`references.md`                                     | 当前模块 datasheet、相关 checklist              | 最终 BOM、无关模块资料                  |
-| 原理图设计               | 基础上下文 + 当前项目需求、设计说明、关键 datasheet 和候选记录                                                                            | 器件选型 Skill / datasheet Skill             | PCB 审查记录、其他项目                  |
-| 原理图审查               | 基础上下文 + `skills/hardware-schematic-review/SKILL.md` + 当前项目需求、设计说明、资料和默认必需实现证据：可追溯到当前 `.SchDoc` 版本的完整原理图 PDF、当前版本 BOM；`.SchDoc` 仅在当前环境具备可靠解析能力时作为 AI 读取输入 | datasheet Skill / 器件选型 Skill，仅在追溯依据时读取；网表、ERC 输出、元件报告、引脚或封装映射报告、局部截图仅在对应问题无法通过 PDF 和 BOM 判断，或用户明确提供并要求 AI 分析时按需读取 | 所有 Skill、所有项目、`templates/`     |
-| 原理图变更后的文档同步        | 基础上下文 + 更新后的完整原理图 PDF + 当前项目 `design_notes.md` + 与变更相关的 `module_design` 文档 + `docs/schematic_review.md`；`.SchDoc` 仅在当前环境具备可靠解析能力时作为 AI 读取输入 | 更新后的 BOM 仅在变更涉及器件新增、删除、数量、参数、型号、料号或 PCB 封装时读取；`requirements.md`，仅当功能边界或验收标准受到影响；`references.md`，仅当器件或参数依据发生变化；`docs/revision_history.md`，记录重要设计决定或硬件版本变化；datasheet Skill，仅当需要核对关键器件参数；网表、ERC 输出、元件报告、引脚或封装映射报告、局部截图仅按问题需要补充 | 其他项目、全部 Skill、全部 datasheet、无关历史记录、`templates/` |
-| PCB Layout / PCB 审查 | 基础上下文 + 当前项目原理图、PCB 相关文件和 PCB checklist                                                                           | datasheet / 原理图审查记录                      | 其他项目目录、模板目录                    |
-| 调试测试                | 基础上下文 + 当前项目 `docs/bringup_log.md` / `docs/test_report.md`                                                        | 原理图审查记录、PCB 审查记录、关键 datasheet            | 其他项目历史记录                       |
-| 新增项目                | 基础上下文 + `docs/Project_Template_Guide.md` + `templates/hardware_project_template/`                                 | `docs/08_Project_Workflow.md`            | 其他项目历史记录                       |
-| 模板维护                | 基础上下文 + `docs/Project_Template_Guide.md` + `templates/`                                                           | 一个已有项目结构作为参考                             | 所有项目内容                         |
-| README / 通用文档维护     | 基础上下文 + 被修改文档                                                                                                     | 相关 docs                                  | 当前项目硬件细节文件                     |
-| 开源项目参考分析            | 基础上下文 + `references/open_source_hardware_projects.md`                                                             | 当前项目 `references.md` / `design_notes.md` | 其他无关项目目录                       |
+| 主阶段 / 任务 | 默认读取 | 按需读取 | 不应默认读取 |
+|---|---|---|---|
+| 阶段 1：需求确认 | 基础上下文 + 当前项目 `requirements.md`、`block_diagram.md` | 项目 `README.md`、结构标准、模板指南（仅初始化/迁移） | 其他项目、全部 datasheet、全部 Skill |
+| 阶段 2：关键器件选型 | 基础上下文 + 器件选型 Skill + 当前项目 `requirements.md`、`design_notes.md`、`references.md` | 当前候选 datasheet、datasheet Skill、专项 checklist | 原理图/PCB 审查 Skill、无关器件资料 |
+| 阶段 3：模块设计与原理图绘制协作 | 基础上下文 + 当前项目需求、设计说明、资料索引、当前模块文档和关键资料 | 选型 Skill、datasheet Skill、BOM 草稿、封装资料 | 其他项目、全部历史记录 |
+| 阶段 4：原理图审查 | 基础上下文 + 原理图审查 Skill + 当前项目需求、设计说明、资料索引、完整原理图 PDF、当前 BOM、`docs/schematic_review.md` | 当前模块文档；网表、ERC、元件报告、映射报告、截图仅按具体问题触发 | 其他项目、模板、全部 Skill |
+| 阶段 5：PCB Layout Preflight / 布局审查 | 基础上下文 + PCB Skill + 当前项目 `requirements.md`、`design_notes.md`、`references.md`、`docs/pcb_design_rules.md`、当前 PCB 审查文件、当前 PCB 实现证据 | 目标板厂官方能力、关键器件 Layout 要求、原理图 PDF、BOM、机械资料、PCB 图片 | 其他项目、项目 1、全部 datasheet |
+| 阶段 6：布线和铺铜审查 | 阶段 5 默认范围 + 当前布线/铺铜证据、规则和中间 DRC 结果 | 无铺铜视图、关键模块文档、关键器件资料 | 模板、无关制造输出 |
+| 阶段 7：PCB Review / 制造放行 | PCB Skill + 当前项目事实文件、`docs/pcb_design_rules.md`、`docs/pcb_review.md`、当前 PCB 实现证据、完整 Batch DRC 结果和同版制造输出 | 目标板厂官方能力、Gerber、钻孔、坐标、装配图、BOM、制造说明、关键封装资料 | 其他项目、未关联的历史输出 |
+| 阶段 8：焊接和硬件调试 | 基础上下文 + 当前项目 `bringup_log.md`、`test_report.md`、原理图和接口说明 | PCB 审查记录、关键 datasheet、专项安全 checklist、`revision_history.md` | 其他项目历史记录、模板 |
 
-## 5. 特殊读取规则
+## 5. 常见维护任务
 
-- `docs/08_Project_Workflow.md` 只在用户询问完整流程、需要判断阶段边界或权限、新项目初始化、维护流程文档时读取。
-- `prompts/硬件项目工作流程总结.md` 只在用户要求流程总结、阶段复盘、生成提示词或学习完整流程时读取。
-- `templates/` 只在新增硬件项目、维护模板、检查模板结构或用户明确要求时读取。
-- 一个任务默认只读取当前阶段对应的一个 Skill；跨阶段任务才按需读取上游 Skill。
-- 当前任务明确属于某个项目时，只读取该项目目录下与任务相关的文件；跨项目对比、经验复用或总结所有项目时才读取其他项目。
-- 历史审查、PCB 审查、bringup、测试报告和改版记录只在追踪历史问题、继续审查、总结项目或准备简历材料时读取。
-- 原理图变更后的文档同步必须以用户在 Altium 中修改后的实现输出为依据；AI 默认通过更新后的完整原理图 PDF 核对 EDA 实现。只有当变更涉及器件新增、删除、数量、参数、型号、料号或 PCB 封装时，才要求同步提供更新后的 BOM；网表、ERC 输出、报告或截图仅在对应问题需要时补充；无可靠证据时标记“待 EDA 核对”。
-- `.SchDoc` 是权威源文件，但只有在当前环境具备可靠 Altium 解析器、脚本或自动化接口时，才能作为 AI 直接读取和核对的实现输入。
-- 文档变更只影响相关事实源，不应机械修改所有项目文档。
+| 任务 | 默认读取 | 按需读取 | 不应默认读取 |
+|---|---|---|---|
+| 新增项目 | 基础上下文 + 结构标准 + 模板指南 + 硬件项目模板 | 八阶段流程 | 其他项目历史记录 |
+| 模板维护 | 基础上下文 + 结构标准 + 模板指南 + 模板 | 一个明确的参考项目结构 | 所有项目内容、全部 datasheet |
+| 旧项目迁移 | 基础上下文 + 结构标准 + 当前项目入口与目录说明 | 当前阶段文件、八阶段流程 | 机械重写全部历史记录 |
+| README / 通用文档维护 | 基础上下文 + 被修改文档 | 与引用关系直接相关的权威文档 | 当前项目全部硬件细节 |
+| 开源项目参考分析 | 基础上下文 + 仓库开源参考索引 | 当前项目 `references.md`、需求与设计说明 | 其他无关项目 |
+| 历史问题追踪 | 基础上下文 + 当前问题所在审查/调试/测试记录 | 与该问题直接关联的证据和资料 | 全部历史输出 |
+
+## 6. PCB 任务特殊规则
+
+PCB Layout Preflight、布局审查、布线铺铜审查、PCB Review 和制造放行默认读取 `skills/hardware-pcb-layout-review/SKILL.md`。
+
+PCB 规则类任务的项目级默认范围：
+
+- 当前项目 `requirements.md`
+- 当前项目 `design_notes.md`
+- 当前项目 `references.md`
+- 当前项目 `docs/pcb_design_rules.md`
+- 当前 PCB 审查文件
+- 当前 PCB 实现证据
+
+条件触发：
+
+- 目标板厂官方能力：制造基线、设计规则、制造规则或下单核对任务；
+- 相关关键器件 PCB Layout 要求：布局、布线、散热、回流或专项规则依赖器件要求时；
+- 原理图 PDF 与 BOM：问题涉及网络、封装、极性、接口或原理图审查追溯时；
+- DRC 报告或截图：分析实际违规、Scope、Priority、Repour 或制造门禁时；
+- Gerber、钻孔、坐标和装配输出：制造放行时。
+
+不因一般 PCB 视觉审查自动浏览板厂资料；只有判断制造能力、规则值、裕量或下单参数时才读取目标板厂官方能力。
+
+## 7. Altium 与证据边界
+
+- `.SchDoc` 与 `.PcbDoc` 是权威实现源文件，但只有当前环境具备可靠解析器、脚本或自动化接口时，AI 才能直接读取相应内部对象。
+- 无可靠 `.SchDoc` 解析能力时，原理图审查默认使用可追溯的完整原理图 PDF 和当前 BOM。
+- 无可靠 `.PcbDoc` 解析能力时，只使用用户提供的 PCB 图片、规则摘要、DRC 结果、报告、截图和制造输出等实现证据。
+- PCB 图片只能支持视觉审查，不能证明网络、间距、线宽、孔径、环宽、规则命中、铺铜状态或 DRC 通过。
+- AI 只有在用户提供 ERC 或 DRC 结果时才分析实际结果，不得声称自行运行 Altium、Repour、ERC 或 Batch DRC。
+- 无法由现有证据确认的实现事项，标记“待 EDA 核对”，不得据此关闭问题或制造放行。
+
+## 8. 完整流程读取规则
+
+仅在以下情况读取完整 `docs/08_Project_Workflow.md`：
+
+- 判断项目处于哪个主阶段；
+- 判断进入、退出、回退或阶段权限；
+- 执行新项目初始化或旧项目迁移；
+- 维护流程、结构、模板或跨阶段门禁；
+- 用户明确要求完整流程说明。
+
+普通 datasheet 阅读、单次器件选型、单次原理图审查、单次 PCB 审查、调试记录或小幅文档维护不默认读取完整流程。
