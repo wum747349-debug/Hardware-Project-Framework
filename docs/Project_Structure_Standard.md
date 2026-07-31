@@ -111,7 +111,7 @@ projects/XX_Project_Name/
 | `docs/module_design/*.md` | 某模块进入详细电路设计、参数反推或专项布局要求整理时 |
 | `docs/schematic_review.md` | 开始正式原理图审查时 |
 | `docs/pcb_design_rules.md` | PCB Layout Preflight 前，形成项目级 PCB 规则基线时 |
-| `docs/pcb_review.md` | 开始 PCB 布局、布线或制造放行审查记录时 |
+| `docs/pcb_review.md` | 阶段 5 可创建或启用，先记录 Layout Preflight 结论，后续渐进维护 |
 | `docs/bringup_log.md` | 准备焊接检查或首次上电时 |
 | `docs/test_report.md` | 开始正式功能、性能或边界测试时 |
 | `docs/revision_history.md` | 确立首个硬件版本或发生重要设计变更时 |
@@ -156,7 +156,7 @@ projects/XX_Project_Name/
 | `docs/module_design/*.md` | 保存单个模块的连接、计算、器件依据、风险和专项布局要求 |
 | `docs/schematic_review.md` | 保存实际原理图问题、证据、状态和进入 PCB Layout 的结论 |
 | `docs/pcb_design_rules.md` | 保存本项目具体 PCB 规则值、Scope、Priority、DRC 类别、配置状态和规则豁免 |
-| `docs/pcb_review.md` | 保存实际 PCB 问题、证据、关闭状态、DRC 结果引用和制造门禁结论 |
+| `docs/pcb_review.md` | 渐进保存阶段 5～7 的 Preflight 结论、重要布局布线问题、Release Review、用户 Batch DRC 摘要、豁免引用和制造放行结论 |
 | `docs/bringup_log.md` | 保存焊接检查、首次上电、测量数据、现象和调试过程 |
 | `docs/test_report.md` | 保存测试条件、预期、实测结果、偏差和验收结论 |
 | `docs/revision_history.md` | 保存硬件版本、重要改版原因、影响范围和复验要求 |
@@ -201,6 +201,16 @@ projects/XX_Project_Name/
 - 不把图片、PDF 或文字设计意图当作 `.SchDoc` / `.PcbDoc` 内部实现已经同步的证明。
 
 规则文件描述“应该是什么”，审查记录描述“实际是否做到”。
+
+### 6.3 `pcb_review.md` 渐进记录规则
+
+项目只维护一个 `docs/pcb_review.md`，不另建 `pcb_layout_notes.md`、`pcb_routing_review.md` 或 `drc_report.md`：
+
+- 阶段 5 可以创建或启用，只填写审查对象、Layout Preflight 结论和阻断项；
+- 阶段 6 记录需要跨回合追踪的重要布局和布线问题及其状态；
+- 阶段 7 填写 PCB Release Review 问题、用户提供的 Batch DRC 摘要、规则豁免引用、制造输出检查和制造放行结论。
+
+文件在阶段 5 创建不表示 PCB 审查或制造放行已完成。Batch DRC 摘要可以来自用户对话；默认不要求另建报告文件。
 
 ## 7. 标准文档状态头
 

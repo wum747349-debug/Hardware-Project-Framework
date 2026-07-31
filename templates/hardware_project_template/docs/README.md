@@ -11,10 +11,12 @@
 | `module_design/` | 模块连接、计算、器件依据和专项布局要求 | 阶段 3 | 未启用 |
 | `schematic_review.md` | 实际原理图问题、证据和阶段结论 | 阶段 4 | 未启用 |
 | `pcb_design_rules.md` | 项目具体 PCB 规则、Scope、Priority 与配置状态 | 阶段 5 前 | 未启用 |
-| `pcb_review.md` | 实际 PCB 问题、DRC、豁免和制造门禁 | 阶段 5 至 7 | 未启用 |
+| `pcb_review.md` | 渐进记录 Preflight、布局布线问题、Batch DRC 摘要、豁免与制造放行 | 阶段 5 可启用，持续到阶段 7 | 未启用 |
 | `bringup_log.md` | 焊接检查、首次上电和调试原始记录 | 阶段 8 | 未启用 |
 | `test_report.md` | 测试条件、结果和验收结论 | 阶段 8 | 未启用 |
 | `revision_history.md` | 硬件版本和重要改版原因 | 首个版本或重要变更 | 未启用 |
 | `user/` | 面向使用者的接口、接线和安全说明 | 按需 | 未启用 |
 
 文件存在不表示阶段已完成；启用后更新各文件状态、依据和适用版本。当前项目阶段只在项目根 `README.md` 维护。
+
+`pcb_review.md` 在阶段 5 只记录 Layout Preflight，阶段 6 追加重要布局布线问题，阶段 7 再完成 Release Review、Batch DRC 和制造放行；不得因文件已创建而把后续审查标记为完成。

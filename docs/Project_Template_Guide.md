@@ -177,12 +177,22 @@ XX_Project_Name
 - 在模块进入连接、计算和专项布局设计时创建对应模块文档。
 - 在首次正式原理图审查时启用原理图审查记录。
 - 在 PCB Layout Preflight 前必须完成项目 PCB 规则文档。
-- 在首次布局/布线审查时启用 PCB 审查记录。
+- 阶段 5 可启用 PCB 审查记录并只填写 Layout Preflight 结论；阶段 6、7 在同一文件中渐进补充。
 - 在准备焊接和首次上电时启用 bringup 记录。
 - 在开始正式测试时启用测试报告。
 - 在确定首个硬件版本或出现重要变更时启用改版记录。
 
 不要为了目录整齐而一次性填写所有阶段结果。
+
+### 9.1 渐进填写 `pcb_review.md`
+
+只使用一个 `docs/pcb_review.md` 覆盖阶段 5～7：
+
+- 阶段 5：填写审查对象、Layout Preflight 结论和阻断项；
+- 阶段 6：记录重要布局和布线问题，不要求归档中间 DRC；
+- 阶段 7：填写 Release Review 问题、用户 Batch DRC 摘要、豁免引用、制造输出检查和放行结论。
+
+不要新增 `pcb_layout_notes.md`、`pcb_routing_review.md` 或 `drc_report.md`。文件提前创建不代表 PCB 审查已经完成。
 
 ## 10. 填写 PCB 规则模板
 
