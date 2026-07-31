@@ -16,7 +16,7 @@
 - 模拟前端；
 - 通信接口扩展板。
 
-模板提供目录、状态头、事实源入口、阶段文档和输出目录说明，不提供任何项目的器件、网络、板框、线宽、孔径或板厂下单默认值。
+模板提供必要目录、状态头、事实源入口、阶段文档和父目录说明；按需输出与图片子目录在实际产生内容时创建。模板不提供任何项目的器件、网络、板框、线宽、孔径或板厂下单默认值。
 
 ## 2. 不直接适用的复杂项目
 
@@ -123,6 +123,8 @@ XX_Project_Name
 ### 按需目录
 
 - `docs/user/`
+- `hardware/outputs/schematic_pdf/`
+- `hardware/outputs/bom/`
 - `hardware/outputs/netlist/`
 - `hardware/outputs/erc/`
 - `hardware/outputs/component_reports/`
@@ -132,9 +134,12 @@ XX_Project_Name
 - `hardware/outputs/pick_place/`
 - `hardware/outputs/fabrication_package/`
 - `hardware/images/pcb/`
+- `hardware/images/assembly/`
+- `hardware/images/bringup/`
+- `hardware/images/test/`
 - 按模块创建的 `references/datasheets/<module>/`
 
-目录存在不表示输出已经生成。
+这些标准路径不在模板中全部预建；进入相应阶段并实际产生内容时再创建。目录存在不表示输出已经生成，父目录 `README.md` 统一说明用途和启用时机。
 
 ## 8. 文档状态头
 

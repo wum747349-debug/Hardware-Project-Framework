@@ -74,7 +74,7 @@ projects/XX_Project_Name/
    └─ lcsc_parts/
 ```
 
-目录树表示标准位置，不表示初始化时必须填写全部阶段文档，也不表示空输出目录已经产生对应输出。
+目录树表示标准路径，不表示模板会预建全部子目录，也不表示空输出目录已经产生对应输出。
 
 ## 4. 文件启用级别
 
@@ -96,6 +96,8 @@ projects/XX_Project_Name/
 - `hardware/images/`；
 - `references/datasheets/`；
 - `references/lcsc_parts/`。
+
+模板只预建上述入口文件和父目录说明。`hardware/outputs/`、`hardware/images/` 等父目录通过各自 `README.md` 说明按需子目录，不预建尚未产生内容的输出或图片分类目录。
 
 这些文件可以处于“草稿”或“待确认”状态，但必须说明用途、当前事实边界和待补信息。不得为了满足初始化格式而虚构器件、参数、规则或验证结果。
 
@@ -121,6 +123,8 @@ projects/XX_Project_Name/
 以下内容仅在项目实际需要时创建：
 
 - `docs/user/`：面向使用者的接口说明、快速开始、接线说明和安全提示；
+- `hardware/outputs/schematic_pdf/`：用户实际导出可追溯原理图 PDF 时；
+- `hardware/outputs/bom/`：用户实际导出 BOM 时；
 - `hardware/outputs/netlist/`：需要网表核对或归档时；
 - `hardware/outputs/erc/`：用户实际导出 ERC、Messages 或相关证据时；
 - `hardware/outputs/component_reports/`：需要补充元件属性证据时；
@@ -130,10 +134,13 @@ projects/XX_Project_Name/
 - `hardware/outputs/pick_place/`：需要 SMT 装配且用户实际导出坐标时；
 - `hardware/outputs/fabrication_package/`：制造放行后整理同版制造归档包时；
 - `hardware/images/pcb/`：需要视觉审查、机械沟通或项目展示时；
+- `hardware/images/assembly/`：需要记录装配过程或结果时；
+- `hardware/images/bringup/`：需要记录上电调试现象时；
+- `hardware/images/test/`：需要记录测试环境、波形或结果时；
 - `references/datasheets/<module>/`：当前决策需要读取相应模块资料时；
 - `references/lcsc_parts/`：使用立创商城进行候选搜索和采购记录时。
 
-按需目录可以不存在。需要保留空目录时，优先放置说明性 `README.md`；只有没有说明内容时才使用 `.gitkeep`。
+按需目录默认不存在，在进入相应阶段并实际产生内容时创建。低信息量子目录不单独放置 README；说明统一维护在父目录 `README.md`。只有子目录确有独立使用规则时才增加说明文件。
 
 ## 5. 文件唯一职责
 
