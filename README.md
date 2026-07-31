@@ -4,6 +4,35 @@
 
 本仓库不仅用于当前三个硬件实战项目，也可作为后续低压嵌入式硬件项目的模板工作区。
 
+## 八阶段项目流程
+
+本仓库统一采用八个硬件主阶段：
+
+1. 需求确认阶段
+2. 关键器件选型阶段
+3. 原理图模块设计和绘制阶段
+4. 原理图审查阶段
+5. PCB 布局阶段
+6. 布线和铺铜阶段
+7. PCB 审查阶段
+8. 焊接和硬件调试阶段
+
+datasheet 阅读、外围参数反推、BOM 草稿、制造输出、测试报告和改版记录属于相应阶段内活动，不再作为独立顶层阶段。
+
+## 仓库工作入口
+
+- [仓库通用规则](PROJECT_RULES.md)
+- [项目结构标准](docs/Project_Structure_Standard.md)
+- [八阶段工作流程](docs/08_Project_Workflow.md)
+- [AI 最小上下文指南](docs/AI_Context_Guide.md)
+- [项目模板使用指南](docs/Project_Template_Guide.md)
+- [硬件项目模板](templates/hardware_project_template/README.md)
+- [PCB Layout / Review Skill](skills/hardware-pcb-layout-review/SKILL.md)
+- [PCB Layout Preflight Checklist](checklists/pcb_layout_preflight_checklist.md)
+- [PCB Release Checklist](checklists/pcb_release_checklist.md)
+
+项目 1 是仓库参考实现，不是可原样复制的模板。新项目必须根据自己的需求、器件资料、封装、目标板厂、装配方式和实际 EDA 实现重新确认。
+
 ## 当前项目列表
 
 1. STM32 数据采集/控制开发板
@@ -38,16 +67,17 @@
 ## 仓库结构
 
 - `docs/`：通用项目路线、工具链、设计规范和调试模板
-- `docs/08_Project_Workflow.md`：仓库标准执行流程和 AI/Codex 阶段边界规则，用于判断各阶段输入输出、是否需要 datasheet、是否允许生成 BOM 或画原理图
+- `docs/Project_Structure_Standard.md`：项目目录、文件职责、事实源、命名、版本和迁移标准
+- `docs/08_Project_Workflow.md`：八阶段顺序、职责、进入/退出条件和阶段门
 - `docs/AI_Context_Guide.md`：AI 最小必要上下文读取规则，用于限制不同任务下应读取的项目文件、Skill、流程文档、模板和历史记录
+- `docs/Project_Template_Guide.md`：硬件项目模板使用、初始化验收和旧项目迁移说明
 - `references/`：数据手册、应用笔记、开源项目和学习资料索引
 - `references/open_source_hardware_projects.md`：开源硬件参考项目索引，只用于记录结构、设计思路、文档组织和输出文件组织方式
 - `common/`：通用模板、复用电路和测试工具说明
 - `projects/`：当前硬件实战项目及后续新增项目
 - `projects/*/references.md`：每个项目的官方资料、开源参考项目、需要提取的学习点和不可照抄内容
 - `skills/`：硬件项目阶段 Skill，只保存阶段方法、输入输出格式和关键风险提醒；细化检查项优先放入 `checklists/`
-- `templates/`：可复用硬件项目模板，后续新增项目时可复制使用
-- `docs/Project_Template_Guide.md`：硬件项目模板使用说明和新增项目流程
+- `templates/`：可复用硬件项目模板，后续新增项目时按模板指南复制使用
 - `checklists/`：原理图、PCB、上电、发布检查表
 - `prompts/`：面向用户的 AI 协作说明、硬件项目流程学习/复盘总结和可复制的 AI 任务提示词模板，不作为 AI 普通任务默认上下文
 
