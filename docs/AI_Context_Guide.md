@@ -9,12 +9,14 @@
 
 本文规定 AI 协助本仓库时的最小必要上下文，避免随项目、Skill、checklist 和历史记录增加而无边界加载。
 
-新聊天接手仓库时默认读取：
+仓库接手、仓库整体介绍、项目选择或项目优先级判断时读取：
 
 - `PROJECT_RULES.md`
 - `AGENTS.md`
 - `docs/AI_Context_Guide.md`
 - `README.md`
+
+用户已经明确当前项目和具体任务时，仓库级基础上下文仍为 `PROJECT_RULES.md`、`AGENTS.md` 和本文，但不默认读取仓库根 `README.md`；改为按任务读取当前项目根 `README.md`、当前阶段 Skill、项目事实文件和证据。
 
 仅在判断完整流程、当前阶段、阶段权限、回退条件或维护流程时读取 `docs/08_Project_Workflow.md`。仅在新项目初始化、旧项目迁移或模板维护时读取 `docs/Project_Structure_Standard.md`、`docs/Project_Template_Guide.md` 和模板。
 
@@ -48,9 +50,9 @@
 | 阶段 2：关键器件选型 | 基础上下文 + 器件选型 Skill + 当前项目 `requirements.md`、`design_notes.md`、`references.md` | 当前候选 datasheet、datasheet Skill、专项 checklist | 原理图/PCB 审查 Skill、无关器件资料 |
 | 阶段 3：模块设计与原理图绘制协作 | 基础上下文 + 当前项目需求、设计说明、资料索引、当前模块文档和关键资料 | 选型 Skill、datasheet Skill、BOM 草稿、封装资料 | 其他项目、全部历史记录 |
 | 阶段 4：原理图审查 | 基础上下文 + 原理图审查 Skill + 当前项目需求、设计说明、资料索引、完整原理图 PDF、当前 BOM、`docs/schematic_review.md` | 当前模块文档；网表、ERC、元件报告、映射报告、截图仅按具体问题触发 | 其他项目、模板、全部 Skill |
-| 阶段 5：Layout Preflight | 基础上下文 + PCB Skill + 当前项目 `README.md`、`requirements.md`、`design_notes.md`、`references.md`、`docs/schematic_review.md`、`docs/pcb_design_rules.md` 和关键器件 Layout 资料 | 原理图 PDF、BOM、模块文档、目标板厂官方能力、机械约束 | `docs/pcb_review.md`、DRC 报告、制造输出、其他项目 |
-| 阶段 5～6：Layout / Routing Review | 基础上下文 + PCB Skill + 当前项目 `README.md`、`requirements.md`、`design_notes.md`、`docs/pcb_design_rules.md` 和当前 PCB 图片/实现证据 | 相关模块文档、关键 datasheet、`docs/schematic_review.md`；继续已有问题时读取 `docs/pcb_review.md` | 全部 `references/`、全部 datasheet、完整流程、Release Checklist、制造输出、DRC 结果 |
-| 阶段 7：PCB Release Review | 基础上下文 + PCB Skill + 当前项目 `README.md`、`requirements.md`、`docs/pcb_design_rules.md`、`docs/pcb_review.md`、当前 PCB 实现证据、当前 BOM、用户对话中的完整 Batch DRC 结果、制造输出清单/实际输出和 Release Checklist | 目标板厂官方能力、Gerber、Drill、Pick and Place、装配图、制造说明、局部截图 | 其他项目、未关联的历史输出、全部 datasheet |
+| 阶段 5：Layout Preflight | 基础上下文 + PCB Skill；具体范围见本文“PCB 三种模式最小上下文” | 按该章节的 Layout Preflight 条件触发 | 按该章节的 Layout Preflight 禁止读取范围 |
+| 阶段 5～6：Layout / Routing Review | 基础上下文 + PCB Skill；具体范围见本文“PCB 三种模式最小上下文” | 按该章节的 Layout / Routing Review 条件触发 | 按该章节的 Layout / Routing Review 禁止读取范围 |
+| 阶段 7：PCB Release Review | 基础上下文 + PCB Skill；具体范围见本文“PCB 三种模式最小上下文” | 按该章节的 PCB Release Review 条件触发 | 按该章节的 PCB Release Review 禁止读取范围 |
 | 阶段 8：焊接和硬件调试 | 基础上下文 + 当前项目 `bringup_log.md`、`test_report.md`、原理图和接口说明 | PCB 审查记录、关键 datasheet、专项安全 checklist、`revision_history.md` | 其他项目历史记录、模板 |
 
 ## 5. 常见维护任务

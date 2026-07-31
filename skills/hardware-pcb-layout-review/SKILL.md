@@ -35,48 +35,11 @@ description: Review low-voltage embedded PCB readiness, layout, routing, copper,
 
 ## 3. 最小上下文
 
-所有模式先读取 `PROJECT_RULES.md`、`AGENTS.md`、`docs/AI_Context_Guide.md` 和本 Skill，然后按模式补充当前项目内容。不得默认加载其他项目、全部 datasheet、全部 Skill 或全部历史输出。
+三种模式的默认、按需和禁止读取范围以 `docs/AI_Context_Guide.md` 的“PCB 三种模式最小上下文”为准；本 Skill 不重复维护文件清单。
 
-三种模式都默认读取当前项目根 `README.md`，只用于确认项目身份、当前项目阶段、当前硬件版本、当前入口和下一步摘要。项目 README 不替代 `requirements.md`、`design_notes.md`、`docs/pcb_design_rules.md` 或 `docs/pcb_review.md` 的事实职责。
+三种模式均读取当前项目根 `README.md`，仅用于确认项目身份、当前项目阶段、当前硬件版本、当前入口和下一步摘要。项目 README 不替代 `requirements.md`、`design_notes.md`、`docs/pcb_design_rules.md` 或 `docs/pcb_review.md` 的事实职责。
 
-### 模式 A：Layout Preflight
-
-默认读取：
-
-- 当前项目 `README.md`；
-- 当前项目 `requirements.md`、`design_notes.md`、`references.md`；
-- 当前项目 `docs/schematic_review.md`；
-- 当前项目 `docs/pcb_design_rules.md`，不存在时协助创建；
-- 与当前关键器件直接相关的 Layout 资料。
-
-按需读取：完整原理图 PDF、当前 BOM、相关模块文档、目标板厂官方能力和机械约束。
-
-默认不要求：`docs/pcb_review.md`、DRC 报告、制造输出或其他项目。
-
-### 模式 B：Layout / Routing Review
-
-默认读取：
-
-- 当前项目 `README.md`；
-- 当前项目 `requirements.md`、`design_notes.md`、`docs/pcb_design_rules.md`；
-- 当前 PCB 图片或用户提供的其他实现证据。
-
-按需读取：相关模块文档、关键 datasheet、`docs/schematic_review.md`；继续已有 PCB 问题时读取 `docs/pcb_review.md`。
-
-默认不要求：DRC 结果、全部 `references/`、全部 datasheet、完整流程、Release Checklist 或制造输出。
-
-### 模式 C：PCB Release Review
-
-默认读取：
-
-- 当前项目 `README.md`；
-- 当前项目 `requirements.md`、`docs/pcb_design_rules.md`、`docs/pcb_review.md`；
-- 当前 PCB 实现证据和当前 BOM；
-- 用户在对话中提供的完整 Batch DRC 结果；
-- 制造输出清单或待放行的实际输出；
-- PCB Release Checklist。
-
-按需读取：Gerber、Drill、Pick and Place、装配图、制造说明和具体问题的局部截图。
+执行时仍按第 2 节选择 Layout Preflight、Layout / Routing Review 或 PCB Release Review，并按下文对应方法、证据边界和 checklist 完成审查。
 
 ## 4. 能力与证据边界
 

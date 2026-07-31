@@ -5,267 +5,95 @@
 > 适用对象：新项目初始化、模板维护与旧项目迁移
 > 最后核对依据：项目结构标准、八阶段流程和当前硬件项目模板
 
-## 1. 模板适用范围
+## 1. 定位与适用范围
 
-`templates/hardware_project_template/` 默认适用于：
+`templates/hardware_project_template/` 用于初始化低压嵌入式、MCU 控制、传感器采集、电源管理、模拟前端和通信接口扩展项目。它提供项目事实入口、父目录说明和阶段文档模板，不提供任何项目的器件、网络、板框、规则值或板厂参数。
 
-- 低压嵌入式硬件；
-- MCU 控制板；
-- 传感器采集板；
-- 电源管理板；
-- 模拟前端；
-- 通信接口扩展板。
+高压、射频、高速数字、隔离电源、汽车、医疗、安规或特殊制造项目只能复用基础结构，必须另补专项 Skill、checklist、标准依据和相应审查能力。
 
-模板预建项目事实入口、父目录说明和阶段文件空模板；按需输出目录、图片分类目录及其低信息量 README 不预建，在实际产生内容时创建。模板不提供任何项目的器件、网络、板框、线宽、孔径或板厂下单默认值。
+权威规则分别见：
 
-## 2. 不直接适用的复杂项目
-
-以下项目可复用基础目录，但不能仅凭本模板完成设计和放行：
-
-- 高压；
-- 射频；
-- 高速数字与复杂受控阻抗；
-- 隔离电源；
-- 汽车电子；
-- 医疗电子；
-- 安规认证；
-- HDI、刚挠结合或其他特殊制造工艺。
-
-这些项目必须增加专项 Skill、checklist、标准依据和具备相应能力的审查。
-
-## 3. 权威文档
-
-- 项目目录、文件职责、命名和迁移：`docs/Project_Structure_Standard.md`
+- 项目结构、文件职责、状态头和迁移原则：`docs/Project_Structure_Standard.md`
 - 八阶段顺序、阶段门和职责：`docs/08_Project_Workflow.md`
-- AI 最小读取范围：`docs/AI_Context_Guide.md`
-- 仓库稳定原则：`PROJECT_RULES.md`
-- PCB 执行方法：`skills/hardware-pcb-layout-review/SKILL.md`
-- PCB Layout 前置清单：`checklists/pcb_layout_preflight_checklist.md`
-- PCB 制造放行清单：`checklists/pcb_release_checklist.md`
+- AI 默认、按需和禁止读取范围：`docs/AI_Context_Guide.md`
+- 仓库稳定原则和安全边界：`PROJECT_RULES.md`
 
-本指南只说明模板操作，不复制上述规则正文。
+## 2. 从模板创建项目
 
-## 4. 从模板创建项目
+1. 确认项目属于模板适用范围；复杂项目先确定专项方法和检查项。
+2. 在 `projects/` 下确定下一个稳定编号，目录命名为 `XX_Project_Name`。
+3. 复制 `templates/hardware_project_template/` 到新项目目录。
+4. 替换项目名称、当前项目阶段、当前硬件版本及所有模板占位符。
+5. 按第 4 节顺序填写初始事实文件。
+6. 在 `docs/README.md` 标记阶段文档的启用状态，不重复维护当前项目阶段。
+7. 检查相对链接、占位符、目录命名和 Git diff。
 
-1. 确认项目适用范围；复杂项目先补专项方法和检查项。
-2. 在 `projects/` 下确定下一个稳定编号。
-3. 将 `templates/hardware_project_template/` 复制为 `projects/XX_Project_Name/`。
-4. 将项目根 `README.md` 标题、当前项目阶段和当前硬件版本占位符替换为项目实际信息。
-5. 填写 `requirements.md` 的目标、第一版边界、验收边界和待确认制造基线。
-6. 更新 `block_diagram.md`、`design_notes.md` 和 `references.md` 的初始内容。
-7. 在 `docs/README.md` 标记各阶段文件为“未启用”“草稿”“当前有效”或“历史归档”，不在其中重复维护当前项目阶段。
-8. 检查模板内链接、占位符和项目目录命名。
-9. 只提交本次新项目文件，不把缓存、日志、二进制临时文件或其他项目改动混入提交。
+复制模板只代表项目框架已初始化，不表示需求、选型、原理图、PCB、DRC 或制造已经完成。
 
-复制模板只完成项目初始化，不表示需求、选型、原理图、PCB、DRC 或制造已经完成。
+## 3. 必须替换的占位符
 
-## 5. 项目命名
+- 项目名称和目录编号；
+- 项目根 README 的标题、唯一 `> 当前项目阶段：` 和当前硬件版本；
+- 状态头中的适用对象、依据和草稿状态；
+- 需求目标、不做内容、验收边界和待确认制造基线；
+- 框图、整板设计意图、Pin Map、接口和资料索引占位；
+- 所有 `<...>`、`待填写` 或示例性文本。
 
-项目目录使用：
+不得为消除占位符而虚构器件、参数、规则、EDA、DRC、制造或实测结果。
 
-```text
-XX_Project_Name
-```
+## 4. 初始化填写顺序
 
-- `XX`：两位稳定顺序号；
-- `Project_Name`：英文单词和下划线组成的功能名称；
-- 不用临时器件型号绑定目录名；
-- 公开引用后不因优先级变化重排编号。
+1. `README.md`：项目身份、范围、阶段、版本、导航和下一步摘要。
+2. `requirements.md`：第一版目标、不做内容、验收边界、安全与制造待确认项。
+3. `block_diagram.md`：模块、能量流、信号流和边界。
+4. `design_notes.md`：整板架构、初始 Pin Map、接口和跨模块约定。
+5. `references.md`：资料来源、用途、状态和待核对项。
+6. `docs/README.md`、`hardware/README.md`、`firmware/README.md`：各目录导航与边界。
 
-示例只说明格式：
+具体文件职责和状态头定义以 `docs/Project_Structure_Standard.md` 为准。
 
-```text
-04_Sensor_Interface_Board
-```
+## 5. 阶段文档启用
 
-## 6. 八阶段工作方式
+- 关键器件比较时启用 `docs/component_selection_plan.md`。
+- 模块进入连接、计算或专项布局设计时启用 `docs/module_design/*.md`。
+- 正式原理图审查时启用 `docs/schematic_review.md`。
+- Layout Preflight 前完成 `docs/pcb_design_rules.md`。
+- 阶段 5 可启用唯一的 `docs/pcb_review.md`，阶段 6、7 在同一文件中渐进维护。
+- 准备焊接和首次上电时启用 `docs/bringup_log.md`。
+- 正式测试时启用 `docs/test_report.md`。
+- 确立首个硬件版本或发生重要改版时启用 `docs/revision_history.md`。
 
-| 阶段 | 主阶段 | 主要启用文件 |
-|---|---|---|
-| 1 | 需求确认阶段 | `requirements.md`、`block_diagram.md`、`design_notes.md` |
-| 2 | 关键器件选型阶段 | `docs/component_selection_plan.md`、`references.md` |
-| 3 | 原理图模块设计和绘制阶段 | `docs/module_design/*.md`、BOM 草稿、原理图输出 |
-| 4 | 原理图审查阶段 | `docs/schematic_review.md` |
-| 5 | PCB 布局阶段 | `docs/pcb_design_rules.md`、Layout Preflight |
-| 6 | 布线和铺铜阶段 | 当前 PCB 实现证据、重要布局布线问题记录 |
-| 7 | PCB 审查阶段 | `docs/pcb_review.md`、Batch DRC、制造输出 |
-| 8 | 焊接和硬件调试阶段 | `docs/bringup_log.md`、`docs/test_report.md`、`docs/revision_history.md` |
+文件可提前存在，但不能以“文件存在”代替阶段完成。完整阶段门和 PCB 阶段规则以 `docs/08_Project_Workflow.md` 为准。
 
-完整进入、退出和回退条件以八阶段流程为准。
+## 6. 初始化验收清单
 
-## 7. 必需、阶段性和可选内容
+- [ ] 目录名符合 `XX_Project_Name`，公开引用后不因优先级变化重编号。
+- [ ] 项目结构标准要求的初始化文件和父目录齐全。
+- [ ] 项目根 README 只有一个当前阶段字段，其他文档不维护当前阶段。
+- [ ] 核心文档状态头和占位符已按真实信息处理。
+- [ ] README 能导航到项目事实入口。
+- [ ] 目标、不做内容、验收边界和制造待确认项已记录。
+- [ ] 阶段文件未误标为已完成，空输出目录未描述为已有输出。
+- [ ] 未复制其他项目的器件、网络、尺寸、规则或审查状态。
+- [ ] Markdown 相对链接、`git diff --check` 和仓库验证脚本通过。
 
-### 创建时必需
+## 7. 旧项目迁移
 
-- 项目根五个事实入口：`README.md`、`requirements.md`、`block_diagram.md`、`design_notes.md`、`references.md`；
-- `docs/README.md`；
-- `hardware/README.md`；
-- `firmware/README.md`；
-- 标准目录说明文件。
+1. 先盘点现有文件，按结构标准确定每类事实的权威源。
+2. 优先补齐项目入口、状态头、`docs/README.md` 和 `hardware/README.md`。
+3. 将重复事实收敛到主事实源，保留有追溯价值的历史记录并改为明确历史语境。
+4. 只在项目进入相关阶段时补齐阶段文档和按需目录，不机械重写全部历史。
+5. 文件移动或重命名前搜索仓库引用并修复链接。
+6. 不为满足模板外观移动、解析或改写 Altium 二进制源文件。
+7. 迁移后检查链接、职责重复、版本字段和实现证据追溯关系。
 
-这些文件可以是草稿，但不得虚构事实。
+## 8. Git 注意事项
 
-### 阶段性文件
+- 修改前检查工作区，保留用户已有修改和未跟踪硬件资料。
+- 只显式暂存本次创建或迁移涉及的文件，禁止 `git add .` 和 `git add -A`。
+- 提交前检查暂存 diff，避免缓存、日志、临时输出、敏感信息和其他项目改动混入。
+- 文件重命名、删除或迁移必须先确认有价值内容已保留且链接已同步。
 
-进入相应阶段时启用：
+## 9. AI 最小上下文
 
-- `docs/component_selection_plan.md`
-- `docs/module_design/*.md`
-- `docs/schematic_review.md`
-- `docs/pcb_design_rules.md`
-- `docs/pcb_review.md`
-- `docs/bringup_log.md`
-- `docs/test_report.md`
-- `docs/revision_history.md`
-
-文件可以提前存在；只有状态头、内容和阶段门满足时才表示已启用或完成。
-
-### 按需目录
-
-- `docs/user/`
-- `hardware/outputs/schematic_pdf/`
-- `hardware/outputs/bom/`
-- `hardware/outputs/netlist/`
-- `hardware/outputs/erc/`
-- `hardware/outputs/component_reports/`
-- `hardware/outputs/footprint_reports/`
-- `hardware/outputs/gerber/`
-- `hardware/outputs/drill/`
-- `hardware/outputs/pick_place/`
-- `hardware/outputs/fabrication_package/`
-- `hardware/images/pcb/`
-- `hardware/images/assembly/`
-- `hardware/images/bringup/`
-- `hardware/images/test/`
-- 按模块创建的 `references/datasheets/<module>/`
-
-这些标准路径不在模板中全部预建；进入相应阶段并实际产生内容时再创建。目录存在不表示输出已经生成，父目录 `README.md` 统一说明用途和启用时机。
-
-## 8. 文档状态头
-
-项目根 `README.md` 是当前项目阶段的唯一主事实源，建议使用：
-
-```text
-> 文档状态：<草稿 / 当前有效 / 历史归档>
-> 当前项目阶段：<八阶段名称>
-> 当前硬件版本：<版本>
-> 最后核对依据：<文件、证据或待填写>
-```
-
-其他项目文档使用：
-
-```text
-> 文档状态：<草稿 / 待核对 / 当前有效 / 历史归档>
-> 适用阶段：<一个或多个八阶段名称>
-> 适用对象：<项目名称与硬件版本>
-> 最后核对依据：<文件、资料、证据或待填写>
-```
-
-使用规则：
-
-- 初始化时使用“草稿”，不要直接标记“当前有效”；
-- 关键依据不足时使用“待核对”；
-- 只有在所列依据与适用版本范围内有效时使用“当前有效”；
-- 历史记录保留为“历史归档”，不要伪装成当前事实；
-- `docs/README.md` 只维护职责、启用时机和导航，不重复项目根 README 的当前阶段；
-- 审查、测试或调试日期写在正文，不维护统一的“最近更新”字段；
-- 状态头不能替代 EDA、DRC、制造或实测证据。
-
-项目事实文件、阶段文档、项目根 `README.md`、`docs/README.md`、`hardware/README.md` 和 `firmware/README.md` 应使用对应的标准状态头。仅用于目录占位和固定使用说明的底层 README 可以不使用完整四字段状态头；模板明确豁免：
-
-- `hardware/altium_project/README.md`
-- `hardware/outputs/README.md`
-- `hardware/images/README.md`
-- `references/datasheets/README.md`
-- `references/lcsc_parts/README.md`
-
-豁免文件不得维护当前项目阶段、审查结论、测试结论或项目具体参数。一旦目录 README 开始承载项目状态或版本事实，就必须使用标准状态头，或将事实迁移到对应项目文件。不得仅因文件名为 `README.md` 就自动豁免。
-
-## 9. 什么时候创建或启用阶段文档
-
-- 在关键器件需要正式比较时启用选型计划。
-- 在模块进入连接、计算和专项布局设计时创建对应模块文档。
-- 在首次正式原理图审查时启用原理图审查记录。
-- 在 PCB Layout Preflight 前必须完成项目 PCB 规则文档。
-- 阶段 5 可启用 PCB 审查记录并只填写 Layout Preflight 结论；阶段 6、7 在同一文件中渐进补充。
-- 在准备焊接和首次上电时启用 bringup 记录。
-- 在开始正式测试时启用测试报告。
-- 在确定首个硬件版本或出现重要变更时启用改版记录。
-
-不要为了目录整齐而一次性填写所有阶段结果。
-
-### 9.1 渐进填写 `pcb_review.md`
-
-只使用一个 `docs/pcb_review.md` 覆盖阶段 5～7：
-
-- 阶段 5：填写审查对象、Layout Preflight 结论和阻断项；
-- 阶段 6：记录重要布局和布线问题，不要求归档中间 DRC；
-- 阶段 7：填写 Release Review 问题、用户 Batch DRC 摘要、豁免引用、制造输出检查和放行结论。
-
-不要新增 `pcb_layout_notes.md`、`pcb_routing_review.md` 或 `drc_report.md`。文件提前创建不代表 PCB 审查已经完成。
-
-## 10. 填写 PCB 规则模板
-
-1. 从 `requirements.md` 读取目标板厂和基础 PCB 规格摘要。
-2. 使用目标板厂当前官方能力核对相关制造边界与日期。
-3. 区分制造能力、项目设计默认值和制造极限。
-4. 根据项目需求定义网络分类、Net Class 或明确网络 Scope。
-5. 填写 Clearance、Width、Via、Hole、Annular Ring、Mask、Silkscreen、Board Outline 和 Polygon 等适用类别。
-6. 只在项目确实需要时增加差分、阻抗、长度、高速、模拟或大电流专项规则。
-7. 明确每条规则的 Scope、Priority 和默认/专项覆盖关系。
-8. 由用户在 Altium Designer 中实际配置规则，并分别确认配置、Scope 和 Priority 状态。
-9. Layout 前由用户确认关键规则、Scope 和 Priority 已在 Altium 中配置并人工核对；完整 Batch DRC 只在阶段 7 制造放行前运行。
-10. 将实际问题、DRC 结果和制造门禁写入 `docs/pcb_review.md`，不要写回规则定义。
-
-## 11. 项目事实与通用模板
-
-- 模板描述“需要填写什么”，不保存任何项目答案。
-- `requirements.md` 保存本项目需求和基础制造摘要。
-- `design_notes.md` 保存本项目整板设计意图、Pin Map 和接口。
-- 模块文档保存本项目连接、计算和专项布局要求。
-- `docs/pcb_design_rules.md` 保存本项目具体规则值。
-- 审查记录保存实际问题、证据、状态和结论。
-
-不得把另一个项目的参数复制到模板后再作为新项目默认值。
-
-## 12. 项目 1 参考边界
-
-项目 1 可用于理解文档分层、规则与审查分工、证据记录和输出目录组织，但不是可原样复制的模板。
-
-新项目必须基于自己的需求、目标板厂官方能力、关键器件资料、封装、装配方式和实际 EDA 实现重新设计。不得继承项目 1 的器件、网络名、规则值、板框、制造参数、问题编号、DRC 结果或放行结论。
-
-## 13. 初始化验收清单
-
-- [ ] 项目目录名称符合 `XX_Project_Name`。
-- [ ] 创建时必需文件与目录齐全。
-- [ ] 核心项目文档包含统一状态头。
-- [ ] 根 README 的导航链接有效。
-- [ ] 第一版目标、不做内容和验收边界已记录。
-- [ ] PCB 制造基线字段均已填写占位或确认值。
-- [ ] 阶段文件未被误标记为已完成。
-- [ ] 空输出目录未被描述为已有输出。
-- [ ] 模板占位符未被虚构值替换。
-- [ ] 不包含其他项目的器件、网络、尺寸、规则或审查状态。
-- [ ] `git diff --check` 和 Markdown 链接检查通过。
-
-## 14. 旧项目迁移
-
-- 先按项目结构标准确定现有事实源，不机械重写全部文件。
-- 优先补项目入口、状态头、`docs/README.md` 和 `hardware/README.md`。
-- 只在进入相关阶段时补齐阶段文档和输出目录。
-- 具有明确历史追溯意义的旧阶段记录可以保留；当前维护内容直接使用八阶段模型。
-- 不为满足模板外观移动或改写 Altium 二进制源文件。
-- 文件重命名或移动前检查链接和历史引用。
-
-## 15. AI 最小上下文
-
-新增项目或模板维护时读取：
-
-- `PROJECT_RULES.md`
-- `AGENTS.md`
-- `docs/AI_Context_Guide.md`
-- `docs/Project_Structure_Standard.md`
-- 本指南
-- `templates/hardware_project_template/`
-
-只有需要判断阶段门时读取完整八阶段流程；不默认加载其他项目、全部 Skill、全部 datasheet 或项目 1。
+新增项目、模板维护和旧项目迁移的读取范围以 `docs/AI_Context_Guide.md` 为准。本指南只提供模板操作步骤，不重复维护结构、流程或 PCB 执行规则。
