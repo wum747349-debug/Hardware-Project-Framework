@@ -19,6 +19,8 @@
 
 datasheet 阅读、外围参数反推、BOM 草稿、制造输出、测试报告和改版记录属于相应阶段内活动，不再作为独立顶层阶段。
 
+PCB Layout Preflight 不要求初始 DRC，布线阶段不要求归档中间 DRC；完整 Batch DRC 只在阶段 7 由用户运行，默认可直接在对话中提供结果摘要。详细边界见八阶段流程、PCB Skill 和对应 checklist。
+
 ## 仓库工作入口
 
 - [仓库通用规则](PROJECT_RULES.md)
