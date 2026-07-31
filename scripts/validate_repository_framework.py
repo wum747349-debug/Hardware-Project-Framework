@@ -62,6 +62,55 @@ REQUIRED_TEMPLATE_FILES = (
     "references/lcsc_parts/README.md",
 )
 
+TEMPLATE_STANDARD_HEADER_FILES = (
+    "requirements.md",
+    "block_diagram.md",
+    "design_notes.md",
+    "references.md",
+    "docs/README.md",
+    "docs/component_selection_plan.md",
+    "docs/module_design/README.md",
+    "docs/schematic_review.md",
+    "docs/pcb_design_rules.md",
+    "docs/pcb_review.md",
+    "docs/bringup_log.md",
+    "docs/test_report.md",
+    "docs/revision_history.md",
+    "docs/user/README.md",
+    "hardware/README.md",
+    "firmware/README.md",
+)
+
+TEMPLATE_HEADER_EXEMPT_FILES = (
+    "hardware/altium_project/README.md",
+    "hardware/outputs/README.md",
+    "hardware/images/README.md",
+    "references/datasheets/README.md",
+    "references/lcsc_parts/README.md",
+)
+
+PROJECT_ONE_CURRENT_FILES = (
+    "projects/01_STM32_DAQ_Control_Board/README.md",
+    "projects/01_STM32_DAQ_Control_Board/docs/README.md",
+    "projects/01_STM32_DAQ_Control_Board/docs/pcb_design_rules.md",
+    "projects/01_STM32_DAQ_Control_Board/docs/pcb_review.md",
+    "projects/01_STM32_DAQ_Control_Board/hardware/README.md",
+)
+
+STANDARD_STATUS_FIELDS = (
+    "文档状态",
+    "适用阶段",
+    "适用对象",
+    "最后核对依据",
+)
+
+ROOT_README_STATUS_FIELDS = (
+    "文档状态",
+    "当前项目阶段",
+    "当前硬件版本",
+    "最后核对依据",
+)
+
 PROJECT_ONE_TOKENS = (
     "STM32F103C8T6",
     "AP2112K",
@@ -111,7 +160,19 @@ def framework_markdown_files() -> list[Path]:
     files = [ROOT / name for name in ("PROJECT_RULES.md", "AGENTS.md", "README.md")]
     for directory in ("docs", "skills", "checklists", "templates"):
         files.extend((ROOT / directory).rglob("*.md"))
+    files.extend(ROOT / relative_path for relative_path in PROJECT_ONE_CURRENT_FILES)
     return sorted(set(files))
+
+
+def has_status_field(text: str, field: str) -> bool:
+    return (
+        re.search(
+            rf"^>\s*{re.escape(field)}：",
+            text,
+            flags=re.MULTILINE,
+        )
+        is not None
+    )
 
 
 def check_required_files(validator: Validator) -> None:
@@ -186,11 +247,14 @@ def check_template_content(validator: Validator) -> None:
             "模板包含本地绝对路径",
         )
 
-        if path.suffix.lower() == ".md" and path.name.lower() != "readme.md":
+        if path.suffix.lower() == ".md" and path.resolve() != (
+            template_root / "README.md"
+        ).resolve():
             validator.check(
-                re.search(r"^>\s*当前阶段：", text, flags=re.MULTILINE) is None,
+                not has_status_field(text, "当前阶段")
+                and not has_status_field(text, "当前项目阶段"),
                 relative_path,
-                "模板非 README 文档错误维护“当前阶段”字段",
+                "模板根 README 以外的 Markdown 错误维护当前阶段状态头字段",
             )
 
         validator.check(
@@ -206,20 +270,53 @@ def check_template_content(validator: Validator) -> None:
 
     root_readme = template_root / "README.md"
     root_text = root_readme.read_text(encoding="utf-8")
+    for field in ROOT_README_STATUS_FIELDS:
+        validator.check(
+            has_status_field(root_text, field),
+            str(root_readme.relative_to(ROOT)),
+            f"项目根 README 缺少状态头字段：{field}",
+        )
     validator.check(
-        "> 当前项目阶段：" in root_text,
+        len(
+            re.findall(
+                r"^>\s*当前项目阶段：",
+                root_text,
+                flags=re.MULTILINE,
+            )
+        )
+        == 1,
         str(root_readme.relative_to(ROOT)),
-        "项目根 README 缺少唯一“当前项目阶段”字段",
+        "项目根 README 必须且只能维护一个“当前项目阶段”状态头字段",
+    )
+    validator.check(
+        not has_status_field(root_text, "当前阶段"),
+        str(root_readme.relative_to(ROOT)),
+        "项目根 README 不得使用旧“当前阶段”状态头字段",
     )
 
-    current_stage_locations = []
-    for path in template_root.rglob("*.md"):
-        if re.search(r"^>\s*当前项目阶段：", path.read_text(encoding="utf-8"), re.MULTILINE):
-            current_stage_locations.append(path.resolve())
+    for relative_path in TEMPLATE_STANDARD_HEADER_FILES:
+        path = template_root / relative_path
+        text = path.read_text(encoding="utf-8")
+        for field in STANDARD_STATUS_FIELDS:
+            validator.check(
+                has_status_field(text, field),
+                str(path.relative_to(ROOT)),
+                f"缺少标准状态头字段：{field}",
+            )
+
+    classified_template_files = {
+        "README.md",
+        *TEMPLATE_STANDARD_HEADER_FILES,
+        *TEMPLATE_HEADER_EXEMPT_FILES,
+    }
+    actual_template_markdown = {
+        path.relative_to(template_root).as_posix()
+        for path in template_root.rglob("*.md")
+    }
     validator.check(
-        current_stage_locations == [root_readme.resolve()],
+        actual_template_markdown == classified_template_files,
         "templates/hardware_project_template",
-        "“当前项目阶段”未唯一维护在模板根 README",
+        "模板 Markdown 未全部归入根 README、标准状态头列表或底层 README 豁免白名单",
     )
 
     for relative_path in OPTIONAL_READMES_REMOVED_FROM_TEMPLATE:
@@ -290,6 +387,59 @@ def check_skill_references(validator: Validator) -> None:
             (ROOT / "checklists" / checklist_name).is_file(),
             f"checklists/{checklist_name}",
             "PCB Skill 引用的 checklist 不存在",
+        )
+
+
+def check_project_one_stage_fields(validator: Validator) -> None:
+    legacy_stage = re.compile(r"阶段\s*(?:11|12)")
+    for relative_path in PROJECT_ONE_CURRENT_FILES:
+        text = validator.read(relative_path)
+        validator.check(
+            legacy_stage.search(text) is None,
+            relative_path,
+            "项目 1 当前维护文件仍使用阶段 11 / 12",
+        )
+
+    root_readme = PROJECT_ONE_CURRENT_FILES[0]
+    validator.check(
+        "> 当前项目阶段：阶段 7：PCB 审查阶段" in validator.read(root_readme),
+        root_readme,
+        "项目 1 根 README 缺少阶段 7 的唯一当前项目阶段字段",
+    )
+
+    for relative_path in PROJECT_ONE_CURRENT_FILES[1:]:
+        text = validator.read(relative_path)
+        validator.check(
+            not has_status_field(text, "当前阶段")
+            and not has_status_field(text, "当前项目阶段"),
+            relative_path,
+            "项目 1 非根 README 不得维护当前阶段状态头字段",
+        )
+
+
+def check_layout_checklist(validator: Validator) -> None:
+    relative_path = "checklists/pcb_layout_checklist.md"
+    text = validator.read(relative_path)
+    required_keywords = (
+        "审查对象与版本",
+        "板框",
+        "机械",
+        "电源",
+        "去耦",
+        "回流",
+        "换层",
+        "过孔",
+        "铺铜",
+        "Repour",
+        "丝印",
+        "测试点",
+        "可进入 PCB Release Review",
+    )
+    for keyword in required_keywords:
+        validator.check(
+            keyword in text,
+            relative_path,
+            f"Layout / Routing Checklist 缺少关键覆盖：{keyword}",
         )
 
 
@@ -369,6 +519,8 @@ def main() -> int:
     check_template_content(validator)
     check_stage_model(validator)
     check_skill_references(validator)
+    check_project_one_stage_fields(validator)
+    check_layout_checklist(validator)
     check_drc_policy(validator)
 
     if validator.errors:
