@@ -26,11 +26,9 @@
 | [docs/schematic_review.md](docs/schematic_review.md) | 原理图审查状态、问题、风险、证据和关闭情况 |
 | [docs/pcb_review.md](docs/pcb_review.md) | 阶段 7 当前问题、关闭依据、风险统计和制造门禁 |
 
-## 2. 当前工作
+## 2. 状态与审查入口
 
-当前项目阶段以项目根 [README.md](README.md) 的状态头为准。项目已完成 PCB Layout，并已形成首轮 PCB 辅助审查记录；当前工作重点是依据用户在 Altium 中的确认、当前规格书、原理图 PDF、BOM 和 PCB 审查输入，逐项关闭可关闭问题并保留制造门禁。
-
-注意：当前不表示 PCB、DRC 或制造输出已经通过。用户可以导出待放行制造输出用于阶段 7 Release Review；制造门禁完成前不得提交板厂或建立最终制造归档包，完成放行后再进入阶段 8：焊接和硬件调试阶段。
+实时阶段、硬件版本和下一步以项目根 [README.md](README.md) 为准；原理图问题与 PCB 制造门禁分别由 [docs/schematic_review.md](docs/schematic_review.md) 和 [docs/pcb_review.md](docs/pcb_review.md) 维护。本文件不重复维护动态待办或放行状态。
 
 ## 3. 系统模块总览
 
@@ -142,15 +140,14 @@
 - HSE 晶振 PCB 布局要求仍需落实：晶振和负载电容靠近 `OSC_IN/OSC_OUT`，走线短且对称、无过孔、远离大电流和高速信号；可低风险预留 `OSC_OUT` 串联电阻焊盘，但不是必须修改项，也不表示当前已实现。
 - 当前主要电气问题已经完成修改，原理图电气设计基本定稿；但关键器件封装、引脚、焊盘映射、接口朝向、丝印和测试点可达性仍需 Altium 人工核对，不能写成已具备直接打样条件。
 
-## 9. 后续审查入口
+## 9. 审查与证据入口
 
-阶段 7 下一步建议按以下顺序推进：
+- 原理图实现证据：`hardware/outputs/schematic_pdf/STM32_DAQ_Control_Board_Schematic.pdf` 和同版 BOM。
+- 模块依据与资料索引：[docs/module_design/](docs/module_design/) 和 [references.md](references.md)。
+- 原理图审查历史：[docs/schematic_review.md](docs/schematic_review.md)。
+- PCB 问题、用户提供的 DRC 结果和制造门禁：[docs/pcb_review.md](docs/pcb_review.md)。
 
-1. 以当前原理图 PDF `hardware/outputs/schematic_pdf/STM32_DAQ_Control_Board_Schematic.pdf`、BOM `hardware/outputs/bom/STM32_DAQ_Control_Board.xlsx`、USB-C 规格书和用户 Altium 确认为问题关闭依据。
-2. 使用 [docs/pcb_review.md](docs/pcb_review.md) 继续关闭阶段 7 的未关闭问题与制造门禁。
-3. 对照 [docs/module_design/](docs/module_design/) 和 [references.md](references.md) 保持 USB-C、Shield、接口定义和资料路径一致。
-4. 由用户在 Altium 中完成剩余规则核对、Repour 和完整 Batch DRC；AI/Codex 不声称代为完成。
-5. 用户可导出 Gerber、钻孔、坐标等待放行输出用于阶段 7 Release Review；制造门禁关闭前不得提交板厂或建立最终制造归档包，完成放行后再进入阶段 8：焊接和硬件调试阶段。
+实际 Altium 规则核对、Repour、Batch DRC 和制造输出由用户执行；本文不将未提供的实现或验证结果描述为已完成。
 
 ## 10. 相关文档
 

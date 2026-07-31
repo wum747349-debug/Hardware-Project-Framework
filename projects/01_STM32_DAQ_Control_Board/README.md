@@ -57,7 +57,6 @@
 | [docs/pcb_review.md](docs/pcb_review.md) | 阶段 7 当前问题、关闭依据与制造门禁主记录 |
 | [hardware/README.md](hardware/README.md) | Altium 源文件、导出文件和图片目录约定 |
 | [docs/user/project_overview.md](docs/user/project_overview.md) | 面向展示/复盘的项目简介 |
-| [docs/user/learning_record.md](docs/user/learning_record.md) | 学习记录和复盘入口 |
 
 ## 推荐阅读顺序
 
