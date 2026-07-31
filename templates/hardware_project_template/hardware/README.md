@@ -1,10 +1,9 @@
 # hardware 目录说明
 
 > 文档状态：草稿
-> 当前阶段：<阶段名称>
+> 适用阶段：阶段 3 至阶段 7
 > 适用对象：<项目名称与硬件版本>
 > 最后核对依据：<当前 hardware 目录>
-> 最近更新：<YYYY-MM-DD>
 
 - `altium_project/`：保存 `.PrjPcb`、`.SchDoc`、`.PcbDoc` 等权威 EDA 源文件。
 - `outputs/`：保存可追溯的原理图、BOM、报告和制造输出。
