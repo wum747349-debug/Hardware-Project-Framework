@@ -87,7 +87,7 @@ XX_Project_Name
 | 3 | 原理图模块设计和绘制阶段 | `docs/module_design/*.md`、BOM 草稿、原理图输出 |
 | 4 | 原理图审查阶段 | `docs/schematic_review.md` |
 | 5 | PCB 布局阶段 | `docs/pcb_design_rules.md`、Layout Preflight |
-| 6 | 布线和铺铜阶段 | 当前 PCB 实现证据、中间 DRC 记录 |
+| 6 | 布线和铺铜阶段 | 当前 PCB 实现证据、重要布局布线问题记录 |
 | 7 | PCB 审查阶段 | `docs/pcb_review.md`、Batch DRC、制造输出 |
 | 8 | 焊接和硬件调试阶段 | `docs/bringup_log.md`、`docs/test_report.md`、`docs/revision_history.md` |
 

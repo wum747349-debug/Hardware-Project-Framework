@@ -155,7 +155,7 @@ projects/XX_Project_Name/
 | `docs/component_selection_plan.md` | 保存关键器件候选、筛选依据、主选与备选决策过程 |
 | `docs/module_design/*.md` | 保存单个模块的连接、计算、器件依据、风险和专项布局要求 |
 | `docs/schematic_review.md` | 保存实际原理图问题、证据、状态和进入 PCB Layout 的结论 |
-| `docs/pcb_design_rules.md` | 保存本项目具体 PCB 规则值、Scope、Priority、DRC 类别、配置状态和规则豁免 |
+| `docs/pcb_design_rules.md` | 保存本项目具体 PCB 规则值、Scope、Priority、AD 配置/人工核对状态和规则豁免定义 |
 | `docs/pcb_review.md` | 渐进保存阶段 5～7 的 Preflight 结论、重要布局布线问题、Release Review、用户 Batch DRC 摘要、豁免引用和制造放行结论 |
 | `docs/bringup_log.md` | 保存焊接检查、首次上电、测量数据、现象和调试过程 |
 | `docs/test_report.md` | 保存测试条件、预期、实测结果、偏差和验收结论 |

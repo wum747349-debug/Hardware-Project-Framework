@@ -336,6 +336,10 @@ def check_drc_policy(validator: Validator) -> None:
 
     project_rules = validator.read("PROJECT_RULES.md")
     workflow = validator.read("docs/08_Project_Workflow.md")
+    template_guide = validator.read("docs/Project_Template_Guide.md")
+    template_rules = validator.read(
+        "templates/hardware_project_template/docs/pcb_design_rules.md"
+    )
     validator.check(
         "完整 Batch DRC 只在阶段 7" in project_rules,
         "PROJECT_RULES.md",
@@ -345,6 +349,16 @@ def check_drc_policy(validator: Validator) -> None:
         "阶段 6 不要求保存、导出或归档中间 DRC 记录" in workflow,
         "docs/08_Project_Workflow.md",
         "阶段 6 的中间 DRC 简化规则缺失",
+    )
+    validator.check(
+        "中间 DRC 记录" not in template_guide,
+        "docs/Project_Template_Guide.md",
+        "模板指南仍把中间 DRC 记录列为阶段 6 输出",
+    )
+    validator.check(
+        "| DRC 已验证 |" not in template_rules,
+        "templates/hardware_project_template/docs/pcb_design_rules.md",
+        "规则模板仍长期维护“DRC 已验证”列",
     )
 
 
