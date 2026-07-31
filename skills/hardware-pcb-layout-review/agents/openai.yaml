@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hardware PCB Layout Review"
+  short_description: "Review PCB layout, routing, DRC, and release readiness"
+  default_prompt: "Use $hardware-pcb-layout-review to perform a PCB layout preflight or release review."
