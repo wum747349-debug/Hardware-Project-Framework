@@ -11,16 +11,18 @@ from urllib.parse import unquote
 
 ROOT = Path(__file__).resolve().parents[1]
 
-CANONICAL_STAGES = (
-    "需求确认阶段",
-    "关键器件选型阶段",
-    "原理图模块设计和绘制阶段",
-    "原理图审查阶段",
-    "PCB 布局阶段",
-    "布线和铺铜阶段",
-    "PCB 审查阶段",
-    "焊接和硬件调试阶段",
-)
+CANONICAL_STAGE_MAP = {
+    1: "需求确认阶段",
+    2: "关键器件选型阶段",
+    3: "原理图模块设计和绘制阶段",
+    4: "原理图审查阶段",
+    5: "PCB 布局阶段",
+    6: "布线和铺铜阶段",
+    7: "PCB 审查阶段",
+    8: "焊接和硬件调试阶段",
+}
+
+CANONICAL_STAGES = tuple(CANONICAL_STAGE_MAP.values())
 
 REQUIRED_COMMON_FILES = (
     "PROJECT_RULES.md",
@@ -89,12 +91,22 @@ TEMPLATE_HEADER_EXEMPT_FILES = (
     "references/lcsc_parts/README.md",
 )
 
-PROJECT_ONE_CURRENT_FILES = (
-    "projects/01_STM32_DAQ_Control_Board/README.md",
-    "projects/01_STM32_DAQ_Control_Board/docs/README.md",
-    "projects/01_STM32_DAQ_Control_Board/docs/pcb_design_rules.md",
-    "projects/01_STM32_DAQ_Control_Board/docs/pcb_review.md",
-    "projects/01_STM32_DAQ_Control_Board/hardware/README.md",
+PROJECT_ONE_ROOT = "projects/01_STM32_DAQ_Control_Board"
+PROJECT_ONE_ROOT_README = f"{PROJECT_ONE_ROOT}/README.md"
+
+PROJECT_ONE_LEGACY_STAGE_EXEMPT_FILES = (
+    f"{PROJECT_ONE_ROOT}/docs/revision_history.md",
+    f"{PROJECT_ONE_ROOT}/references/lcsc_parts/lcsc_search_notes.md",
+)
+
+PROJECT_ONE_REMOVED_FILES = (
+    f"{PROJECT_ONE_ROOT}/docs/component_selection.md",
+    f"{PROJECT_ONE_ROOT}/docs/user/learning_record.md",
+)
+
+PROJECT_ONE_REQUIRED_SUPPORTING_FILES = (
+    f"{PROJECT_ONE_ROOT}/docs/component_selection_plan.md",
+    f"{PROJECT_ONE_ROOT}/docs/user/project_overview.md",
 )
 
 STANDARD_STATUS_FIELDS = (
@@ -160,7 +172,7 @@ def framework_markdown_files() -> list[Path]:
     files = [ROOT / name for name in ("PROJECT_RULES.md", "AGENTS.md", "README.md")]
     for directory in ("docs", "skills", "checklists", "templates"):
         files.extend((ROOT / directory).rglob("*.md"))
-    files.extend(ROOT / relative_path for relative_path in PROJECT_ONE_CURRENT_FILES)
+    files.extend((ROOT / PROJECT_ONE_ROOT).rglob("*.md"))
     return sorted(set(files))
 
 
@@ -390,30 +402,96 @@ def check_skill_references(validator: Validator) -> None:
         )
 
 
-def check_project_one_stage_fields(validator: Validator) -> None:
+def check_project_one_document_contract(validator: Validator) -> None:
+    project_root = ROOT / PROJECT_ONE_ROOT
+    project_markdown = sorted(project_root.rglob("*.md"))
+    exempt_paths = set(PROJECT_ONE_LEGACY_STAGE_EXEMPT_FILES)
     legacy_stage = re.compile(r"阶段\s*(?:11|12)")
-    for relative_path in PROJECT_ONE_CURRENT_FILES:
-        text = validator.read(relative_path)
+    dated_history_line = re.compile(r"^\|\s*\d{4}-\d{2}-\d{2}\s*\|")
+
+    for path in project_markdown:
+        relative_path = path.relative_to(ROOT).as_posix()
+        text = path.read_text(encoding="utf-8")
+
         validator.check(
-            legacy_stage.search(text) is None,
+            not has_status_field(text, "当前阶段"),
             relative_path,
-            "项目 1 当前维护文件仍使用阶段 11 / 12",
+            "项目 1 Markdown 不得使用旧“当前阶段”状态头字段",
         )
 
-    root_readme = PROJECT_ONE_CURRENT_FILES[0]
-    validator.check(
-        "> 当前项目阶段：阶段 7：PCB 审查阶段" in validator.read(root_readme),
-        root_readme,
-        "项目 1 根 README 缺少阶段 7 的唯一当前项目阶段字段",
-    )
+        if relative_path != PROJECT_ONE_ROOT_README:
+            validator.check(
+                not has_status_field(text, "当前项目阶段"),
+                relative_path,
+                "项目 1 非根 README 不得维护“当前项目阶段”状态头字段",
+            )
 
-    for relative_path in PROJECT_ONE_CURRENT_FILES[1:]:
-        text = validator.read(relative_path)
+        legacy_lines = [
+            line for line in text.splitlines() if legacy_stage.search(line)
+        ]
+        if relative_path in exempt_paths:
+            for line in legacy_lines:
+                validator.check(
+                    dated_history_line.search(line) is not None,
+                    relative_path,
+                    "阶段 11 / 12 仅允许出现在明确日期化的历史记录行中",
+                )
+        else:
+            validator.check(
+                not legacy_lines,
+                relative_path,
+                "项目 1 非历史豁免文件仍使用阶段 11 / 12",
+            )
+
+    root_text = validator.read(PROJECT_ONE_ROOT_README)
+    stage_field_count = len(
+        re.findall(
+            r"^>\s*当前项目阶段：",
+            root_text,
+            flags=re.MULTILINE,
+        )
+    )
+    validator.check(
+        stage_field_count == 1,
+        PROJECT_ONE_ROOT_README,
+        "项目根 README 必须且只能维护一个“当前项目阶段”状态头字段",
+    )
+    stage_fields = re.findall(
+        r"^>\s*当前项目阶段：\s*阶段\s*(\d+)：([^\r\n]+?)\s*$",
+        root_text,
+        flags=re.MULTILINE,
+    )
+    validator.check(
+        len(stage_fields) == 1,
+        PROJECT_ONE_ROOT_README,
+        "项目根 README 的“当前项目阶段”字段格式不正确",
+    )
+    if len(stage_fields) == 1:
+        stage_number_text, stage_name = stage_fields[0]
+        stage_number = int(stage_number_text)
         validator.check(
-            not has_status_field(text, "当前阶段")
-            and not has_status_field(text, "当前项目阶段"),
+            stage_number in CANONICAL_STAGE_MAP,
+            PROJECT_ONE_ROOT_README,
+            "当前项目阶段编号必须为 1～8",
+        )
+        validator.check(
+            CANONICAL_STAGE_MAP.get(stage_number) == stage_name,
+            PROJECT_ONE_ROOT_README,
+            "当前项目阶段编号和名称必须与八阶段标准完全对应",
+        )
+
+    for relative_path in PROJECT_ONE_REMOVED_FILES:
+        validator.check(
+            not (ROOT / relative_path).exists(),
             relative_path,
-            "项目 1 非根 README 不得维护当前阶段状态头字段",
+            "已合并或删除的项目 1 文档不应继续存在",
+        )
+
+    for relative_path in PROJECT_ONE_REQUIRED_SUPPORTING_FILES:
+        validator.check(
+            (ROOT / relative_path).is_file(),
+            relative_path,
+            "项目 1 必需保留的辅助文档不存在",
         )
 
 
@@ -519,7 +597,7 @@ def main() -> int:
     check_template_content(validator)
     check_stage_model(validator)
     check_skill_references(validator)
-    check_project_one_stage_fields(validator)
+    check_project_one_document_contract(validator)
     check_layout_checklist(validator)
     check_drc_policy(validator)
 
