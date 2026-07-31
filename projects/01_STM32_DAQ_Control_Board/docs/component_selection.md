@@ -4,7 +4,7 @@
 
 本文件记录 `STM32F103C8T6 数据采集/控制开发板` 第一轮关键器件候选和 datasheet 初步核对结果。
 
-当前项目已处于阶段 11：PCB 审查问题修正与关闭。本文件以下内容均为当时选型阶段记录，不再逐行维护“当前状态”，也不是最终 BOM。Rev A 当前主选、资料和审查状态只以 [../design_notes.md](../design_notes.md)、[../references.md](../references.md)、[pcb_review.md](pcb_review.md) 和当前 PDF/BOM 为准。
+当前项目阶段以项目根 [README.md](../README.md) 的状态头为准。本文件以下内容均为当时选型阶段记录，不再逐行维护“当前状态”，也不是最终 BOM。Rev A 当前主选、资料和审查状态只以 [../design_notes.md](../design_notes.md)、[../references.md](../references.md)、[pcb_review.md](pcb_review.md) 和当前 PDF/BOM 为准。
 
 后续 USB-C 变更说明：据用户确认，旧 `TYPE-C 16PIN 2MD(073)`（C2765186）的安装结构仅适配约 `0.8mm` 板厚，因此被替代；Rev A 当前唯一型号见 [../design_notes.md](../design_notes.md) 和 [../references.md](../references.md)。
 

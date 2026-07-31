@@ -1,11 +1,8 @@
 # Hardware 目录说明
 
 > 文档状态：当前有效
->
-> 当前阶段：阶段 11：PCB 审查问题修正与关闭
->
-> 适用对象：STM32 DAQ Control Board Rev A
->
+> 适用阶段：阶段 3 至阶段 7
+> 适用对象：STM32 DAQ Control Board Rev A 的硬件源文件、实现证据与输出
 > 最后核对依据：当前 hardware 目录结构
 
 本目录保存当前项目的 Altium 源文件、硬件导出文件和图片资料。不要把 datasheet 放入本目录；datasheet 统一维护在 `../references/`。
@@ -21,10 +18,10 @@
 | `outputs/erc/`                 | 条件触发的 ERC 报告、Messages 导出或相关截图 | 仅在用户提供并要求分析具体 ERC 问题时使用                                                               |
 | `outputs/component_reports/`   | 条件触发的元件属性报告                   | BOM 信息不足或需额外核对元件属性时按需提供                                                               |
 | `outputs/footprint_reports/`   | 条件触发的封装或映射报告                  | 关键器件引脚、焊盘或封装映射存在具体问题时按需提供                                                             |
-| `outputs/gerber/`              | Gerber 层文件                    | 进入正式制造输出阶段后使用                                                                         |
-| `outputs/drill/`               | NC Drill、PTH/NPTH 钻孔文件及相关钻孔输出 | 进入正式制造输出阶段后使用                                                                         |
-| `outputs/pick_place/`          | 贴片坐标                          | 进入正式装配输出阶段后使用                                                                         |
-| `outputs/fabrication_package/` | 最终制造归档包                       | 进入正式制造归档阶段后使用                                                                         |
+| `outputs/gerber/`              | Gerber 层文件                    | 阶段 7 制造输出与 Release Review 活动中使用                                                        |
+| `outputs/drill/`               | NC Drill、PTH/NPTH 钻孔文件及相关钻孔输出 | 阶段 7 制造输出与 Release Review 活动中使用                                                        |
+| `outputs/pick_place/`          | 贴片坐标                          | 阶段 7 装配输出与 Release Review 活动中使用                                                        |
+| `outputs/fabrication_package/` | 最终制造归档包                       | 阶段 7 制造门禁完成后整理                                                                          |
 | `images/pcb/`                  | 少量供人工和 AI 辅助审查的 PCB 图片        | 在重要审查节点或具体问题需要时更新                                                                     |
 
 标准目录：
@@ -109,7 +106,7 @@ Pin/Pad Mapping、封装映射、3D 视图、安装孔局部图和机械图均�
 - `outputs/pick_place/`：贴片坐标。
 - `outputs/fabrication_package/`：最终制造归档包。
 
-这些目录在进入正式制造输出阶段后使用。目录存在不代表对应文件已经生成，也不代表项目已经达到可制造状态。
+这些目录在阶段 7 的制造输出和 Release Review 活动中使用。用户可以导出待放行输出用于审查；目录或文件存在不代表项目已经达到可制造状态，制造门禁完成前不得提交板厂或建立最终制造归档包。
 
 ## AI、用户和 Codex 的职责边界
 

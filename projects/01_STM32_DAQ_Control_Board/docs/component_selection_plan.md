@@ -1,15 +1,15 @@
 # 器件选型计划
 
 > 文档状态：历史选型记录
-> 当前项目阶段：阶段 11：PCB 审查问题修正与关闭
-> 适用对象：STM32 DAQ Control Board Rev A
+> 适用阶段：阶段 2：关键器件选型阶段（历史记录）
+> 适用对象：STM32 DAQ Control Board Rev A 的第一轮关键器件选型过程
 > 最后核对依据：第一轮关键器件选型过程记录
 
 ## 0. 当前定位
 
 本文是第一轮关键器件选型计划和历史选型依据入口。
 
-当前项目已推进到阶段 11 PCB 审查问题修正与关闭。本文件仅保留早期候选选型过程；最终主选器件摘要、关键网络和模块设计依据以 [../design_notes.md](../design_notes.md)、[../references.md](../references.md) 和 [module_design/](module_design/) 为准。
+当前项目阶段以项目根 [README.md](../README.md) 的状态头为准。本文件仅保留早期候选选型过程；最终主选器件摘要、关键网络和模块设计依据以 [../design_notes.md](../design_notes.md)、[../references.md](../references.md) 和 [module_design/](module_design/) 为准。
 
 本文保留原有选型计划、搜索关键词、筛选维度和候选记录模板，用于追溯第一轮器件选择过程；不作为最终 BOM，也不表示原理图已经审查通过。
 
@@ -120,4 +120,4 @@
 4. Codex 再整理 `references.md`。
 5. AI 再读取 datasheet，做参数提取和候选对比。
 
-当前项目已进入阶段 11；上述步骤作为历史选型过程追溯保留，不代表当前型号或当前阶段。
+当前项目已进入后续阶段；上述步骤作为历史选型过程追溯保留，不代表当前型号或当前阶段。

@@ -37,10 +37,13 @@ description: Review low-voltage embedded PCB readiness, layout, routing, copper,
 
 所有模式先读取 `PROJECT_RULES.md`、`AGENTS.md`、`docs/AI_Context_Guide.md` 和本 Skill，然后按模式补充当前项目内容。不得默认加载其他项目、全部 datasheet、全部 Skill 或全部历史输出。
 
+三种模式都默认读取当前项目根 `README.md`，只用于确认项目身份、当前项目阶段、当前硬件版本、当前入口和下一步摘要。项目 README 不替代 `requirements.md`、`design_notes.md`、`docs/pcb_design_rules.md` 或 `docs/pcb_review.md` 的事实职责。
+
 ### 模式 A：Layout Preflight
 
 默认读取：
 
+- 当前项目 `README.md`；
 - 当前项目 `requirements.md`、`design_notes.md`、`references.md`；
 - 当前项目 `docs/schematic_review.md`；
 - 当前项目 `docs/pcb_design_rules.md`，不存在时协助创建；
@@ -54,6 +57,7 @@ description: Review low-voltage embedded PCB readiness, layout, routing, copper,
 
 默认读取：
 
+- 当前项目 `README.md`；
 - 当前项目 `requirements.md`、`design_notes.md`、`docs/pcb_design_rules.md`；
 - 当前 PCB 图片或用户提供的其他实现证据。
 
@@ -65,6 +69,7 @@ description: Review low-voltage embedded PCB readiness, layout, routing, copper,
 
 默认读取：
 
+- 当前项目 `README.md`；
 - 当前项目 `requirements.md`、`docs/pcb_design_rules.md`、`docs/pcb_review.md`；
 - 当前 PCB 实现证据和当前 BOM；
 - 用户在对话中提供的完整 Batch DRC 结果；

@@ -1,8 +1,8 @@
 # 设计说明总览
 
 > 文档状态：当前有效，整板设计意图与接口约定主文档
-> 当前阶段：阶段 11：PCB 审查问题修正与关闭
-> 适用对象：STM32 DAQ Control Board Rev A
+> 适用阶段：阶段 1 至阶段 7
+> 适用对象：STM32 DAQ Control Board Rev A 的整板设计意图与接口约定
 > 最后核对依据：当前原理图 PDF、当前 BOM 与已确认设计决定
 
 ## 1. 当前设计定位
@@ -24,13 +24,13 @@
 | Altium `.SchDoc`、当前审查版 PDF、必要时的网表 | 确认实际电气实现，包括实际器件位号、接线、网络和元件参数 |
 | [docs/module_design/](docs/module_design/) | 模块级连接依据、参数计算、datasheet 依据、风险和 PCB 检查项 |
 | [docs/schematic_review.md](docs/schematic_review.md) | 原理图审查状态、问题、风险、证据和关闭情况 |
-| [docs/pcb_review.md](docs/pcb_review.md) | 阶段 11 当前问题、关闭依据、风险统计和制造门禁 |
+| [docs/pcb_review.md](docs/pcb_review.md) | 阶段 7 当前问题、关闭依据、风险统计和制造门禁 |
 
-## 2. 当前阶段
+## 2. 当前工作
 
-当前项目已完成 PCB Layout，并已形成首轮 PCB 辅助审查记录。当前处于阶段 11 的问题修正与关闭阶段，重点是依据用户在 Altium 中的确认、当前规格书、原理图 PDF、BOM 和 PCB 审查输入，逐项关闭可关闭问题并保留制造门禁。
+当前项目阶段以项目根 [README.md](README.md) 的状态头为准。项目已完成 PCB Layout，并已形成首轮 PCB 辅助审查记录；当前工作重点是依据用户在 Altium 中的确认、当前规格书、原理图 PDF、BOM 和 PCB 审查输入，逐项关闭可关闭问题并保留制造门禁。
 
-注意：本阶段不表示 PCB、DRC 或制造输出已经通过；不得生成正式制造文件，也不推进到阶段 12。
+注意：当前不表示 PCB、DRC 或制造输出已经通过。用户可以导出待放行制造输出用于阶段 7 Release Review；制造门禁完成前不得提交板厂或建立最终制造归档包，完成放行后再进入阶段 8：焊接和硬件调试阶段。
 
 ## 3. 系统模块总览
 
@@ -144,13 +144,13 @@
 
 ## 9. 后续审查入口
 
-阶段 11 下一步建议按以下顺序推进：
+阶段 7 下一步建议按以下顺序推进：
 
 1. 以当前原理图 PDF `hardware/outputs/schematic_pdf/STM32_DAQ_Control_Board_Schematic.pdf`、BOM `hardware/outputs/bom/STM32_DAQ_Control_Board.xlsx`、USB-C 规格书和用户 Altium 确认为问题关闭依据。
-2. 使用 [docs/pcb_review.md](docs/pcb_review.md) 继续关闭阶段 11 的未关闭问题与制造门禁。
+2. 使用 [docs/pcb_review.md](docs/pcb_review.md) 继续关闭阶段 7 的未关闭问题与制造门禁。
 3. 对照 [docs/module_design/](docs/module_design/) 和 [references.md](references.md) 保持 USB-C、Shield、接口定义和资料路径一致。
 4. 由用户在 Altium 中完成剩余规则核对、Repour 和完整 Batch DRC；AI/Codex 不声称代为完成。
-5. 制造门禁关闭前不生成 Gerber、钻孔、坐标或制造包，不推进到阶段 12。
+5. 用户可导出 Gerber、钻孔、坐标等待放行输出用于阶段 7 Release Review；制造门禁关闭前不得提交板厂或建立最终制造归档包，完成放行后再进入阶段 8：焊接和硬件调试阶段。
 
 ## 10. 相关文档
 

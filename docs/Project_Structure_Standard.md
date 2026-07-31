@@ -97,7 +97,7 @@ projects/XX_Project_Name/
 - `references/datasheets/`；
 - `references/lcsc_parts/`。
 
-模板只预建上述入口文件和父目录说明。`hardware/outputs/`、`hardware/images/` 等父目录通过各自 `README.md` 说明按需子目录，不预建尚未产生内容的输出或图片分类目录。
+模板预建项目事实入口、父目录说明和阶段文件空模板；按需输出目录、图片分类目录及其低信息量 README 不预建。`hardware/outputs/`、`hardware/images/` 等父目录通过各自 `README.md` 集中说明按需子目录。
 
 这些文件可以处于“草稿”或“待确认”状态，但必须说明用途、当前事实边界和待补信息。不得为了满足初始化格式而虚构器件、参数、规则或验证结果。
 
@@ -232,6 +232,16 @@ projects/XX_Project_Name/
 > 最后核对依据：<文件、资料、证据或待填写>
 ```
 
+项目事实文件、阶段文档、项目根 `README.md`、`docs/README.md`、`hardware/README.md` 和 `firmware/README.md` 应使用对应的标准状态头。仅用于目录占位和固定使用说明的底层 README 可以不使用完整四字段状态头，例如模板中的：
+
+- `hardware/altium_project/README.md`
+- `hardware/outputs/README.md`
+- `hardware/images/README.md`
+- `references/datasheets/README.md`
+- `references/lcsc_parts/README.md`
+
+这类底层 README 不得维护当前项目阶段、审查结论、测试结论或项目具体参数。一旦目录 README 开始承载项目状态或版本事实，就必须使用标准状态头，或将相关事实迁移到对应项目文件。不得仅凭文件名为 `README.md` 自动豁免状态头要求。
+
 `docs/README.md` 只维护文件职责、启用时机和文档导航，可以使用“未启用”“草稿”“当前有效”“历史归档”等简化状态，但不得维护另一套当前项目阶段。
 
 审查、测试和调试记录如需日期，在正文中使用“审查日期”“测试日期”或“记录日期”，不在所有文件中统一维护“最近更新”。状态含义：
@@ -350,7 +360,7 @@ NN_<module_name>.md
 2. 优先补齐项目入口、状态头、`docs/README.md` 和 `hardware/README.md`。
 3. 将重复事实收敛到主事实源；其他文件改为摘要和链接，保留有追溯价值的历史说明。
 4. 项目进入相应阶段时，再补齐阶段文件和输出目录，不要求一次创建并填写全部文件。
-5. 旧项目历史阶段编号可以保留；后续更新时逐步映射到仓库八阶段模型。
+5. 旧项目具有明确历史追溯意义的阶段记录可以保留；当前维护内容应直接使用仓库八阶段模型。
 6. 文件移动或重命名前先检查仓库内链接和外部引用；无明确收益时保留原路径。
 7. 不移动、重写或解析 Altium 二进制源文件来满足目录外观。
 8. 迁移完成后检查相对链接、职责重复、版本字段和实现证据追溯关系。

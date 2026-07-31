@@ -1,16 +1,14 @@
 # PCB 设计规则
 
 > 文档状态：当前有效，规则基线已确认，尚未在 Altium Designer 中配置和验证
->
-> 当前阶段：阶段 11：PCB 审查问题修正与关闭
->
-> 适用对象：STM32 DAQ Control Board Rev A
->
-> 默认目标板厂：嘉立创 / JLCPCB
->
-> 官方工艺核对日期：2026-07-28
+> 适用阶段：阶段 5 至阶段 7
+> 适用对象：STM32 DAQ Control Board Rev A 的 PCB 规则基线
+> 最后核对依据：项目需求、嘉立创 / JLCPCB 官方工艺能力与当前 PCB 审查记录
 
 ## 事实边界
+
+- 默认目标板厂：嘉立创 / JLCPCB
+- 官方工艺核对日期：2026-07-28
 
 - 本文档是用户人工配置 Altium Designer 规则的依据。
 - 工程可能使用 Constraint Manager 或 PCB Rules and Constraints Editor；本文规定规则逻辑、Scope 和参数，不强制具体菜单路径。

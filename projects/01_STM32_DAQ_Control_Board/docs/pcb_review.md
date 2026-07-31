@@ -1,13 +1,14 @@
 # PCB 辅助审查记录
 
 > 文档状态：首轮 PCB 辅助审查记录完成，存在未关闭问题，未批准制造输出
-> 当前阶段：阶段 11：PCB 审查问题修正与关闭
-> 审查对象：STM32 DAQ Control Board Rev A
-> 审查日期：2026-07-29
-> 审查输入基线：当前本地工作树；初次审查对应 `main` HEAD `49462616d00875fa011b27f3276eecddc76c6d80`
-> 最近问题状态更新：`main` 提交 `b4fc059451667f302f671a7cb8a2b46967a4fb4a`
+> 适用阶段：阶段 5 至阶段 7
+> 适用对象：STM32 DAQ Control Board Rev A 的 PCB 审查与制造放行
+> 最后核对依据：当前本地工作树；初次审查对应 `main` HEAD `49462616d00875fa011b27f3276eecddc76c6d80`；问题状态更新对应 `main` 提交 `b4fc059451667f302f671a7cb8a2b46967a4fb4a`
 
 ## 1. 文档定位与事实边界
+
+- 审查日期：2026-07-29
+- 审查对象：STM32 DAQ Control Board Rev A
 
 本轮是基于完整原理图 PDF、当前 BOM、顶层、底层和无铺铜 PCB 视图进行的 PCB 辅助审查。
 
@@ -292,4 +293,4 @@ AI/Codex 未运行 Batch DRC。当前摘要可作为审查输入记录，但存�
 2. 在已确认 `59.563 mm × 60.000 mm` 板框外接尺寸的基础上，继续核对四个安装孔、SW3、USB-C 和板边的机械间隙。
 3. 按 [pcb_design_rules.md](pcb_design_rules.md) 核对实际规则，Repour 后由用户运行完整 Batch DRC，并按第 6.2 节记录结果。
 4. 导出包含 PCB Footprint 的 BOM，完成人工封装、Pin/Pad mapping、极性和方向核对。
-5. 更新必要的 PCB 审查图和问题状态。制造门禁关闭前不生成 Gerber、钻孔、坐标或制造包，不推进到阶段 12。
+5. 更新必要的 PCB 审查图和问题状态。用户可导出 Gerber、钻孔、坐标等待放行输出用于本阶段 Release Review；制造门禁关闭前不得提交板厂或建立最终制造归档包，放行完成后再进入阶段 8：焊接和硬件调试阶段。

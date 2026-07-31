@@ -1,9 +1,9 @@
 # STM32F103C8T6 数据采集/控制开发板
 
 > 文档状态：当前有效
-> 当前阶段：阶段 11：PCB 审查问题修正与关闭
-> 适用对象：STM32 DAQ Control Board Rev A
-> 最后核对依据：当前原理图 PDF、当前 BOM 与已确认设计决定
+> 当前项目阶段：阶段 7：PCB 审查阶段
+> 当前硬件版本：Rev A
+> 最后核对依据：当前原理图 PDF、当前 BOM、PCB 辅助审查记录与已确认设计决定
 
 ## 项目简介
 
@@ -13,9 +13,9 @@
 
 ## 当前阶段
 
-当前项目已完成 PCB Layout 和首轮 PCB 辅助审查，现处于阶段 11 的审查问题修正与关闭阶段。USB-C 当前型号、Shield RC 实现和板框尺寸已经按用户 Altium 确认同步；其余 DRC 规则、接口安全边界、安装孔/机械间隙、版本追溯、BOM Footprint 和装配标识等制造门禁仍未关闭。
+当前项目已完成 PCB Layout 和首轮 PCB 辅助审查，现处于阶段 7：PCB 审查阶段。USB-C 当前型号、Shield RC 实现和板框尺寸已经按用户 Altium 确认同步；其余 DRC 规则、接口安全边界、安装孔/机械间隙、版本追溯、BOM Footprint 和装配标识等制造门禁仍未关闭。
 
-注意：当前不代表 PCB、DRC 或制造输出已经通过。AI/Codex 未解析 `.PcbDoc`、未运行 Altium、Repour 或 Batch DRC；制造门禁关闭前不生成制造文件，也不推进到阶段 12。
+注意：当前不代表 PCB、DRC 或制造输出已经通过。AI/Codex 未解析 `.PcbDoc`、未运行 Altium、Repour 或 Batch DRC。用户可以导出待放行制造输出用于阶段 7 的 PCB Release Review；制造门禁完成前不得将其作为正式批准版本提交板厂，也不得建立最终制造归档包。阶段 7 完成并确认制造、装配准备就绪后，才进入阶段 8：焊接和硬件调试阶段。
 
 ## 第一版功能
 
@@ -54,7 +54,7 @@
 | [references.md](references.md) | datasheet、资料路径和阅读状态索引 |
 | [docs/component_selection_plan.md](docs/component_selection_plan.md) | 第一轮关键器件选型计划和历史依据 |
 | [docs/schematic_review.md](docs/schematic_review.md) | 原理图审查历史记录与已关闭问题 |
-| [docs/pcb_review.md](docs/pcb_review.md) | 阶段 11 当前问题、关闭依据与制造门禁主记录 |
+| [docs/pcb_review.md](docs/pcb_review.md) | 阶段 7 当前问题、关闭依据与制造门禁主记录 |
 | [hardware/README.md](hardware/README.md) | Altium 源文件、导出文件和图片目录约定 |
 | [docs/user/project_overview.md](docs/user/project_overview.md) | 面向展示/复盘的项目简介 |
 | [docs/user/learning_record.md](docs/user/learning_record.md) | 学习记录和复盘入口 |
@@ -66,7 +66,7 @@
 3. 读 [block_diagram.md](block_diagram.md)，建立系统模块和信号流向。
 4. 读 [design_notes.md](design_notes.md)，核对当前设计意图、主选器件、Pin Map 和接口定义。
 5. 按模块阅读 [docs/module_design/](docs/module_design/)。
-6. 使用 [docs/pcb_review.md](docs/pcb_review.md) 跟踪阶段 11 当前问题、关闭状态和制造门禁；[docs/schematic_review.md](docs/schematic_review.md) 用于追溯原理图审查历史。
+6. 使用 [docs/pcb_review.md](docs/pcb_review.md) 跟踪阶段 7 当前问题、关闭状态和制造门禁；[docs/schematic_review.md](docs/schematic_review.md) 用于追溯原理图审查历史。
 
 ## 模块设计文档
 
@@ -79,7 +79,7 @@
 
 ## 下一步
 
-1. 按 [docs/pcb_review.md](docs/pcb_review.md) 继续关闭阶段 11 的未关闭问题。
+1. 按 [docs/pcb_review.md](docs/pcb_review.md) 继续关闭阶段 7 的未关闭问题。
 2. 由用户在 Altium 中核对实际规则，Repour 后运行完整 Batch DRC，并留下可追溯记录。
 3. 继续确认安装孔和机械间隙、接口安全边界、BOM Footprint、极性和 Pin 1 标识。
-4. 制造门禁关闭前不生成 Gerber、钻孔、坐标或制造包，不推进到阶段 12。
+4. 用户可导出 Gerber、钻孔、坐标等待放行输出用于阶段 7 Release Review；制造门禁关闭前不得提交板厂或建立最终制造归档包，完成放行后再进入阶段 8：焊接和硬件调试阶段。
