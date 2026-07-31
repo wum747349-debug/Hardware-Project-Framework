@@ -1,30 +1,34 @@
-# Hardware Project Template
+# <Project Name>
 
-本目录是硬件项目模板。新增项目时，可复制本目录到 `projects/XX_Project_Name/`。
+> 文档状态：草稿
+> 当前阶段：阶段 1：需求确认阶段
+> 适用对象：<项目名称与硬件版本>
+> 最后核对依据：<待填写>
+> 最近更新：<YYYY-MM-DD>
 
-## 项目目标
+## 项目定位
 
-请在这里填写本项目要实现的功能、应用场景和第一版边界。
+- 项目用途：<待确认>
+- 第一版目标：<待确认>
+- 第一版不做：<待确认>
+- 当前结论：<待确认>
 
-## 工具链
+## 当前阶段
 
-- EDA：Altium Designer
-- MCU 配置：STM32CubeMX，如适用
-- 固件开发：Keil MDK，如适用
-- 文档：Markdown
-- 版本管理：Git / GitHub
+当前处于：`<八阶段名称>`。
 
-## 推荐流程
+进入条件、退出条件和阶段门以仓库 `docs/08_Project_Workflow.md` 为准。文件存在不代表对应阶段已完成。
 
-1. 填写 `requirements.md`
-2. 绘制或整理 `block_diagram.md`
-3. 收集资料并更新 `references.md`
-4. 进行器件选型并更新 `design_notes.md`
-5. 绘制原理图
-6. 审查原理图并更新 `docs/schematic_review.md`
-7. PCB Layout
-8. PCB 审查并更新 `docs/pcb_review.md`
-9. 打样、焊接、上电调试
-10. 更新 `docs/bringup_log.md`
-11. 完成测试并更新 `docs/test_report.md`
-12. 如有改版，更新 `docs/revision_history.md`
+## 文档导航
+
+- [需求与验收边界](requirements.md)
+- [系统框图](block_diagram.md)
+- [整板设计意图](design_notes.md)
+- [资料索引](references.md)
+- [阶段文档索引](docs/README.md)
+- [硬件源文件与输出](hardware/README.md)
+- [固件说明](firmware/README.md)
+
+## 下一步
+
+1. <待填写>

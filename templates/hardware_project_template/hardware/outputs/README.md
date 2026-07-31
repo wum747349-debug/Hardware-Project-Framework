@@ -1,0 +1,16 @@
+# outputs 目录说明
+
+本目录只保存 EDA 与制造输出，不维护设计意图或通用规则。目录存在不表示输出已生成或制造已放行。
+
+| 目录 | 职责 | 启用方式 |
+|---|---|---|
+| `schematic_pdf/` | 完整原理图 PDF | 原理图审查前由用户导出 |
+| `bom/` | 当前 BOM | 原理图审查、采购或制造前导出 |
+| `netlist/` | 条件触发网表 | 复杂网络核对时按需导出 |
+| `erc/` | 条件触发 ERC / Messages | 用户执行并需要分析时 |
+| `component_reports/` | 条件触发元件属性报告 | BOM 信息不足时 |
+| `footprint_reports/` | 条件触发封装或映射报告 | 映射风险时 |
+| `gerber/` | Gerber | 制造放行活动中导出 |
+| `drill/` | PTH / NPTH 钻孔 | 制造放行活动中导出 |
+| `pick_place/` | 贴片坐标 | SMT 装配时导出 |
+| `fabrication_package/` | 同版制造归档包 | 制造放行后整理 |
