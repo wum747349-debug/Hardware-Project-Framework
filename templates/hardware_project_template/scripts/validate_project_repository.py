@@ -25,6 +25,13 @@ REQUIRED_FILES = (
     "scripts/validate_project_repository.py",
 )
 
+REQUIRED_DIRECTORIES = {
+    "docs",
+    "hardware",
+    "references",
+    "scripts",
+}
+
 FRAMEWORK_FIELDS = (
     "Framework Repository",
     "Framework Release",
@@ -159,6 +166,16 @@ def check_required_structure(validator: Validator) -> None:
             actual_files == set(REQUIRED_FILES),
             ".",
             "Template must contain exactly the Required files; Conditional and Stage-enabled files are not pre-created",
+        )
+        actual_directories = {
+            path.relative_to(validator.root).as_posix()
+            for path in validator.root.rglob("*")
+            if path.is_dir()
+        }
+        validator.check(
+            actual_directories == REQUIRED_DIRECTORIES,
+            ".",
+            "Template must contain exactly the Required directories; empty Conditional and Stage-enabled directories are not pre-created",
         )
 
 
