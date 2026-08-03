@@ -1,4 +1,4 @@
-name: Repository framework check
+name: Framework contract check
 
 on:
   push:
@@ -11,7 +11,6 @@ on:
       - "checklists/**"
       - "templates/**"
       - "scripts/**"
-      - "projects/01_STM32_DAQ_Control_Board/**/*.md"
       - ".github/workflows/repository-framework-check.yml"
   pull_request:
     paths:
@@ -23,7 +22,6 @@ on:
       - "checklists/**"
       - "templates/**"
       - "scripts/**"
-      - "projects/01_STM32_DAQ_Control_Board/**/*.md"
       - ".github/workflows/repository-framework-check.yml"
 
 jobs:
@@ -36,5 +34,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.x"
-      - name: Validate repository framework
-        run: python scripts/validate_repository_framework.py
+      - name: Validate Framework repository
+        run: python scripts/validate_framework_repository.py
+      - name: Validate Template fixture
+        run: python scripts/validate_project_repository.py templates/hardware_project_template --template

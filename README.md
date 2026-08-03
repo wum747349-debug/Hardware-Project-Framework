@@ -1,11 +1,13 @@
 # Hardware Practice Projects
 
-> 仓库状态：Repository Architecture Transition — Framework v1 Contract
+> 仓库状态：Repository Architecture Transition — Framework v0.9 Executable Candidate
 > 当前仓库：`wum747349-debug/Hardware-Practice-Projects`
 > 目标仓库名称：`Hardware-Project-Framework`（尚未切换）
-> Framework 发布状态：尚未发布 RC 或 Final
+> Framework 发布状态：v1 Contract 的 v0.9 可执行候选；尚未发布 RC 或 Final
 
 本仓库正在从 Legacy Monorepo 收敛为 Hardware Project Framework。Framework 定义方法和契约，不作为真实 Project 的活动事实源。当前 `projects/` 仍保留三个 Legacy Migration Source；本阶段没有拆分、迁移或删除任何真实 Project。
+
+Framework v0.9 已实现 Standalone Project Template、初始化 Guide/Skill/Checklist、Project Validator、Framework Validator 与轻量 CI。它是 Framework v1 Contract 的预发布可执行候选，不是 Git Release，也不表示 Framework v1 Final 已完成。
 
 ## 架构边界
 
@@ -39,8 +41,25 @@ Project Bootstrap 位于八阶段之前，不是 Stage 0 或 Stage 1。Stage 1 �
 - [Bootstrap、Gate 1.5 与八阶段 Workflow](docs/08_Project_Workflow.md)
 - [AI 最小上下文指南](docs/AI_Context_Guide.md)
 - [Template 使用与同步规则](docs/Project_Template_Guide.md)
+- [Standalone Project 初始化指南](docs/Project_Initialization_Guide.md)
 - [Phase 0 Baseline 记录](docs/Repository_Architecture_Migration_Baseline.md)
 - [Standalone Project Template](templates/hardware_project_template/README.md)
+- [Project Initialization Skill](skills/hardware-project-initialization/SKILL.md)
+- [Gate 1.5 Checklist](checklists/project_initialization_checklist.md)
+
+## Validation
+
+```bash
+python scripts/validate_framework_repository.py
+python scripts/validate_project_repository.py templates/hardware_project_template --template
+```
+
+复制到 Standalone Project 后可在项目根运行：
+
+```bash
+python scripts/validate_project_repository.py
+python scripts/validate_project_repository.py --gate-1-5
+```
 
 ## 当前事实
 
@@ -49,6 +68,7 @@ Project Bootstrap 位于八阶段之前，不是 Stage 0 或 Stage 1。Stage 1 �
 - 当前 GitHub Repository 尚未重命名。
 - Legacy monorepo projects 仍存在，尚未执行 Project 2 / 3 Authority Cutover。
 - Framework v1 RC、Final 和最终 Reference Project 均尚未发布或建立。
+- `development-v0.9` 只用于 Framework 自测或明确预发布评估，不是正式 Release。
 
 ## Repository Architecture Migration 语义
 
