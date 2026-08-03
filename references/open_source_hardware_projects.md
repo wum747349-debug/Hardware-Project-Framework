@@ -4,10 +4,10 @@
 
 ## 01_STM32_DAQ_Control_Board
 
-| 仓库名称 | GitHub 地址 | 参考用途 | 可参考内容 | 注意事项 | 是否允许直接复用 |
-| --- | --- | --- | --- | --- | --- |
-| `devnithw/stm32-devboard` | <https://github.com/devnithw/stm32-devboard> | 参考 STM32F103 最小系统、USB 供电、3.3V 稳压、SWD 调试接口、UART/I2C 引出和 KiCad 项目文档组织方式。 | MCU 最小系统模块划分、电源与调试接口组织、外设引出思路、项目目录和文档组织。 | 该项目是 KiCad 项目，本仓库使用 Altium Designer，只参考结构，不直接复制文件。STM32 具体型号、供电、时钟、BOOT、复位、SWD、USB 和接口设计必须重新根据 datasheet / reference manual 核对。 | 否，只能参考结构和思路，不能直接照抄 |
-| `phonght32/openSTM32F4_LQFP64` | <https://github.com/phonght32/openSTM32F4_LQFP64> | 参考完整 STM32F4 控制板结构，以及多电源输入、3.3V 电源、JTAG/SWD、UART、I2C、SPI、ADC、DAC、PWM 等接口组织。 | 控制板系统结构、接口分组方式、BOM/Gerber/文档/制造输出的组织方式。 | 项目复杂度高于本仓库第一版 STM32 数据采集/控制开发板，不能照搬。第一版项目仍应优先保持简单、可焊接、可调试。 | 否，只能参考结构和思路，不能直接照抄 |
+| 仓库名称                           | GitHub 地址                                         | 参考用途                                                                        | 可参考内容                                    | 注意事项                                                                                                                            | 是否允许直接复用           |
+| ------------------------------ | ------------------------------------------------- | --------------------------------------------------------------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| `devnithw/stm32-devboard`      | <https://github.com/devnithw/stm32-devboard>      | 参考 STM32F103 最小系统、USB 供电、3.3V 稳压、SWD 调试接口、UART/I2C 引出和 KiCad 项目文档组织方式。      | MCU 最小系统模块划分、电源与调试接口组织、外设引出思路、项目目录和文档组织。 | 该项目是 KiCad 项目，本仓库使用 Altium Designer，只参考结构，不直接复制文件。STM32 具体型号、供电、时钟、BOOT、复位、SWD、USB 和接口设计必须重新根据 datasheet / reference manual 核对。 | 否，只能参考结构和思路，不能直接照抄 |
+| `phonght32/openSTM32F4_LQFP64` | <https://github.com/phonght32/openSTM32F4_LQFP64> | 参考完整 STM32F4 控制板结构，以及多电源输入、3.3V 电源、JTAG/SWD、UART、I2C、SPI、ADC、DAC、PWM 等接口组织。 | 控制板系统结构、接口分组方式、BOM/Gerber/文档/制造输出的组织方式。  | 项目复杂度高于本仓库第一版 STM32 数据采集/控制开发板，不能照搬。第一版项目仍应优先保持简单、可焊接、可调试。                                                                      | 否，只能参考结构和思路，不能直接照抄 |
 
 ## 02_LiIon_Charger_Protection_Board
 
