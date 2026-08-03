@@ -10,6 +10,15 @@ desktop.ini
 # Local prompt notes
 /prompts/AI硬件项目任务提示词.md
 /prompts/硬件项目工作流程总结.md
+/prompts/Hardware-Practice-Projects 仓库规则与项目框架升级方案.md
+/prompts/chatgpt审查提示词.md
+/prompts/chatgpt开场白.md
+/prompts/仓库调整方案.md
+/prompts/硬件项目仓库架构整改综合方案.md
+
+# Local workspace notes and standalone experiments
+/.obsidian/
+/stm32f103c8t6-template/
 
 # Altium temporary files
 __Previews/
