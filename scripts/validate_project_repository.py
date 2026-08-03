@@ -250,14 +250,15 @@ def check_placeholders(validator: Validator) -> None:
         if not path.is_file() or path.suffix.lower() not in {".md", ".py"}:
             continue
         text = path.read_text(encoding="utf-8", errors="replace")
-        found.update(PLACEHOLDER.findall(text))
         relative_path = path.relative_to(validator.root).as_posix()
-        if relative_path != "scripts/validate_project_repository.py":
-            validator.check(
-                ABSOLUTE_LOCAL_PATH.search(text) is None,
-                relative_path,
-                "contains a local absolute path",
-            )
+        if relative_path == "scripts/validate_project_repository.py":
+            continue
+        found.update(PLACEHOLDER.findall(text))
+        validator.check(
+            ABSOLUTE_LOCAL_PATH.search(text) is None,
+            relative_path,
+            "contains a local absolute path",
+        )
 
     if validator.template_mode:
         validator.check(found == EXPECTED_TEMPLATE_PLACEHOLDERS, ".", "Template placeholder set does not match the Contract")
