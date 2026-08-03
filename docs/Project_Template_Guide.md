@@ -1,99 +1,88 @@
-# 硬件项目模板使用指南
+# Project Template Guide
 
-> 文档状态：当前有效
-> 适用阶段：新项目初始化、模板维护与旧项目迁移
-> 适用对象：新项目初始化、模板维护与旧项目迁移
-> 最后核对依据：项目结构标准、八阶段流程和当前硬件项目模板
+> 文档状态：Framework v1 Contract
+> 适用对象：Standalone Project Template 的维护、发布与同步
+> 权威职责：Template 操作边界；结构与 Lifecycle 分别引用权威文档
 
-## 1. 定位与适用范围
+## 1. Template 定位
 
-`templates/hardware_project_template/` 用于初始化低压嵌入式、MCU 控制、传感器采集、电源管理、模拟前端和通信接口扩展项目。它提供项目事实入口、父目录说明和阶段文档模板，不提供任何项目的器件、网络、板框、规则值或板厂参数。
+`templates/hardware_project_template/` 是 [Project Structure Standard](Project_Structure_Standard.md) 的可复制实现，不是结构 Contract 的权威源。它必须可以从固定 Framework Release 独立复制为 Standalone Project Repository，不依赖当前 monorepo `projects/...`、本地绝对路径、Framework 工作树或同级目录。
 
-高压、射频、高速数字、隔离电源、汽车、医疗、安规或特殊制造项目只能复用基础结构，必须另补专项 Skill、checklist、标准依据和相应审查能力。
+Template 只提供 Project container、Binding/Runtime 入口、事实入口、职责说明和 Project Validator 发布快照，不提供任何真实 Project 的器件、网络、板框、规则值、板厂参数、Review、DRC、Manufacturing 或 Test 事实。
 
-权威规则分别见：
+## 2. 获取与复制规则
 
-- 项目结构、文件职责、状态头和迁移原则：`docs/Project_Structure_Standard.md`
-- 八阶段顺序、阶段门和职责：`docs/08_Project_Workflow.md`
-- AI 默认、按需和禁止读取范围：`docs/AI_Context_Guide.md`
-- 仓库稳定原则和安全边界：`PROJECT_RULES.md`
+正式 Project Bootstrap 必须从已发布的固定 Framework Release 获取 Template，不复制漂移的 Framework `main`。Framework 尚未发布时，只允许自测或明确预发布评估使用 Structure Standard 定义的 Development Binding。
 
-## 2. 从模板创建项目
+复制完成后，Project 必须能够脱离 Framework checkout 独立理解和运行 `scripts/validate_project_repository.py`。Template 与 Project Repository 不要求位于同一个父目录。
 
-1. 确认项目属于模板适用范围；复杂项目先确定专项方法和检查项。
-2. 在 `projects/` 下确定下一个稳定编号，目录命名为 `XX_Project_Name`。
-3. 复制 `templates/hardware_project_template/` 到新项目目录。
-4. 替换项目名称、当前项目阶段、当前硬件版本及所有模板占位符。
-5. 按第 4 节顺序填写初始事实文件。
-6. 在 `docs/README.md` 标记阶段文档的启用状态，不重复维护当前项目阶段。
-7. 检查相对链接、占位符、目录命名和 Git diff。
+详细 Bootstrap、Stage 1 与 Gate 1.5 顺序以 [Workflow](08_Project_Workflow.md) 为准；Phase 2 的 `docs/Project_Initialization_Guide.md` 只提供操作步骤，不重复本 Contract。
 
-复制模板只代表项目框架已初始化，不表示需求、选型、原理图、PCB、DRC 或制造已经完成。
+## 3. Template 内容分类
 
-## 3. 必须替换的占位符
+Template 必须实现 Structure Standard 定义的三类：
 
-- 项目名称和目录编号；
-- 项目根 README 的标题、唯一 `> 当前项目阶段：` 和当前硬件版本；
-- 状态头中的适用对象、依据和草稿状态；
-- 需求目标、不做内容、验收边界和待确认制造基线；
-- 框图、整板设计意图、Pin Map、接口和资料索引占位；
-- 所有 `<...>`、`待填写` 或示例性文本。
+- Required：全部存在，并以有职责的文件保留 Required 目录；
+- Conditional：默认不创建，包括 `firmware/`；
+- Stage-enabled：默认不预建，在进入相应 Stage 时创建。
 
-不得为消除占位符而虚构器件、参数、规则、EDA、DRC、制造或实测结果。
+禁止为目录整齐创建空目录、低信息量 README、空 Stage 报告或假输出。`docs/README.md`、`hardware/README.md` 与 `references/README.md` 是 Required 父目录的真实职责说明，不是低信息量占位。
 
-## 4. 初始化填写顺序
+## 4. 必须替换的 Template Placeholder
 
-1. `README.md`：项目身份、范围、阶段、版本、导航和下一步摘要。
-2. `requirements.md`：第一版目标、不做内容、验收边界、安全与制造待确认项。
-3. `block_diagram.md`：模块、能量流、信号流和边界。
-4. `design_notes.md`：整板架构、初始 Pin Map、接口和跨模块约定。
-5. `references.md`：资料来源、用途、状态和待核对项。
-6. `docs/README.md`、`hardware/README.md`、`firmware/README.md`：各目录导航与边界。
+Template 使用明确尖括号 placeholder，例如：
 
-具体文件职责和状态头定义以 `docs/Project_Structure_Standard.md` 为准。
+```text
+<PROJECT_NAME>
+<FRAMEWORK_REPOSITORY>
+<FRAMEWORK_RELEASE>
+<FRAMEWORK_COMMIT>
+<PROJECT_STRUCTURE_VERSION>
+<INITIALIZATION_FRAMEWORK_RELEASE>
+```
 
-## 5. 阶段文档启用
+Bootstrap 必须替换全部 Template placeholder，Project Validator 必须识别残留。不得使用假 SHA、假 Release 或其他 Project facts 伪装有效 binding。
 
-- 关键器件比较时启用 `docs/component_selection_plan.md`。
-- 模块进入连接、计算或专项布局设计时启用 `docs/module_design/*.md`。
-- 正式原理图审查时启用 `docs/schematic_review.md`。
-- Layout Preflight 前完成 `docs/pcb_design_rules.md`。
-- 阶段 5 可启用唯一的 `docs/pcb_review.md`，阶段 6、7 在同一文件中渐进维护。
-- 准备焊接和首次上电时启用 `docs/bringup_log.md`。
-- 正式测试时启用 `docs/test_report.md`。
-- 确立首个硬件版本或发生重要改版时启用 `docs/revision_history.md`。
+`TBD`、`待确认`、`Draft` 是允许的真实未决状态，不属于 Template placeholder。不得为消除未决状态而虚构器件、参数、EDA、DRC、制造或实测结果。
 
-文件可提前存在，但不能以“文件存在”代替阶段完成。完整阶段门和 PCB 阶段规则以 `docs/08_Project_Workflow.md` 为准。
+## 5. Project Runtime Files
 
-## 6. 初始化验收清单
+Template `AGENTS.md` 必须只实现 Structure Standard 的轻量启动路由；Template `PROJECT_RULES.md` 必须只实现十条 Project Runtime Rules；Template `FRAMEWORK.md` 必须使用唯一 schema。
 
-- [ ] 目录名符合 `XX_Project_Name`，公开引用后不因优先级变化重编号。
-- [ ] 项目结构标准要求的初始化文件和父目录齐全。
-- [ ] 项目根 README 只有一个当前阶段字段，其他文档不维护当前阶段。
-- [ ] 核心文档状态头和占位符已按真实信息处理。
-- [ ] README 能导航到项目事实入口。
-- [ ] 目标、不做内容、验收边界和制造待确认项已记录。
-- [ ] 阶段文件未误标为已完成，空输出目录未描述为已有输出。
-- [ ] 未复制其他项目的器件、网络、尺寸、规则或审查状态。
-- [ ] Markdown 相对链接、`git diff --check` 和仓库验证脚本通过。
+三者均不得：
 
-## 7. 旧项目迁移
+- 复制完整 Framework Workflow、Skill 或 Checklist；
+- 引用当前 monorepo `projects/...`；
+- 引用其他真实 Project；
+- 默认读取 Framework `main`；
+- 依赖 Windows 或其他本地绝对路径。
 
-1. 先盘点现有文件，按结构标准确定每类事实的权威源。
-2. 优先补齐项目入口、状态头、`docs/README.md` 和 `hardware/README.md`。
-3. 将重复事实收敛到主事实源，保留有追溯价值的历史记录并改为明确历史语境。
-4. 只在项目进入相关阶段时补齐阶段文档和按需目录，不机械重写全部历史。
-5. 文件移动或重命名前搜索仓库引用并修复链接。
-6. 不为满足模板外观移动、解析或改写 Altium 二进制源文件。
-7. 迁移后检查链接、职责重复、版本字段和实现证据追溯关系。
+## 6. Project Validator 发布快照
 
-## 8. Git 注意事项
+Framework 中 `scripts/validate_project_repository.py` 是唯一开发源。Template 中 `scripts/validate_project_repository.py` 是发布快照，不允许人工维护另一套逻辑。
 
-- 修改前检查工作区，保留用户已有修改和未跟踪硬件资料。
-- 只显式暂存本次创建或迁移涉及的文件，禁止 `git add .` 和 `git add -A`。
-- 提交前检查暂存 diff，避免缓存、日志、临时输出、敏感信息和其他项目改动混入。
-- 文件重命名、删除或迁移必须先确认有价值内容已保留且链接已同步。
+每次修改开发源后必须同步快照并由 Framework Validator 做 byte-for-byte 一致性检查。Project Validator 运行时只依赖 Project 自身和 Python 标准库。
 
-## 9. AI 最小上下文
+## 7. Template 维护顺序
 
-新增项目、模板维护和旧项目迁移的读取范围以 `docs/AI_Context_Guide.md` 为准。本指南只提供模板操作步骤，不重复维护结构、流程或 PCB 执行规则。
+1. 先修改权威 Contract 并通过 Contract Gate。
+2. 更新 Framework 唯一 Project Validator 开发源。
+3. 按 Contract 更新 Template Required files 与内容。
+4. 从开发源同步 Template validator snapshot。
+5. 运行 Framework Validator、Template validation 和 clean bootstrap smoke test。
+6. 如果实现暴露 Contract 必须改变，先回到权威文档修正并重新执行 Contract Gate，再同步实现。
+
+禁止在 Template、Skill、Checklist 或 Validator 中偷偷改变 Contract。
+
+## 8. Gate 1.5 与迁移边界
+
+从 Template 复制只表示 Bootstrap container 已建立。Stage 1 完成第一版 Requirements Baseline 后，必须使用 Initialization Checklist 和 Project Validator 执行 Gate 1.5；只有 Gate PASS 才能进入 Stage 2。
+
+旧 Project 迁移不是普通 Template copy。迁移必须保留原权威源，建立事实映射，验证 Standalone Repository，并按 Structure Standard 显式执行 Authority Cutover；禁止长期双写。
+
+## 9. 相关权威文档
+
+- [Project Structure Standard](Project_Structure_Standard.md)
+- [Hardware Project Workflow](08_Project_Workflow.md)
+- [AI Context Guide](AI_Context_Guide.md)
+- [Framework Rules](../PROJECT_RULES.md)

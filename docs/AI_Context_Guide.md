@@ -1,140 +1,112 @@
-# AI 上下文读取指南
+# AI Context Guide
 
-> 文档状态：当前有效
-> 适用阶段：全部八阶段
-> 适用对象：本仓库 AI/Codex 协作任务
-> 最后核对依据：八阶段工作流程、项目结构标准与当前 Skill 路由
+> 文档状态：Framework v1 Contract
+> 适用对象：Framework 维护、Standalone Project 与显式迁移任务
+> 权威职责：默认、按需与禁止读取范围
 
-## 1. 文件定位
+## 1. 核心规则
 
-本文规定 AI 协助本仓库时的最小必要上下文，避免随项目、Skill、checklist 和历史记录增加而无边界加载。
+AI/Codex 只读取“当前身份与绑定 + 当前 Runtime Rules + 当前 Project Facts + 当前 Stage Method + 当前任务 Evidence”。不为保险加载全部 Project、Skill、checklist、datasheet、模板或历史记录。
 
-仓库接手、仓库整体介绍、项目选择或项目优先级判断时读取：
+Framework Repository 与 Standalone Project 的启动路径不同，不能混用。
+
+## 2. Standalone Project 四层上下文
+
+| Layer | 默认入口 | 内容 |
+| --- | --- | --- |
+| Layer 0 — Framework Binding | `FRAMEWORK.md` | Framework Repository、Release、Commit、Structure Version、初始化来源与状态 |
+| Layer 1 — Runtime Rules | Project `PROJECT_RULES.md` | 所有阶段始终成立的最小项目规则 |
+| Layer 2 — Project Facts | 当前 Project 的 README、需求、框图、设计说明、资料、模块、Review 与 Evidence | 当前项目实际身份、阶段、设计和结果 |
+| Layer 3 — Stage Method | 绑定 Framework 快照中的 Skill、Checklist、Workflow fragment、专项 Guide | 当前任务如何执行 |
+
+Standalone Project `AGENTS.md` 必须按顺序：
+
+1. 读取 Layer 0 `FRAMEWORK.md`；
+2. 读取 Layer 1 `PROJECT_RULES.md`；
+3. 使用绑定的 Release + Commit 定位 Framework 快照；
+4. 从该快照读取本文；
+5. 只加载当前任务需要的 Layer 2、Layer 3 和 Evidence。
+
+Project 不默认读取 Framework `main`，不默认读取其他 Project，也不依赖 Framework 与 Project 位于同一父目录。
+
+## 3. Framework Repository 维护路由
+
+仓库接手、架构、导航或 Framework 整体维护先读取：
 
 - `PROJECT_RULES.md`
 - `AGENTS.md`
 - `docs/AI_Context_Guide.md`
 - `README.md`
 
-用户已经明确当前项目和具体任务时，仓库级基础上下文仍为 `PROJECT_RULES.md`、`AGENTS.md` 和本文，但不默认读取仓库根 `README.md`；改为按任务读取当前项目根 `README.md`、当前阶段 Skill、项目事实文件和证据。
+随后按任务读取：
 
-仅在判断完整流程、当前阶段、阶段权限、回退条件或维护流程时读取 `docs/08_Project_Workflow.md`。仅在新项目初始化、旧项目迁移或模板维护时读取 `docs/Project_Structure_Standard.md`、`docs/Project_Template_Guide.md` 和模板。
+| 任务 | 按需读取 | 不应默认读取 |
+| --- | --- | --- |
+| Contract / Structure | `docs/Project_Structure_Standard.md`、`docs/08_Project_Workflow.md`、`docs/Project_Template_Guide.md` | 真实 Project 硬件细节、datasheet、EDA |
+| Template / Bootstrap | Structure、Workflow、Template Guide、Template、初始化 Skill/checklist/Validator | 所有真实 Project、全部 Skill |
+| Validator | 被检查的权威文档、Template、相关 Skill/checklist、现有 CI | Project 1/2/3 设计事实 |
+| 单一 Skill / Checklist | 对应权威文档和被修改文件 | 其他无关 Skill/checklist |
+| Legacy Migration | 迁移 Guide、目标 Project 最小事实与结构映射 | 其他 Project、无关历史输出 |
+| README / 通用文档 | 被修改文档及其直接权威引用 | 全部 Project 硬件细节 |
 
-## 2. 核心原则
+只有确认 Phase 0 恢复点时读取 `docs/Repository_Architecture_Migration_Baseline.md`。Legacy Project 只在兼容或迁移核对确有必要时读取最小结构信息；不得把其器件、网络、规则值、板框、板厂参数或阶段结果变成 Framework 默认值。
 
-- 默认只读取“仓库基础规则 + 当前项目事实文件 + 当前阶段 Skill + 当前任务证据”。
-- 一个项目任务只读取该项目相关内容；不默认加载其他项目。
-- 一个阶段任务只读取该阶段 Skill；跨阶段任务才按需读取上游 Skill。
-- 不默认加载全部 datasheet，只读取当前决策、问题或关键器件所需资料。
-- 不默认加载项目 1，也不把项目 1 的器件、网络、板框、规则值或板厂参数当作通用参数。
-- 不为“保险”读取全部历史审查、调试、测试或改版记录。
-- 涉及关键硬件参数时，回到官方 datasheet、reference manual 或 application note 核对。
-- 涉及制造能力时，使用目标板厂当前官方资料；商品页、报价和促销不能替代官方工艺能力。
-- 文档变更只更新相应事实源，不机械同步全部项目文件。
+## 4. Bootstrap、Stage 1 与 Gate 1.5
 
-## 3. 上下文分层
+### Bootstrap
 
-| 层级 | 内容 | 示例 |
-|---|---|---|
-| 基础上下文 | 仓库稳定规则与读取规则 | `PROJECT_RULES.md`、`AGENTS.md`、本文 |
-| 阶段上下文 | 当前任务的执行方法 | 当前阶段 `skills/*/SKILL.md` |
-| 当前项目上下文 | 当前项目事实与设计意图 | `requirements.md`、`design_notes.md`、`references.md` |
-| 实现证据 | 支撑 EDA、DRC、制造或实测结论的输入 | PDF、BOM、图片、报告、输出、测量记录 |
-| 扩展上下文 | 条件触发资料 | 模块文档、checklist、板厂能力、历史记录、模板、开源索引 |
+默认读取：Layer 0/1、Structure Standard、Workflow 的 Bootstrap 章节、Project Initialization Guide、初始化 Skill、Template、Project 根 Required files。
 
-## 4. 八阶段任务读取范围
+按需读取：专项合规方法、目标 Release 的 Migration Guide。
 
-| 主阶段 / 任务 | 默认读取 | 按需读取 | 不应默认读取 |
-|---|---|---|---|
-| 阶段 1：需求确认 | 基础上下文 + 当前项目 `requirements.md`、`block_diagram.md` | 项目 `README.md`、结构标准、模板指南（仅初始化/迁移） | 其他项目、全部 datasheet、全部 Skill |
-| 阶段 2：关键器件选型 | 基础上下文 + 器件选型 Skill + 当前项目 `requirements.md`、`design_notes.md`、`references.md` | 当前候选 datasheet、datasheet Skill、专项 checklist | 原理图/PCB 审查 Skill、无关器件资料 |
-| 阶段 3：模块设计与原理图绘制协作 | 基础上下文 + 当前项目需求、设计说明、资料索引、当前模块文档和关键资料 | 选型 Skill、datasheet Skill、BOM 草稿、封装资料 | 其他项目、全部历史记录 |
-| 阶段 4：原理图审查 | 基础上下文 + 原理图审查 Skill + 当前项目需求、设计说明、资料索引、完整原理图 PDF、当前 BOM、`docs/schematic_review.md` | 当前模块文档；网表、ERC、元件报告、映射报告、截图仅按具体问题触发 | 其他项目、模板、全部 Skill |
-| 阶段 5：Layout Preflight | 基础上下文 + PCB Skill；具体范围见本文“PCB 三种模式最小上下文” | 按该章节的 Layout Preflight 条件触发 | 按该章节的 Layout Preflight 禁止读取范围 |
-| 阶段 5～6：Layout / Routing Review | 基础上下文 + PCB Skill；具体范围见本文“PCB 三种模式最小上下文” | 按该章节的 Layout / Routing Review 条件触发 | 按该章节的 Layout / Routing Review 禁止读取范围 |
-| 阶段 7：PCB Release Review | 基础上下文 + PCB Skill；具体范围见本文“PCB 三种模式最小上下文” | 按该章节的 PCB Release Review 条件触发 | 按该章节的 PCB Release Review 禁止读取范围 |
-| 阶段 8：焊接和硬件调试 | 基础上下文 + 当前项目 `bringup_log.md`、`test_report.md`、原理图和接口说明 | PCB 审查记录、关键 datasheet、专项安全 checklist、`revision_history.md` | 其他项目历史记录、模板 |
+禁止默认读取：其他 Project、全部 Stage Skill、datasheet、EDA、制造和测试历史。
 
-## 5. 常见维护任务
+### Stage 1
 
-| 任务 | 默认读取 | 按需读取 | 不应默认读取 |
-|---|---|---|---|
-| 新增项目 | 基础上下文 + 结构标准 + 模板指南 + 硬件项目模板 | 八阶段流程 | 其他项目历史记录 |
-| 模板维护 | 基础上下文 + 结构标准 + 模板指南 + 模板 | 一个明确的参考项目结构 | 所有项目内容、全部 datasheet |
-| 旧项目迁移 | 基础上下文 + 结构标准 + 当前项目入口与目录说明 | 当前阶段文件、八阶段流程 | 机械重写全部历史记录 |
-| README / 通用文档维护 | 基础上下文 + 被修改文档 | 与引用关系直接相关的权威文档 | 当前项目全部硬件细节 |
-| 开源项目参考分析 | 基础上下文 + 仓库开源参考索引 | 当前项目 `references.md`、需求与设计说明 | 其他无关项目 |
-| 历史问题追踪 | 基础上下文 + 当前问题所在审查/调试/测试记录 | 与该问题直接关联的证据和资料 | 全部历史输出 |
+默认读取：Layer 0/1、项目 `README.md`、`requirements.md`、`block_diagram.md`、`design_notes.md`、`references.md`，以及初始化 Skill 的 Stage 1 章节。
 
-## 6. PCB 三种模式最小上下文
+按需读取：Workflow 的 Stage 1 章节、专项安全/合规 checklist。
 
-PCB Layout Preflight、布局审查、布线铺铜审查、PCB Review 和制造放行默认读取 `skills/hardware-pcb-layout-review/SKILL.md`。
+禁止默认读取：器件选型后的 Stage Skill、其他 Project、全部 datasheet。
 
-三种模式都默认读取当前项目根 `README.md`，仅用于确认项目身份、当前项目阶段、当前硬件版本、当前入口和下一步摘要。项目 README 不替代 `requirements.md`、`design_notes.md`、`docs/pcb_design_rules.md` 或 `docs/pcb_review.md` 的事实职责。
+### Gate 1.5
 
-### Layout Preflight
+默认读取：Layer 0/1、Project Required files、Structure Standard 的 Required/Conditional/Stage-enabled 定义、Workflow Gate 1.5、Initialization Checklist 与 Project Validator 输出。
 
-- 当前项目 `README.md`
-- 当前项目 `requirements.md`
-- 当前项目 `design_notes.md`
-- 当前项目 `references.md`
-- 当前项目 `docs/schematic_review.md`
-- 当前项目 `docs/pcb_design_rules.md`
-- 关键器件 Layout 资料
+按需读取：Markdown 链接目标、用户提供的身份或绑定证据。
 
-原理图 PDF、BOM、模块文档、板厂官方能力和机械约束按需读取；不默认读取 `pcb_review.md`、DRC 报告或制造输出。
+Gate 1.5 不读取或产生后续阶段设计结果；Validator 结果不能替代对 Requirements Baseline 真实性的人工判断。
 
-### Layout / Routing Review
+## 5. 八阶段最小读取范围
 
-- 当前项目 `README.md`
-- 当前项目 `requirements.md`
-- 当前项目 `design_notes.md`
-- 当前项目 `docs/pcb_design_rules.md`
-- 当前 PCB 图片或用户提供的实现证据
+| Stage / Task | 默认读取 | 按需读取 | 不应默认读取 |
+| --- | --- | --- | --- |
+| Stage 1 — Requirements | Layer 0/1 + 当前项目五个根事实入口 + 初始化 Skill | Workflow Stage 1、专项安全方法 | 其他 Project、全部 datasheet、后续 Skill |
+| Stage 2 — Component Selection | Layer 0/1 + 选型 Skill + Requirements/Design/References | 当前候选官方资料、datasheet Skill、专项 checklist | 原理图/PCB Review Skill、无关资料 |
+| Stage 3 — Schematic Design | Layer 0/1 + 当前需求、设计说明、资料索引、当前模块文档 | 选型/datasheet Skill、BOM 草稿、封装资料 | 其他 Project、全部历史记录 |
+| Stage 4 — Schematic Review | Layer 0/1 + Review Skill + Requirements/Design/References + 完整 PDF + 当前 BOM + Review 记录 | 当前模块文档；网表/ERC/报告/截图按具体问题触发 | 其他 Project、Template、全部 Skill |
+| Stage 5 — Layout Preflight | Layer 0/1 + PCB Skill + README/Requirements/Design/References + Schematic Review + PCB Rules + 关键 Layout 资料 | PDF/BOM/机械/板厂官方能力 | Batch DRC、制造输出、其他 Project |
+| Stage 5–6 — Layout/Routing Review | Layer 0/1 + PCB Skill + README/Requirements/Design/PCB Rules + 当前 PCB Evidence | 模块资料、关键 datasheet、已有 PCB 问题 | 全部资料、Release checklist、制造输出 |
+| Stage 7 — PCB Release Review | Layer 0/1 + PCB Skill + README/Requirements/PCB Rules/PCB Review + 当前 BOM/Evidence + 用户 Batch DRC + 制造输出清单 + Release Checklist | 局部 Gerber、Drill、坐标、截图和报告片段 | 其他 Project 历史 |
+| Stage 8 — Bring-up/Test | Layer 0/1 + README + Bring-up/Test 记录 + 原理图与接口说明 | PCB Review、关键 datasheet、安全 checklist、Revision | 其他 Project、Template |
 
-模块文档、关键 datasheet、原理图审查记录和已有 PCB 问题按需读取；不默认读取全部资料索引、全部 datasheet、完整流程、Release Checklist、制造输出或 DRC 结果。
+## 6. 条件触发与证据边界
 
-### PCB Release Review
+- 目标板厂官方能力：仅在制造基线、规则、裕量或下单核对时读取。
+- 关键器件官方资料：仅在当前参数、连接、封装、Layout 或安全判断需要时读取。
+- 原理图 PDF / BOM / 报告：仅在相应 Review 或具体追溯问题需要时读取。
+- DRC 局部证据：用户摘要不足以判断具体违规、规则或豁免时读取。
+- Gerber、Drill、坐标与装配输出：制造放行时读取。
 
-- 当前项目 `README.md`
-- 当前项目 `requirements.md`
-- 当前项目 `docs/pcb_design_rules.md`
-- 当前项目 `docs/pcb_review.md`
-- 当前 PCB 实现证据和当前 BOM
-- 用户在对话中提供的完整 Batch DRC 结果
-- 制造输出清单或待放行的实际输出
-- `checklists/pcb_release_checklist.md`
+无可靠 `.SchDoc` / `.PcbDoc` 解析能力时，只使用用户提供的 PDF、BOM、图片、报告、规则摘要和输出。图片不能证明网络、间距、线宽、孔径、规则命中、铺铜或 DRC 通过。无法确认的实现事项标记“待 EDA 核对”，不得据此关闭问题或制造放行。
 
-Gerber、Drill、Pick and Place、装配图、制造说明和局部截图按具体问题读取。DRC 摘要默认来自用户对话，不要求专门报告或完整截图。
+## 7. 完整 Workflow 读取条件
 
-### 条件触发原则
+只在以下情况完整读取 `docs/08_Project_Workflow.md`：
 
-- 目标板厂官方能力：制造基线、设计规则、制造规则或下单核对任务；
-- 相关关键器件 PCB Layout 要求：布局、布线、散热、回流或专项规则依赖器件要求时；
-- 原理图 PDF 与 BOM：问题涉及网络、封装、极性、接口或原理图审查追溯时；
-- DRC 局部截图或报告片段：用户摘要不足以判断具体违规、规则问题或豁免时；
-- Gerber、钻孔、坐标和装配输出：制造放行时。
+- 判断 Bootstrap、当前 Stage、Gate、回退或阶段权限；
+- 执行新 Project 初始化或旧 Project migration；
+- 维护 Workflow、Structure、Template 或跨阶段 Contract；
+- 用户明确要求完整流程。
 
-不因一般 PCB 视觉审查自动浏览板厂资料；只有判断制造能力、规则值、裕量或下单参数时才读取目标板厂官方能力。
-
-## 7. Altium 与证据边界
-
-- `.SchDoc` 与 `.PcbDoc` 是权威实现源文件，但只有当前环境具备可靠解析器、脚本或自动化接口时，AI 才能直接读取相应内部对象。
-- 无可靠 `.SchDoc` 解析能力时，原理图审查默认使用可追溯的完整原理图 PDF 和当前 BOM。
-- 无可靠 `.PcbDoc` 解析能力时，只使用用户提供的 PCB 图片、规则摘要、DRC 对话结果、报告、截图和制造输出等实现证据。
-- PCB 图片只能支持视觉审查，不能证明网络、间距、线宽、孔径、环宽、规则命中、铺铜状态或 DRC 通过。
-- AI 只有在用户提供 ERC 或 DRC 结果时才分析实际结果，不得声称自行运行 Altium、Repour、ERC 或 Batch DRC。
-- 缺少 DRC 报告文件不自动阻断审查；缺少版本、规则基线或关键类别时，只能给出受限结论。
-- 无法由现有证据确认的实现事项，标记“待 EDA 核对”，不得据此关闭问题或制造放行。
-
-## 8. 完整流程读取规则
-
-仅在以下情况读取完整 `docs/08_Project_Workflow.md`：
-
-- 判断项目处于哪个主阶段；
-- 判断进入、退出、回退或阶段权限；
-- 执行新项目初始化或旧项目迁移；
-- 维护流程、结构、模板或跨阶段门禁；
-- 用户明确要求完整流程说明。
-
-普通 datasheet 阅读、单次器件选型、单次原理图审查、单次 PCB 审查、调试记录或小幅文档维护不默认读取完整流程。
+普通 datasheet 阅读、单次选型、单次 Review、调试记录或小幅文档维护只读取相关章节和当前任务上下文。

@@ -1,422 +1,227 @@
-# 硬件项目八阶段工作流程
+# Hardware Project Workflow
 
-> 文档状态：当前有效
-> 适用阶段：全部八阶段
-> 适用对象：本仓库硬件项目
-> 最后核对依据：`PROJECT_RULES.md`、`docs/Project_Structure_Standard.md`
+> 文档状态：Framework v1 Contract
+> 适用范围：Project Bootstrap、Gate 1.5 与八个硬件主阶段
+> 权威职责：Lifecycle、进入/退出/回退条件与阶段门
 
-## 1. 文档定位
+## 1. Lifecycle
 
-本文只规定八个主阶段的边界、输入输出、职责和阶段门。具体执行方法由对应 Skill 维护，逐项检查由 `checklists/` 维护，项目事实与结果由项目文件维护。
+```text
+Project Bootstrap
+        ↓
+Stage 1 — Requirements Definition
+        ↓
+Gate 1.5 — Project Initialization & Requirements Baseline
+        ↓
+Stage 2 → Stage 3 → Stage 4 → Stage 5 → Stage 6 → Stage 7 → Stage 8
+```
 
-普通任务按 [AI 上下文读取指南](AI_Context_Guide.md) 读取最小必要上下文；项目结构和文件职责以 [项目结构标准](Project_Structure_Standard.md) 为准。
+Bootstrap 位于八阶段之前，不是 Stage 0，也不属于 Stage 1。Gate 1.5 位于 Stage 1 与 Stage 2 之间，只检查初始化和第一版 Requirements Baseline，不产生器件、原理图、PCB、DRC、制造或测试结果。
 
-## 2. 总原则
+项目结构、绑定 schema 和 Stage-enabled 路径以 [Project Structure Standard](Project_Structure_Standard.md) 为准；AI 读取范围以 [AI Context Guide](AI_Context_Guide.md) 为准；执行方法由对应 Skill 维护；逐项检查由 checklist 维护。
 
-- 采用渐进式硬件设计：先确认需求与模块边界，再围绕当前决策选择器件、读取资料、反推外围、形成 BOM 草稿和 EDA 实现。
-- datasheet 阅读、BOM 维护、制造输出和改版记录是阶段内活动，不另设顶层阶段。
-- 规则文件描述“应该是什么”，审查记录描述“实际是否做到”。文件存在不代表阶段完成。
-- AI/Codex 负责分析、建议、文档、证据审查和 Git；用户负责 Altium Designer 操作、焊接和实测。
-- `.SchDoc` 与 `.PcbDoc` 是权威实现源。无可靠解析能力时，AI 不声称读取其内部对象，也不声称运行 ERC、Repour、DRC 或制造输出。
-- 证据不足的结论必须说明限制，或标记“待 EDA 核对”“待用户确认”“待实测”。
-- 项目当前阶段只在项目根 `README.md` 维护。
+## 2. 通用原则
 
-## 3. 八阶段总览
+- 八个主阶段的数量和顺序保持不变；datasheet、BOM、制造输出、测试与改版是阶段内活动。
+- 项目当前阶段只在根 `README.md` 的唯一字段维护，不能由文件存在推断。
+- Required 文件在 Bootstrap 建立；Conditional 内容按项目需要建立；Stage-enabled 文件只在进入相关工作时创建。
+- 规则文件描述“应该是什么”，Review、DRC、Bring-up 和 Test 记录描述“实际是否做到”。
+- `.SchDoc` / `.PcbDoc` 是权威 EDA 实现源；无可靠解析能力时 AI 不声称读取内部对象或运行 Altium、ERC、Repour、DRC。
+- 证据不足的结论必须明确限制或标记 `TBD` / `待确认` / `待 EDA 核对` / `待用户确认` / `待实测`。
+- 回退到上游阶段后，所有受影响下游 Gate 必须重新评估。
 
-| 阶段  | 主阶段          | 主要输出                                                    | 核心阶段门                    |
-| --- | ------------ | ------------------------------------------------------- | ------------------------ |
-| 1   | 需求确认阶段       | `requirements.md`、`block_diagram.md`、设计边界               | 第一版范围和基础 PCB 规格明确        |
-| 2   | 关键器件选型阶段     | 主选/备选、选型记录、资料索引                                         | 影响架构与布局的关键器件有可靠依据        |
-| 3   | 原理图模块设计和绘制阶段 | 模块设计依据、原理图实现及原理图审查输入                                    | 同版完整原理图 PDF 与当前 BOM 可供审查 |
-| 4   | 原理图审查阶段      | `docs/schematic_review.md`                              | 高风险问题关闭，关键布局输入明确         |
-| 5   | PCB 布局阶段     | 规则基线、Layout Preflight、正式布局                              | 规则与布局前置条件满足，不以 DRC 为门禁   |
-| 6   | 布线和铺铜阶段      | 完成布线与铺铜的 PCB、审查输入                                       | 关键问题已处理，具备 PCB 审查输入      |
-| 7   | PCB 审查阶段     | `docs/pcb_review.md`、Batch DRC 摘要、制造输出与放行结论             | 完整 Batch DRC 和制造门禁满足     |
-| 8   | 焊接和硬件调试阶段    | `bringup_log.md`、`test_report.md`、`revision_history.md` | 安全上电、功能验证和问题回溯完成         |
+## 3. Project Bootstrap
 
-## 4. 阶段 1：需求确认阶段
+### 目标
 
-### 阶段目标
+建立独立 Project 容器、Project Identity、Framework Binding 和 Required 入口，使 Project 可以在不依赖 monorepo 路径或本地 Framework 目录的情况下继续 Stage 1。
 
-明确第一版做什么、不做什么，完成模块拆分，并建立电源、接口、负载、模拟、安全、调试、机械和基础制造边界。
+### 输入
+
+- 一个用于初始化的固定 Framework Release；
+- 该 Release 对应的 immutable commit；
+- Project 名称与活动权威仓库位置；
+- Template 与 Project Validator 发布快照。
+
+### 活动
+
+1. 从固定 Framework Release 获取 `templates/hardware_project_template/`，不复制 Framework `main` 的漂移工作树。
+2. 创建结构标准定义的全部 Required 文件与职责目录。
+3. 填写 Project Identity 和 `FRAMEWORK.md` binding；尚未正式发布时的 Framework 自测使用明确 Development Binding。
+4. 将根 `README.md` 当前状态设为 `Bootstrap`，建立项目导航。
+5. 清除必须替换的 Template placeholder；未知项目事实保留为 `TBD`、`待确认` 或 Draft，不虚构答案。
+6. 只按实际需要启用 Conditional 内容，不预建 Stage-enabled 文件。
+
+### 允许状态
+
+Bootstrap 允许 Draft、TBD 与待确认，但禁止为清除占位符而虚构器件、参数、原理图、PCB、ERC、DRC、Manufacturing 或 Test。
+
+### 输出与退出条件
+
+- Project Identity 唯一且不含其他 Project 残留；
+- `FRAMEWORK.md` schema 完整，Release + Commit 不含歧义；
+- Required files 齐全，导航链接有效；
+- Project Validator 可在 Standalone Project 中独立运行；
+- 根 `README.md` 可以真实切换到 Stage 1。
+
+Bootstrap 完成只证明项目容器可用，不证明 Requirements Baseline 已建立。
+
+## 4. Stage 1 — Requirements Definition
+
+### 目标
+
+建立第一版 Requirements Baseline，明确做什么、不做什么、模块边界及进入关键器件选型所需的工程约束。
 
 ### 必需输入
 
+- 已完成的 Project Bootstrap；
 - 项目用途、应用场景和第一版约束；
-- 已知电源、接口、负载、安全、成本、尺寸和装配要求。
+- 已知电源、接口、负载、安全、成本、尺寸、制造与装配要求。
 
 ### 主要活动
 
-- 确认功能目标、验收边界和明确不做的内容；
-- 拆分模块，整理能量流、信号流和接口边界；
-- 识别电源、电池、MOSFET、模拟输入、误接和首次上电风险；
-- 确认目标板厂、材料、层数、板厚、铜厚、装配方式及初步机械约束；
-- 将未确定事项标记为待确认，不提前虚构具体规则值。
+- 记录项目目标与第一版不做内容；
+- 定义功能边界和模块边界；
+- 建立主要能量流、信号流与接口需求；
+- 记录电源、安全、误接、首次上电和调试边界；
+- 建立制造基础要求与机械/装配约束；
+- 定义可验证的验收标准；
+- 将未决事项记录为待确认问题，并说明影响与核对计划。
 
 ### 主要输出
 
-- `requirements.md`、`block_diagram.md`；
-- `design_notes.md` 的整板结构入口；
-- 项目根 `README.md` 的当前阶段和范围摘要。
-
-### AI/Codex 与用户职责
-
-- AI/Codex：整理需求、模块、风险和待确认项，维护事实文件。
-- 用户：确认范围、优先级、制造基线、机械约束和最终取舍。
-
-### 进入条件
-
-已有可描述的项目目标和需求确认人。
+- `requirements.md` 第一版 baseline；
+- `block_diagram.md` 第一版模块、能量流和信号流；
+- `design_notes.md` 的整板设计意图入口；
+- `references.md` 的资料需求入口；
+- 根 `README.md` 的真实 Stage 1 状态与导航。
 
 ### 退出条件
 
-第一版范围、模块边界、主要电源与接口、基础制造规格和验收边界足以支撑关键器件选型；未决项有负责人和核对计划。
+目标、不做内容、功能/模块/电源/接口/安全/制造边界、验收标准和待确认问题足以支撑 Gate 1.5；未知项没有被虚构为已确认事实。
 
-### 回退条件
+Stage 1 完成后必须执行 Gate 1.5，不能直接进入 Stage 2。
 
-后续功能、接口、电源、机械、板厂或验收边界变化时回到本阶段，并评估下游影响。
+## 5. Gate 1.5 — Project Initialization & Requirements Baseline
 
-### Skill / Checklist
+### 位置与职责
 
-新项目初始化参见 [项目模板指南](Project_Template_Guide.md)；专项安全问题按需使用对应 checklist。
+Gate 1.5 位于 Stage 1 与 Stage 2 之间。它验证 Project 容器、Framework Binding、事实入口和第一版 Requirements Baseline 是否可用；不产生设计结果。
 
-## 5. 阶段 2：关键器件选型阶段
+### 检查范围
 
-### 阶段目标
+- Project Identity 唯一且与当前仓库一致；
+- Framework Repository、Release、Commit、Project Structure Version、Repository Model、Initialization Framework Release 与 Status 完整一致；
+- 根事实入口齐全，根 `README.md` 是当前阶段唯一事实源；
+- README Navigation 的必要相对链接有效；
+- Template placeholder 已替换，`TBD` / `待确认` 仅作为真实未决状态存在；
+- 不含 Project 1 / 2 / 3 名称、旧 monorepo 路径或其他 Project facts 残留；
+- Required 齐全，Conditional 未被误判为 Required，Stage-enabled 内容未为目录整齐提前预建；
+- 无职责的空目录和低信息量文件不存在；
+- Stage 1 Requirements Baseline 覆盖目标、不做内容、功能/模块/电源/接口/安全/制造边界、验收标准和待确认问题；
+- 尚未开始的选型、EDA、Review、DRC、Manufacturing、Bring-up、Test 明确保持未开始/未验证状态；
+- 没有提前产生或声称后续阶段结论。
 
-选择影响架构、外围、封装、布局、散热和采购的关键器件，形成有依据的主选与备选。
+### 结论
 
-### 必需输入
+只有全部阻断项关闭后，Gate 1.5 才能 `PASS` 并将 `Initialization Status` 更新为 `Initialized`。任何阻断项存在时结论为 `FAIL`，Project 保持 Stage 1 / `Gate 1.5 Pending`。
 
-- `requirements.md`、`block_diagram.md`、`design_notes.md`、`references.md`；
-- 当前模块的采购和封装约束。
+Gate 1.5 PASS 是进入 Stage 2 的必要条件，但不证明任何关键器件、EDA 或验证结果。
 
-### 主要活动
+逐项执行使用 `checklists/project_initialization_checklist.md`，自动结构检查使用 Project Validator；人工事实判断不能由 Validator 完全替代。
 
-- 建立关键器件筛选条件、主选、备选和淘汰理由；
-- 按当前决策读取 datasheet、reference manual 或 application note；
-- 核对工作范围、外围、封装、引脚、Layout 要求和采购风险；
-- 普通阻容、LED、排针和测试点等不影响架构的器件后置。
+## 6. Stage 2 — Critical Component Selection
 
-### 主要输出
+### 目标与活动
 
-- `docs/component_selection_plan.md`；
-- 更新后的 `references.md` 与 `design_notes.md`；
-- 关键参数、风险和资料待核对项。
-
-### AI/Codex 与用户职责
-
-- AI/Codex：提供比较维度、资料提取和风险分析，不把商品页当作关键参数唯一依据。
-- 用户：执行采购平台搜索，确认型号、库存、成本、封装和最终选择。
-
-### 进入条件
-
-阶段 1 的架构与制造边界足以筛选器件。
-
-### 退出条件
-
-影响架构、外围、封装和布局的器件有主选与合理备选；关键参数有可靠依据或明确待核对计划；候选记录未被误写为最终 BOM。
-
-### 回退条件
-
-无候选满足需求，或器件迫使成本、尺寸、层数、供电、接口或装配方式实质变化时回到阶段 1。
-
-### Skill / Checklist
-
-使用 `skills/hardware-component-selection/SKILL.md`；读取关键资料时使用 `skills/hardware-datasheet-reading/SKILL.md`。
-
-## 6. 阶段 3：原理图模块设计和绘制阶段
-
-### 阶段目标
-
-依据关键器件资料完成模块电路、外围参数和专项布局要求，由用户在 Altium Designer 中实现正式原理图。
-
-### 必需输入
-
-- 阶段 1 的需求与模块边界；
-- 阶段 2 的器件决策与关键资料；
-- 当前 `design_notes.md`、`references.md` 和模块文档。
-
-### 主要活动
-
-- 整理各模块供电、信号、保护、调试和跨模块接口；
-- 依据资料反推外围、去耦、偏置、保护、时钟、复位和滤波参数；
-- 核对引脚、封装、极性、额定值与 Pin/Pad mapping 风险；
-- 维护模块设计依据、整板约定和带封装/风险信息的 BOM 草稿；
-- 用户绘制并版本化原理图，导出同版完整原理图 PDF 和当前 BOM。
-
-### 主要输出
-
-- 模块设计依据、BOM 草稿；
-- Altium 原理图；
-- 可追溯原理图 PDF 和当前 BOM。
-
-### AI/Codex 与用户职责
-
-- AI/Codex：协助连接分析、计算、风险检查和文档，不声称完成 Altium 实现。
-- 用户：实际绘制和复核原理图，维护符号、封装、网络与器件属性，导出审查输入。
+选择影响架构、外围、封装、布局、散热和采购的关键器件，依据官方资料形成主选、备选与淘汰理由。普通阻容等不影响架构的器件可以后置。
 
 ### 进入条件
 
-关键器件和资料足以确定当前模块方向。
+Gate 1.5 已 PASS，Requirements Baseline 足以筛选器件。
 
-### 退出条件
+### 主要输出与退出条件
 
-模块设计依据可追溯；BOM 草稿包含必要位号、数量、参数/型号和封装；同版完整原理图 PDF 与当前 BOM 已准备；关键 Layout 要求明确或有核对计划。
+启用 `docs/component_selection_plan.md`，更新 `references.md` 与 `design_notes.md`。影响架构/封装/Layout 的关键器件有可靠依据或明确核对计划，候选记录未被误写为最终 BOM。
 
-### 回退条件
+需求、供电、接口、尺寸、装配或制造边界因器件选择实质变化时回到 Stage 1 并重新执行 Gate 1.5。
 
-器件或资料不成立时回到阶段 2；需求、接口或模块边界冲突时回到阶段 1。
+## 7. Stage 3 — Schematic Module Design and Capture
 
-### Skill / Checklist
+### 目标与活动
 
-按需使用 datasheet、器件选型 Skill 和原理图设计 checklist。正式审查结果只在阶段 4 形成。
-
-## 7. 阶段 4：原理图审查阶段
-
-### 阶段目标
-
-在 PCB Layout 前发现并关闭供电、接口、保护、封装、引脚、板级安全和关键布局输入问题。
-
-### 必需输入
-
-- 可追溯到当前 `.SchDoc` 的完整原理图 PDF；
-- 当前 BOM；
-- `requirements.md`、`design_notes.md`、`references.md`、相关模块文档和 `docs/schematic_review.md`。
-
-### 主要活动
-
-- 系统审查原理图、BOM、关键器件依据和模块意图；
-- 记录问题、风险、证据、修改建议、关闭条件和状态；
-- 仅在具体问题需要时读取网表、报告、映射证据或截图；
-- 仅在用户提供 ERC 结果时分析 ERC。
-
-### 主要输出
-
-- `docs/schematic_review.md`；
-- 必要的需求、设计、模块文档和 BOM 同步；
-- 是否允许进入 Layout Preflight 的结论。
-
-### AI/Codex 与用户职责
-
-- AI/Codex：依据 PDF、BOM 和条件触发证据审查，说明能力与证据限制。
-- 用户：实际修改原理图，重新导出同版证据，确认 ERC、符号、封装和映射。
+依据 Requirements、器件决策和关键资料完成模块连接、外围参数、保护与专项 Layout 要求；由用户在 Altium Designer 中实现正式原理图并导出同版完整原理图 PDF 与当前 BOM。
 
 ### 进入条件
 
-完整原理图 PDF 与当前 BOM 可追溯到同一审查版本。
+关键器件与资料足以确定当前模块方向。
 
-### 退出条件
+### 主要输出与退出条件
 
-高风险及影响封装、接口、安全和关键布局的问题关闭；其余问题有不阻断 PCB 决策的明确处置；审查记录给出显式结论。
+按需启用 `docs/module_design/*.md`；形成可追溯模块依据、BOM 草稿、Altium 原理图、同版完整 PDF 与当前 BOM。AI 不声称完成 EDA 实现。
 
-### 回退条件
+器件/资料不成立回到 Stage 2；需求或模块边界冲突回到 Stage 1 与 Gate 1.5。
 
-器件或封装问题回到阶段 2；模块连接和参数问题回到阶段 3；功能或安全边界变化回到阶段 1。
+## 8. Stage 4 — Schematic Review
 
-### Skill / Checklist
+### 目标与活动
 
-使用 `skills/hardware-schematic-review/SKILL.md` 和 `checklists/schematic_checklist.md`；关键参数争议按需回读资料。
+依据可追溯完整原理图 PDF、当前 BOM、Requirements、Design Notes、References 与模块资料，审查供电、接口、保护、封装、引脚、板级安全与关键 Layout 输入。只在用户提供 ERC 结果时分析 ERC。
 
-## 8. 阶段 5：PCB 布局阶段
+### 主要输出与退出条件
 
-### 阶段目标
+启用 `docs/schematic_review.md`。高风险及影响封装、接口、安全和关键 Layout 的问题关闭；其他问题有明确处置；给出是否允许进入 Layout Preflight 的显式结论。
 
-完成 Layout Preflight、项目规则基线和器件布局，使机械、封装、规则与关键路径满足正式布线条件。
+器件或封装问题回 Stage 2；连接/参数问题回 Stage 3；功能/安全边界变化回 Stage 1 与 Gate 1.5。
 
-### 必需输入
+## 9. Stage 5 — PCB Layout
 
-- 阶段 4 的放行结论；
-- `requirements.md`、`design_notes.md`、`references.md`；
-- 关键封装与 Layout 资料；
-- 当前 `.PcbDoc`；
-- `docs/pcb_design_rules.md`（不存在时在本阶段创建）。
+### 目标与活动
 
-### 主要活动
+完成 Layout Preflight、制造/机械基线、封装核对、规则值、Scope、Priority 与关键布局。用户在 Altium 配置并人工核对实际规则。
 
-- 确认目标板厂、制造基线、板框、安装孔、机械边界和关键封装；
-- 定义规则值、Net Class 或 Scope、Priority 和覆盖关系；
-- 用户在 Altium Designer 中配置并人工核对关键规则、Scope 和 Priority；
-- 完成功能分区、连接器、电源、去耦、晶振、模拟、功率和关键器件布局。
-- 按需创建或启用 `docs/pcb_review.md`，本阶段只填写 Layout Preflight 结论和阻断项。
+### 主要输出与退出条件
 
-阶段 5 不要求运行初始 DRC。用户可按实际需要使用 Altium 在线规则检查或临时检查，但其结果不是允许正式布局的仓库门禁。
+启用 `docs/pcb_design_rules.md`，并在需要记录 Preflight 时启用唯一的 `docs/pcb_review.md`。规则基线与关键布局前置条件满足，无阻断正式布局的问题。
 
-### 主要输出
+Stage 5 不要求初始 DRC，也不以 DRC 作为正式布局门禁。制造/机械基线变化回 Stage 1 与 Gate 1.5；原理图问题回 Stage 3/4。
 
-- `docs/pcb_design_rules.md` 与 Layout Preflight 结论；
-- 完成关键器件和功能分区布局的 `.PcbDoc`；
-- 必要的 PCB 图片或机械证据。
+## 10. Stage 6 — Routing and Copper
 
-### AI/Codex 与用户职责
+### 目标与活动
 
-- AI/Codex：协助规则逻辑和布局审查，证据不足时标记“待 EDA 核对”。
-- 用户：实际配置规则并人工核对 Scope/Priority，完成布局并确认实现。
+完成布线、换层、回流路径、过孔、热与铺铜；用户在相关修改后执行 Repour，并可按需使用实时或临时检查。
 
-### 进入条件
+### 主要输出与退出条件
 
-阶段 4 已允许进入 Layout Preflight，且具备制造、机械、封装和规则准备资料。
+完成可追溯 `.PcbDoc` 与 Review 输入，在同一 `docs/pcb_review.md` 记录需要跨回合追踪的重要问题。计划布局布线铺铜完成，关键路径已人工检查，重要问题已处理。
 
-### 退出条件
+Stage 6 不要求保存、导出或归档中间 DRC 记录，也不以中间 DRC 作为继续工作的仓库门禁。
 
-Layout Preflight 通过；规则基线已形成并经用户在 Altium 中配置、人工核对；关键布局明确；无阻断布线的机械、封装或规则问题。
+## 11. Stage 7 — PCB Release Review
 
-### 回退条件
+### 目标与活动
 
-封装或映射问题回到阶段 2/3；原理图问题回到阶段 3 并重新经过阶段 4；制造或机械基线变化回到阶段 1。
+审查当前 PCB/Git 版本、规则基线、PCB 实现、机械、装配、BOM 与制造输出；分析用户运行的完整 Batch DRC，并区分设计问题、规则问题和可追溯豁免。
 
-### Skill / Checklist
+### 主要输出与退出条件
 
-使用 [PCB Skill](../skills/hardware-pcb-layout-review/SKILL.md) 的 Layout Preflight 模式和 [Preflight Checklist](../checklists/pcb_layout_preflight_checklist.md)。
+在 `docs/pcb_review.md` 记录 Release Review、用户 Batch DRC 摘要、豁免引用、制造输出检查与显式放行结论。用户确认当前版本完整 Batch DRC 已运行；实际违规已解决或具有批准的合理豁免；同版制造输出完整。
 
-## 9. 阶段 6：布线和铺铜阶段
+AI 只分析用户提供的 DRC 和制造证据，不因缺少专门报告文件自动判失败，也不声称自行运行工具或导出输出。
 
-### 阶段目标
+## 12. Stage 8 — Assembly, Bring-up and Hardware Test
 
-完成符合项目规则和基本信号/电源完整性要求的布线、换层、回流路径与铺铜，为 PCB 审查提供实现证据。
+### 目标与活动
 
-### 必需输入
+安全完成装配、首次限流上电、下载通信、功能/性能/边界验证，记录条件、期望、实测、异常和改版影响。
 
-- 阶段 5 已确认的布局；
-- `docs/pcb_design_rules.md`；
-- 关键器件和模块专项 Layout 要求；
-- 当前 PCB 实现证据。
+### 主要输出与退出条件
 
-### 主要活动
+按实际活动启用 `docs/bringup_log.md`、`docs/test_report.md`，必要时启用 `docs/revision_history.md`。核心功能与验收边界已测试，未测项和异常有明确后续，记录可追溯到硬件版本。
 
-- 按项目风险处理关键电源、负载、模拟、晶振、高速和普通信号；
-- 核对回流、换层、过孔、细颈、热和机械影响；
-- 完成铺铜并在相关修改后由用户 Repour；
-- 用户可使用 Altium 实时检查或按需临时检查，及时修正实现问题；
-- 在阶段 5 已启用的同一个 `docs/pcb_review.md` 中记录需要跨回合追踪的重要布局和布线问题。
+AI 生成计划并分析用户数据；用户负责实际焊接、上电、测量与测试。
 
-阶段 6 不要求保存、导出或归档中间 DRC 记录，也不以中间 DRC 作为继续布线的仓库门禁。
+## 13. 完成后的维护
 
-### 主要输出
-
-- 完成布局、布线和铺铜的 `.PcbDoc`；
-- 重要问题及其处置记录；
-- 可追溯的当前 PCB 审查输入。
-
-### AI/Codex 与用户职责
-
-- AI/Codex：辅助审查用户提供的图片和实现证据，记录问题与限制。
-- 用户：实际布线、换层、铺铜、Repour，并按需要使用 Altium 检查。
-
-### 进入条件
-
-阶段 5 完成，布局与规则不存在已知阻断问题。
-
-### 退出条件
-
-计划布局、布线和铺铜完成；关键回流、功率、模拟、高速、晶振和负载路径已人工检查；关键问题已处理；版本与审查输入可追溯。
-
-### 回退条件
-
-布局、封装、板框或规则不可行时回到阶段 5；电路源头问题回到阶段 3 并重新经过阶段 4；制造基线变化回到阶段 1/5。
-
-### Skill / Checklist
-
-使用 PCB Skill 的 Layout / Routing Review 模式和 [PCB Layout Checklist](../checklists/pcb_layout_checklist.md)。
-
-## 10. 阶段 7：PCB 审查阶段
-
-### 阶段目标
-
-审查 PCB 实现、规则、机械、装配和制造输出，依据用户运行的完整 Batch DRC 形成制造放行结论。
-
-### 必需输入
-
-- 当前 PCB / Git 版本与实现证据；
-- `requirements.md`、`docs/pcb_design_rules.md`、`docs/pcb_review.md`；
-- 当前 BOM；
-- 用户在对话中提供的完整 Batch DRC 结果摘要；
-- 制造输出清单或待放行的实际输出。
-
-Batch DRC 摘要应足以判断版本、规则基线、Warnings、Rule Violations、关键类别、关键问题、解决状态和规则豁免。默认不要求专门 DRC 文件、导出报告或截图；具体问题无法判断时再补局部证据。
-
-### 主要活动
-
-- 核对 PCB 版本、规则基线和审查输入一致性；
-- 分析用户提供的完整 Batch DRC 摘要，区分设计问题、规则问题和合理豁免；
-- 审查布局布线、板框机械、装配信息、BOM 和制造输出；
-- 用户修改后重新运行完整 Batch DRC，并明确确认最终结果；
-- 记录实际问题、关闭状态、规则豁免引用和显式制造放行结论。
-
-### 主要输出
-
-- 更新后的 `docs/pcb_review.md`；
-- 用户提供的 Batch DRC 摘要和规则豁免引用；
-- 同版制造输出与“批准制造 / 有条件批准 / 不批准制造”结论。
-
-### AI/Codex 与用户职责
-
-- AI/Codex：只分析用户提供的 DRC 和制造证据，不因缺少报告文件自动判定失败；缺少版本、规则基线或关键类别时给出受限结论。
-- 用户：实际修改 PCB、Repour、运行完整 Batch DRC、导出制造输出，并确认豁免、下单参数和放行结论。
-
-### 进入条件
-
-阶段 6 退出条件满足，当前 PCB 与审查输入可追溯。
-
-### 退出条件
-
-用户明确确认已对当前版本运行完整 Batch DRC；所有实际违规已解决或形成明确、合理、可追溯的豁免；制造输出同版、完整且经确认；`pcb_review.md` 给出显式放行结论。
-
-### 回退条件
-
-规则、布局或机械问题回到阶段 5；布线、回流或铺铜问题回到阶段 6；原理图、封装或 BOM 源头问题回到阶段 2/3 并重新经过阶段 4；制造基线变化回到阶段 1。
-
-### Skill / Checklist
-
-使用 PCB Skill 的 PCB Release Review 模式和 [PCB Release Checklist](../checklists/pcb_release_checklist.md)。
-
-## 11. 阶段 8：焊接和硬件调试阶段
-
-### 阶段目标
-
-安全完成装配、首次上电、下载通信、功能与性能验证，形成可追溯调试、测试和改版记录。
-
-### 必需输入
-
-- 已批准制造的 PCB 与同版制造资料；
-- 当前 BOM、装配图、原理图、接口说明和关键器件资料；
-- 调试设备、固件和测试计划。
-
-### 主要活动
-
-- 核对物料、封装、替代料、极性、Pin 1、方向和短路风险；
-- 按风险规划焊接和限流上电顺序；
-- 验证电源、下载、通信、采集、驱动和安全边界；
-- 记录条件、期望、实测、异常、结论和改版影响。
-
-### 主要输出
-
-- `docs/bringup_log.md`、`docs/test_report.md`；
-- 必要的 `docs/revision_history.md`、测试证据和用户说明更新。
-
-### AI/Codex 与用户职责
-
-- AI/Codex：生成检查与调试计划，分析用户数据，整理问题、报告和复验项。
-- 用户：实际焊接、限流上电、测量、测试并确认结论。
-
-### 进入条件
-
-阶段 7 已批准制造，实物、同版资料和安全调试计划齐全。
-
-### 退出条件
-
-焊接与首次上电结果已记录；核心功能和验收边界已测试；未测项与异常有明确后续；记录可追溯到硬件版本。
-
-### 回退条件
-
-按问题源头回到受影响阶段，并重新通过相应阶段门与复验。
-
-### Skill / Checklist
-
-使用电源、模拟、板级安全和项目专项 checklist；关键异常按需读取 datasheet；调试与测试使用项目模板。
-
-## 12. 项目完成后的维护
-
-简历整理、项目展示、仓库导航和经验复盘不作为顶层硬件阶段。只有测试和实际职责有可追溯证据时，才能写成已完成成果。
-
-本文只在判断阶段、阶段门、回退、初始化、迁移或跨阶段审查时完整读取；普通单项任务按最小必要上下文执行。
+项目展示、简历整理、仓库导航和经验复盘不作为第九阶段。只有测试与实际职责有可追溯证据时，才能写成已完成成果。
