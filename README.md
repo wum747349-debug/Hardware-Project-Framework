@@ -42,6 +42,8 @@ Project Bootstrap 位于八阶段之前，不是 Stage 0 或 Stage 1。Stage 1 �
 - [AI 最小上下文指南](docs/AI_Context_Guide.md)
 - [Template 使用与同步规则](docs/Project_Template_Guide.md)
 - [Standalone Project 初始化指南](docs/Project_Initialization_Guide.md)
+- [Framework Migration Guide](docs/Framework_Migration_Guide.md)
+- [Framework Changelog](CHANGELOG.md)
 - [Phase 0 Baseline 记录](docs/Repository_Architecture_Migration_Baseline.md)
 - [Standalone Project Template](templates/hardware_project_template/README.md)
 - [Project Initialization Skill](skills/hardware-project-initialization/SKILL.md)

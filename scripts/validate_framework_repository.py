@@ -18,11 +18,13 @@ REQUIRED_FRAMEWORK_FILES = (
     "PROJECT_RULES.md",
     "AGENTS.md",
     "README.md",
+    "CHANGELOG.md",
     "docs/Project_Structure_Standard.md",
     "docs/08_Project_Workflow.md",
     "docs/AI_Context_Guide.md",
     "docs/Project_Template_Guide.md",
     "docs/Project_Initialization_Guide.md",
+    "docs/Framework_Migration_Guide.md",
     "skills/hardware-project-initialization/SKILL.md",
     "checklists/project_initialization_checklist.md",
     "scripts/validate_project_repository.py",
@@ -77,7 +79,7 @@ def normalize_link_target(raw_target: str) -> str:
 
 
 def framework_markdown_files() -> list[Path]:
-    files = [ROOT / name for name in ("PROJECT_RULES.md", "AGENTS.md", "README.md")]
+    files = [ROOT / name for name in ("PROJECT_RULES.md", "AGENTS.md", "README.md", "CHANGELOG.md")]
     for directory in ("docs", "skills", "checklists", "templates"):
         files.extend((ROOT / directory).rglob("*.md"))
     return sorted(set(files))
@@ -121,6 +123,8 @@ def check_contract_authorities(validator: Validator) -> None:
     context = validator.read("docs/AI_Context_Guide.md")
     template_guide = validator.read("docs/Project_Template_Guide.md")
     init_guide = validator.read("docs/Project_Initialization_Guide.md")
+    migration_guide = validator.read("docs/Framework_Migration_Guide.md")
+    changelog = validator.read("CHANGELOG.md")
     init_skill = validator.read("skills/hardware-project-initialization/SKILL.md")
     init_checklist = validator.read("checklists/project_initialization_checklist.md")
     readme = validator.read("README.md")
@@ -179,6 +183,8 @@ def check_contract_authorities(validator: Validator) -> None:
     for phrase, path, text in (
         ("唯一开发源", "docs/Project_Template_Guide.md", template_guide),
         ("固定 Framework Release", "docs/Project_Initialization_Guide.md", init_guide),
+        ("不自动升级", "docs/Framework_Migration_Guide.md", migration_guide),
+        ("Framework v0.9 Executable Candidate", "CHANGELOG.md", changelog),
         ("Gate 1.5", "skills/hardware-project-initialization/SKILL.md", init_skill),
         ("No Premature Conclusions", "checklists/project_initialization_checklist.md", init_checklist),
         ("Framework v0.9", "README.md", readme),

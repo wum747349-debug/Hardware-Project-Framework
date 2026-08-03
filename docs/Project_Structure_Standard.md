@@ -288,3 +288,5 @@ Phase 6 是迁移收尾，不得第二次创建或拆分 Project 2 / Project 3�
 - [Bootstrap、Gate 1.5 与八阶段 Workflow](08_Project_Workflow.md)
 - [AI 上下文读取指南](AI_Context_Guide.md)
 - [Template 使用指南](Project_Template_Guide.md)
+- [Framework Migration Guide](Framework_Migration_Guide.md)
+- [Framework Changelog](../CHANGELOG.md)
