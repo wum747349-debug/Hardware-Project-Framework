@@ -7,6 +7,10 @@ desktop.ini
 .vscode/
 .idea/
 
+# Local prompt notes
+/prompts/AI硬件项目任务提示词.md
+/prompts/硬件项目工作流程总结.md
+
 # Altium temporary files
 __Previews/
 History/
