@@ -1,27 +1,23 @@
-# 系统框图
+# Block Diagram
 
-> 文档状态：草稿
-> 适用阶段：阶段 1：需求确认阶段
-> 适用对象：<项目名称与硬件版本>
-> 最后核对依据：<待填写>
+Status: Draft
 
-## 功能框图
+## System Boundary
 
 ```text
-[输入 / 电源] -> [保护 / 电源管理] -> [控制核心]
-                                  -> [传感器 / 模拟前端]
-                                  -> [通信接口]
-                                  -> [输出 / 负载驱动]
+[External Input] -> [Project Boundary] -> [External Output]
 ```
 
-## 模块边界
+Replace the generic boundary with the real energy flow, signal flow, and modules during Stage 1. Do not select parts merely to complete this document.
 
-| 模块 | 功能 | 输入 | 输出 | 电源域 | 风险 / 待确认 |
-|---|---|---|---|---|---|
-| <模块> |  |  |  |  |  |
+## Modules
 
-## 主要能量流与信号流
+| Module | Responsibility | Inputs | Outputs | Power Domain | Open Risk |
+| --- | --- | --- | --- | --- | --- |
+| TBD | TBD | TBD | TBD | TBD | TBD |
 
-- 能量流：<待填写>
-- 关键信号流：<待填写>
-- 跨模块边界：<待填写>
+## Cross-module Flows
+
+- Energy flow: TBD
+- Signal flow: TBD
+- Control and feedback boundaries: TBD

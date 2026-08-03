@@ -1,53 +1,40 @@
-# 设计说明总览
+# Design Notes
 
-> 文档状态：草稿
-> 适用阶段：阶段 1 至阶段 7（按需更新）
-> 适用对象：<项目名称与硬件版本>
-> 最后核对依据：<待填写>
+Status: Draft
 
-## 1. 整板设计意图
+## Board-level Intent
 
-<记录整板当前设计方向、主选方案和主要约束，不展开模块级计算。>
+TBD — record the current architecture intent and constraints. Do not present candidate parts as selected facts.
 
-## 2. 主选与备选摘要
+## Current Decisions
 
-| 模块 | 主选 | 备选 | 选择依据 | 当前状态 |
-|---|---|---|---|---|
-| <模块> |  |  |  | 待确认 |
+| Decision | Current Position | Basis | Status |
+| --- | --- | --- | --- |
+| TBD | TBD | TBD | Open |
 
-## 3. 电源树与关键网络
+## Power and Interfaces
 
-| 网络 / 电源域 | 来源 | 去向 | 额定边界 | 说明 |
-|---|---|---|---|---|
-| <名称> |  |  |  |  |
+| Domain / Interface | Source | Destination | Required Boundary | Status |
+| --- | --- | --- | --- | --- |
+| TBD | TBD | TBD | TBD | Open |
 
-## 4. Pin Map
+## Pin and Connection Planning
 
-| 器件引脚 | 功能 | 项目网络 / 接口 | 方向 | 备注 |
-|---|---|---|---|---|
-| <待填写> |  |  |  |  |
+Pin maps and project network names are created only when supported by actual project decisions.
 
-## 5. 接口定义
+| Function | Required Direction / Behavior | Candidate Mapping | Basis | Status |
+| --- | --- | --- | --- | --- |
+| TBD | TBD | TBD | TBD | Open |
 
-| 接口 | 引脚顺序 | 电平 / 电压 | 方向与视角 | 安全边界 |
-|---|---|---|---|---|
-| <接口> |  |  |  |  |
+## PCB Inputs
 
-## 6. 模块文档索引
+- Mechanical constraints: TBD
+- Sensitive or high-risk areas: TBD
+- Power and thermal constraints: TBD
+- Required official layout sources: TBD
 
-| 模块 | 文档 | 当前状态 |
-|---|---|---|
-| <模块> | `docs/module_design/<NN_module_name>.md` | 待创建 |
+## Open Decisions
 
-## 7. PCB 关键输入
-
-- 机械和布局约束：<待填写>
-- 敏感区域：<待填写>
-- 功率与热约束：<待填写>
-- 关键器件 Layout 依据：<待填写>
-
-## 8. 待确认问题
-
-| 编号 | 问题 | 影响阶段 | 状态 |
-|---|---|---|---|
-| DN-001 | <待填写> |  | 待确认 |
+| ID | Decision Needed | Affected Stage | Resolution Source | Status |
+| --- | --- | --- | --- | --- |
+| DN-001 | TBD | TBD | TBD | Open |

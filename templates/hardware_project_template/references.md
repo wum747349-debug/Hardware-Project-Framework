@@ -1,31 +1,29 @@
-# 参考资料索引
+# Reference Index
 
-> 文档状态：草稿
-> 适用阶段：全部八阶段（按需更新）
-> 适用对象：<项目名称与硬件版本>
-> 最后核对依据：<当前资料目录 / 待填写>
+Status: Draft
 
-## 资料使用原则
+Critical parameters must be verified against official datasheets, reference manuals, or application notes. Product pages may support availability and ordering research but do not replace official technical evidence. Open-source projects may inform method and structure but are not project facts.
 
-- 关键参数以官方 datasheet、reference manual 和 application note 为主依据。
-- 商品页只作库存、价格、封装、料号和资料入口参考。
-- 开源项目只提炼结构、风险和检查项，不直接复制设计。
-- 只收集当前决策需要的资料，不要求初始化时下载全部 datasheet。
+## Official Sources
 
-## 资料索引
+| Item / Module | Document | Source | Version | Purpose | Review Status | Local Path or Link |
+| --- | --- | --- | --- | --- | --- | --- |
+| TBD | TBD | TBD | TBD | TBD | Not reviewed | TBD |
 
-| 器件 / 模块 | 资料名称 | 来源 | 本地路径或链接 | 用途 | 阅读状态 | 版本 / 风险 |
-|---|---|---|---|---|---|---|
-| <待填写> |  |  |  |  | 未阅读 |  |
+## Procurement Sources
 
-## 开源参考
+| Item | Source | Purpose | Technical Limitation | Status |
+| --- | --- | --- | --- | --- |
+| TBD | TBD | Availability only | Not an official parameter source | Open |
 
-| 项目 | 来源 | 学习点 | 不可照抄内容 | 使用状态 |
-|---|---|---|---|---|
-| <待填写> |  |  | 原理图、PCB、BOM、制造文件 | 待评估 |
+## Open-source References
 
-## 待补资料
+| Project | Source | Learning Purpose | Content Not Reused | Status |
+| --- | --- | --- | --- | --- |
+| TBD | TBD | Structure / method only | Schematic, PCB, BOM, manufacturing files | Open |
 
-| 模块 | 资料 | 用途 | 优先级 | 状态 |
-|---|---|---|---|---|
-| <待填写> |  |  |  | 待补充 |
+## Missing Evidence
+
+| Topic | Required Source | Decision Blocked | Priority | Status |
+| --- | --- | --- | --- | --- |
+| TBD | TBD | TBD | TBD | Open |

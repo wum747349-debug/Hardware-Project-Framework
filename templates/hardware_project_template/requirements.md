@@ -1,76 +1,47 @@
-# 项目需求
+# Requirements Baseline
 
-> 文档状态：草稿
-> 适用阶段：阶段 1：需求确认阶段
-> 适用对象：<项目名称与硬件版本>
-> 最后核对依据：<待填写>
+Status: Draft
 
-## 1. 项目目标与边界
+## Project Goal
 
-- 项目名称：<待确认>
-- 项目用途：<待确认>
-- 第一版目标：<待确认>
-- 第一版不做：<待确认>
-- 验收边界：<待确认>
+TBD — record the first-version goal without inventing implementation details.
 
-## 2. 电源、安全与调试
+## Out of Scope
 
-- 输入电源：<待确认>
-- 板级电源轨：<待确认>
-- 最大负载：<待确认>
-- 保护与安全边界：<待确认>
-- 调试与测试点：<待确认>
-- 首次上电限流：<待确认>
+TBD — state what the first version will not do.
 
-## 3. 控制、接口与模拟需求
+## Functional Boundary
 
-- 控制核心：<待确认>
-- GPIO / PWM：<待确认>
-- UART / I2C / SPI / USB：<待确认>
-- 模拟输入与量程：<待确认>
-- 采样率与精度：<待确认>
-- 输出与负载类型：<待确认>
-- 外部连接器：<待确认>
+TBD — describe required functions and system boundaries.
 
-## 4. 机械与装配约束
+## Module Boundary
 
-- 板子尺寸：<待确认>
-- 安装空间：<待确认>
-- 连接器位置与方向：<待确认>
-- 器件高度：<待确认>
-- 手工焊接 / SMT：<待确认>
+TBD — identify logical modules and their responsibilities.
 
-## 5. PCB 制造基线
+## Power Requirements
 
-| 字段 | 项目值 | 依据 / 待核对项 |
-|---|---|---|
-| 目标板厂 | `<待确认>` |  |
-| PCB 材料 | `<待确认>` |  |
-| 层数 | `<待确认>` |  |
-| 成品板厚 | `<待确认>` |  |
-| 铜厚 | `<待确认>` |  |
-| 装配方式 | `<待确认>` |  |
-| 板框约束 | `<待确认>` |  |
-| 安装孔 | `<待确认>` |  |
-| 默认设计线宽 | `<待板厂官方能力核对>` |  |
-| 默认设计间距 | `<待板厂官方能力核对>` |  |
-| 默认过孔 | `<待板厂官方能力核对>` |  |
-| 最小 PTH | `<待板厂官方能力核对>` |  |
-| 最小 NPTH | `<待板厂官方能力核对>` |  |
-| 是否声明受控阻抗 | `<待确认>` |  |
-| 特殊工艺 | `<不适用 / 待确认>` |  |
-| 下单前必须复核项 | `<待填写>` |  |
+TBD — record known input, rails, load boundaries, sequencing, and unresolved items.
 
-制造极限不能直接作为设计默认值；项目设计值应保留合理制造裕量。具体 PCB 规则、Scope 和 Priority 只在 `docs/pcb_design_rules.md` 维护。
+## Interface Requirements
 
-## 6. 验收标准
+TBD — record required external and internal interfaces, directions, and unresolved electrical levels.
 
-| 编号 | 验收项 | 条件 | 预期结果 | 验证方式 | 状态 |
-|---|---|---|---|---|---|
-| REQ-001 | <待填写> |  |  |  | 待确认 |
+## Safety Boundary
 
-## 7. 待确认问题
+TBD — identify power, battery, MOSFET, analog input, misuse, and first-power-on risks that apply.
 
-| 编号 | 问题 | 影响 | 负责人 | 计划 | 状态 |
-|---|---|---|---|---|---|
-| TBD-001 | <待填写> |  |  |  | 待确认 |
+## Manufacturing Baseline
+
+TBD — record known material, layer, thickness, copper, assembly, mechanical, and supplier constraints; leave unresolved facts explicit.
+
+## Acceptance Criteria
+
+| ID | Requirement | Verification Method | Expected Result | Status |
+| --- | --- | --- | --- | --- |
+| REQ-001 | TBD | TBD | TBD | Draft |
+
+## Open Questions
+
+| ID | Question | Impact | Owner / Source | Resolution Plan | Status |
+| --- | --- | --- | --- | --- | --- |
+| OPEN-001 | TBD | TBD | TBD | TBD | Open |

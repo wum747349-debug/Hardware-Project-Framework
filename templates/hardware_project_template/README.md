@@ -1,35 +1,34 @@
-# <Project Name>
+# <PROJECT_NAME>
 
-> 文档状态：草稿
-> 当前项目阶段：阶段 1：需求确认阶段
-> 当前硬件版本：<版本>
-> 最后核对依据：<文件、证据或待填写>
+Project Identity: <PROJECT_NAME>
+Current Project Stage: Bootstrap
+Hardware Revision: <HARDWARE_REVISION>
 
-## 项目定位
+## Purpose
 
-- 项目用途：<待确认>
-- 第一版目标：<待确认>
-- 第一版不做：<待确认>
-- 当前结论：<待确认>
+TBD — replace this line with the real project purpose during Bootstrap.
 
-## 当前工作
+## Current Status
 
-- 当前阶段以本文状态头为准。
-- 当前正在进行的工作：<待填写>
-- 当前阻断项：<待填写>
+- Framework binding and initialization status: [FRAMEWORK.md](FRAMEWORK.md)
+- Project facts are Draft until confirmed in this repository.
+- No component, EDA, ERC, DRC, manufacturing, bring-up, or test result is implied by Bootstrap.
 
-进入条件、退出条件和阶段门以仓库 `docs/08_Project_Workflow.md` 为准。文件存在不代表对应阶段已完成。
+## Project Facts
 
-## 文档导航
+- [Requirements baseline](requirements.md)
+- [Block diagram](block_diagram.md)
+- [Design notes](design_notes.md)
+- [Reference index](references.md)
 
-- [需求与验收边界](requirements.md)
-- [系统框图](block_diagram.md)
-- [整板设计意图](design_notes.md)
-- [资料索引](references.md)
-- [阶段文档索引](docs/README.md)
-- [硬件源文件与输出](hardware/README.md)
-- [固件说明](firmware/README.md)
+## Repository Navigation
 
-## 下一步
+- [Project runtime rules](PROJECT_RULES.md)
+- [Stage document responsibilities](docs/README.md)
+- [Hardware source and evidence responsibilities](hardware/README.md)
+- [Local reference responsibilities](references/README.md)
+- [Project validator](scripts/validate_project_repository.py)
 
-1. <待填写>
+## Next Step
+
+Complete Bootstrap, change `Current Project Stage` to `Stage 1 — Requirements Definition`, establish the first Requirements Baseline, then execute Gate 1.5.
