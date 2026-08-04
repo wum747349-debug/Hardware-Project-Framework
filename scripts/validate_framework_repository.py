@@ -5,14 +5,17 @@ from __future__ import annotations
 
 import argparse
 import re
+import shutil
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 from urllib.parse import unquote
 
 
 ROOT = Path(__file__).resolve().parents[1]
 TEMPLATE_ROOT = ROOT / "templates/hardware_project_template"
+FINAL_REFERENCE_ROOT = ROOT / "examples/reference_project_v1"
 
 REQUIRED_FRAMEWORK_FILES = (
     "PROJECT_RULES.md",
@@ -51,6 +54,30 @@ REQUIRED_TEMPLATE_FILES = {
 MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
 ABSOLUTE_LOCAL_PATH = re.compile(
     r"(?i)(?<![A-Za-z0-9])(?:[A-Z]:[\\/]|/Users/|/home/|/mnt/[a-z]/)"
+)
+
+LEGACY_PROJECT_RESIDUE = (
+    "projects/01_STM32_DAQ_Control_Board",
+    "projects/02_LiIon_Charger_Protection_Board",
+    "projects/03_STM32_OpAmp_ADC_Acquisition_Board",
+    "01_STM32_DAQ_Control_Board",
+    "02_LiIon_Charger_Protection_Board",
+    "03_STM32_OpAmp_ADC_Acquisition_Board",
+    "STM32 DAQ Control Board",
+    "Li-Ion Charger Protection Board",
+    "STM32 OpAmp ADC Acquisition Board",
+    "Hardware-Practice-Projects/projects",
+)
+
+SMOKE_STAGE_PATHS = (
+    "docs/component_selection_plan.md",
+    "docs/module_design",
+    "docs/schematic_review.md",
+    "docs/pcb_design_rules.md",
+    "docs/pcb_review.md",
+    "docs/bringup_log.md",
+    "docs/test_report.md",
+    "docs/revision_history.md",
 )
 
 
@@ -159,6 +186,7 @@ def check_contract_authorities(validator: Validator) -> None:
 
     validator.check("Gate 1.5 — Project Initialization & Requirements Baseline" in workflow, "docs/08_Project_Workflow.md", "Gate 1.5 canonical name missing")
     validator.check("Bootstrap 位于八阶段之前，不是 Stage 0" in workflow, "docs/08_Project_Workflow.md", "Bootstrap boundary drift")
+    validator.check("migration provenance 可以保留" in workflow, "docs/08_Project_Workflow.md", "Gate 1.5 migration provenance boundary missing")
     for number, name in {
         1: "Requirements Definition",
         2: "Critical Component Selection",
@@ -211,12 +239,7 @@ def check_template_contract(validator: Validator) -> None:
         relative_path = path.relative_to(ROOT).as_posix()
         if path.suffix.lower() == ".md":
             validator.check(ABSOLUTE_LOCAL_PATH.search(text) is None, relative_path, "Template contains a local absolute path")
-        for token in (
-            "projects/01_STM32_DAQ_Control_Board",
-            "projects/02_LiIon_Charger_Protection_Board",
-            "projects/03_STM32_OpAmp_ADC_Acquisition_Board",
-            "Hardware-Practice-Projects/projects",
-        ):
+        for token in LEGACY_PROJECT_RESIDUE:
             if path.suffix.lower() == ".md":
                 validator.check(token not in text, relative_path, f"Template contains legacy Project residue: {token}")
 
@@ -248,15 +271,208 @@ def run_template_validator(validator: Validator) -> None:
     validator.check(result.returncode == 0, "scripts/validate_project_repository.py", f"Template fixture validation failed: {details}")
 
 
+def run_fixture_validator(project_root: Path, *arguments: str) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        [sys.executable, str(project_root / "scripts/validate_project_repository.py"), *arguments],
+        cwd=project_root,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        check=False,
+    )
+
+
+def prepare_stage_1_fixture(target: Path, framework_commit: str) -> None:
+    shutil.copytree(TEMPLATE_ROOT, target)
+    replacements = {
+        "<PROJECT_NAME>": "Framework Validator Fixture",
+        "<HARDWARE_REVISION>": "TEST-REV-A",
+        "<FRAMEWORK_REPOSITORY>": "wum747349-debug/Hardware-Practice-Projects",
+        "<FRAMEWORK_RELEASE>": "development-v0.9",
+        "<FRAMEWORK_COMMIT>": framework_commit,
+        "<PROJECT_STRUCTURE_VERSION>": "1",
+        "<INITIALIZATION_FRAMEWORK_RELEASE>": "development-v0.9",
+        "<INITIALIZATION_STATUS>": "Gate 1.5 Pending",
+    }
+    for markdown_file in target.rglob("*.md"):
+        text = markdown_file.read_text(encoding="utf-8")
+        for placeholder, value in replacements.items():
+            text = text.replace(placeholder, value)
+        markdown_file.write_text(text, encoding="utf-8")
+
+    readme = target / "README.md"
+    readme.write_text(
+        readme.read_text(encoding="utf-8").replace(
+            "Current Project Stage: Bootstrap",
+            "Current Project Stage: Stage 1 — Requirements Definition",
+        ),
+        encoding="utf-8",
+    )
+
+
+def initialize_fixture(target: Path) -> None:
+    binding = target / "FRAMEWORK.md"
+    binding.write_text(
+        binding.read_text(encoding="utf-8").replace(
+            "Initialization Status: Gate 1.5 Pending",
+            "Initialization Status: Initialized",
+        ),
+        encoding="utf-8",
+    )
+
+
+def check_project_smoke_tests(validator: Validator) -> None:
+    commit_result = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        check=False,
+    )
+    framework_commit = commit_result.stdout.strip()
+    validator.check(
+        commit_result.returncode == 0 and re.fullmatch(r"[0-9a-f]{40}", framework_commit) is not None,
+        "git rev-parse HEAD",
+        "Smoke fixtures require the current immutable Framework commit",
+    )
+    if commit_result.returncode != 0 or re.fullmatch(r"[0-9a-f]{40}", framework_commit) is None:
+        return
+
+    temporary_path: Path | None = None
+    with tempfile.TemporaryDirectory(prefix="framework-validator-", dir=ROOT) as temporary_directory:
+        temporary_path = Path(temporary_directory)
+
+        clean_project = temporary_path / "clean-bootstrap"
+        prepare_stage_1_fixture(clean_project, framework_commit)
+        validator.check(not (clean_project / "firmware").exists(), "Clean Bootstrap Smoke", "Conditional firmware directory was pre-created")
+        validator.check(
+            not any((clean_project / path).exists() for path in SMOKE_STAGE_PATHS),
+            "Clean Bootstrap Smoke",
+            "Stage-enabled content was pre-created",
+        )
+        gate_result = run_fixture_validator(clean_project, "--gate-1-5")
+        gate_details = (gate_result.stdout + gate_result.stderr).strip()
+        validator.check(gate_result.returncode == 0, "Clean Bootstrap Smoke", f"Gate 1.5 Pending validation failed: {gate_details}")
+
+        initialize_fixture(clean_project)
+        initialized_gate_result = run_fixture_validator(clean_project, "--gate-1-5")
+        initialized_gate_details = (initialized_gate_result.stdout + initialized_gate_result.stderr).strip()
+        validator.check(
+            initialized_gate_result.returncode != 0 and "Gate 1.5 Pending" in initialized_gate_details,
+            "Clean Bootstrap Smoke",
+            f"Gate mode accepted a pre-Initialized fixture: {initialized_gate_details}",
+        )
+        normal_result = run_fixture_validator(clean_project)
+        normal_details = (normal_result.stdout + normal_result.stderr).strip()
+        validator.check(normal_result.returncode == 0, "Clean Bootstrap Smoke", f"Initialized normal validation failed: {normal_details}")
+
+        stage_enabled_project = temporary_path / "stage-enabled-semantics"
+        prepare_stage_1_fixture(stage_enabled_project, framework_commit)
+        initialize_fixture(stage_enabled_project)
+        stage_readme = stage_enabled_project / "README.md"
+        stage_readme.write_text(
+            stage_readme.read_text(encoding="utf-8").replace(
+                "Current Project Stage: Stage 1 — Requirements Definition",
+                "Current Project Stage: Stage 5 — PCB Layout",
+            ),
+            encoding="utf-8",
+        )
+        stage_documents = {
+            "docs/component_selection_plan.md": "# Component Selection Fixture\n\nFixture activity evidence.\n",
+            "docs/module_design/fixture.md": "# Module Design Fixture\n\nFixture activity evidence.\n",
+            "docs/schematic_review.md": "# Schematic Review Fixture\n\nFixture activity evidence.\n",
+            "docs/pcb_design_rules.md": "# PCB Design Rules Fixture\n\nFixture activity evidence.\n",
+        }
+        for relative_path, content in stage_documents.items():
+            document = stage_enabled_project / relative_path
+            document.parent.mkdir(parents=True, exist_ok=True)
+            document.write_text(content, encoding="utf-8")
+        stage_5_result = run_fixture_validator(stage_enabled_project)
+        stage_5_details = (stage_5_result.stdout + stage_5_result.stderr).strip()
+        validator.check(
+            stage_5_result.returncode == 0 and not (stage_enabled_project / "docs/pcb_review.md").exists(),
+            "Stage-enabled Semantics Smoke",
+            f"Stage 5 incorrectly required pcb_review.md before review activity: {stage_5_details}",
+        )
+
+        (stage_enabled_project / "docs/pcb_review.md").write_text(
+            "# PCB Review Fixture\n\nFixture Stage 6/7 activity evidence.\n",
+            encoding="utf-8",
+        )
+        stage_readme.write_text(
+            stage_readme.read_text(encoding="utf-8").replace(
+                "Current Project Stage: Stage 5 — PCB Layout",
+                "Current Project Stage: Stage 8 — Assembly, Bring-up and Hardware Test",
+            ),
+            encoding="utf-8",
+        )
+        stage_8_result = run_fixture_validator(stage_enabled_project)
+        stage_8_details = (stage_8_result.stdout + stage_8_result.stderr).strip()
+        validator.check(
+            stage_8_result.returncode == 0
+            and not (stage_enabled_project / "docs/bringup_log.md").exists()
+            and not (stage_enabled_project / "docs/test_report.md").exists(),
+            "Stage-enabled Semantics Smoke",
+            f"Stage 8 incorrectly required bring-up/test records before those activities: {stage_8_details}",
+        )
+
+        migration_project = temporary_path / "migration-provenance"
+        prepare_stage_1_fixture(migration_project, framework_commit)
+        migration_readme = migration_project / "README.md"
+        migration_readme.write_text(
+            migration_readme.read_text(encoding="utf-8")
+            + "\n## Migration Provenance\n\n"
+            + "Source Repository: wum747349-debug/Hardware-Practice-Projects\n\n"
+            + "Legacy Project Path: projects/02_LiIon_Charger_Protection_Board\n\n"
+            + "Git History Strategy: Clean Import\n",
+            encoding="utf-8",
+        )
+        migration_gate_result = run_fixture_validator(migration_project, "--gate-1-5")
+        migration_gate_details = (migration_gate_result.stdout + migration_gate_result.stderr).strip()
+        validator.check(
+            migration_gate_result.returncode == 0,
+            "Migration Provenance Smoke",
+            f"Legal migration provenance was rejected: {migration_gate_details}",
+        )
+
+        initialize_fixture(migration_project)
+        migration_normal_result = run_fixture_validator(migration_project)
+        migration_normal_details = (migration_normal_result.stdout + migration_normal_result.stderr).strip()
+        validator.check(
+            migration_normal_result.returncode == 0,
+            "Migration Provenance Smoke",
+            f"Initialized migration fixture failed: {migration_normal_details}",
+        )
+
+        migration_readme.write_text(
+            migration_readme.read_text(encoding="utf-8")
+            + "\nFramework Runtime Path: ../Hardware-Practice-Projects/projects/02_LiIon_Charger_Protection_Board\n",
+            encoding="utf-8",
+        )
+        illegal_result = run_fixture_validator(migration_project)
+        illegal_details = (illegal_result.stdout + illegal_result.stderr).strip()
+        validator.check(
+            illegal_result.returncode != 0 and "runtime path/dependency" in illegal_details,
+            "Illegal Runtime Dependency Negative Test",
+            f"Illegal runtime dependency was not rejected by the expected check: {illegal_details}",
+        )
+
+    if temporary_path is not None:
+        validator.check(not temporary_path.exists(), "Temporary Project Fixtures", "Smoke-test temporary directory was not removed")
+
+
 def check_final_mode(validator: Validator) -> None:
     if validator.mode != "final":
         return
-    reference_root = ROOT / "reference_project"
-    validator.check(reference_root.is_dir(), "reference_project", "Final mode requires the future Reference Project")
-    if reference_root.is_dir():
+    reference_path = FINAL_REFERENCE_ROOT.relative_to(ROOT).as_posix()
+    validator.check(FINAL_REFERENCE_ROOT.is_dir(), reference_path, "Final mode requires the future Reference Project")
+    if FINAL_REFERENCE_ROOT.is_dir():
         source = ROOT / "scripts/validate_project_repository.py"
-        result = subprocess.run([sys.executable, str(source), str(reference_root)], cwd=ROOT, check=False)
-        validator.check(result.returncode == 0, "reference_project", "Final Reference Project validation failed")
+        result = subprocess.run([sys.executable, str(source), str(FINAL_REFERENCE_ROOT)], cwd=ROOT, check=False)
+        validator.check(result.returncode == 0, reference_path, "Final Reference Project validation failed")
 
 
 def validate(mode: str) -> Validator:
@@ -267,6 +483,7 @@ def validate(mode: str) -> Validator:
     check_template_contract(validator)
     check_validator_snapshot(validator)
     run_template_validator(validator)
+    check_project_smoke_tests(validator)
     check_final_mode(validator)
     return validator
 

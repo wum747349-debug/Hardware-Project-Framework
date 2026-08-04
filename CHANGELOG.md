@@ -21,5 +21,8 @@ Status: development implementation for human review; not an RC or Final release.
 - Added the standalone Project Validator and synchronized Template snapshot.
 - Added the Framework Validator and lightweight CI checks.
 - Added clean-bootstrap smoke coverage using an explicit `development-v0.9` binding.
+- Aligned Gate 1.5 validation with the `Gate 1.5 Pending` → PASS → `Initialized` state transition.
+- Made Standalone Project validation migration-safe while retaining generic runtime-independence checks.
+- Added automated legal-provenance and illegal-runtime-dependency smoke coverage.
 
 No Framework RC/Final tag or Reference Project is included in v0.9.
