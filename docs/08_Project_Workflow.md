@@ -115,7 +115,7 @@ Gate 1.5 位于 Stage 1 与 Stage 2 之间。它验证 Project 容器、Framewor
 - 根事实入口齐全，根 `README.md` 是当前阶段唯一事实源；
 - README Navigation 的必要相对链接有效；
 - Template placeholder 已替换，`TBD` / `待确认` 仅作为真实未决状态存在；
-- 不含 Project 1 / 2 / 3 名称、旧 monorepo 路径或其他 Project facts 残留；
+- 不含未标注的其他 Project facts 或非法旧 monorepo runtime dependency；显式标注的 Source Repository、Legacy Project Path 等 migration provenance 可以保留；
 - Required 齐全，Conditional 未被误判为 Required，Stage-enabled 内容未为目录整齐提前预建；
 - 无职责的空目录和低信息量文件不存在；
 - Stage 1 Requirements Baseline 覆盖目标、不做内容、功能/模块/电源/接口/安全/制造边界、验收标准和待确认问题；

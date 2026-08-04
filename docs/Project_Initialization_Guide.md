@@ -60,15 +60,22 @@ Current Project Stage: Stage 1 — Requirements Definition
 ## 5. 执行 Gate 1.5
 
 1. 使用 [Project Initialization Checklist](../checklists/project_initialization_checklist.md) 逐项检查人工事实。
-2. 确认没有其他 Project 残留、无意义目录或提前产生的后续阶段结论。
-3. 将 `Initialization Status` 更新为 `Initialized`，运行 Gate 模式验证：
+2. 确认没有未标注的其他 Project facts、非法 monorepo runtime dependency、无意义目录或提前产生的后续阶段结论；显式标注的合法 migration provenance 可以保留。
+3. 确认当前状态真实为 `Current Project Stage: Stage 1 — Requirements Definition` 与 `Initialization Status: Gate 1.5 Pending`，运行 Gate 模式验证：
 
 ```bash
 python scripts/validate_project_repository.py --gate-1-5
 ```
 
-4. 如失败，将状态恢复为 `Gate 1.5 Pending`，修正阻断项并重新执行。
-5. 只有 checklist 与 Validator 均无阻断项时，Gate 1.5 才可记为 PASS 并允许进入 Stage 2。
+4. 如失败，保持 `Gate 1.5 Pending`，修正阻断项并重新执行。
+5. 只有 checklist 与 Validator 均无阻断项时，Gate 1.5 才可记为 PASS；此时将 `Initialization Status` 更新为 `Initialized`。
+6. 更新状态后运行普通 Validator，确认最终 Project 状态仍合法：
+
+```bash
+python scripts/validate_project_repository.py
+```
+
+7. 普通 Validator 通过后才允许进入 Stage 2。
 
 Validator 只检查可自动判定的结构、binding、placeholder、链接、阶段文件和明显残留；它不能判断真实硬件需求是否充分，也不能证明 EDA、ERC、DRC、Manufacturing 或 Test。
 

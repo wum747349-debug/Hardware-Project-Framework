@@ -31,7 +31,7 @@
 
 - [ ] 所有尖括号 Template placeholder 已替换。
 - [ ] `TBD`、`待确认`、Draft 只表示真实未决事实。
-- [ ] 不含 Project 1 / 2 / 3 名称、旧 monorepo 路径或其他 Project facts。
+- [ ] 不含未标注的其他 Project facts 或非法旧 monorepo runtime dependency；显式 migration provenance 与运行时依赖已区分。
 
 ## Stage 1 Requirements Baseline
 
@@ -52,6 +52,8 @@
 
 ## Validation
 
+- [ ] 执行 Gate Validator 前真实保持 `Initialization Status: Gate 1.5 Pending`。
 - [ ] `python scripts/validate_project_repository.py --gate-1-5` 通过。
 - [ ] 人工事实审查无阻断项。
-- [ ] Gate 1.5 结论为 PASS，才允许进入 Stage 2。
+- [ ] Gate 1.5 PASS 后才将 `Initialization Status` 更新为 `Initialized`。
+- [ ] 更新状态后的 `python scripts/validate_project_repository.py` 通过，才允许进入 Stage 2。

@@ -77,11 +77,20 @@ STAGES = {
 STAGE_FILES = {
     2: ("docs/component_selection_plan.md",),
     4: ("docs/schematic_review.md",),
-    5: ("docs/pcb_design_rules.md", "docs/pcb_review.md"),
-    8: ("docs/bringup_log.md", "docs/test_report.md"),
+    5: ("docs/pcb_design_rules.md",),
+    6: ("docs/pcb_review.md",),
 }
 
-ALL_STAGE_PATHS = tuple(path for paths in STAGE_FILES.values() for path in paths)
+ACTIVITY_ENABLED_FILES = (
+    "docs/bringup_log.md",
+    "docs/test_report.md",
+    "docs/revision_history.md",
+)
+
+ALL_STAGE_PATHS = (
+    *(path for paths in STAGE_FILES.values() for path in paths),
+    *ACTIVITY_ENABLED_FILES,
+)
 
 GATE_REQUIREMENT_SECTIONS = (
     "Project Goal",
@@ -96,24 +105,15 @@ GATE_REQUIREMENT_SECTIONS = (
     "Open Questions",
 )
 
-LEGACY_RESIDUE = (
-    "projects/01_STM32_DAQ_Control_Board",
-    "projects/02_LiIon_Charger_Protection_Board",
-    "projects/03_STM32_OpAmp_ADC_Acquisition_Board",
-    "01_STM32_DAQ_Control_Board",
-    "02_LiIon_Charger_Protection_Board",
-    "03_STM32_OpAmp_ADC_Acquisition_Board",
-    "STM32 DAQ Control Board",
-    "Li-Ion Charger Protection Board",
-    "STM32 OpAmp ADC Acquisition Board",
-    "Hardware-Practice-Projects/projects",
-)
-
 MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
 PLACEHOLDER = re.compile(r"<[A-Z][A-Z0-9_]*>")
 ABSOLUTE_LOCAL_PATH = re.compile(
     r"(?i)(?<![A-Za-z0-9])(?:[A-Z]:[\\/]|/Users/|/home/|/mnt/[a-z]/)"
 )
+FRAMEWORK_RUNTIME_DEPENDENCY = re.compile(
+    r"(?i)^\s*(?:[-*]\s*)?(?:Framework|Monorepo)\s+Runtime\s+(?:Path|Dependency)\s*:\s*(.*?)\s*$"
+)
+NO_RUNTIME_DEPENDENCY = {"", "none", "n/a", "not required", "无", "不需要"}
 FORMAL_RELEASE = re.compile(r"hardware-project-framework-v\d+\.\d+\.\d+(?:-rc\d+)?")
 FULL_SHA = re.compile(r"[0-9a-fA-F]{40}")
 
@@ -261,6 +261,30 @@ def check_stage_enabled(validator: Validator) -> None:
         validator.check(bool(module_files), "docs/module_design", f"Stage {validator.stage_number} requires at least one module design document")
 
 
+def check_initialization_state(validator: Validator) -> None:
+    if validator.template_mode or not validator.binding:
+        return
+    status = validator.binding.get("Initialization Status")
+    if validator.stage_text == "Bootstrap":
+        validator.check(
+            status in {"Bootstrap Draft", "Development Bootstrap"},
+            "FRAMEWORK.md",
+            "Bootstrap requires Initialization Status: Bootstrap Draft or Development Bootstrap",
+        )
+    elif validator.stage_number == 1:
+        validator.check(
+            status in {"Gate 1.5 Pending", "Initialized"},
+            "FRAMEWORK.md",
+            "Stage 1 requires Initialization Status: Gate 1.5 Pending or Initialized",
+        )
+    elif validator.stage_number is not None:
+        validator.check(
+            status == "Initialized",
+            "FRAMEWORK.md",
+            f"Stage {validator.stage_number} requires Initialization Status: Initialized",
+        )
+
+
 def check_placeholders(validator: Validator) -> None:
     found: set[str] = set()
     for path in validator.root.rglob("*"):
@@ -302,12 +326,20 @@ def check_markdown_links(validator: Validator) -> None:
                 validator.check(target_path.exists(), f"{markdown_file.relative_to(validator.root)}:{line_number}", f"relative link target does not exist: {match.group(1)}")
 
 
-def check_project_residue(validator: Validator) -> None:
+def check_standalone_independence(validator: Validator) -> None:
     for markdown_file in validator.root.rglob("*.md"):
         text = markdown_file.read_text(encoding="utf-8")
         relative_path = markdown_file.relative_to(validator.root).as_posix()
-        for token in LEGACY_RESIDUE:
-            validator.check(token not in text, relative_path, f"contains other-Project or legacy monorepo residue: {token}")
+        for line_number, line in enumerate(text.splitlines(), start=1):
+            match = FRAMEWORK_RUNTIME_DEPENDENCY.match(line)
+            if match is None:
+                continue
+            value = match.group(1).strip().lower()
+            validator.check(
+                value in NO_RUNTIME_DEPENDENCY,
+                f"{relative_path}:{line_number}",
+                "Standalone Project must not declare a Framework or monorepo runtime path/dependency",
+            )
 
 
 def check_runtime_contract(validator: Validator) -> None:
@@ -329,7 +361,7 @@ def check_gate_1_5(validator: Validator) -> None:
         return
     validator.check(not validator.template_mode, "--gate-1-5", "Gate mode cannot be combined with Template mode")
     validator.check(validator.stage_number == 1, "README.md", "Gate 1.5 requires Current Project Stage to be Stage 1")
-    validator.check(validator.binding.get("Initialization Status") == "Initialized", "FRAMEWORK.md", "Gate 1.5 PASS requires Initialization Status: Initialized")
+    validator.check(validator.binding.get("Initialization Status") == "Gate 1.5 Pending", "FRAMEWORK.md", "Gate 1.5 validation requires Initialization Status: Gate 1.5 Pending")
 
     readme_path = validator.root / "README.md"
     if readme_path.is_file():
@@ -358,10 +390,11 @@ def validate(root: Path, template_mode: bool = False, gate_1_5: bool = False) ->
     check_required_structure(validator)
     parse_binding(validator)
     parse_stage(validator)
+    check_initialization_state(validator)
     check_stage_enabled(validator)
     check_placeholders(validator)
     check_markdown_links(validator)
-    check_project_residue(validator)
+    check_standalone_independence(validator)
     check_runtime_contract(validator)
     check_gate_1_5(validator)
     return validator

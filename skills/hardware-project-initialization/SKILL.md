@@ -40,10 +40,11 @@
 ## Gate 1.5 协作
 
 1. 使用 Initialization Checklist 检查 Identity、Binding、Required、Navigation、placeholder、residue 与 Requirements Baseline。
-2. 运行 Project Validator 的 `--gate-1-5` 模式。
+2. 保持 `Initialization Status: Gate 1.5 Pending`，运行 Project Validator 的 `--gate-1-5` 模式。
 3. 将自动检查与人工事实审查分开报告。
 4. 任一阻断项存在时输出 FAIL，并保持 `Gate 1.5 Pending`。
-5. 只有全部阻断项关闭时输出 PASS；Gate 本身不产生设计结果。
+5. 只有全部阻断项关闭时输出 PASS，再将 `Initialization Status` 更新为 `Initialized`。
+6. 更新状态后运行普通 Project Validator；通过后才允许进入 Stage 2。Gate 本身不产生设计结果。
 
 ## 事实与证据禁止事项
 
