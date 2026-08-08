@@ -5,7 +5,7 @@
 > 目标仓库名称：`Hardware-Project-Framework`（尚未切换）
 > Framework 发布状态：v1 Contract 的 v0.9 可执行候选；尚未发布 RC 或 Final
 
-本仓库正在从 Legacy Monorepo 收敛为 Hardware Project Framework。Framework 定义方法和契约，不作为真实 Project 的活动事实源。当前 `projects/` 仍保留三个 Legacy Migration Source；本阶段没有拆分、迁移或删除任何真实 Project。
+本仓库正在从 Legacy Monorepo 收敛为 Hardware Project Framework。Framework 定义方法和契约，不作为真实 Project 的活动事实源。当前 `projects/` 仍保留三个 Legacy Migration Source。Project 2 Standalone Repository 已存在，并已完成 Bootstrap / Stage 1 / Gate 1.5 Pilot；尚未执行 Authority Cutover，Legacy Project 2 仍是 Current Authority。
 
 Framework v0.9 已实现 Standalone Project Template、初始化 Guide/Skill/Checklist、Project Validator、Framework Validator 与轻量 CI。它是 Framework v1 Contract 的预发布可执行候选，不是 Git Release，也不表示 Framework v1 Final 已完成。
 

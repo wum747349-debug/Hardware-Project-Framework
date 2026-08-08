@@ -63,7 +63,7 @@ Initialization Status: <INITIALIZATION_STATUS>
 | Project Structure Version | Project Repository 使用的结构契约版本；当前为 `1` |
 | Repository Model | 固定为 `Standalone Project` |
 | Initialization Framework Release | 首次 Bootstrap 使用的 Framework Release，用于来源追溯 |
-| Initialization Status | `Bootstrap Draft`、`Gate 1.5 Pending` 或 `Initialized`；开发自测可使用 `Development Bootstrap` |
+| Initialization Status | `Bootstrap Draft`、`Gate 1.5 Pending` 或 `Initialized`；`Development Bootstrap` 仅用于 development-v0.9 绑定的 Bootstrap 状态 |
 
 Project 必须锁定 Release + Commit，不默认跟随 Framework `main`。`Framework Release`、`Framework Commit` 和 `Initialization Framework Release` 不能用 branch 名代替。
 
@@ -81,6 +81,8 @@ Initialization Status: Development Bootstrap
 ```
 
 Development Binding 不是正式 Release，不得写成已发布的 `hardware-project-framework-v1.0.0-rc1` 或 Final。
+
+`Development Bootstrap` 不是 development-v0.9 绑定的永久状态。Project 进入 Stage 1 后，`Initialization Status` 按正常 Workflow 转为 `Gate 1.5 Pending`；Gate 1.5 PASS 后可转为 `Initialized`。在此状态生命周期中，`Framework Release` 仍保持 `development-v0.9`，直到 Project 显式执行 binding migration。
 
 ## 4. Project `AGENTS.md` Contract
 
