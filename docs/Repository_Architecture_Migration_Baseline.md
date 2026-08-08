@@ -6,6 +6,10 @@
 
 本文件仅保存 Phase 0 冻结时的恢复点、结构摘要和项目阶段事实，不是 Framework v1 契约，也不提前定义 Phase 1 的最终实施细节。
 
+### Historical Terminology Note
+
+本文保留原始 Baseline Freeze 当时使用的 migration terminology。文中的 `Phase 0` 与旧 Phase 1～8 migration model 仅是历史术语；当前活动路线以 [Repository Architecture Migration Master Plan](Repository_Architecture_Migration_Master_Plan.md) 为准。
+
 ## 2. Repository Baseline
 
 | Item | Baseline value |

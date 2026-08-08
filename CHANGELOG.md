@@ -12,7 +12,13 @@ Status: development implementation for human review; not an RC or Final release.
 - Defined the unique `FRAMEWORK.md` schema, Release + Commit binding, Project Structure Version 1, and explicit migration policy.
 - Defined the four-layer context model, Bootstrap, Stage 1, and Gate 1.5 without changing the eight hardware stages.
 - Classified project content as Required, Conditional, or Stage-enabled; `firmware/` is Conditional.
-- Clarified Authority Cutover and Phase 6 migration-closeout semantics.
+- Clarified the stable Authority Cutover contract without binding Project Runtime Rules to one-time migration phase numbers.
+
+### Documentation Architecture
+
+- Separated the one-time Repository Architecture Migration roadmap from the Project Runtime Contract.
+- Added a human-facing Migration Master Plan and a migration-only AI Runbook.
+- Removed legacy repository-migration Phase numbering from Runtime Contract enforcement where applicable.
 
 ### Executable Implementation
 

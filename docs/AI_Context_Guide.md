@@ -12,12 +12,12 @@ Framework Repository 与 Standalone Project 的启动路径不同，不能混用
 
 ## 2. Standalone Project 四层上下文
 
-| Layer | 默认入口 | 内容 |
-| --- | --- | --- |
-| Layer 0 — Framework Binding | `FRAMEWORK.md` | Framework Repository、Release、Commit、Structure Version、初始化来源与状态 |
-| Layer 1 — Runtime Rules | Project `PROJECT_RULES.md` | 所有阶段始终成立的最小项目规则 |
-| Layer 2 — Project Facts | 当前 Project 的 README、需求、框图、设计说明、资料、模块、Review 与 Evidence | 当前项目实际身份、阶段、设计和结果 |
-| Layer 3 — Stage Method | 绑定 Framework 快照中的 Skill、Checklist、Workflow fragment、专项 Guide | 当前任务如何执行 |
+| Layer                       | 默认入口                                                         | 内容                                                             |
+| --------------------------- | ------------------------------------------------------------ | -------------------------------------------------------------- |
+| Layer 0 — Framework Binding | `FRAMEWORK.md`                                               | Framework Repository、Release、Commit、Structure Version、初始化来源与状态 |
+| Layer 1 — Runtime Rules     | Project `PROJECT_RULES.md`                                   | 所有阶段始终成立的最小项目规则                                                |
+| Layer 2 — Project Facts     | 当前 Project 的 README、需求、框图、设计说明、资料、模块、Review 与 Evidence       | 当前项目实际身份、阶段、设计和结果                                              |
+| Layer 3 — Stage Method      | 绑定 Framework 快照中的 Skill、Checklist、Workflow fragment、专项 Guide | 当前任务如何执行                                                       |
 
 Standalone Project `AGENTS.md` 必须按顺序：
 
@@ -47,9 +47,10 @@ Project 不默认读取 Framework `main`，不默认读取其他 Project，也�
 | Validator | 被检查的权威文档、Template、相关 Skill/checklist、现有 CI | Project 1/2/3 设计事实 |
 | 单一 Skill / Checklist | 对应权威文档和被修改文件 | 其他无关 Skill/checklist |
 | Legacy Migration | 迁移 Guide、目标 Project 最小事实与结构映射 | 其他 Project、无关历史输出 |
+| Repository Architecture Migration | `docs/Repository_Architecture_Migration_AI_Runbook.md`、相关 Contract、必要的目标 Project 最小事实 | 全部 Project、全部资料、Master Plan（除非任务涉及整体路线或计划修订） |
 | README / 通用文档 | 被修改文档及其直接权威引用 | 全部 Project 硬件细节 |
 
-只有确认 Phase 0 恢复点时读取 `docs/Repository_Architecture_Migration_Baseline.md`。Legacy Project 只在兼容或迁移核对确有必要时读取最小结构信息；不得把其器件、网络、规则值、板框、板厂参数或阶段结果变成 Framework 默认值。
+普通 Framework maintenance 不默认读取 Repository Architecture Migration Master Plan 或 AI Runbook。只有核对永久 Baseline 恢复点时读取 `docs/Repository_Architecture_Migration_Baseline.md`。Legacy Project 只在兼容或迁移核对确有必要时读取最小结构信息；不得把其器件、网络、规则值、板框、板厂参数或阶段结果变成 Framework 默认值。
 
 ## 4. Bootstrap、Stage 1 与 Gate 1.5
 

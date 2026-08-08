@@ -160,9 +160,9 @@ def check_contract_authorities(validator: Validator) -> None:
         "Framework 定义硬件项目的方法和契约，不作为真实 Project 的活动事实源",
         "一个正式 Project 只能有一个活动权威仓库",
         "framework-pre-v1-migration",
-        "Phase 6 不得第二次创建或拆分 Project 2 / Project 3",
+        "禁止长期双写",
     ):
-        validator.check(phrase in rules, "PROJECT_RULES.md", f"missing authority or migration Contract: {phrase}")
+        validator.check(phrase in rules, "PROJECT_RULES.md", f"missing stable authority Contract: {phrase}")
 
     for field in (
         "Framework Repository:",

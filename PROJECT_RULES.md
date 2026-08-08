@@ -66,17 +66,11 @@ Framework Era
 
 版本语义不得混淆：Framework Release 表示方法发布；Project Structure Version 表示项目仓库结构契约；Hardware Revision 表示硬件设计版本；Git tag/commit 表示源码身份。
 
-## 7. Authority Cutover 与迁移阶段语义
+## 7. Authority Cutover
 
 迁移前，Legacy Monorepo Project Directory 是 Current Authority。独立仓库完成验证并执行 Cutover 后，Standalone Project Repository 成为 Only Active Project Authority，原目录降级为 Frozen Migration Source：不继续开发、不再修改项目事实、只用于迁移核对，且在新仓库确认完整前不删除。禁止长期双写。
 
-仓库架构整改阶段语义固定为：
-
-- Phase 3：Project 2 Pilot + Initial Authority Cutover；
-- Phase 4：Project 3 Clean Bootstrap + Initial Authority Cutover；
-- Phase 6：Formal Migration Closeout，包括 Project 2 final migration verification、Project 3 final migration verification，以及 Project 1 formal standalone migration。
-
-Phase 6 不得第二次创建或拆分 Project 2 / Project 3。
+Repository Architecture Migration 的一次性路线不属于 Project Runtime Contract；其当前计划与执行路由分别由 Migration Master Plan 和 Migration AI Runbook 维护。迁移计划不得改变上述单一活动权威源、Cutover 后冻结 Legacy Source 和禁止长期双写的稳定规则。
 
 ## 8. Git 安全
 

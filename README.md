@@ -44,10 +44,18 @@ Project Bootstrap 位于八阶段之前，不是 Stage 0 或 Stage 1。Stage 1 �
 - [Standalone Project 初始化指南](docs/Project_Initialization_Guide.md)
 - [Framework Migration Guide](docs/Framework_Migration_Guide.md)
 - [Framework Changelog](CHANGELOG.md)
-- [Phase 0 Baseline 记录](docs/Repository_Architecture_Migration_Baseline.md)
+- [Migration Baseline 历史记录](docs/Repository_Architecture_Migration_Baseline.md)
 - [Standalone Project Template](templates/hardware_project_template/README.md)
 - [Project Initialization Skill](skills/hardware-project-initialization/SKILL.md)
 - [Gate 1.5 Checklist](checklists/project_initialization_checklist.md)
+
+## Repository Architecture Transition
+
+- Human roadmap：[Repository Architecture Migration Master Plan](docs/Repository_Architecture_Migration_Master_Plan.md)
+- AI migration execution：[Repository Architecture Migration AI Runbook](docs/Repository_Architecture_Migration_AI_Runbook.md)
+- Runtime Contract：[PROJECT_RULES.md](PROJECT_RULES.md)、[Project Structure Standard](docs/Project_Structure_Standard.md)、[Project Workflow](docs/08_Project_Workflow.md)、[AI Context Guide](docs/AI_Context_Guide.md)
+
+Master Plan 是 human-facing 一次性迁移路线；AI Runbook 是 migration-only AI operational guide。两者都不属于 Standalone Project Runtime Contract，不复制到 Project Template 或真实 Project，也不改变八阶段 Workflow。
 
 ## Validation
 
@@ -71,11 +79,3 @@ python scripts/validate_project_repository.py --gate-1-5
 - Legacy monorepo projects 仍存在，尚未执行 Project 2 / 3 Authority Cutover。
 - Framework v1 RC、Final 和最终 Reference Project 均尚未发布或建立。
 - `development-v0.9` 只用于 Framework 自测或明确预发布评估，不是正式 Release。
-
-## Repository Architecture Migration 语义
-
-- Phase 3：Project 2 Pilot + Initial Authority Cutover。
-- Phase 4：Project 3 Clean Bootstrap + Initial Authority Cutover。
-- Phase 6：Formal Migration Closeout；只做 Project 2 / 3 最终迁移验证和 Project 1 正式独立迁移，不第二次拆分 Project 2 / 3。
-
-详细权威规则见 `PROJECT_RULES.md` 与 `docs/Project_Structure_Standard.md`。

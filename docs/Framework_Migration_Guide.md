@@ -38,7 +38,7 @@ Structure Version 变化必须建立旧路径到新职责的映射，确认 Requ
 
 Frozen Migration Source 不继续开发、不修改项目事实、只用于核对；新仓库确认完整前不删除。禁止长期双写。
 
-Phase 3/4 分别执行 Project 2/3 initial cutover；Phase 6 只做 Project 2/3 final migration verification 与 Project 1 formal standalone migration，不第二次拆分 Project 2/3。
+本指南不规定一次性 Repository Architecture Migration 的 Phase、Pilot、RC 或 Closeout 排期；这些路线由 [Repository Architecture Migration Master Plan](Repository_Architecture_Migration_Master_Plan.md) 维护。无论排期如何，每个真实 Project 的迁移验证与 Authority Cutover 都必须独立判断并由用户明确批准。
 
 ## 5. 禁止事项
 

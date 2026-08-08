@@ -274,15 +274,9 @@ Cutover 后：Standalone Project Repository = Only Active Project Authority
 
 Frozen Migration Source 不继续开发、不修改项目事实、只用于核对；新仓库确认完整前不删除。禁止长期双写。
 
-## 14. Repository Architecture Migration 阶段语义
+一次性的 Repository Architecture Migration 路线不属于 Standalone Project Runtime Contract，不复制到 Project Template 或 Standalone Project，也不是 Project Validator 输入。迁移计划不得定义 Project Hardware Stage 或成为 Project Facts 的第二权威源。
 
-- Phase 3：Project 2 Pilot + Initial Authority Cutover。
-- Phase 4：Project 3 Clean Bootstrap + Initial Authority Cutover。
-- Phase 6：Formal Migration Closeout，包括 Project 2 final migration verification、Project 3 final migration verification 和 Project 1 formal standalone migration。
-
-Phase 6 是迁移收尾，不得第二次创建或拆分 Project 2 / Project 3。
-
-## 15. 相关权威文档
+## 14. 相关权威文档
 
 - [Framework 通用规则](../PROJECT_RULES.md)
 - [Bootstrap、Gate 1.5 与八阶段 Workflow](08_Project_Workflow.md)
