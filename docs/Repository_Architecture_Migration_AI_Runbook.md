@@ -25,15 +25,31 @@ Migration Master Plan
 
 ## Migration Orientation
 
-Current Migration Phase: `Phase 1 — Pilot Stabilization`。
+Current Migration Phase: `Phase 2 — Clean Bootstrap & RC Readiness`。
 
 ### Project 2 Migration Milestone
 
 - Standalone initialization pilot completed.
 - Stage 1 / Gate 1.5 pilot completed.
 - Authority Cutover has not yet occurred as of this Runbook revision.
+- Legacy Project 2 remains Current Authority.
 
 本节只提供 migration orientation，不维护 Project Runtime Facts。Project 2 当前 Stage 以其根 `README.md` 为唯一权威源；当前 Framework binding 以其 `FRAMEWORK.md` 为权威源。执行任务前必须重新读取这些权威文件，不得把本 Runbook 当作 `Migration_Status.md`。
+
+### Project 3 Phase 2 Orientation
+
+Project 3 Clean Bootstrap 尚未执行。初始化前必须显式选择 immutable Framework snapshot，不得绑定持续变化的 Framework `main`，不得把 Legacy Project 3、Project 1 或 Project 2 当作 Project 3 的默认 Project Facts source，也不得依赖本地 Framework 路径。
+
+Phase 2 clean-room scope：
+
+```text
+Bootstrap
+  → Stage 1
+  → Gate 1.5
+  → Framework Generalization / RC Readiness input
+```
+
+除非另行获得明确授权，Stage 2 不属于 Phase 2 clean-room objective。本节只提供执行路由，不是 Project 3 Runtime Facts 或 Framework binding 的权威源。
 
 ## Read Routing
 

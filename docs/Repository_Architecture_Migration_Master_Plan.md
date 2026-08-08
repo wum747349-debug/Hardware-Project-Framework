@@ -52,6 +52,16 @@ Framework 只定义方法。正式 Project 锁定固定 Release + immutable 40 �
 
 这些里程碑不再沿用旧 Phase 0～8 作为未来主线。Git HEAD、Project binding 与 Hardware Stage 继续由 Git、Project `FRAMEWORK.md` 和根 `README.md` 维护。
 
+### Current Migration Status
+
+- Phase 1 — Pilot Stabilization：`CLOSED — Human Review Approved`；
+- Current Active Phase：`Phase 2 — Clean Bootstrap & RC Readiness`；
+- Current Phase 2 Step：Governance Handoff / Entry Preconditions / Framework Snapshot Selection；
+- Project 2：Bootstrap / Stage 1 / Gate 1.5 Pilot 已完成；Authority Cutover 尚未执行，Legacy Project 2 仍是 Current Authority；
+- Project 3：Clean Bootstrap 尚未执行，也未发生任何 Project 3 Hardware Stage advancement。
+
+Phase 2 必须在 Project 3 初始化前显式选择 immutable Framework snapshot；Proposed Framework Snapshot 不等于 Adopted Project 3 Framework Snapshot，Framework `main` 或当前 HEAD 均不得被自动视为 Project 3 binding。本状态不表示 Project 3 已初始化、Gate 1.5 已通过、RC readiness 已通过或 RC 已发布。
+
 ## 4. Four active phases
 
 ### Phase 1 — Pilot Stabilization
