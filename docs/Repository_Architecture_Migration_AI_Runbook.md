@@ -38,11 +38,15 @@ Current Migration Phase: `Phase 2 — Clean Bootstrap & RC Readiness`。
 
 ### Project 3 Phase 2 Orientation
 
-Project 3 Clean Bootstrap 尚未执行。初始化前必须显式选择 immutable Framework snapshot，不得绑定持续变化的 Framework `main`，不得把 Legacy Project 3、Project 1 或 Project 2 当作 Project 3 的默认 Project Facts source，也不得依赖本地 Framework 路径。
+Project 3 当前里程碑：
 
-Phase 2 Preconditions Review 已通过；下一项需要用户决定的是 `Bootstrap Authorization`。该授权只批准从确认的固定 snapshot 创建并 Bootstrap 新 Standalone Repository，不代表任何 candidate binding 已被 Project 3 adopted，也不授权进入 Stage 1。
+- Clean Bootstrap：`COMPLETE`；
+- Stage 1：`COMPLETE`；
+- Gate 1.5：`PASS`；
+- Initialization Status：`Initialized`；
+- Phase 2 clean-room objective：`COMPLETE`。
 
-Phase 2 clean-room scope：
+Phase 2 clean-room execution path（completed）：
 
 ```text
 Bootstrap Authorization
@@ -58,7 +62,9 @@ Bootstrap Authorization
   → Framework Generalization / RC Readiness input
 ```
 
-除非另行获得明确授权，Stage 2 不属于 Phase 2 clean-room objective。本节只提供执行路由，不是 Project 3 Runtime Facts 或 Framework binding 的权威源。
+Current task：`Framework Generalization / RC Readiness Review`。Stage 2：`NOT AUTHORIZED`。RC tag / GitHub Release：`PENDING HUMAN APPROVAL`。
+
+本节只提供当前 migration orientation 与已完成执行路径，不是 Project 3 Runtime Facts 或 Framework binding 的权威源。执行任务前仍须从 Project 3 根 `README.md` 与 `FRAMEWORK.md` 重新核对当前 Stage、初始化状态和 binding。
 
 ## Read Routing
 

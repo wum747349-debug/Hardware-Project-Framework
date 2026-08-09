@@ -6,7 +6,7 @@ Hardware Revision: <HARDWARE_REVISION>
 
 ## Purpose
 
-TBD — replace this line with the real project purpose during Bootstrap.
+TBD — replace when the project purpose is confirmed; do not invent it during Bootstrap.
 
 ## Current Status
 
