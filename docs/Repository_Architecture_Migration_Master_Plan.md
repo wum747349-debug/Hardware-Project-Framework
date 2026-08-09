@@ -56,16 +56,18 @@ Framework 只定义方法。正式 Project 锁定固定 Release + immutable 40 �
 ### Current Migration Status
 
 - Phase 1 — Pilot Stabilization：`CLOSED — Human Review Approved`；
-- Current Active Phase：`Phase 2 — Clean Bootstrap & RC Readiness`；
+- Phase 2 — Clean Bootstrap & RC Readiness：`CLOSED — RC1 Published / Human Review Approved`；
 - Phase 2 Preconditions Review：`PASS`；
 - Project 2：Bootstrap / Stage 1 / Gate 1.5 Pilot 已完成；Authority Cutover 尚未执行，Legacy Project 2 仍是 Current Authority；
 - Project 3：Clean Bootstrap 已完成，Stage 1 Requirements Definition 已完成，Gate 1.5 Human Review 与 Technical Closeout 均已 PASS，`Initialization Status: Initialized`；仍处于 Stage 1，Stage 2 未获授权；
 - Phase 2 clean-room objective：`COMPLETE`；
-- Current Phase 2 Step：`Framework Generalization / RC Readiness Review`。
+- RC1：`hardware-project-framework-v1.0.0-rc1` @ `b36d9d399651e5c1a2b07dbc70d6e1487df57fd5`；
+- Phase 3：`NOT STARTED — Pending Human Authorization`；
+- Next：`Phase 3 — Formal Project Migration & Authority Cutover`。
 
 Project 3 的 clean-room 结果证明 Framework 能在不依赖 Legacy Project 3、Project 1、Project 2 或本地 Framework 路径的情况下完成 Bootstrap → Stage 1 → Gate 1.5 → Initialized。Project 3 继续绑定其显式选择的 immutable Framework snapshot；Framework `main` 或当前 HEAD 的后续变化不构成 Project 3 binding change。
 
-本状态不表示 Stage 2 已授权、Authority Cutover 已执行、RC 已获批准或 RC 已发布。当前只进入 Framework Generalization / RC Readiness 技术审查；RC tag 与 GitHub Release 仍必须等待 Human approval。
+RC1 tag 与 GitHub prerelease 已发布，Phase 2 已完成 Human Review 并关闭。本状态不表示 Stage 2 已授权、Authority Cutover 已执行、Project binding 已迁移或 Phase 3 已开始；进入 Phase 3 仍须等待 Human authorization。
 
 Migration 的 routine validation、CI、diff inspection、technical review 与 evidence collection 默认自动执行并合并报告；只有实质状态、权威、binding、release、repository identity transition，或 destructive change / 明确枚举的 externally visible repository transition 才需要 Human approval。当前任务已授权范围内的普通 commit 与 push 不另设 Human Gate。
 
@@ -91,7 +93,7 @@ Goal：用 Project 3 完成 Clean Bootstrap、Stage 1、Gate 1.5，证明 Framew
 
 Actions：从明确 snapshot 初始化 Project 3；按 Contract 建立最小事实入口并执行 Gate；Framework 继续用 temporary fixture / smoke test 验证 Template。
 
-Outputs / Done：Project 3 Clean Bootstrap / Stage 1 / Gate 1.5 已通过并完成初始化，Framework CI 已形成 RC Readiness Review 输入。当前进行 Framework Generalization / RC Readiness Review；Project 3 不需为 RC 强行进入后续 Hardware Stage。
+Outputs / Done：Project 3 Clean Bootstrap / Stage 1 / Gate 1.5 已通过并完成初始化，Framework Generalization / RC Readiness Review 已通过，`hardware-project-framework-v1.0.0-rc1` 已发布，Phase 2 已关闭。Project 3 不需为 RC 强行进入后续 Hardware Stage。
 
 ### Phase 3 — Formal Project Migration & Authority Cutover
 
