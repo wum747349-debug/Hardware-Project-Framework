@@ -40,12 +40,21 @@ Current Migration Phase: `Phase 2 — Clean Bootstrap & RC Readiness`。
 
 Project 3 Clean Bootstrap 尚未执行。初始化前必须显式选择 immutable Framework snapshot，不得绑定持续变化的 Framework `main`，不得把 Legacy Project 3、Project 1 或 Project 2 当作 Project 3 的默认 Project Facts source，也不得依赖本地 Framework 路径。
 
+Phase 2 Preconditions Review 已通过；下一项需要用户决定的是 `Bootstrap Authorization`。该授权只批准从确认的固定 snapshot 创建并 Bootstrap 新 Standalone Repository，不代表 Project 3 已采用提示词或 Framework `main` 中的候选 binding，也不授权进入 Stage 1。
+
 Phase 2 clean-room scope：
 
 ```text
-Bootstrap
+Bootstrap Authorization
+  → Create empty Standalone Repository
+  → Bootstrap from fixed immutable Framework snapshot
+  → Automatic validation and Bootstrap Result Report
+  → STOP for Human approval to enter Stage 1
   → Stage 1
-  → Gate 1.5
+  → Gate 1.5 checklist and validation
+  → Human Gate 1.5 PASS
+  → Initialization Status = Initialized
+  → STOP
   → Framework Generalization / RC Readiness input
 ```
 
@@ -84,9 +93,23 @@ Repository Migration Task 的建议顺序：
 2. 确定本次只属于一个 Migration Phase 或明确的跨 Phase 审查，并记录允许与禁止动作。
 3. 按 Issue / Change Classification 建立最小修改集合；保护用户已有改动和 Legacy Project 内容。
 4. 运行与改动相称的 Framework、Template 或 Project 验证；人工事实、EDA、ERC、DRC、制造和测试不能由 Validator 替代。
-5. 报告 Current Reality、修改、限制、验证与仍需用户决定的 Human Gate，然后停止等待审查。
+5. 汇总报告 Current Reality、修改、限制、验证与仍需用户决定的 Human approval。Routine checks 不单独触发停顿；仅在发现 blocker、Contract contradiction，或下一动作需要 Human approval 时停止。
 
-## Human Gates
+## Human Approval Policy
+
+Migration execution 不为每个 Validator、review、CI check、diff inspection、clean-room validation、evidence collection 或 report 分别设置 Human Gate。Automatic checks should remain automatic，并在未发现 blocker 时合并执行和报告。
+
+只有下一动作造成实质状态、权威、binding、release 或 repository transition，或执行 destructive / externally visible repository change 时，才需要用户明确批准。包括：
+
+- 第一次创建正式 Standalone Project Repository 并写入固定 binding 的 Bootstrap Authorization；
+- Project Hardware Stage advancement；
+- Gate 1.5 Human PASS 及 `Initialization Status: Gate 1.5 Pending → Initialized`；
+- Authority Cutover；
+- 真实 Project 的 Framework binding migration；
+- RC / Final tag 与 GitHub Release；
+- Repository Rename、Legacy Project deletion、history-affecting migration action 或 destructive cleanup。
+
+Bootstrap Authorization 不是新的 Hardware Gate，也不是 Stage 0。第一次写入新 Standalone Project 前，用户必须确认 fixed Framework Release + immutable Commit、Project Identity、Standalone Repository identity、适用时的 repository visibility，以及创建并 Bootstrap 该仓库的授权。Bootstrap Authorization 不授权进入 Stage 1；Bootstrap 与自动验证完成后必须报告结果并停止，等待 Stage 1 advancement approval。
 
 未经用户明确批准，不得执行：Project Stage advancement、Authority Cutover、Legacy Project deletion、Repository Rename、RC / Final tag 或 release、真实 Project 的 Framework binding migration。也不得把 Framework `main` 变化自动同步到 Project。
 
