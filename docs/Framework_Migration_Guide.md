@@ -16,11 +16,13 @@ Compatible Sync 可包括 Validator bug / false-positive fix、文档澄清、Sk
 
 - Project Structure Version；
 - `FRAMEWORK.md` schema；
+- Project `AGENTS.md` context-routing contract；
 - Required / Conditional / Stage-enabled 模型；
 - Runtime Rules；
 - Stage model 与 Gate semantics；
 - Project fact authority / responsibility；
-- Repository authority model。
+- Repository authority model；
+- Validator required structure。
 
 执行流程：
 
