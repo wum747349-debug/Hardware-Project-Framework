@@ -1,5 +1,11 @@
 # 单节锂电池充电与保护电源板
 
+Migration Status: Frozen Migration Source
+
+Active Authority: wum747349-debug/LiIon-Charger-Protection-Board
+
+本 Legacy 目录只为历史迁移追溯而保留，不再作为活动 Project Authority。不得在此继续 Project facts、EDA、manufacturing evidence、bring-up、test records 或 Hardware Stage progression；所有活动 Project 工作只能在上述 Standalone Repository 中进行。
+
 ## 项目目标
 
 设计一块 USB-C 输入的单节锂电池充电与保护电源板，用于训练电源管理、锂电池充电保护、稳压输出和安全调试能力。

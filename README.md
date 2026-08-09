@@ -1,13 +1,13 @@
 # Hardware Practice Projects
 
-> 仓库状态：Repository Architecture Transition — Framework v0.9 Executable Candidate
+> 仓库状态：Repository Architecture Transition — Framework v1 RC1
 > 当前仓库：`wum747349-debug/Hardware-Practice-Projects`
 > 目标仓库名称：`Hardware-Project-Framework`（尚未切换）
-> Framework 发布状态：v1 Contract 的 v0.9 可执行候选；尚未发布 RC 或 Final
+> Framework 发布状态：RC1 已发布；Final 尚未发布
 
-本仓库正在从 Legacy Monorepo 收敛为 Hardware Project Framework。Framework 定义方法和契约，不作为真实 Project 的活动事实源。当前 `projects/` 仍保留三个 Legacy Migration Source。Project 2 Standalone Repository 已存在，并已完成 Bootstrap / Stage 1 / Gate 1.5 Pilot；尚未执行 Authority Cutover，Legacy Project 2 仍是 Current Authority。
+本仓库正在从 Legacy Monorepo 收敛为 Hardware Project Framework。Framework 定义方法和契约，不作为真实 Project 的活动事实源。当前 `projects/` 仍保留三个 Legacy Migration Source。Project 2 已完成 Framework binding migration 与 Authority Cutover；其 Standalone Repository 是 Only Active Project Authority，Legacy Project 2 仅作为 Frozen Migration Source 保留。
 
-Framework v0.9 已实现 Standalone Project Template、初始化 Guide/Skill/Checklist、Project Validator、Framework Validator 与轻量 CI。它是 Framework v1 Contract 的预发布可执行候选，不是 Git Release，也不表示 Framework v1 Final 已完成。
+Framework v0.9 已建立 Standalone Project Template、初始化 Guide/Skill/Checklist、Project Validator、Framework Validator 与轻量 CI；Framework v1 RC1 现已发布。RC1 不是 Framework v1 Final，也不表示最终 Closeout 已完成。
 
 ## 架构边界
 
@@ -76,6 +76,6 @@ python scripts/validate_project_repository.py --gate-1-5
 - Baseline Tag：`framework-pre-v1-migration`
 - Baseline Commit：`3e9d4801bdd5768f8edc0e14e8f01bf278721e54`
 - 当前 GitHub Repository 尚未重命名。
-- Legacy monorepo projects 仍存在，尚未执行 Project 2 / 3 Authority Cutover。
-- Framework v1 RC、Final 和最终 Reference Project 均尚未发布或建立。
+- Legacy monorepo projects 仍存在；Legacy Project 2 已冻结为 Migration Source，Project 3 Authority Cutover 尚未执行。
+- Framework v1 RC1 已发布；Final 和最终 Reference Project 尚未发布或建立。
 - `development-v0.9` 只用于 Framework 自测或明确预发布评估，不是正式 Release。

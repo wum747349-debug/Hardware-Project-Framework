@@ -33,20 +33,24 @@ Phase 3 — Formal Project Migration & Authority Cutover：`ACTIVE — Human Aut
 
 Current Project：`Project 2`。
 
-Current Step：`Formal Migration Readiness / Pre-Cutover Preparation`。
+Current Step：`Project 2 Authority Cutover — COMPLETE / STOP`。
 
+- Project 2 Hardware Stage：`Stage 1 — Requirements Definition`；
 - Project 2 Stage 2：`NOT AUTHORIZED`；
-- Project 2 Framework binding migration：`NOT YET AUTHORIZED / NOT EXECUTED`；
-- Project 2 Authority Cutover：`NOT YET AUTHORIZED / NOT EXECUTED`；
+- Project 2 Framework binding migration：`COMPLETED`；
+- Project 2 Authority Cutover：`COMPLETED`；
+- Project 2 Active Authority：`wum747349-debug/LiIon-Charger-Protection-Board`；
+- Legacy Project 2：`FROZEN MIGRATION SOURCE`；
 - Project 3 migration：`NOT STARTED`；
-- Repository Rename：`NOT AUTHORIZED`。
+- Repository Rename：`NOT AUTHORIZED / NOT EXECUTED`。
 
 ### Project 2 Migration Milestone
 
 - Standalone initialization pilot completed.
 - Stage 1 / Gate 1.5 pilot completed.
-- Authority Cutover has not yet occurred as of this Runbook revision.
-- Legacy Project 2 remains Current Authority.
+- Framework binding migration and Authority Cutover are complete.
+- The Standalone Repository is the Only Active Project Authority.
+- Legacy Project 2 is retained only as a Frozen Migration Source.
 
 本节只提供 migration orientation，不维护 Project Runtime Facts。Project 2 当前 Stage 以其根 `README.md` 为唯一权威源；当前 Framework binding 以其 `FRAMEWORK.md` 为权威源。执行任务前必须重新读取这些权威文件，不得把本 Runbook 当作 `Migration_Status.md`。
 
@@ -76,7 +80,7 @@ Bootstrap Authorization
   → Framework Generalization / RC Readiness input
 ```
 
-Phase 2 closeout：`COMPLETE`。RC1 已作为 GitHub prerelease 发布。Project 3 Stage 2：`NOT AUTHORIZED`；Project 3 migration：`NOT STARTED`。当前 Phase 3 授权只适用于从 Project 2 Formal Migration Readiness / Pre-Cutover Preparation 开始执行，不构成 Project 2 Stage 2、Framework binding migration 或 Authority Cutover 授权。
+Phase 2 closeout：`COMPLETE`。RC1 已作为 GitHub prerelease 发布。Project 2 Framework binding migration 与 Authority Cutover 已分别获得 Human Approval 并完成；这不构成 Project 2 Stage 2 授权。Project 3 Stage 2：`NOT AUTHORIZED`；Project 3 migration：`NOT STARTED`。本次执行在 Project 2 Cutover 后停止。
 
 本节只提供当前 migration orientation 与已完成执行路径，不是 Project 3 Runtime Facts 或 Framework binding 的权威源。执行任务前仍须从 Project 3 根 `README.md` 与 `FRAMEWORK.md` 重新核对当前 Stage、初始化状态和 binding。
 
