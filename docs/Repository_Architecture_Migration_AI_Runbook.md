@@ -40,7 +40,7 @@ Current Migration Phase: `Phase 2 — Clean Bootstrap & RC Readiness`。
 
 Project 3 Clean Bootstrap 尚未执行。初始化前必须显式选择 immutable Framework snapshot，不得绑定持续变化的 Framework `main`，不得把 Legacy Project 3、Project 1 或 Project 2 当作 Project 3 的默认 Project Facts source，也不得依赖本地 Framework 路径。
 
-Phase 2 Preconditions Review 已通过；下一项需要用户决定的是 `Bootstrap Authorization`。该授权只批准从确认的固定 snapshot 创建并 Bootstrap 新 Standalone Repository，不代表 Project 3 已采用提示词或 Framework `main` 中的候选 binding，也不授权进入 Stage 1。
+Phase 2 Preconditions Review 已通过；下一项需要用户决定的是 `Bootstrap Authorization`。该授权只批准从确认的固定 snapshot 创建并 Bootstrap 新 Standalone Repository，不代表任何 candidate binding 已被 Project 3 adopted，也不授权进入 Stage 1。
 
 Phase 2 clean-room scope：
 
@@ -99,7 +99,7 @@ Repository Migration Task 的建议顺序：
 
 Migration execution 不为每个 Validator、review、CI check、diff inspection、clean-room validation、evidence collection 或 report 分别设置 Human Gate。Automatic checks should remain automatic，并在未发现 blocker 时合并执行和报告。
 
-只有下一动作造成实质状态、权威、binding、release 或 repository transition，或执行 destructive / externally visible repository change 时，才需要用户明确批准。包括：
+只有下一动作造成实质状态、权威、binding、release 或 repository transition，或执行 destructive change / 下列明确枚举的 externally visible repository transition 时，才需要用户明确批准。包括：
 
 - 第一次创建正式 Standalone Project Repository 并写入固定 binding 的 Bootstrap Authorization；
 - Project Hardware Stage advancement；
@@ -108,6 +108,8 @@ Migration execution 不为每个 Validator、review、CI check、diff inspection
 - 真实 Project 的 Framework binding migration；
 - RC / Final tag 与 GitHub Release；
 - Repository Rename、Legacy Project deletion、history-affecting migration action 或 destructive cleanup。
+
+当前任务已授权范围内的普通 documentation / code commit 与 push 不另设 Human Gate；它们不能被用来隐式执行上述 transition。
 
 Bootstrap Authorization 不是新的 Hardware Gate，也不是 Stage 0。第一次写入新 Standalone Project 前，用户必须确认 fixed Framework Release + immutable Commit、Project Identity、Standalone Repository identity、适用时的 repository visibility，以及创建并 Bootstrap 该仓库的授权。Bootstrap Authorization 不授权进入 Stage 1；Bootstrap 与自动验证完成后必须报告结果并停止，等待 Stage 1 advancement approval。
 

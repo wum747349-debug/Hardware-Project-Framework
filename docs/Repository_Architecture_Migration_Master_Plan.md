@@ -63,7 +63,7 @@ Framework 只定义方法。正式 Project 锁定固定 Release + immutable 40 �
 
 Phase 2 必须在 Project 3 初始化前显式选择 immutable Framework snapshot；Proposed Framework Snapshot 不等于 Adopted Project 3 Framework Snapshot，Framework `main` 或当前 HEAD 均不得被自动视为 Project 3 binding。本状态不表示 Project 3 已初始化、Gate 1.5 已通过、RC readiness 已通过或 RC 已发布。
 
-Migration 的 routine validation、CI、diff inspection、technical review 与 evidence collection 默认自动执行并合并报告；只有实质状态、权威、binding、release、repository identity transition，或 destructive / externally visible repository change 才需要 Human approval。
+Migration 的 routine validation、CI、diff inspection、technical review 与 evidence collection 默认自动执行并合并报告；只有实质状态、权威、binding、release、repository identity transition，或 destructive change / 明确枚举的 externally visible repository transition 才需要 Human approval。当前任务已授权范围内的普通 commit 与 push 不另设 Human Gate。
 
 ## 4. Four active phases
 
