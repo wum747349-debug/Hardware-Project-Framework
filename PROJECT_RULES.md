@@ -61,7 +61,7 @@ Framework Era
 - 正式 Project 必须通过 `FRAMEWORK.md` 锁定一个 Framework Release 和对应不可歧义的完整 Commit SHA。
 - Project 不默认跟随或读取 Framework `main`。
 - 正式 Bootstrap 必须从固定 Framework Release 获取 Template；开发绑定只允许用于 Framework 自测和明确的预发布评估。
-- Framework 升级必须显式执行 migration；只有完成差异审查、结构/内容迁移和验证后，才更新 `Framework Release`、`Framework Commit`，并在需要时更新 `Project Structure Version`。
+- Framework binding update 必须由用户明确要求并锁定目标 Release + immutable Commit。若 Project Structure Version、`FRAMEWORK.md` schema、Project `AGENTS.md` context-routing contract、Required/Conditional/Stage-enabled 模型、Runtime Rules、Stage/Gate、Project 事实职责、Repository authority model 与 Validator required structure 均未改变，可按 Compatible Framework Sync 执行；发生任何 Runtime / Structural Contract 实质变化时，必须按 Framework Contract Migration 执行完整差异审查、Project adaptation、验证与一次 Human Approval。两类更新都不得自动跟随 Framework `main`，并只在验证通过后更新 binding；仅在结构契约变化时更新 `Project Structure Version`。
 - 发布顺序为 Baseline → Release Candidate → Final。RC 后若 Required files、`FRAMEWORK.md` schema、Project `AGENTS.md`、Gate 1.5、Runtime Rules、目录职责、Structure Version 或 Validator required structure 实质变化，必须发布新的 RC，不得继续声称旧 RC 已验证。
 
 版本语义不得混淆：Framework Release 表示方法发布；Project Structure Version 表示项目仓库结构契约；Hardware Revision 表示硬件设计版本；Git tag/commit 表示源码身份。

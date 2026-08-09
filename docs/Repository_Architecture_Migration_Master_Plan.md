@@ -78,7 +78,7 @@ Project 3 的 clean-room 结果证明 Framework 能在不依赖 Legacy Project 3
 
 RC1 tag 与 GitHub prerelease 已发布，Phase 2 已完成 Human Review 并关闭。Phase 3 中 Project 2 Framework binding migration 与 Authority Cutover 已分别获得 Human Approval 并完成；Project 2 Stage 2 仍未授权，本次执行在 Cutover 后停止。Project 3 migration 仍未开始，Repository Rename 仍未授权或执行。
 
-Migration 的 routine validation、CI、diff inspection、technical review 与 evidence collection 默认自动执行并合并报告；只有实质状态、权威、binding、release、repository identity transition，或 destructive change / 明确枚举的 externally visible repository transition 才需要 Human approval。当前任务已授权范围内的普通 commit 与 push 不另设 Human Gate。
+Migration 的 routine validation、CI、diff inspection、technical review 与 evidence collection 默认自动执行并合并报告。Compatible Framework Sync 在用户已明确要求后不另设 Human Gate；Framework Contract Migration、Authority Cutover、Stage / Gate 状态变化、release、repository identity transition 与 destructive change 按 [Framework Migration Guide](Framework_Migration_Guide.md) 保留各自的一次或必要 Human Approval。当前任务已授权范围内的普通 commit 与 push 不另设 Human Gate。
 
 ## 4. Four active phases
 
@@ -126,16 +126,11 @@ Outputs / Done：Repository identity、current tree、文档、Template、Fixtur
 
 Repository Rename 是 Framework Repository identity transition，不只是 GitHub UI 或 README 改名。Phase 4 负责新仓库身份、内部与文档链接及 release identity 的一致性；真实 Project 不得仅因仓库改名而静默重写 `FRAMEWORK.md`。Project 必须在适用的 binding update 中显式选择 Framework release + immutable commit，并一并采用 Rename 后的 Framework Repository identity。`Repository Rename ≠ automatic Project Framework migration`。
 
-## 5. Framework change-management candidate
+## 5. Framework change management after the pilot
 
-以下仅为 **Pilot Change-Management Policy / Candidate Design — Not yet a standalone Project Runtime Contract**。
+Project 2 pilot 已将长期 Framework change management 收敛为 `Compatible Framework Sync` 与 `Framework Contract Migration`。分类边界、执行流程与 Human Approval Policy 由 [Framework Migration Guide](Framework_Migration_Guide.md) 维护；本一次性 Master Plan 不重复定义或覆盖该长期治理。
 
-| Class | Examples | Required handling |
-| --- | --- | --- |
-| Framework Sync | Validator bug/误判修复，Skill/Checklist 澄清，文档或链接修正，不改变 Runtime Contract 的兼容工具增强 | 显式执行；指定 snapshot；运行必要验证；不自动跟随 `main`。 |
-| Framework Migration | Required/Conditional/Stage-enabled、`FRAMEWORK.md` schema、Runtime Rules、Gate/Stage lifecycle、Structure Version 或文件职责变化 | 完整差异审查、Project adaptation、受影响 Gate/Stage reassessment，并显式更新 binding。 |
-
-Framework `main` 变化绝不等于 Project 自动变化。是否将 Sync 固化为长期 Contract，留待独立审查。
+Repository Architecture Transition 自身的 Authority Cutover、Repository Rename、Legacy deletion 与 RC / Final publication 仍按各自 Human Gate 执行。Transition closeout 后，本 Master Plan 成为 Historical Engineering Record，AI Runbook retire / archive；长期 Framework change management 不继承本计划的 Phase、Pilot 或 Closeout bureaucracy。Framework `main` 变化始终不等于 Project 自动变化。
 
 ## 6. RC strategy
 

@@ -264,7 +264,7 @@ hardware-project-framework-v1.0.0
 
 正式 Bootstrap 从固定 Release 获取 Template，而不是复制当前 `main`。RC 后若 Required files、绑定 schema、Project `AGENTS.md`、Gate 1.5、Runtime Rules、目录职责、Structure Version 或 Validator required structure 实质变化，必须发布新 RC。
 
-Project 继续使用其绑定版本，直到显式 migration：审查目标 release 与当前绑定差异，迁移 Project 结构/Runtime Rules/Stage Method，运行相应 Validator，记录结果，然后更新 Release + Commit；仅在结构契约变化时更新 Project Structure Version。
+Project 继续使用其绑定版本，直到用户明确要求 binding update。Project Structure Version、`FRAMEWORK.md` schema、Project `AGENTS.md` context-routing contract、Required/Conditional/Stage-enabled 模型、Runtime Rules、Stage/Gate、Project 事实职责、Repository authority model 与 Validator required structure 全部不变时，可按 Compatible Framework Sync 应用最小兼容改动、运行受影响验证并更新 Release + Commit。上述任一 Runtime / Structural Contract 语义实质变化时，必须按 Framework Contract Migration 完成旧→新 Contract diff、Project adaptation、受影响 Stage/Gate 分析、验证与 rollback plan，再更新 binding；仅在结构契约变化时更新 Project Structure Version。分类、执行顺序与 Human Approval Policy 以 [Framework Migration Guide](Framework_Migration_Guide.md) 为准。
 
 Authority Cutover：
 

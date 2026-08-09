@@ -64,7 +64,7 @@ Project 3 当前里程碑：
 - Initialization Status：`Initialized`；
 - Phase 2 clean-room objective：`COMPLETE`。
 
-Phase 2 clean-room execution path（completed）：
+Phase 2 clean-room execution path（completed；保留为历史执行记录，不作为未来 Bootstrap 的重复审批模板）：
 
 ```text
 Bootstrap Authorization
@@ -109,7 +109,7 @@ Repository Migration Task 的建议顺序：
 | Contract gap | Contract 缺少完成当前判断所需的规则 |
 | Documentation-only issue | 不改变 Contract 语义的表达、导航或链接问题 |
 
-变更再分类为 `Compatible Sync candidate` 或 `Contract Migration`。这是 Pilot policy，不能据此自动升级真实 Project。Sync candidate 仍需显式 snapshot 与验证；Contract Migration 需要完整差异审查、Project adaptation 和受影响 Gate / Stage reassessment。Validator 只能实现 Contract 的可自动验证部分，不能反向创造 Contract，也不能要求用虚构事实换取 PASS。
+Framework binding update 必须按 [Framework Migration Guide](Framework_Migration_Guide.md) 分类为 `Compatible Framework Sync` 或 `Framework Contract Migration`，不能据此自动升级真实 Project。Compatible Sync 需要固定 snapshot、impact check 与验证，但用户已明确要求执行时不另设 Human Gate；Contract Migration 需要完整差异审查、Project adaptation、受影响 Gate / Stage reassessment 与一次 Human Approval。Validator 只能实现 Contract 的可自动验证部分，不能反向创造 Contract，也不能要求用虚构事实换取 PASS。
 
 ## Execution Loop
 
@@ -121,24 +121,18 @@ Repository Migration Task 的建议顺序：
 
 ## Human Approval Policy
 
-Migration execution 不为每个 Validator、review、CI check、diff inspection、clean-room validation、evidence collection 或 report 分别设置 Human Gate。Automatic checks should remain automatic，并在未发现 blocker 时合并执行和报告。
+长期 Human Approval Policy 以 [Framework Migration Guide](Framework_Migration_Guide.md) 为准；本 transition-only Runbook 只应用该政策，不另造 Runtime Contract。Migration execution 不为 Validator、review、CI check、diff inspection、clean-room validation、evidence collection、commit / push 或 report 分别设置 Human Gate。
 
-只有下一动作造成实质状态、权威、binding、release 或 repository transition，或执行 destructive change / 下列明确枚举的 externally visible repository transition 时，才需要用户明确批准。包括：
+- Compatible Framework Sync：用户明确要求执行即构成 execution authorization；不另设 Readiness / Sync / Closeout Gate。
+- Framework Contract Migration：assessment 后一次 Human Approval；transaction 后的 Final Report 不是新 Gate。
+- Authority Cutover：只读 assessment 与 `READY / BLOCKED` report 后一次 Human Approval；Cutover Transaction 后的 Closeout Review 只是 verification / report。
+- Project Hardware Stage advancement、Gate 1.5 Human PASS、RC / Final publication、Repository Rename、Legacy deletion / destructive operation：各自保留所需 Human Approval。
+- 当前任务已授权范围内的普通 documentation / code commit 与 push：不另设 Human Gate，但不能隐式执行上述 transition。
 
-- 第一次创建正式 Standalone Project Repository 并写入固定 binding 的 Bootstrap Authorization；
-- Project Hardware Stage advancement；
-- Gate 1.5 Human PASS 及 `Initialization Status: Gate 1.5 Pending → Initialized`；
-- Authority Cutover；
-- 真实 Project 的 Framework binding migration；
-- RC / Final tag 与 GitHub Release；
-- Repository Rename、Legacy Project deletion、history-affecting migration action 或 destructive cleanup。
+Bootstrap Authorization 不是 Hardware Gate，也不是 Stage 0。用户若明确要求创建新的 Standalone Hardware Project，并指定 Project / Repository identity 与固定 Framework Release + immutable Commit，该请求本身就是 Bootstrap execution authorization；适用时仍应先确认 repository visibility 等不可推断输入。正常流程为 `User request → Bootstrap → Validator → Bootstrap Result Report → STOP before Hardware Stage advancement`，无需制造第二个 Bootstrap Human Gate。进入 Stage 1 仍按 Project Stage advancement policy 处理。
 
-当前任务已授权范围内的普通 documentation / code commit 与 push 不另设 Human Gate；它们不能被用来隐式执行上述 transition。
+Cutover 准备完成不等于 Cutover 已执行。只有用户一次批准且每个 Project 的迁移完整性、Facts、真实 Hardware Stage、EDA/Evidence/References/History、固定 binding、Validator 与人工核对均满足时，才能将 Standalone 标记为 Only Active Project Authority；随后 Legacy 只能是 Frozen Migration Source，禁止双写。
 
-Bootstrap Authorization 不是新的 Hardware Gate，也不是 Stage 0。第一次写入新 Standalone Project 前，用户必须确认 fixed Framework Release + immutable Commit、Project Identity、Standalone Repository identity、适用时的 repository visibility，以及创建并 Bootstrap 该仓库的授权。Bootstrap Authorization 不授权进入 Stage 1；Bootstrap 与自动验证完成后必须报告结果并停止，等待 Stage 1 advancement approval。
+Framework v1 closeout 后，本 Runbook 应 retire / archive；Master Plan 成为 Historical Engineering Record。长期正常 Framework change management 只使用 Compatible Framework Sync 或 Framework Contract Migration，不继承本次 Repository Transition 的 Phase bureaucracy。
 
-未经用户明确批准，不得执行：Project Stage advancement、Authority Cutover、Legacy Project deletion、Repository Rename、RC / Final tag 或 release、真实 Project 的 Framework binding migration。也不得把 Framework `main` 变化自动同步到 Project。
-
-Cutover 准备完成不等于 Cutover 已执行。只有用户批准且每个 Project 的迁移完整性、Facts、真实 Hardware Stage、EDA/Evidence/References/History、固定 binding、Validator 与人工核对均满足时，才能将 Standalone 标记为 Only Active Project Authority；随后 Legacy 只能是 Frozen Migration Source，禁止双写。
-
-Stop condition：若权威 Project Facts、Framework binding、Migration Phase 意图或 Human Gate 状态与 Runbook 假设冲突，停止相应变更并报告差异，不自行推进 Stage、Cutover、Rename 或 Release。
+Stop condition：若权威 Project Facts、Framework binding、Migration Phase 意图或 Human Gate 状态与 Runbook 假设冲突，或 classification 不明确，停止相应变更并报告差异，不自行推进 Stage、Cutover、Rename 或 Release。
