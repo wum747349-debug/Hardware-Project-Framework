@@ -13,6 +13,7 @@
 
 ```text
 Runtime Contract                     Migration Engineering
+        ↓                                    ↓
 PROJECT_RULES.md                     Master Plan
   ↓                                    ↓
 Structure + Workflow + AI Context    AI Runbook
@@ -57,11 +58,14 @@ Framework 只定义方法。正式 Project 锁定固定 Release + immutable 40 �
 - Phase 1 — Pilot Stabilization：`CLOSED — Human Review Approved`；
 - Current Active Phase：`Phase 2 — Clean Bootstrap & RC Readiness`；
 - Phase 2 Preconditions Review：`PASS`；
-- Current Phase 2 Step：Bootstrap Authorization；
 - Project 2：Bootstrap / Stage 1 / Gate 1.5 Pilot 已完成；Authority Cutover 尚未执行，Legacy Project 2 仍是 Current Authority；
-- Project 3：Clean Bootstrap 尚未执行，也未发生任何 Project 3 Hardware Stage advancement。
+- Project 3：Clean Bootstrap 已完成，Stage 1 Requirements Definition 已完成，Gate 1.5 Human Review 与 Technical Closeout 均已 PASS，`Initialization Status: Initialized`；仍处于 Stage 1，Stage 2 未获授权；
+- Phase 2 clean-room objective：`COMPLETE`；
+- Current Phase 2 Step：`Framework Generalization / RC Readiness Review`。
 
-Phase 2 必须在 Project 3 初始化前显式选择 immutable Framework snapshot；Proposed Framework Snapshot 不等于 Adopted Project 3 Framework Snapshot，Framework `main` 或当前 HEAD 均不得被自动视为 Project 3 binding。本状态不表示 Project 3 已初始化、Gate 1.5 已通过、RC readiness 已通过或 RC 已发布。
+Project 3 的 clean-room 结果证明 Framework 能在不依赖 Legacy Project 3、Project 1、Project 2 或本地 Framework 路径的情况下完成 Bootstrap → Stage 1 → Gate 1.5 → Initialized。Project 3 继续绑定其显式选择的 immutable Framework snapshot；Framework `main` 或当前 HEAD 的后续变化不构成 Project 3 binding change。
+
+本状态不表示 Stage 2 已授权、Authority Cutover 已执行、RC 已获批准或 RC 已发布。当前只进入 Framework Generalization / RC Readiness 技术审查；RC tag 与 GitHub Release 仍必须等待 Human approval。
 
 Migration 的 routine validation、CI、diff inspection、technical review 与 evidence collection 默认自动执行并合并报告；只有实质状态、权威、binding、release、repository identity transition，或 destructive change / 明确枚举的 externally visible repository transition 才需要 Human approval。当前任务已授权范围内的普通 commit 与 push 不另设 Human Gate。
 
@@ -87,7 +91,7 @@ Goal：用 Project 3 完成 Clean Bootstrap、Stage 1、Gate 1.5，证明 Framew
 
 Actions：从明确 snapshot 初始化 Project 3；按 Contract 建立最小事实入口并执行 Gate；Framework 继续用 temporary fixture / smoke test 验证 Template。
 
-Outputs / Done：Project 3 Clean Bootstrap / Stage 1 / Gate 1.5 通过，Framework CI 通过并形成 RC Readiness Review 输入。Project 3 不需为 RC 强行进入后续 Hardware Stage。
+Outputs / Done：Project 3 Clean Bootstrap / Stage 1 / Gate 1.5 已通过并完成初始化，Framework CI 已形成 RC Readiness Review 输入。当前进行 Framework Generalization / RC Readiness Review；Project 3 不需为 RC 强行进入后续 Hardware Stage。
 
 ### Phase 3 — Formal Project Migration & Authority Cutover
 
@@ -137,7 +141,7 @@ development / v0.9
   → hardware-project-framework-v1.0.0
 ```
 
-RC Entry Criteria：Contract 无已知阻断性矛盾；Project 2 已完成 Bootstrap / Stage 1 / Gate 1.5 Pilot；Project 3 Clean Bootstrap / Stage 1 / Gate 1.5 通过；Template 不依赖 Legacy monorepo；Project 与 Framework Validator 基本实现 Contract；Framework CI 通过；Validator 不迫使 Project 虚构事实；剩余工作不会再改变 RC Project Contract。
+RC Entry Criteria：Contract 无已知阻断性矛盾；Project 2 已完成 Bootstrap / Stage 1 / Gate 1.5 Pilot；Project 3 Clean Bootstrap / Stage 1 / Gate 1.5 通过；Template 不依赖 Legacy monorepo；Project 与 Framework Validator 基本实现 Contract；Framework CI 通过；Validator 不迫使 Project 虚构事实；Clean-room 未暴露 Project-specific hidden dependency；剩余工作不会再改变 RC Project Contract。
 
 RC 后若实质修改 Contract，必须 `rc1 → Contract change → rc2 → revalidation`，不得继续宣称旧 RC 已验证。
 
