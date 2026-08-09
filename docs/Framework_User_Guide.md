@@ -1,154 +1,150 @@
-# Framework User Guide
+# Framework 用户指南（Framework User Guide）
 
-> Audience: Human User
+> 面向对象（Audience）：Human User
 >
-> Runtime Contract: No
+> Runtime Contract：No
 >
-> Purpose: Explanatory / Navigation Guide
+> 用途（Purpose）：解释与导航，不定义新的 Framework Contract
 
-This guide lowers the entry barrier by explaining and linking to existing authority. It does not create a Framework Contract, Project Runtime Rule, Stage Rule, or Human Approval Rule.
+本文以中文解释为主，并保留 Framework 中已稳定使用的英文 Contract、Stage、Gate、文件名和技术术语。本指南只用于降低理解门槛并导航到现有权威源，不创建 Framework Contract、Project Runtime Rule、Stage Rule 或 Human Approval Rule。
 
-## 1. What is Framework?
+## 1. Framework 是什么
 
-Hardware Project Framework provides reusable engineering methods, repository structure rules, templates, validators, and AI context guidance for hardware projects.
+Hardware Project Framework 为硬件项目提供可复用的工程方法、仓库结构规则、Template、Validator 和 AI 上下文指引。
 
-Framework Repository defines:
+Framework Repository 定义：
 
-- project methods and contracts;
-- templates and validation tools;
-- workflow and stage guidance.
+- 项目方法和 Contract；
+- Template 和验证工具；
+- Workflow、Stage 与 Guide。
 
-A Standalone Project Repository stores the actual project facts:
+Standalone Project Repository 保存真实 Project 事实：
 
-- requirements;
-- design decisions;
-- EDA source files;
-- evidence and test records;
-- project history.
+- requirements 和设计决策；
+- EDA 源文件；
+- Evidence、测试记录和 Project history。
 
-Framework is not the active fact source for a real project.
+Framework 不是任何真实 Project 的活动事实源。
 
-## 2. Framework Repository vs Project Repository
+## 2. Framework Repository 与 Standalone Project Repository
 
 ```text
 Framework Repository
 Contract → Template → Validator → Guide
 
 Standalone Project Repository
-Binding → Runtime Rules → Project Facts → Evidence
+Binding → Runtime Rules → Project Facts → EDA / Evidence → Project History
 ```
 
-A project uses a fixed Framework Release and immutable Commit recorded in `FRAMEWORK.md`. It does not automatically follow Framework `main`.
+Project 使用 `FRAMEWORK.md` 记录的固定 Framework Release 和 immutable Commit，不会自动跟随 Framework `main`。
 
-## 3. Starting a Project
+## 3. 如何创建一个新 Project
 
-Recommended path:
+推荐阅读路径：
 
 ```text
 README
 → Framework User Guide
-→ the Contract or Guide required by the current task
+→ 当前任务需要的 Contract / Guide
 ```
 
-Typical flow:
+典型流程：
 
-1. Create a Standalone Project Repository.
-2. Initialize from a fixed Framework Release template.
-3. Complete Bootstrap and Stage 1 requirements.
-4. Pass Gate 1.5 before Stage 2.
+1. 创建 Standalone Project Repository。
+2. 从固定 Framework Release 的 Template 初始化。
+3. 完成 Bootstrap 和 Stage 1 requirements。
+4. 通过 Gate 1.5 后才能进入 Stage 2。
 
-Unknown facts should remain TBD or pending confirmation. Do not create false engineering facts to satisfy structure checks.
+未知事实应保留为 `TBD` 或待确认，不得为了通过结构检查而伪造工程事实。
 
-Use the [Project Initialization Guide](Project_Initialization_Guide.md) for the operating sequence, the [Project Template Guide](Project_Template_Guide.md) for template boundaries, the [Project Structure Standard](Project_Structure_Standard.md) for structure and binding, and the [Project Workflow](08_Project_Workflow.md) for lifecycle and gates.
+操作顺序见 [Project Initialization Guide](Project_Initialization_Guide.md)，Template 边界见 [Project Template Guide](Project_Template_Guide.md)，结构与 Binding 见 [Project Structure Standard](Project_Structure_Standard.md)，Lifecycle 与 Gate 见 [Project Workflow](08_Project_Workflow.md)。本指南不复制这些文档的完整规则。
 
-## 4. Continuing an Existing Project
+## 4. 如何继续已有 Project
 
-For an existing project:
+继续一个已有 Project 时：
 
-1. Read the project's `README.md` for current stage and facts.
-2. Read `FRAMEWORK.md` for current Framework binding.
-3. Read project `PROJECT_RULES.md`.
-4. Use the required Stage Method from the bound Framework snapshot.
+1. 从 Project `README.md` 查看 current stage 和 Project Facts 导航。
+2. 从 `FRAMEWORK.md` 查看当前 Framework Binding。
+3. 读取 Project `PROJECT_RULES.md` 了解 project runtime rules。
+4. 从已绑定的 Framework snapshot 取得当前任务需要的 Stage Method、Guide、Skill 和 Checklist。
 
-The project repository remains the source of project-specific truth. Follow the bound snapshot's [AI Context Guide](AI_Context_Guide.md) to load only the Project Facts, Stage Method, and evidence needed for the current task; do not default to Framework `main` or another Project.
+当前 Project Repository 始终是项目特定事实的权威源。按已绑定 snapshot 中的 [AI Context Guide](AI_Context_Guide.md) 只加载当前任务所需 Project Facts、Stage Method 和 Evidence；不默认读取 Framework `main` 或其他 Project。
 
-## 5. AI and Human Responsibilities
+## 5. AI 可以做什么，哪些动作需要 Human Approval
 
-Within an authorized task, AI can routinely help with:
+在已授权的任务范围内，AI 可以直接协助：
 
-- documentation preparation;
-- read-only review, evidence organization, and engineering analysis;
-- structure, link, validator, and CI checks;
-- scoped documentation, validator, and tooling maintenance;
-- explicit staging, ordinary commits, and pushes when requested.
+- documentation 准备；
+- read-only review、diff inspection、Evidence 整理和工程分析；
+- 结构、链接、Validator 和 CI 检查；
+- 已授权范围内的文档、Validator 和工具维护；
+- 明确暂存、普通 commit 与 push。
 
-These routine actions do not authorize AI to invent Project facts, claim unperformed EDA or physical work, or make a high-impact state change.
+这些常规动作不授权 AI 虚构 Project Facts、声称未执行的 EDA 或物理工作，也不授权高影响状态变更。
 
-Human approval remains required for high-impact state changes:
+以下动作仍需要 Human Approval：
 
-- hardware Stage advancement;
-- Gate 1.5 Human PASS;
-- Framework Contract Migration;
-- Authority Cutover;
-- RC / Final publication;
-- Repository Rename;
-- destructive cleanup.
+- Project Hardware Stage advancement；
+- Gate 1.5 Human PASS；
+- Framework Contract Migration；
+- Authority Cutover；
+- RC / Final publication；
+- Repository Rename；
+- Legacy deletion / destructive cleanup。
 
-Routine documentation, validation, review, and explicitly authorized compatible maintenance do not require repeated approval gates. The authoritative responsibility and approval boundaries are in [Framework Rules](../PROJECT_RULES.md), [Project Workflow](08_Project_Workflow.md), and [Framework Migration Guide](Framework_Migration_Guide.md).
+常规 documentation、review、Validator、CI、diff inspection、Evidence 整理以及授权任务内的普通 commit / push 不制造重复 Human Gate。权威职责与审批边界见 [Framework Rules](../PROJECT_RULES.md)、[Project Workflow](08_Project_Workflow.md) 和 [Framework Migration Guide](Framework_Migration_Guide.md)。
 
-## 6. Framework Updates
+## 6. Framework 更新：Compatible Framework Sync 与 Framework Contract Migration
 
-Two categories exist:
+### 兼容 Framework 同步（Compatible Framework Sync）
 
-### Compatible Framework Sync
-
-Used for a fixed target Framework Release + immutable Commit when Runtime and Structural Contract semantics remain unchanged. It still requires an explicit user task and validation, but no separate repeated approval gate.
+用于目标 Framework Release + immutable Commit 固定，且 Runtime / Structural Contract 语义保持不变的兼容更新。它仍需要明确用户任务与验证，但不另行制造重复 Human Approval Gate。
 
 ### Framework Contract Migration
 
-Used when contracts such as schema, structure, lifecycle, Project fact responsibility, authority model, or validator-required structure change. It requires the full impact review, Project adaptation, validation, rollback plan, and Human Approval defined by the authoritative guide.
+用于 schema、structure、lifecycle、authority、Project fact responsibility、validator required structure 等 Contract 语义发生实质变化的情况。它需按权威 Guide 完成影响审查、Project adaptation、验证、rollback plan 和 Human Approval。
 
-For the complete classification and process, see the [Framework Migration Guide](Framework_Migration_Guide.md). This summary does not replace it.
+完整分类与执行流程见 [Framework Migration Guide](Framework_Migration_Guide.md)；本节只做易懂解释，不替代该 Guide。
 
-## 7. Where to Find Facts
+## 7. 应该去哪里查看真实状态和事实
 
-| Question | Source |
+| 问题 | 权威入口 |
 | --- | --- |
-| Current Framework binding | Project `FRAMEWORK.md` |
-| Current project stage | Project `README.md` |
-| Current requirements | Project `requirements.md` |
-| Project facts and evidence | The current Project's fact files and evidence, routed from its `README.md` |
-| Repository structure and fact responsibilities | [Project Structure Standard](Project_Structure_Standard.md) |
-| Bootstrap and Gate 1.5 operating steps | [Project Initialization Guide](Project_Initialization_Guide.md) |
+| 当前 Framework Binding | Project `FRAMEWORK.md` |
+| 当前 Project Stage | Project `README.md` |
+| 当前 Requirements | Project `requirements.md` |
+| Project Facts / Evidence | 当前 Project 自身的事实文件和证据，从其 `README.md` 导航 |
+| Repository Structure / Binding 职责 | [Project Structure Standard](Project_Structure_Standard.md) |
+| Bootstrap / Gate 1.5 操作 | [Project Initialization Guide](Project_Initialization_Guide.md) |
 | Stage lifecycle | [Project Workflow](08_Project_Workflow.md) |
 | AI context routing | [AI Context Guide](AI_Context_Guide.md) |
-| Framework update classification and approval | [Framework Migration Guide](Framework_Migration_Guide.md) |
+| Framework 更新 / Human Approval | [Framework Migration Guide](Framework_Migration_Guide.md) |
 
-## 8. Recommended Reading by Role
+## 8. 不同角色应该阅读哪些文档
 
-Human User:
+Human User：
 
-- the repository `README.md` and this Framework User Guide;
-- the current Project's `README.md`, `FRAMEWORK.md`, requirements, and task-specific facts when continuing a Project;
-- the [Project Initialization Guide](Project_Initialization_Guide.md) when creating a Project.
+- 仓库 `README.md` 和本 Framework User Guide；
+- 继续已有 Project 时，读取当前 Project 的 `README.md`、`FRAMEWORK.md`、requirements 和任务相关事实；
+- 创建 Project 时，读取 [Project Initialization Guide](Project_Initialization_Guide.md)。
 
-Project Creator:
+Project Creator：
 
-- this guide;
-- the [Project Initialization Guide](Project_Initialization_Guide.md);
-- the [Project Structure Standard](Project_Structure_Standard.md);
-- the [Project Workflow](08_Project_Workflow.md);
-- the [Project Template Guide](Project_Template_Guide.md).
+- 本指南；
+- [Project Initialization Guide](Project_Initialization_Guide.md)；
+- [Project Structure Standard](Project_Structure_Standard.md)；
+- [Project Workflow](08_Project_Workflow.md)；
+- [Project Template Guide](Project_Template_Guide.md)。
 
-Framework Maintainer:
+Framework Maintainer：
 
-- [Framework Rules](../PROJECT_RULES.md);
-- the [Project Structure Standard](Project_Structure_Standard.md), [Project Workflow](08_Project_Workflow.md), and [AI Context Guide](AI_Context_Guide.md);
-- the [Project Template Guide](Project_Template_Guide.md), [Project Initialization Guide](Project_Initialization_Guide.md), and [Framework Migration Guide](Framework_Migration_Guide.md);
-- affected validator, skill, checklist, and CI documentation only as required by the task.
+- [Framework Rules](../PROJECT_RULES.md)；
+- [Project Structure Standard](Project_Structure_Standard.md)、[Project Workflow](08_Project_Workflow.md) 和 [AI Context Guide](AI_Context_Guide.md)；
+- [Project Template Guide](Project_Template_Guide.md)、[Project Initialization Guide](Project_Initialization_Guide.md) 和 [Framework Migration Guide](Framework_Migration_Guide.md)；
+- 只按当前任务需要读取受影响的 Validator、Skill、Checklist 和 CI 文档。
 
-## 9. One-time Repository Architecture Migration
+## 9. 一次性 Repository Architecture Migration
 
-Framework maintainers working on the repository-wide transition can use the [Repository Architecture Migration Master Plan](Repository_Architecture_Migration_Master_Plan.md) for the human roadmap and the [Repository Architecture Migration AI Runbook](Repository_Architecture_Migration_AI_Runbook.md) for migration-only execution routing.
+维护 Repository Architecture Transition 时，Framework Maintainer 可使用 [Repository Architecture Migration Master Plan](Repository_Architecture_Migration_Master_Plan.md) 了解 human-facing roadmap，使用 [Repository Architecture Migration AI Runbook](Repository_Architecture_Migration_AI_Runbook.md) 了解 migration-only 执行路由。
 
-These two documents are not Standalone Project Runtime Contract and are not the default reading path for ordinary Project work.
+这两个文档都不是 Standalone Project Runtime Contract，也不是普通 Project 工作的默认阅读路径。

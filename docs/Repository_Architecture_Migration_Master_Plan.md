@@ -120,7 +120,32 @@ Project 2 不需要为了 RC 进入 Stage 2。但若未来要在 Standalone Repo
 
 Goal：完成 Transition Repository 到正式 Framework Repository 的收尾。
 
-Actions：确认三个 Project 权威收敛；从 current tree 移除真实 Project 活动副本但保留 Git history；建立轻量 `examples/reference_project_v1/`；收尾 README、CHANGELOG 与 Migration Guide；清理 Transition-only 低价值内容；执行获批的 GitHub Rename 并修复身份与链接；验证 Template、Fixture、Validator 与 CI。
+Actions：确认三个 Project 权威收敛；从 current tree 移除真实 Project 活动副本但保留 Git history；建立轻量 `examples/reference_project_v1/`；收尾 README、CHANGELOG 与 Migration Guide；按文档治理分类与获批处置清理 Transition-only 低价值内容；执行获批的 GitHub Rename 并修复身份与链接；验证 Template、Fixture、Validator 与 CI。
+
+#### Documentation Inventory & Rationalization
+
+Framework v1 Final 前对 legacy / transition-era 文档执行：
+
+```text
+Inventory → Classification → Disposition → Rationalization
+```
+
+每个文档先分类为 `Contract`、`Guide`、`Stage Method / Checklist`、`Transition Historical Record` 或 `Legacy Project / Portfolio Material`，再选择 `keep`、`merge`、`move`、`archive`、`retire` 或 `delete` disposition。分类与决策必须先于删除；不得仅为了让仓库看起来整齐而直接删除文件。
+
+初始审查候选（initial review candidates）为：
+
+- `docs/00_Project_Roadmap.md`；
+- `docs/01_Toolchain_Setup.md`；
+- `docs/02_Altium_Design_Rules.md`；
+- `docs/03_Component_Selection_Rules.md`；
+- `docs/04_PCB_Review_Checklist.md`；
+- `docs/05_Bringup_Test_Checklist.md`；
+- `docs/06_Debug_Record_Template.md`；
+- `docs/07_Resume_Project_Notes.md`。
+
+这些文件只是待审查候选，不是预先确定的删除清单。审查应识别重复职责、已被新 Contract / Guide / Skill / Checklist 替代的内容、transition-only wording、Legacy Monorepo assumption、三个具体 Project / portfolio assumption、应进入 Stage Method / Skill / Checklist 的长期工程方法，以及已无长期价值的历史说明。`docs/00_Project_Roadmap.md` 和 `docs/07_Resume_Project_Notes.md` 应作为 `Legacy Project / Portfolio Material` 的重点候选进行审查，但不预判最终 disposition。
+
+Phase 4 前可以进行 inventory、read-only classification 和 planning。Project 2、Project 3 与 Project 1 migration 期间，不得仅为仓库整洁而提前执行旧文档 destructive cleanup。实际 `move`、`merge`、`archive`、`retire` 或 `delete` 只在三个真实 Project 全部完成 Authority Cutover 后的 Phase 4 中，依照审查结论与所需 Human Approval 执行。
 
 Outputs / Done：Repository identity、current tree、文档、Template、Fixture、Validator 与 CI 一致，用户批准并实际发布 `hardware-project-framework-v1.0.0`。Rename 只在此阶段且真实 GitHub 操作获批后执行，不能由文档提前假定。
 

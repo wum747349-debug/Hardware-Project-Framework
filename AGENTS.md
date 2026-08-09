@@ -14,6 +14,16 @@
 6. 普通 Framework maintenance 不默认读取 Repository Architecture Migration Master Plan 或 AI Runbook。
 7. Repository Architecture Migration task 读取 `docs/Repository_Architecture_Migration_AI_Runbook.md`；只有整体路线、Phase、RC、Cutover、Final 或计划修订任务才按需读取 Master Plan。
 
+## 文档语言与可读性
+
+本节是 Framework authoring / usability guidance，不是 Project Runtime Contract 或 Structural Contract，也不改变 Standalone Project `AGENTS.md` context-routing contract。
+
+- Framework 面向用户的说明性文档默认以中文为主要解释语言，使普通用户无需依赖完整英文阅读能力也能理解当前流程、状态、职责、风险与下一步。
+- 已稳定使用的英文正式术语应保留，例如 Framework、Standalone Project、Runtime Contract、Framework Contract Migration、Compatible Framework Sync、Authority Cutover、Stage / Gate、Validator、CI 和 EDA。
+- 文件名、路径、schema key、identifier、命令、固定字段及其值不得为了中文化而机械翻译。
+- 推荐使用“中文解释 + 必要英文正式术语”，例如“兼容 Framework 同步（Compatible Framework Sync）”、“Framework Contract Migration”和“Authority Cutover”。
+- Human-facing Guide、README、操作说明和 AI/Codex 最终报告在无明确必要时不得整篇使用英文；明确面向外部英文读者的文档可按其 Audience 使用英文。
+
 ## Standalone Project `AGENTS.md` Contract
 
 Project Template 中的轻量 `AGENTS.md` 只负责启动路由，必须要求 AI/Codex：
