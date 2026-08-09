@@ -62,12 +62,18 @@ Framework 只定义方法。正式 Project 锁定固定 Release + immutable 40 �
 - Project 3：Clean Bootstrap 已完成，Stage 1 Requirements Definition 已完成，Gate 1.5 Human Review 与 Technical Closeout 均已 PASS，`Initialization Status: Initialized`；仍处于 Stage 1，Stage 2 未获授权；
 - Phase 2 clean-room objective：`COMPLETE`；
 - RC1：`hardware-project-framework-v1.0.0-rc1` @ `b36d9d399651e5c1a2b07dbc70d6e1487df57fd5`；
-- Phase 3：`NOT STARTED — Pending Human Authorization`；
-- Next：`Phase 3 — Formal Project Migration & Authority Cutover`。
+- Phase 3 — Formal Project Migration & Authority Cutover：`ACTIVE — Human Authorized`；
+- Current Project：`Project 2`；
+- Current Step：`Formal Migration Readiness / Pre-Cutover Preparation`；
+- Project 2 Stage 2：`NOT AUTHORIZED`；
+- Project 2 Framework binding migration：`NOT YET AUTHORIZED / NOT EXECUTED`；
+- Project 2 Authority Cutover：`NOT YET AUTHORIZED / NOT EXECUTED`；
+- Project 3 migration：`NOT STARTED`；
+- Repository Rename：`NOT AUTHORIZED`。
 
 Project 3 的 clean-room 结果证明 Framework 能在不依赖 Legacy Project 3、Project 1、Project 2 或本地 Framework 路径的情况下完成 Bootstrap → Stage 1 → Gate 1.5 → Initialized。Project 3 继续绑定其显式选择的 immutable Framework snapshot；Framework `main` 或当前 HEAD 的后续变化不构成 Project 3 binding change。
 
-RC1 tag 与 GitHub prerelease 已发布，Phase 2 已完成 Human Review 并关闭。本状态不表示 Stage 2 已授权、Authority Cutover 已执行、Project binding 已迁移或 Phase 3 已开始；进入 Phase 3 仍须等待 Human authorization。
+RC1 tag 与 GitHub prerelease 已发布，Phase 2 已完成 Human Review 并关闭。Phase 3 已获得 Human authorization，当前从 Project 2 Formal Migration Readiness / Pre-Cutover Preparation 开始执行；该授权不表示 Stage 2 已授权、Authority Cutover 已批准或执行、Project binding migration 已授权或执行、Project 3 migration 已开始，亦不授权 Repository Rename。
 
 Migration 的 routine validation、CI、diff inspection、technical review 与 evidence collection 默认自动执行并合并报告；只有实质状态、权威、binding、release、repository identity transition，或 destructive change / 明确枚举的 externally visible repository transition 才需要 Human approval。当前任务已授权范围内的普通 commit 与 push 不另设 Human Gate。
 

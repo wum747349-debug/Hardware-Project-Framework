@@ -29,9 +29,17 @@ Phase 2：`CLOSED — RC1 Published / Human Review Approved`。
 
 RC1：`hardware-project-framework-v1.0.0-rc1` @ `b36d9d399651e5c1a2b07dbc70d6e1487df57fd5`。
 
-Phase 3：`NOT STARTED — Pending Human Authorization`。
+Phase 3 — Formal Project Migration & Authority Cutover：`ACTIVE — Human Authorized`。
 
-Next：`Phase 3 — Formal Project Migration & Authority Cutover`。
+Current Project：`Project 2`。
+
+Current Step：`Formal Migration Readiness / Pre-Cutover Preparation`。
+
+- Project 2 Stage 2：`NOT AUTHORIZED`；
+- Project 2 Framework binding migration：`NOT YET AUTHORIZED / NOT EXECUTED`；
+- Project 2 Authority Cutover：`NOT YET AUTHORIZED / NOT EXECUTED`；
+- Project 3 migration：`NOT STARTED`；
+- Repository Rename：`NOT AUTHORIZED`。
 
 ### Project 2 Migration Milestone
 
@@ -68,7 +76,7 @@ Bootstrap Authorization
   → Framework Generalization / RC Readiness input
 ```
 
-Phase 2 closeout：`COMPLETE`。RC1 已作为 GitHub prerelease 发布。Stage 2：`NOT AUTHORIZED`；Phase 3 尚未开始，必须等待 Human authorization。
+Phase 2 closeout：`COMPLETE`。RC1 已作为 GitHub prerelease 发布。Project 3 Stage 2：`NOT AUTHORIZED`；Project 3 migration：`NOT STARTED`。当前 Phase 3 授权只适用于从 Project 2 Formal Migration Readiness / Pre-Cutover Preparation 开始执行，不构成 Project 2 Stage 2、Framework binding migration 或 Authority Cutover 授权。
 
 本节只提供当前 migration orientation 与已完成执行路径，不是 Project 3 Runtime Facts 或 Framework binding 的权威源。执行任务前仍须从 Project 3 根 `README.md` 与 `FRAMEWORK.md` 重新核对当前 Stage、初始化状态和 binding。
 
