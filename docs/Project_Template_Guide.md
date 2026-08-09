@@ -16,7 +16,7 @@ Template 只提供 Project container、Binding/Runtime 入口、事实入口、�
 
 复制完成后，Project 必须能够脱离 Framework checkout 独立理解和运行 `scripts/validate_project_repository.py`。Template 与 Project Repository 不要求位于同一个父目录。
 
-详细 Bootstrap、Stage 1 与 Gate 1.5 顺序以 [Workflow](08_Project_Workflow.md) 为准；Phase 2 的 `docs/Project_Initialization_Guide.md` 只提供操作步骤，不重复本 Contract。
+详细 Bootstrap、Stage 1 与 Gate 1.5 顺序以 [Workflow](08_Project_Workflow.md) 为准；[Project Initialization Guide](Project_Initialization_Guide.md) 只提供操作步骤，不重复本 Contract。
 
 ## 3. Template 内容分类
 

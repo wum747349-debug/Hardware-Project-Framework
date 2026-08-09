@@ -9,6 +9,10 @@
 
 Framework v0.9 已建立 Standalone Project Template、初始化 Guide/Skill/Checklist、Project Validator、Framework Validator 与轻量 CI；Framework v1 RC1 现已发布。RC1 不是 Framework v1 Final，也不表示最终 Closeout 已完成。
 
+## 普通用户入口
+
+请从 [Framework User Guide](docs/Framework_User_Guide.md) 开始：`README → Framework User Guide → 按当前任务进入对应 Contract / Guide`。
+
 ## 架构边界
 
 ```text
