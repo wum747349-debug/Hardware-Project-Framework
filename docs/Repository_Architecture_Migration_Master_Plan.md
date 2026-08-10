@@ -145,19 +145,54 @@ Project 1 已基于已验证 RC1 完成 `Formal Migration → Authority Cutover 
 
 Goal：完成 Transition Repository 到正式 Framework Repository 的收尾。
 
-Actions 可包含：Documentation Inventory / Rationalization、Template human-facing language usability cleanup、轻量 Reference Project、README / CHANGELOG / Guide closeout、Repository identity / Rename，以及 final Template / Fixture / Validator / CI consistency 与 Final Release readiness。确认三个 Project 权威收敛后，current tree 不再保留真实 Project 活动副本，但 Git history 保持可追溯。每项动作仍按自身 scope 与风险边界授权，不因进入 Phase 4 自动获批。
+```text
+Phase 4 Closeout Assessment:
+READY WITH MINOR NOTES
+```
+
+Minor notes 只要求按下述 bounded scope 完成兼容 cleanup、Rename 后 identity verification 与 Final Candidate Validation，不改变 Runtime / Structural Contract，也不增加新的 Gate、Approval 或 Phase。
+
+最终执行模型收敛为：
+
+```text
+Framework Closeout Transaction
+        ↓
+Repository Rename Transaction
+        ↓
+Final Candidate Validation
+        ↓
+ONE Human Publish Approval
+        ↓
+Atomic v1.0.0 Publication
+        ↓
+Automatic Verification
+        ↓
+Transition CLOSED
+```
+
+`Framework Closeout Transaction` 是一个 bounded logical transaction，可统一包含 Documentation Inventory / Rationalization、Template human-facing language usability cleanup、轻量 `examples/reference_project_v1/`、Legacy Project current-tree cleanup、README / CHANGELOG / Guide consistency cleanup，以及 Validator / `--mode final` / CI consistency cleanup。这些普通 closeout cleanup 不分别建立 Documentation Gate、Template Gate、Reference Project Gate 或其他 Approval；transaction 只有在实际触及下述真正风险边界时才停下取得对应授权。
+
+Phase 4 只保留三个 Human Approval 边界：destructive Legacy Project current-tree removal、Repository Rename、Final v1.0.0 publication。Assessment、validation 与 automatic verification 本身不需要 Human Approval；不存在 Final Readiness Approval、Final Technical Approval 或 Final Closeout Approval。
+
+#### Legacy current-tree disposition
+
+三个真实 Legacy Project 已完成 Authority Cutover 后，应从 Framework **current tree** 移除，同时保留完整 Git history。禁止 `filter-repo`、history rewrite 与 force push；不要求把三个完整 Legacy Project 搬入另一个 archive directory。如确有导航需要，可在未来 Closeout Transaction 中保留一个极轻量 migration / history marker。实际 removal 必须在 destructive change 的一次 Human Approval 后执行；本计划只记录执行模型。
+
+#### Reference Project and Template usability
+
+`examples/reference_project_v1/` 是 Phase 4 Final readiness 的已有预期项：synthetic、lightweight、validator-valid，用于 documentation、regression 与 final validation。它不得复制 Project 1 / 2 / 3 的真实 facts、EDA 或 authority，也不创建新的 governance Gate。
+
+Template human-facing language cleanup 应中文解释优先并保留 canonical English technical terms；不得翻译 schema keys、fixed field values，不得改变 paths、identifiers、commands 或破坏 validator-sensitive wording。该工作默认属于 usability / authoring compatibility cleanup，不改变 Runtime / Structural Contract。
 
 Phase 4 release strategy：
 
 ```text
-No Contract-affecting change:
-RC1 → compatible main cleanup → Final validation → v1.0.0
+RC2 required: NO
 
-Contract-affecting change requiring renewed candidate validation:
-RC1 → RC2 → Final validation → v1.0.0
+RC1 → compatible Phase 4 cleanup → Final Candidate Validation → v1.0.0
 ```
 
-因此 RC2 是 optional、impact-triggered，不是 sequence-mandatory，也不建立单独 RC2 Gate。
+该结论的前提是实际实现不改变 Runtime Contract、Structural Contract、Project Structure Version、`FRAMEWORK.md` schema、Required / Conditional / Stage-enabled model、Project `AGENTS.md` routing、Hardware Stage / Gate semantics、Project facts authority、repository authority model 或 incompatible validator contract。若未来执行发现必须改变任一项：`STOP → reclassify as Contract-affecting change → reassess RC2`。不得仅因为 `main` 有新 commit 就要求 RC2。
 
 Future backlog candidate：`scripts/validate_project_migration.py` 可作为 assessment helper，未来辅助检查 binding、target binding、validator snapshot identity、structure completeness、stage、initialization、legacy artifact inventory、authority markers 与明显 stale lifecycle wording。它不是 migration authority、不是新的 Human Gate、也不是 Runtime Contract；Phase 4 是否实现需另行评估，本轮不实现。
 
@@ -184,13 +219,26 @@ Inventory → Classification → Disposition → Rationalization
 
 这些文件只是待审查候选，不是预先确定的删除清单。审查应识别重复职责、已被新 Contract / Guide / Skill / Checklist 替代的内容、transition-only wording、Legacy Monorepo assumption、三个具体 Project / portfolio assumption、应进入 Stage Method / Skill / Checklist 的长期工程方法，以及已无长期价值的历史说明。`docs/00_Project_Roadmap.md` 和 `docs/07_Resume_Project_Notes.md` 应作为 `Legacy Project / Portfolio Material` 的重点候选进行审查，但不预判最终 disposition。
 
-Usability review 还应确认 human-facing documentation 提供足够中文解释，同时保留 canonical English terms、fields、schema key、identifier、path、command 与 validator-sensitive heading；不要求对历史文件机械全文翻译。为避免 Project 1 migration 或后续 Bootstrap 继续产生同类可读性问题，future generation-rule correction 可以在 Project 1 migration 前完成；既有 Project 3 readability debt 不在此处重开 migration，可留待 Phase 4 rationalization 或后续 targeted cleanup 处理。
+Usability review 还应确认 human-facing documentation 提供足够中文解释，同时保留 canonical English terms、fields、schema key、identifier、path、command 与 validator-sensitive heading；不要求对历史文件机械全文翻译。既有 Project 的 readability debt 不重开 migration，可留待后续显式 Project cleanup 处理。
 
 Phase 4 前可以进行 inventory、read-only classification 和 planning。Project 2、Project 3 与 Project 1 migration 期间，不得仅为仓库整洁而提前执行旧文档 destructive cleanup。实际 `move`、`merge`、`archive`、`retire` 或 `delete` 只在三个真实 Project 全部完成 Authority Cutover 后的 Phase 4 中，依照审查结论与所需 Human Approval 执行。
 
-Outputs / Done：Repository identity、current tree、文档、Template、Fixture、Validator 与 CI 一致，用户批准并实际发布 `hardware-project-framework-v1.0.0`。Rename 只在此阶段且真实 GitHub 操作获批后执行，不能由文档提前假定。
+Outputs / Done：Repository identity、current tree、文档、Template、Fixture、Validator 与 CI 一致，用户批准并实际发布 `hardware-project-framework-v1.0.0`。Rename 只在此阶段且真实 GitHub 操作获批后执行，不能由文档提前假定。推荐顺序为：
 
-Repository Rename 是 Framework Repository identity transition，不只是 GitHub UI 或 README 改名。Phase 4 负责新仓库身份、内部与文档链接及 release identity 的一致性；真实 Project 不得仅因仓库改名而静默重写 `FRAMEWORK.md`。Project 必须在适用的 binding update 中显式选择 Framework release + immutable commit，并一并采用 Rename 后的 Framework Repository identity。`Repository Rename ≠ automatic Project Framework migration`。
+```text
+Framework Closeout
+→ Rename Approval
+→ Repository Rename
+→ post-Rename identity fixes / verification
+→ lock Final Candidate SHA
+→ Final Candidate Validation
+→ ONE Human Publish Approval
+→ v1.0.0
+```
+
+Repository Rename 必须在 Final Candidate SHA 锁定前完成。
+
+Repository Rename 是 Framework Repository identity transition，不只是 GitHub UI 或 README 改名。Phase 4 负责新仓库身份、内部与文档链接及 release identity 的一致性；Rename 不得自动修改 Project 1 / 2 / 3 的 `FRAMEWORK.md`，也不得触发 bulk Project rebinding。Existing Project 的旧 Repository identity + RC1 SHA binding 是合法历史 binding；future Project rebinding 只能通过显式 Framework migration。`Repository Rename ≠ automatic Project Framework migration`。
 
 发布 `hardware-project-framework-v1.0.0` 不触发 bulk Project rebinding。Existing Project 仅在新 capability 确有需要、当前 binding 存在已知 Contract / Validator 问题、新 Stage 明确依赖新 Framework，或用户明确授权升级时，才执行 explicit Framework Contract Migration；否则继续使用原 immutable binding。
 
@@ -198,7 +246,7 @@ Repository Rename 是 Framework Repository identity transition，不只是 GitHu
 
 Project 2 pilot 已将长期 Framework change management 收敛为 `Compatible Framework Sync` 与 `Framework Contract Migration`。分类边界、执行流程与 Human Approval Policy 由 [Framework Migration Guide](Framework_Migration_Guide.md) 维护；本一次性 Master Plan 不重复定义或覆盖该长期治理。
 
-Repository Architecture Transition 自身的 Authority Cutover、Repository Rename、Legacy deletion 与 RC / Final publication 仍按各自 Human Gate 执行。Transition closeout 后，本 Master Plan 成为 Historical Engineering Record，AI Runbook retire / archive；长期 Framework change management 不继承本计划的 Phase、Pilot 或 Closeout bureaucracy。Framework `main` 变化始终不等于 Project 自动变化。
+Repository Architecture Transition 自身的 Authority Cutover、Repository Rename、Legacy deletion 与 RC / Final publication 仍按各自 Human Gate 执行。Transition closeout 后，本 Master Plan 成为 Historical Engineering Record，AI Runbook retire / archive；长期 Framework change management 不继承本计划的 Phase、Pilot 或 Closeout bureaucracy。该 lifecycle disposition 不要求为了物理 archive 再创建 post-Final approval 或 post-Final commit。Framework `main` 变化始终不等于 Project 自动变化。
 
 ## 6. RC strategy
 

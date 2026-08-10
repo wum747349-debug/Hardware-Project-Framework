@@ -108,6 +108,35 @@ Formal Migration Assessment 必须一次覆盖 Current Project state、当前与
 
 `READY WITH MINOR NOTES` 仅适用于 notes 不改变 transaction scope、风险边界或 authority 判断的情况。获批后执行一个 bounded logical migration transaction；`Atomic` 不声称跨多个 Git Repository 存在 ACID atomic commit。Automatic closeout verification 必须确认预定 commits / pushes、binding、authority marker、validators、remote state 与无意外 diff；任何失败都停止关闭并进入 recovery report。
 
+## Phase 4 Closeout Execution
+
+Master Plan 当前 Assessment 为 `READY WITH MINOR NOTES`。Phase 4 按以下单一路径执行：
+
+```text
+Framework Closeout Transaction
+        ↓
+Repository Rename Transaction
+        ↓
+Final Candidate Validation
+        ↓
+ONE Human Publish Approval
+        ↓
+Atomic v1.0.0 Publication
+        ↓
+Automatic Verification
+        ↓
+Transition CLOSED
+```
+
+1. `Framework Closeout Transaction` 将 Master Plan 列出的 documentation、Template usability、Reference Project、Legacy current-tree、README / CHANGELOG / Guide 与 Validator / `--mode final` / CI cleanup 作为一个 bounded logical transaction 规划和验证，不为普通 cleanup 分设 Gate 或 Approval。只有实际 destructive Legacy current-tree removal 必须在执行前获得该风险边界的一次 Human Approval；保留完整 Git history，禁止 `filter-repo`、history rewrite、force push，也不要求另建完整 Legacy archive directory。
+2. `Repository Rename Transaction` 在一次 Rename Approval 后执行，并完成 post-Rename identity fixes / verification。Rename 必须早于 Final Candidate SHA lock；不得自动修改 Project 1 / 2 / 3 的 `FRAMEWORK.md` 或执行 bulk Project rebinding，旧 Repository identity + RC1 SHA 继续作为合法历史 binding。Future rebinding 只能通过显式 Framework migration。
+3. 完成 Rename verification 后锁定 immutable Final Candidate SHA，再执行 Final Candidate Validation。Assessment、validation 与 automatic verification 不需要 Human Approval。
+4. Candidate `READY` 后只请求 `ONE Human Publish Approval`，随后执行 Atomic v1.0.0 Publication 与 Automatic Verification；不存在 Documentation、Template、Reference Project、Final Readiness、Final Technical 或 Final Closeout Approval。
+
+当前策略为 `RC2 required: NO`，支持 `RC1 → compatible Phase 4 cleanup → Final Candidate Validation → v1.0.0`。不得因 `main` 有新 commit 自动要求 RC2。若实际实现会改变 Runtime Contract、Structural Contract、Project Structure Version、`FRAMEWORK.md` schema、Required / Conditional / Stage-enabled model、Project `AGENTS.md` routing、Hardware Stage / Gate semantics、Project facts authority、repository authority model 或 incompatible validator contract，必须 `STOP → reclassify as Contract-affecting change → reassess RC2`。
+
+`examples/reference_project_v1/` 与 Template language cleanup 的内容边界由 Master Plan 维护；执行时必须保持 Reference Project synthetic / lightweight / validator-valid 且不复制真实 Project facts / EDA / authority，并保持中文解释优先、canonical English technical terms 与所有 schema keys、fixed field values、paths、identifiers、commands、validator-sensitive wording 不变。这些是 documentation / regression / usability compatibility work，不自行改变 Runtime / Structural Contract。
+
 ## RC Publication Execution
 
 ```text
@@ -172,6 +201,6 @@ Bootstrap Authorization 不是 Hardware Gate，也不是 Stage 0。用户若明�
 
 Cutover 准备完成不等于 Cutover 已执行。只有用户一次批准且每个 Project 的迁移完整性、Facts、真实 Hardware Stage、EDA/Evidence/References/History、固定 binding、Validator 与人工核对均满足时，才能将 Standalone 标记为 Only Active Project Authority；随后 Legacy 只能是 Frozen Migration Source，禁止双写。
 
-Framework v1 closeout 后，本 Runbook 应 retire / archive；Master Plan 成为 Historical Engineering Record。长期正常 Framework change management 只使用 Compatible Framework Sync 或 Framework Contract Migration，不继承本次 Repository Transition 的 Phase bureaucracy。
+Framework v1 closeout 后，本 Runbook 应 retire / archive；Master Plan 成为 Historical Engineering Record。该 lifecycle disposition 不要求为了物理 archive 再建立 post-Final approval 或 post-Final commit。长期正常 Framework change management 只使用 Compatible Framework Sync 或 Framework Contract Migration，不继承本次 Repository Transition 的 Phase、Pilot 或 Closeout bureaucracy。
 
 Stop condition：若权威 Project Facts、Framework binding、Migration Phase 意图或 Human Gate 状态与 Runbook 假设冲突，或 classification 不明确，停止相应变更并报告差异，不自行推进 Stage、Cutover、Rename 或 Release。
