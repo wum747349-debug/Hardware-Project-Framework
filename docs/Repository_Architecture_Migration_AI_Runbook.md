@@ -11,6 +11,8 @@ Only read this file for Repository Architecture Migration work.
 
 本 Runbook 只服务 Repository Architecture Transition、RC preparation、Project migration、Authority Cutover preparation、Framework Closeout、Repository Rename preparation 与 Final release preparation。普通 Project Requirements、Component Selection、Schematic、PCB、Bring-up 或 Test 任务不得默认读取本文件。本文件不复制到 Project Template 或 Standalone Project，也不是 Project Validator 输入。
 
+职责边界：Master Plan 维护 plan / status / decision model；本 Runbook 维护 execution model，包括 read-only assessment、atomic transaction、RC / Final publication、validation sequence、automatic closeout verification、STOP conditions 与 required final execution report。战略背景和长篇 rationale 不在本文件重复维护。
+
 ## Authority / Precedence
 
 ```text
@@ -70,16 +72,85 @@ Framework binding update 必须按 [Framework Migration Guide](Framework_Migrati
 
 ## Execution Route
 
-1. Re-check live repository state：核对工作树、远端默认分支、HEAD、tag、CI、目标 Project binding / authority 与适用权威文件，不把文档中的易变状态当成实时事实。
-2. Determine migration classification：区分 Compatible Framework Sync、Framework Contract Migration、Authority Cutover 或其他独立高风险动作，并锁定允许与禁止范围。
-3. Run ONE Formal Migration Assessment：一次覆盖 Current Project state、当前与目标 binding、classification、Standalone completeness、Legacy inventory 与事实 reconciliation、pre-cutover fixes、validator / runtime compatibility、authority readiness、exact intended transaction 和 rollback / recovery expectations；结果为 `READY`、`READY WITH MINOR NOTES` 或 `BLOCKED`。
-4. If `BLOCKED`：报告 blocker 并停止，不实施部分迁移。
-5. If ready and the classified next action requires Human Approval：报告 assessment，并且只停止一次。
-6. After approval：执行 assessment 中 exact bounded migration transaction，保护用户修改，限制文件范围，按计划排序 commit / push，并在失败时执行 recovery handling。
-7. Run automatic verification：运行适用 Validator、CI、diff / status、binding、authority marker 与 post-push remote verification；人工事实和 EDA / ERC / DRC / 制造 / 测试证据仍不能由 Validator 替代。
-8. Report `COMPLETE` / `FAILED`：合并报告 Current Reality、执行内容、验证、限制和恢复状态；automatic closeout verification 不设置新的 Human Approval。
+所有 Project Migration、RC Publication 与 Final Publication 均使用同一骨架：
+
+```text
+Assessment / Validation
+        ↓
+ONE Human Approval at the real risk boundary
+        ↓
+Atomic Transaction
+        ↓
+Automatic Verification
+```
+
+执行顺序：
+
+1. Re-check live repository state：核对工作树、远端默认分支、HEAD、tag、release、CI、目标 Project binding / authority 与适用权威文件，不把文档中的易变状态当成实时事实。
+2. Classify and bound：确定 Documentation-only issue、Compatible Framework Sync、Framework Contract Migration、Authority Cutover、RC publication、Final publication 或其他独立高风险动作，记录允许范围、禁止范围与 immutable candidate SHA。
+3. Assess / validate read-only：完成适用的 assessment 或 candidate validation；验证本身不需要 Human Approval。
+4. Decide：结果若为 `BLOCKED` / `NOT READY`，报告 blocker 并 STOP，不实施部分 transaction；ready 时只在真正风险边界请求一次 Human Approval。
+5. Execute atomic transaction：只执行 assessment 中 exact bounded transaction，保护用户修改，限制文件范围，按计划排序 commit / push / publication，并保留 recovery handling。
+6. Verify automatically：运行适用 Validator、CI、diff / status、binding、authority marker、tag / release identity 与 post-push remote verification。
+7. Close and report：verification 全部通过后自动标记 `COMPLETE` / `CLOSED`；失败则标记 `FAILED`、STOP 并报告异常，不增加 closeout approval。
 
 未来迁移取消重复形式化节点：不再设置独立 `Readiness STOP`、`Compatible Sync STOP`、`Cutover Assessment STOP` 或 `Closeout STOP`。这只删除 Pilot-style bureaucracy，不取消真正的高风险 Human Approval。
+
+## Project Migration Transaction
+
+Formal Migration Assessment 必须一次覆盖 Current Project state、当前与目标 immutable binding、classification、Standalone completeness、Legacy inventory 与事实 reconciliation、pre-cutover fixes、validator / runtime compatibility、authority readiness、exact intended transaction 和 rollback / recovery expectations；结果只能是 `READY`、`READY WITH MINOR NOTES` 或 `BLOCKED`。
+
+`READY WITH MINOR NOTES` 仅适用于 notes 不改变 transaction scope、风险边界或 authority 判断的情况。获批后执行一个 bounded logical migration transaction；`Atomic` 不声称跨多个 Git Repository 存在 ACID atomic commit。Automatic closeout verification 必须确认预定 commits / pushes、binding、authority marker、validators、remote state 与无意外 diff；任何失败都停止关闭并进入 recovery report。
+
+## RC Publication Execution
+
+```text
+RC Candidate Identified
+        ↓
+Candidate Validation
+        ↓
+READY / NOT READY
+        ↓
+ONE Human Publish Approval
+        ↓
+Atomic Publication
+        ↓
+Automatic Post-Publish Verification
+        ↓
+CLOSED
+```
+
+Candidate Validation 固定 candidate SHA，运行 required repository / template validation、diff checks 与适用 CI，并核对版本、tag / release identity 和 release notes scope；此步骤不设 separate Human Approval。`NOT READY` 时 STOP。`READY` 后只请求一次 Human Publish Approval，不再设置 RC Readiness、Technical、Publication 或 Closeout Approval。
+
+Atomic Publication 只发布获批 candidate，按 transaction plan 创建并推送 tag、创建对应 GitHub prerelease，并禁止移动既有 tag 或用另一个 SHA 替换 candidate。Post-publish verification 自动核对远端 tag SHA、GitHub prerelease identity、target commit、release metadata 与 CI；全部通过后 `CLOSED`，任何失败均 STOP 并报告，不自动关闭。
+
+RC2 / RC3 只在 Master Plan 所列 Contract / compatibility impact 触发重新 candidate validation 时评估；不得因 `main` 有新 commit 而自动创建新 RC，也不得创建单独 RC2 Gate。
+
+## Final Publication Execution
+
+```text
+Final Candidate Validation
+        ↓
+ONE Human Publish Approval
+        ↓
+Atomic Final Publication
+        ↓
+Automatic Verification
+        ↓
+Final CLOSED
+```
+
+Final Candidate Validation 固定 immutable candidate SHA，执行 final repository / template validation、diff checks、适用 CI、documentation / identity consistency 与 release metadata review，不设独立 readiness approval。若 Phase 4 没有需要重新 candidate validation 的 Contract-affecting change，可直接验证兼容 cleanup 后的 candidate 并从 RC1 进入 Final；否则先按 Master Plan 评估 optional RC2。
+
+Atomic Final Publication 只在一次 Human Publish Approval 后创建并推送 Final tag、创建 GitHub Final release。Automatic Verification 核对远端 tag SHA、release identity、target commit、metadata、CI 与 required closeout state；全部通过后 `Final CLOSED`，失败则 STOP、报告并保持未关闭。
+
+## Validation, STOP and Execution Report
+
+Validation sequence 按 `local scope / diff → required validators → candidate identity → remote branch / tag / release → applicable GitHub Actions → final status` 执行。人工事实和 EDA / ERC / DRC / 制造 / 测试证据不能由 Validator 替代。
+
+除上述 `BLOCKED` / `NOT READY` / verification failure 外，出现 candidate SHA 漂移、未授权 scope、非 fast-forward、意外工作树修改、tag / release 冲突、认证或权限异常、Contract classification 不清、Project Facts / binding / authority 冲突时也必须 STOP；不得自行推进 Stage、Cutover、Rename 或 Release。
+
+Required final execution report 至少包含：initial / final HEAD、candidate SHA、classification、approved transaction、实际 files / repositories / tags / releases、validation 与 Actions 结果、remote verification、Project binding / authority impact、保留的用户修改、异常与 recovery state，以及最终 `COMPLETE / CLOSED` 或 `FAILED / NOT CLOSED`。
 
 ## Human Approval Policy
 
@@ -88,7 +159,7 @@ Framework binding update 必须按 [Framework Migration Guide](Framework_Migrati
 - Compatible Framework Sync：`Assessment → explicit execution authorization → Transaction → Verification`；明确授权后不另设 Human Gate。
 - Framework Contract Migration：`Assessment → ONE Human Approval → Contract Migration Transaction → Verification`。
 - Authority Cutover：`Formal Migration Assessment → ONE Human Approval → Authority Cutover Transaction → Automatic Closeout Verification`。
-- Project Hardware Stage advancement、Gate 1.5 Human PASS、RC / Final publication、Repository Rename、Legacy deletion / destructive operation：各自保留所需 Human Approval。
+- Project Hardware Stage advancement、Gate 1.5 Human PASS、RC / Final publication、Repository Rename、Legacy deletion / destructive operation：各自仅在自己的真正风险边界保留所需 Human Approval；RC / Final publication 各只有一次 Human Publish Approval。
 - 当前任务已授权范围内的普通 documentation / code commit 与 push：不另设 Human Gate，但不能隐式执行上述 transition。
 
 Bootstrap Authorization 不是 Hardware Gate，也不是 Stage 0。用户若明确要求创建新的 Standalone Hardware Project，并指定 Project / Repository identity 与固定 Framework Release + immutable Commit，该请求本身就是 Bootstrap execution authorization；适用时仍应先确认 repository visibility 等不可推断输入。正常流程为 `User request → Bootstrap → Validator → Bootstrap Result Report → STOP before Hardware Stage advancement`，无需制造第二个 Bootstrap Human Gate。进入 Stage 1 仍按 Project Stage advancement policy 处理。

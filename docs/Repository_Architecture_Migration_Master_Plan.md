@@ -9,6 +9,8 @@
 
 本计划用于把 Legacy Monorepo 收敛为一个 Framework Repository 与多个 Standalone Project Repository。核心不是移动目录，而是分离方法与项目事实，让每个真实 Project 只有一个活动权威源，并以可恢复、可核对的方式完成发布和 Cutover。
 
+本计划是给用户阅读的 migration / release plan，主要维护当前 Phase、真实状态、路线理由、下一项主任务、真正风险边界与 Human Approval，以及 Framework Release、Project Binding 和 Final v1 的总体策略。AI/Codex 的 read-only assessment、transaction steps、validation sequence、STOP conditions 与 execution report 由 AI Runbook 维护，不在本计划重复展开。
+
 一次性 Migration Planning 与正常 Runtime Contract 相互独立：
 
 ```text
@@ -44,6 +46,16 @@ Standalone Project Repositories
 
 Framework 只定义方法。正式 Project 锁定固定 Release + immutable 40 位 Commit SHA，不自动跟随 `main`。每个 Project 的 Cutover 独立批准；Cutover 前 Legacy Directory 是 Current Authority，之后 Standalone Repository 是 Only Active Project Authority，Legacy 只作 Frozen Migration Source，禁止长期双写。
 
+Framework development state 与 Project bound Framework state 是两个独立状态：
+
+```text
+Framework main continues evolving
+        !=
+Project 1 / 2 / 3 remain pinned to an immutable release
+```
+
+这种 version pinning 是正常状态，不是 migration failure，也不会自动形成技术债。发布新的 Framework release 不会自动更新任何既有 Project binding；Project 不默认跟随 Framework `main` 或最新 Release。
+
 ## 3. Starting Point — Historical Completed Work
 
 - Baseline Freeze：`framework-pre-v1-migration` 永久恢复点，指向 `3e9d4801bdd5768f8edc0e14e8f01bf278721e54`；
@@ -70,7 +82,7 @@ Framework 只定义方法。正式 Project 锁定固定 Release + immutable 40 �
 
 以上只保留 roadmap orientation，不作为动态 Project 状态数据库。执行任何迁移时，必须从真实 GitHub 默认分支、Project 根 `README.md`、`FRAMEWORK.md` 与适用 authority marker 重新核对 HEAD、Stage、initialization、binding 和 authority；不得依赖本节保存易变的 Project HEAD 或详细 lifecycle wording。Framework `main` 的后续变化不构成任何 Project binding change。
 
-Migration 的 routine validation、CI、diff inspection、technical review 与 evidence collection 默认自动执行并合并报告。Compatible Framework Sync 在用户已明确要求后不另设 Human Gate；Framework Contract Migration、Authority Cutover、Stage / Gate 状态变化、release、repository identity transition 与 destructive change 按 [Framework Migration Guide](Framework_Migration_Guide.md) 保留各自的一次或必要 Human Approval。当前任务已授权范围内的普通 commit 与 push 不另设 Human Gate。
+Migration 的 routine validation、CI、diff inspection、technical review 与 evidence collection 默认自动执行并合并报告。真正风险边界是 Framework Contract Migration、Authority Cutover、Stage / Gate 状态变化、release publication、repository identity transition 与 destructive change；每项只保留其必要的一次 Human Approval，不把自动核验改写为人工 Gate。当前任务已授权范围内的普通 commit 与 push 不另设 Human Gate。
 
 ## 4. Four active phases
 
@@ -114,26 +126,9 @@ Atomic Migration Transaction
 Automatic Closeout Verification
 ```
 
-`Atomic` 表示 `one bounded, human-authorized logical migration transaction`，不表示多个 Git Repository 之间存在 ACID atomic commit。事务必须保留 preflight checks、known intended diffs、bounded file scope、ordered commits / pushes、post-push verification 与 rollback / recovery handling。
+Assessment 必须覆盖当前状态、固定 binding、事实完整性、authority readiness、exact bounded transaction 与 recovery expectations。`BLOCKED` 停止；一次批准只授权已评估的 transaction；通过自动 closeout verification 后关闭，不另设 Readiness 或 Closeout Approval。详细执行和报告要求由 AI Runbook 维护。
 
-每个 Project 的一次 Formal Migration Assessment 必须集中覆盖：
-
-- Current Project state；
-- Current Framework binding；
-- Target Framework release + immutable SHA；
-- Migration classification；
-- Standalone completeness；
-- Legacy artifact inventory；
-- Legacy → Standalone fact reconciliation；
-- Required pre-cutover fixes；
-- Validator / runtime compatibility；
-- Authority readiness；
-- Exact intended transaction；
-- Rollback / recovery expectations。
-
-Assessment 结果只能是 `READY`、`READY WITH MINOR NOTES` 或 `BLOCKED`。`BLOCKED` 必须报告 blocker 并停止；`READY WITH MINOR NOTES` 只有在 notes 不改变 transaction scope、风险边界或权威判断时才可进入批准。一次批准只授权 assessment 中列出的 exact bounded transaction；执行后自动完成 closeout verification，不再设置独立 Readiness、Compatible Sync、Cutover Assessment 或 Closeout STOP。
-
-该模型按独立风险边界应用。Framework Contract Migration 与 Authority Cutover 若同时适用于同一 Project，仍是两项 transaction 和两次各自批准，不得机械合并；已完成并验证的 Compatible Framework Sync 不需要在后续 Cutover 中重复执行或重复批准。
+该模型按真正独立的风险边界应用。Framework Contract Migration 与 Authority Cutover 若同时适用于同一 Project，仍是两项 transaction 和两次各自批准；已完成并验证的 Compatible Framework Sync 不在后续 Cutover 中重复执行或重复批准。
 
 若 Project 2 已在 Phase 1 完成获批的 Pilot Authority Cutover，本 Phase 对 Project 2 只执行 final migration verification、binding verification 与 closeout review，不执行第二次 Cutover。
 
@@ -141,11 +136,25 @@ Outputs / Done：三个 Project 分别完成权威收敛；Standalone 成为各�
 
 Project 2 不需要为了 RC 进入 Stage 2。但若未来要在 Standalone Repository 真正开展 Stage 2，应先明确 Authority Cutover，避免形成两个活动事实源。
 
+Project 1 Formal Migration 不等待 Framework Final v1。Project 1 可继续基于已验证 RC1 完成 `Formal Migration → Authority Cutover → Automatic Closeout`；完成后关闭 Phase 3，再进入 Phase 4 Framework Closeout。Template cleanup、documentation cleanup、Repository Rename 与 Final v1 都不是 Project 1 migration 的前置依赖。
+
 ### Phase 4 — Framework Closeout & v1 Final
 
 Goal：完成 Transition Repository 到正式 Framework Repository 的收尾。
 
-Actions：确认三个 Project 权威收敛；从 current tree 移除真实 Project 活动副本但保留 Git history；建立轻量 `examples/reference_project_v1/`；收尾 README、CHANGELOG 与 Migration Guide；按文档治理分类与获批处置清理 Transition-only 低价值内容；执行获批的 GitHub Rename 并修复身份与链接；验证 Template、Fixture、Validator 与 CI。
+Actions 可包含：Documentation Inventory / Rationalization、Template human-facing language usability cleanup、轻量 Reference Project、README / CHANGELOG / Guide closeout、Repository identity / Rename，以及 final Template / Fixture / Validator / CI consistency 与 Final Release readiness。确认三个 Project 权威收敛后，current tree 不再保留真实 Project 活动副本，但 Git history 保持可追溯。每项动作仍按自身 scope 与风险边界授权，不因进入 Phase 4 自动获批。
+
+Phase 4 release strategy：
+
+```text
+No Contract-affecting change:
+RC1 → compatible main cleanup → Final validation → v1.0.0
+
+Contract-affecting change requiring renewed candidate validation:
+RC1 → RC2 → Final validation → v1.0.0
+```
+
+因此 RC2 是 optional、impact-triggered，不是 sequence-mandatory，也不建立单独 RC2 Gate。
 
 Future backlog candidate：`scripts/validate_project_migration.py` 可作为 assessment helper，未来辅助检查 binding、target binding、validator snapshot identity、structure completeness、stage、initialization、legacy artifact inventory、authority markers 与明显 stale lifecycle wording。它不是 migration authority、不是新的 Human Gate、也不是 Runtime Contract；Phase 4 是否实现需另行评估，本轮不实现。
 
@@ -180,6 +189,8 @@ Outputs / Done：Repository identity、current tree、文档、Template、Fixtur
 
 Repository Rename 是 Framework Repository identity transition，不只是 GitHub UI 或 README 改名。Phase 4 负责新仓库身份、内部与文档链接及 release identity 的一致性；真实 Project 不得仅因仓库改名而静默重写 `FRAMEWORK.md`。Project 必须在适用的 binding update 中显式选择 Framework release + immutable commit，并一并采用 Rename 后的 Framework Repository identity。`Repository Rename ≠ automatic Project Framework migration`。
 
+发布 `hardware-project-framework-v1.0.0` 不触发 bulk Project rebinding。Existing Project 仅在新 capability 确有需要、当前 binding 存在已知 Contract / Validator 问题、新 Stage 明确依赖新 Framework，或用户明确授权升级时，才执行 explicit Framework Contract Migration；否则继续使用原 immutable binding。
+
 ## 5. Framework change management after the pilot
 
 Project 2 pilot 已将长期 Framework change management 收敛为 `Compatible Framework Sync` 与 `Framework Contract Migration`。分类边界、执行流程与 Human Approval Policy 由 [Framework Migration Guide](Framework_Migration_Guide.md) 维护；本一次性 Master Plan 不重复定义或覆盖该长期治理。
@@ -188,23 +199,46 @@ Repository Architecture Transition 自身的 Authority Cutover、Repository Rena
 
 ## 6. RC strategy
 
-RC 是 Release Candidate，位置固定为：
+RC publication 统一采用：
 
 ```text
-development / v0.9
-  → Project 2 Pilot Stabilization
-  → Project 3 Clean Bootstrap
-  → RC Readiness Review
-  → hardware-project-framework-v1.0.0-rc1
-  → Formal Migration / Authority Cutover
-  → Framework Closeout
-  → hardware-project-framework-v1.0.0
+RC Candidate Identified
+        ↓
+Candidate Validation
+        ↓
+READY / NOT READY
+        ↓
+ONE Human Publish Approval
+        ↓
+Atomic Publication
+        ↓
+Automatic Post-Publish Verification
+        ↓
+CLOSED
 ```
 
-RC Entry Criteria：Contract 无已知阻断性矛盾；Project 2 已完成 Bootstrap / Stage 1 / Gate 1.5 Pilot；Project 3 Clean Bootstrap / Stage 1 / Gate 1.5 通过；Template 不依赖 Legacy monorepo；Project 与 Framework Validator 基本实现 Contract；Framework CI 通过；Validator 不迫使 Project 虚构事实；Clean-room 未暴露 Project-specific hidden dependency；剩余工作不会再改变 RC Project Contract。
+Candidate Validation 不需要独立 Human Approval。只有 immutable candidate SHA 通过 required validation 并判定 `READY` 后，才请求一次 Human Publish Approval。批准后执行一个 bounded atomic publication transaction；post-publish verification 通过即自动 `CLOSED`，失败则 STOP 并报告异常，不宣告关闭。不存在独立 RC Readiness、Technical、Publication 或 Closeout Approval。
 
-RC 后若实质修改 Contract，必须 `rc1 → Contract change → rc2 → revalidation`，不得继续宣称旧 RC 已验证。
+RC2 / RC3 均为 optional、impact-triggered。Framework `main` 出现新 commit 不等于必须发布新 RC；documentation / Guide / migration process / authoring、usability、language guidance，以及不改变 Contract 的兼容 human-facing Template wording cleanup，通常不要求 RC2。
+
+只有变化实质影响 Runtime Contract、Structural Contract、Project Structure、binding schema、validator contract / behavior、release-sensitive compatibility，或重大修复需要重新进行 release-candidate validation 时，才评估新 RC。RC 后发生这类 Contract-affecting change 时不得继续宣称旧 RC 已验证。
 
 ## 7. Final Done Criteria
 
-迁移完成意味着：三个 Project 各自只有一个活动权威仓库；Legacy current tree 不再承载活动副本但历史可追溯；Framework 只保留方法、Contract、Template、工具与 Reference/Test Fixture；正式 Project 使用固定 Release + SHA；Rename 已真实完成且引用已修复；v1 Final 的验证、CI、tag 与 release 均获用户批准并实际完成。
+Final publication 采用与 RC 相同的简化模型：
+
+```text
+Final Candidate Validation
+        ↓
+ONE Human Publish Approval
+        ↓
+Atomic Final Publication
+        ↓
+Automatic Verification
+        ↓
+Final CLOSED
+```
+
+Final candidate 必须锁定 immutable candidate SHA 并完成 required validation；automatic verification 失败时 STOP，不宣告 Final CLOSED，也不增加第二个 closeout approval。
+
+迁移完成意味着：三个 Project 各自只有一个活动权威仓库；Legacy current tree 不再承载活动副本但历史可追溯；Framework 只保留方法、Contract、Template、工具与 Reference/Test Fixture；正式 Project 使用固定 Release + SHA；Rename 已真实完成且引用已修复；v1 Final 的验证、CI、tag 与 release 均经一次 Human Publish Approval 并实际完成。
