@@ -62,9 +62,10 @@ Framework 只定义方法。正式 Project 锁定固定 Release + immutable 40 �
 - Project 3：Clean Bootstrap 已完成，Stage 1 Requirements Definition 已完成，Gate 1.5 Human Review 与 Technical Closeout 均已 PASS，`Initialization Status: Initialized`；仍处于 Stage 1，Stage 2 未获授权；
 - Phase 2 clean-room objective：`COMPLETE`；
 - RC1：`hardware-project-framework-v1.0.0-rc1` @ `b36d9d399651e5c1a2b07dbc70d6e1487df57fd5`；
-- Phase 3 — Formal Project Migration & Authority Cutover：`ACTIVE — Human Authorized`；
-- Current Project：`Project 2`；
-- Current Step：`Project 2 Authority Cutover — COMPLETE / STOP`；
+- Phase 3 — Formal Project Migration & Authority Cutover：`ACTIVE`；
+- Project 2 migration：`COMPLETE / CLOSED`；
+- Next migration subject：`Project 3`；
+- Next allowed activity：`Project 3 Formal Migration Readiness Review — READ ONLY`；
 - Project 2 Hardware Stage：`Stage 1 — Requirements Definition`；
 - Project 2 Stage 2：`NOT AUTHORIZED`；
 - Project 2 Framework binding migration：`COMPLETED`；
@@ -72,11 +73,12 @@ Framework 只定义方法。正式 Project 锁定固定 Release + immutable 40 �
 - Project 2 Active Authority：`wum747349-debug/LiIon-Charger-Protection-Board`；
 - Legacy Project 2：`FROZEN MIGRATION SOURCE`；
 - Project 3 migration：`NOT STARTED`；
+- Project 3 Framework Binding Migration / Authority Cutover：`NOT AUTHORIZED / NOT EXECUTED`；
 - Repository Rename：`NOT AUTHORIZED / NOT EXECUTED`。
 
 Project 3 的 clean-room 结果证明 Framework 能在不依赖 Legacy Project 3、Project 1、Project 2 或本地 Framework 路径的情况下完成 Bootstrap → Stage 1 → Gate 1.5 → Initialized。Project 3 继续绑定其显式选择的 immutable Framework snapshot；Framework `main` 或当前 HEAD 的后续变化不构成 Project 3 binding change。
 
-RC1 tag 与 GitHub prerelease 已发布，Phase 2 已完成 Human Review 并关闭。Phase 3 中 Project 2 Framework binding migration 与 Authority Cutover 已分别获得 Human Approval 并完成；Project 2 Stage 2 仍未授权，本次执行在 Cutover 后停止。Project 3 migration 仍未开始，Repository Rename 仍未授权或执行。
+RC1 tag 与 GitHub prerelease 已发布，Phase 2 已完成 Human Review 并关闭。Phase 3 中 Project 2 Framework binding migration 与 Authority Cutover 已分别获得 Human Approval 并完成，Project 2 migration 已 `COMPLETE / CLOSED`；Project 2 Stage 2 仍未授权。下一个迁移对象是 Project 3，但当前只允许执行 `Project 3 Formal Migration Readiness Review — READ ONLY`；这不构成开始 Project 3 migration、执行 Framework Binding Migration 或 Authority Cutover、推进 Stage 2 的授权。Repository Rename 仍未授权或执行。
 
 Migration 的 routine validation、CI、diff inspection、technical review 与 evidence collection 默认自动执行并合并报告。Compatible Framework Sync 在用户已明确要求后不另设 Human Gate；Framework Contract Migration、Authority Cutover、Stage / Gate 状态变化、release、repository identity transition 与 destructive change 按 [Framework Migration Guide](Framework_Migration_Guide.md) 保留各自的一次或必要 Human Approval。当前任务已授权范围内的普通 commit 与 push 不另设 Human Gate。
 

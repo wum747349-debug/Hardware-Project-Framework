@@ -6,12 +6,12 @@
 
 ## 1. 从固定 Release 获取 Template
 
-1. 选择已发布的 Framework Release，例如 `hardware-project-framework-v1.0.0`。
+1. 选择已发布的 Framework Release；预发布评估可选择已发布的 RC，例如 `hardware-project-framework-v1.0.0-rc1`，Final 发布后可选择对应 Final Release。
 2. 确认该 Release 的 immutable 40 位 commit SHA。
 3. 从该 Release 快照取得 `templates/hardware_project_template/`，不要复制 Framework `main` 的漂移工作树。
 4. 将 Template 内容复制到一个新的空白 Project repository root。
 
-Framework RC/Final 尚未发布时，只可为 Framework 自测或明确预发布评估使用 `development-v0.9`，并绑定测试实际使用的 immutable commit；不得把未发布的 RC 名称写成正式 Release。
+`development-v0.9` 只用于 Framework 自测或明确的 development binding，并绑定测试实际使用的 immutable commit；正常 Standalone Project Bootstrap 应选择实际已发布的固定 Release。不得把未发布的名称写成正式 Release，也不得把 Framework `main` 当作 Release。
 
 ## 2. 填写 Project Identity 与 Binding
 
@@ -68,14 +68,28 @@ python scripts/validate_project_repository.py --gate-1-5
 ```
 
 4. 如失败，保持 `Gate 1.5 Pending`，修正阻断项并重新执行。
-5. 只有 checklist 与 Validator 均无阻断项时，Gate 1.5 才可记为 PASS；此时将 `Initialization Status` 更新为 `Initialized`。
-6. 更新状态后运行普通 Validator，确认最终 Project 状态仍合法：
+5. Checklist 与 Validator 均无阻断项只表示 Gate 1.5 达到 technical readiness；它们不会自动授权 Gate 1.5 Human PASS。未获得 Human Approval 时必须保持 `Gate 1.5 Pending`。
+6. Technical readiness 确认后，取得 Gate 1.5 PASS 的明确 Human Approval。
+7. 只有获得该 Human Approval 后，才记录 Gate 1.5 PASS，并将 `Initialization Status` 更新为 `Initialized`。
+8. 更新状态后运行普通 Validator，确认最终 Project 状态仍合法：
 
 ```bash
 python scripts/validate_project_repository.py
 ```
 
-7. 普通 Validator 通过后才允许进入 Stage 2。
+9. 普通 Validator 通过后才允许进入 Stage 2。
+
+```text
+Checklist + Validator PASS
+        ↓
+technical readiness
+        ↓
+Human Approval for Gate 1.5 PASS
+        ↓
+record Gate 1.5 PASS
+        ↓
+Initialization Status = Initialized
+```
 
 Validator 只检查可自动判定的结构、binding、placeholder、链接、阶段文件和明显残留；它不能判断真实硬件需求是否充分，也不能证明 EDA、ERC、DRC、Manufacturing 或 Test。
 

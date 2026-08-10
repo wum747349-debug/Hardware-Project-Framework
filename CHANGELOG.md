@@ -2,9 +2,18 @@
 
 本文件记录 Framework 方法、结构、Template、Skill、Checklist 与 Validator 的发布级变化。真实 Project 的硬件 revision 和项目 release 由各 Standalone Project Repository 自己维护。
 
-## Unreleased — Framework v0.9 Executable Candidate
+## Unreleased
 
-Status: development implementation for human review; not an RC or Final release.
+Status: RC1 之后的 documentation-only maintenance；不属于 RC1 snapshot。
+
+### Documentation Maintenance
+
+- 修正 release 状态、Gate 1.5 Human Approval 操作顺序与当前 migration orientation。
+- 未修改 Runtime / Structural Contract，也未发布 RC2。
+
+## v1.0.0-rc1
+
+Status: `hardware-project-framework-v1.0.0-rc1` 已作为 GitHub prerelease 发布；以下为该 RC1 snapshot 的 release-level summary。
 
 ### Contract
 
@@ -31,4 +40,8 @@ Status: development implementation for human review; not an RC or Final release.
 - Made Standalone Project validation migration-safe while retaining generic runtime-independence checks.
 - Added automated legal-provenance and illegal-runtime-dependency smoke coverage.
 
-No Framework RC/Final tag or Reference Project is included in v0.9.
+RC1 snapshot 不包含 Reference Project。
+
+## v0.9 — Framework v0.9 Executable Candidate
+
+Framework v0.9 是 RC1 之前的 executable candidate 与 development / human-review 阶段。该阶段尚未发布 Framework RC 或 Final tag；其 Contract、Template、Skill、Checklist、Validator 与 CI 工作随后收敛为上方记录的 v1.0.0-rc1。

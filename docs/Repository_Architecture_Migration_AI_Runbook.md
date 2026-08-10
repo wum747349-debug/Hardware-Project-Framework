@@ -29,11 +29,13 @@ Phase 2：`CLOSED — RC1 Published / Human Review Approved`。
 
 RC1：`hardware-project-framework-v1.0.0-rc1` @ `b36d9d399651e5c1a2b07dbc70d6e1487df57fd5`。
 
-Phase 3 — Formal Project Migration & Authority Cutover：`ACTIVE — Human Authorized`。
+Phase 3 — Formal Project Migration & Authority Cutover：`ACTIVE`。
 
-Current Project：`Project 2`。
+Project 2 migration：`COMPLETE / CLOSED`。
 
-Current Step：`Project 2 Authority Cutover — COMPLETE / STOP`。
+Next migration subject：`Project 3`。
+
+Next allowed activity：`Project 3 Formal Migration Readiness Review — READ ONLY`。
 
 - Project 2 Hardware Stage：`Stage 1 — Requirements Definition`；
 - Project 2 Stage 2：`NOT AUTHORIZED`；
@@ -42,6 +44,7 @@ Current Step：`Project 2 Authority Cutover — COMPLETE / STOP`。
 - Project 2 Active Authority：`wum747349-debug/LiIon-Charger-Protection-Board`；
 - Legacy Project 2：`FROZEN MIGRATION SOURCE`；
 - Project 3 migration：`NOT STARTED`；
+- Project 3 Framework Binding Migration / Authority Cutover：`NOT AUTHORIZED / NOT EXECUTED`；
 - Repository Rename：`NOT AUTHORIZED / NOT EXECUTED`。
 
 ### Project 2 Migration Milestone
@@ -80,7 +83,7 @@ Bootstrap Authorization
   → Framework Generalization / RC Readiness input
 ```
 
-Phase 2 closeout：`COMPLETE`。RC1 已作为 GitHub prerelease 发布。Project 2 Framework binding migration 与 Authority Cutover 已分别获得 Human Approval 并完成；这不构成 Project 2 Stage 2 授权。Project 3 Stage 2：`NOT AUTHORIZED`；Project 3 migration：`NOT STARTED`。本次执行在 Project 2 Cutover 后停止。
+Phase 2 closeout：`COMPLETE`。RC1 已作为 GitHub prerelease 发布。Project 2 Framework binding migration 与 Authority Cutover 已分别获得 Human Approval 并完成，Project 2 migration 已 `COMPLETE / CLOSED`；这不构成 Project 2 Stage 2 授权。Project 3 Stage 2：`NOT AUTHORIZED`；Project 3 migration：`NOT STARTED`。下一项允许的活动仅为 `Project 3 Formal Migration Readiness Review — READ ONLY`；不得据此开始 Project 3 migration、执行 Framework Binding Migration 或 Authority Cutover、推进 Stage 2。
 
 本节只提供当前 migration orientation 与已完成执行路径，不是 Project 3 Runtime Facts 或 Framework binding 的权威源。执行任务前仍须从 Project 3 根 `README.md` 与 `FRAMEWORK.md` 重新核对当前 Stage、初始化状态和 binding。
 
