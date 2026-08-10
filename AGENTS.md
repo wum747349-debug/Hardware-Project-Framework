@@ -16,13 +16,15 @@
 
 ## 文档语言与可读性
 
-本节是 Framework authoring / usability guidance，不是 Project Runtime Contract 或 Structural Contract，也不改变 Standalone Project `AGENTS.md` context-routing contract。
+本节是 Documentation Language / Readability 的 single source of truth，属于 authoring / usability guidance，不是 Project Runtime Contract 或 Structural Contract，也不改变 Standalone Project `AGENTS.md` context-routing contract。
 
-- Framework 面向用户的说明性文档默认以中文为主要解释语言，使普通用户无需依赖完整英文阅读能力也能理解当前流程、状态、职责、风险与下一步。
+- 本指导同时适用于 Framework human-facing documentation、由 Framework 指导的 Standalone Project creation / migration / maintenance、Project `README.md`、Project Facts、后续 Stage human-facing documentation，以及 AI/Codex 最终面向用户的说明。
+- 上述 human-facing 内容默认以中文为主要解释语言，使普通用户无需依赖完整英文阅读能力也能理解当前流程、状态、职责、风险、推理依据与下一步；需要时使用中英双语。
 - 已稳定使用的英文正式术语应保留，例如 Framework、Standalone Project、Runtime Contract、Framework Contract Migration、Compatible Framework Sync、Authority Cutover、Stage / Gate、Validator、CI 和 EDA。
-- 文件名、路径、schema key、identifier、命令、固定字段及其值不得为了中文化而机械翻译。
+- 文件名、路径、schema key、identifier、命令、固定字段及其值、validator-sensitive heading 不得为了中文化而改名或机械翻译。
 - 推荐使用“中文解释 + 必要英文正式术语”，例如“兼容 Framework 同步（Compatible Framework Sync）”、“Framework Contract Migration”和“Authority Cutover”。
 - Human-facing Guide、README、操作说明和 AI/Codex 最终报告在无明确必要时不得整篇使用英文；明确面向外部英文读者的文档可按其 Audience 使用英文。
+- Skill、Template 或 Guide 只引用本节作为执行提示，不复制整套语言规则，也不成为第二权威源。
 
 ## Standalone Project `AGENTS.md` Contract
 

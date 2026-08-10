@@ -6,6 +6,8 @@
 
 本 Skill 不定义结构或 Lifecycle；结构以 `docs/Project_Structure_Standard.md` 为准，Gate 以 `docs/08_Project_Workflow.md` 为准，逐项检查使用 `checklists/project_initialization_checklist.md`。
 
+Bootstrap / Stage 1 创建 human-facing Project documentation 时，遵守 Framework `AGENTS.md` 的 Documentation Language / Readability guidance；本 Skill 只传播该执行要求，不另行定义语言规则。
+
 ## 最小上下文
 
 1. 先读取当前 Project `FRAMEWORK.md`。

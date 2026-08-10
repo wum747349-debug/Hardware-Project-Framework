@@ -172,6 +172,8 @@ Inventory → Classification → Disposition → Rationalization
 
 这些文件只是待审查候选，不是预先确定的删除清单。审查应识别重复职责、已被新 Contract / Guide / Skill / Checklist 替代的内容、transition-only wording、Legacy Monorepo assumption、三个具体 Project / portfolio assumption、应进入 Stage Method / Skill / Checklist 的长期工程方法，以及已无长期价值的历史说明。`docs/00_Project_Roadmap.md` 和 `docs/07_Resume_Project_Notes.md` 应作为 `Legacy Project / Portfolio Material` 的重点候选进行审查，但不预判最终 disposition。
 
+Usability review 还应确认 human-facing documentation 提供足够中文解释，同时保留 canonical English terms、fields、schema key、identifier、path、command 与 validator-sensitive heading；不要求对历史文件机械全文翻译。为避免 Project 1 migration 或后续 Bootstrap 继续产生同类可读性问题，future generation-rule correction 可以在 Project 1 migration 前完成；既有 Project 3 readability debt 不在此处重开 migration，可留待 Phase 4 rationalization 或后续 targeted cleanup 处理。
+
 Phase 4 前可以进行 inventory、read-only classification 和 planning。Project 2、Project 3 与 Project 1 migration 期间，不得仅为仓库整洁而提前执行旧文档 destructive cleanup。实际 `move`、`merge`、`archive`、`retire` 或 `delete` 只在三个真实 Project 全部完成 Authority Cutover 后的 Phase 4 中，依照审查结论与所需 Human Approval 执行。
 
 Outputs / Done：Repository identity、current tree、文档、Template、Fixture、Validator 与 CI 一致，用户批准并实际发布 `hardware-project-framework-v1.0.0`。Rename 只在此阶段且真实 GitHub 操作获批后执行，不能由文档提前假定。
