@@ -10,6 +10,17 @@ Project 继续使用 `FRAMEWORK.md` 绑定的 Release + Commit。Framework `main
 
 禁止只修改版本字段而不核对实际差异，也禁止让 Project 同时依赖两个 Framework 版本。`No separate Human Approval gate` 只表示明确的用户执行请求已经构成授权，不允许 AI 主动升级 Project。
 
+长期 migration 模型统一为：
+
+```text
+Assessment
+  → Required Approval
+  → Atomic Transaction
+  → Verification
+```
+
+`Atomic Transaction` 指 one bounded, human-authorized logical migration transaction，不声称多个 Git Repository 之间存在 ACID atomic commit。每个 transaction 都必须定义 preflight checks、known intended diffs、bounded file scope、ordered commits / pushes、post-push verification 与 rollback / recovery handling。
+
 ## 2. Compatible Framework Sync
 
 Compatible Sync 可包括 Validator bug / false-positive fix、文档澄清、Skill / Checklist 澄清、链接修正、CI 改进和兼容工具增强。只有以下语义全部保持不变时才能采用此分类：
@@ -24,7 +35,16 @@ Compatible Sync 可包括 Validator bug / false-positive fix、文档澄清、Sk
 - Repository authority model；
 - Validator required structure。
 
-执行流程：
+执行模型：
+
+```text
+Assessment
+  → explicit execution authorization
+  → Compatible Framework Sync Transaction
+  → Verification
+```
+
+Transaction 包含以下步骤：
 
 1. 选择目标固定 Framework Release + immutable Commit；
 2. 执行 compatibility / impact check，并记录为何不改变上述 Contract 语义；
@@ -33,13 +53,22 @@ Compatible Sync 可包括 Validator bug / false-positive fix、文档澄清、Sk
 5. 验证通过后更新 `FRAMEWORK.md` binding；
 6. 提交、推送并报告结果。
 
-用户已明确要求执行该 Sync 时，不再设置 Readiness、Sync、Closeout 等独立 Human Gate。若发现 blocker、Contract contradiction 或分类不明确，保持原 binding 并停止报告。
+用户已明确要求执行该 Sync 时，不再设置 Readiness Gate、Sync Gate 或 Closeout Gate。若发现 blocker、Contract contradiction 或分类不明确，保持原 binding 并停止报告。
 
 ## 3. Framework Contract Migration
 
 发生以下任一实质变化时，必须分类为 Framework Contract Migration：`FRAMEWORK.md` schema、Project Structure Version、Required / Conditional / Stage-enabled 分类、Runtime Rules、Stage / Gate lifecycle、Project 文件职责或事实权威、Project `AGENTS.md` context-routing contract、Validator required structure，或其他不向后兼容的 Runtime / Structural Contract。
 
-执行流程：
+执行模型：
+
+```text
+Assessment
+  → ONE Human Approval
+  → Contract Migration Transaction
+  → Verification
+```
+
+具体步骤：
 
 1. Migration Assessment：建立 old → new Contract diff、impact analysis、受影响 Project 文件、受影响 Stage / Gate、validation 与 rollback plan；
 2. 报告 assessment 并取得一次 Human Approval；
@@ -49,7 +78,7 @@ Compatible Sync 可包括 Validator bug / false-positive fix、文档澄清、Sk
 6. 运行 Validator 与受影响 Gate / checklist；失败时按 rollback plan 保持或恢复一致 binding，不留下部分切换；
 7. 提交、推送并给出 Final Report。
 
-`One Contract Migration = One Human Approval Gate`。如果同一事务另行触发 Stage advancement、Authority Cutover、Repository Rename、Legacy deletion 或 Release publication，该独立高风险动作仍按自己的 Human Gate 处理。
+`One Contract Migration = One Human Approval Gate`。Framework Contract Migration 改变 Runtime / Structural Contract 适配边界；Authority Cutover 改变唯一活动 Project authority，两者是不同风险边界。如果同一 Project 同时需要两者，不得机械合并为一次批准：先按已批准的 Contract Migration transaction 完成并验证，再对 Authority Cutover 的独立 assessment 与 transaction 取得一次批准。Stage advancement、Repository Rename、Legacy deletion 或 Release publication 同样按各自 Human Gate 处理。
 
 ## 4. Structure Version Change
 
@@ -57,14 +86,16 @@ Structure Version 变化属于 Framework Contract Migration，必须建立旧路
 
 ## 5. Legacy Project Authority Cutover
 
-Authority Cutover 改变唯一活动事实源，因此保留一个 Human Approval Gate：
+Authority Cutover 改变唯一活动事实源，因此采用：
 
-1. Cutover Assessment；
-2. 自动执行只读 completeness、integrity、binding 与 validation checks；
-3. 给出 `READY` / `BLOCKED` report；
-4. `READY` 后取得一次 Human Approval；
-5. 执行 Cutover Transaction：Standalone authority marker、Legacy freeze marker、migration docs sync、validation、commit 与 push；
-6. 给出 Closeout Report。
+```text
+Formal Migration Assessment
+  → ONE Human Approval
+  → Authority Cutover Transaction
+  → Automatic Closeout Verification
+```
+
+Formal Migration Assessment 一次完成只读 completeness、integrity、binding、Standalone / Legacy fact reconciliation、validator / runtime compatibility、authority readiness、exact intended transaction 与 rollback / recovery checks，并给出 `READY`、`READY WITH MINOR NOTES` 或 `BLOCKED`。Ready 后取得一次 Human Approval，再执行 Standalone authority marker、Legacy freeze marker、migration docs sync、ordered commit / push；随后自动执行 validation、remote authority verification 与 Closeout Report。
 
 Cutover 前 Legacy Monorepo Project Directory 是 Current Authority；Cutover 后 Standalone Project Repository 是 Only Active Project Authority，Legacy 目录是 Frozen Migration Source。Frozen source 不继续开发、不修改项目事实、只用于核对；新仓库确认完整前不删除。禁止长期双写。Closeout Review 是执行后的 verification / report，不是新的 Human Approval Gate。
 
@@ -86,7 +117,17 @@ Cutover 前 Legacy Monorepo Project Directory 是 Current Authority；Cutover �
 
 Routine validation、review、CI、diff inspection、evidence collection 与 report 不分别设置 Human Gate。明确用户任务授权始终是执行前提；上表取消的是重复的形式化 `STOP / APPROVE / STOP`，不是用户对 Project 状态变化的控制权。
 
-## 7. 禁止事项
+## 7. Dynamic status single-source guidance
+
+使用现有 Project Contract 管理动态状态，不建立新 schema：
+
+- 根 `README.md` 维护 `Current Project Stage`，并可在有用时提供简洁的当前 lifecycle summary；
+- `FRAMEWORK.md` 维护当前 Framework binding、`Initialization Status` 与 initialization provenance；
+- `requirements.md`、`block_diagram.md`、`design_notes.md`、`references.md` 只维护 Project Facts / Baseline，避免重复 Gate、Migration 或 Authority 动态状态。
+
+`requirements.md` 如需状态措辞，应偏向稳定 baseline，例如 `Baseline: Stage 1 Requirements Baseline`，而不是长期复制 `Gate 1.5 PASS`、`Initialized`、Authority state 或 Migration state。执行迁移时仍须读取真实 GitHub 与上述权威文件，不能把 migration guide 或 runbook 当作动态状态源。
+
+## 8. 禁止事项
 
 - 不从 Framework `main` 直接覆盖 Project；
 - 不用假 Release、branch 名或短 SHA 替代 binding；

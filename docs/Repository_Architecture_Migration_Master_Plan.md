@@ -48,8 +48,7 @@ Framework 只定义方法。正式 Project 锁定固定 Release + immutable 40 �
 
 - Baseline Freeze：`framework-pre-v1-migration` 永久恢复点，指向 `3e9d4801bdd5768f8edc0e14e8f01bf278721e54`；
 - Framework v0.9 Executable Candidate：Contract、Template、初始化方法、Validator 与 CI 已可执行，但不是 RC 或 Final；
-- Project 2 已完成 Standalone Bootstrap、Stage 1 与 Gate 1.5 Pilot；
-- Project 2 仍为 Stage 1，Legacy 仍是 Current Authority，尚未 Cutover，也未获 Stage 2 授权。
+- Project 2 的 Standalone Bootstrap、Stage 1 与 Gate 1.5 Pilot 已为 Phase 1 提供迁移反馈；其后续 migration / cutover 结果见下方最小 orientation。
 
 这些里程碑不再沿用旧 Phase 0～8 作为未来主线。Git HEAD、Project binding 与 Hardware Stage 继续由 Git、Project `FRAMEWORK.md` 和根 `README.md` 维护。
 
@@ -57,28 +56,18 @@ Framework 只定义方法。正式 Project 锁定固定 Release + immutable 40 �
 
 - Phase 1 — Pilot Stabilization：`CLOSED — Human Review Approved`；
 - Phase 2 — Clean Bootstrap & RC Readiness：`CLOSED — RC1 Published / Human Review Approved`；
-- Phase 2 Preconditions Review：`PASS`；
 - Project 2：Bootstrap / Stage 1 / Gate 1.5 Pilot、Framework binding migration 与 Authority Cutover 均已完成；Standalone Repository 是 Only Active Project Authority；
-- Project 3：Clean Bootstrap 已完成，Stage 1 Requirements Definition 已完成，Gate 1.5 Human Review 与 Technical Closeout 均已 PASS，`Initialization Status: Initialized`；仍处于 Stage 1，Stage 2 未获授权；
-- Phase 2 clean-room objective：`COMPLETE`；
 - RC1：`hardware-project-framework-v1.0.0-rc1` @ `b36d9d399651e5c1a2b07dbc70d6e1487df57fd5`；
 - Phase 3 — Formal Project Migration & Authority Cutover：`ACTIVE`；
 - Project 2 migration：`COMPLETE / CLOSED`；
-- Next migration subject：`Project 3`；
-- Next allowed activity：`Project 3 Formal Migration Readiness Review — READ ONLY`；
-- Project 2 Hardware Stage：`Stage 1 — Requirements Definition`；
-- Project 2 Stage 2：`NOT AUTHORIZED`；
-- Project 2 Framework binding migration：`COMPLETED`；
-- Project 2 Authority Cutover：`COMPLETED`；
-- Project 2 Active Authority：`wum747349-debug/LiIon-Charger-Protection-Board`；
-- Legacy Project 2：`FROZEN MIGRATION SOURCE`；
-- Project 3 migration：`NOT STARTED`；
-- Project 3 Framework Binding Migration / Authority Cutover：`NOT AUTHORIZED / NOT EXECUTED`；
+- Project 3 RC1 Compatible Framework Sync：`COMPLETE`；
+- Project 3 Authority Cutover：`NOT EXECUTED`；
+- Project 3 migration：`IN PROGRESS / CUTOVER PENDING`；
+- Project 3 Current Stage：`Stage 1 — Requirements Definition`；
+- Project 3 Stage 2：`NOT AUTHORIZED`；
 - Repository Rename：`NOT AUTHORIZED / NOT EXECUTED`。
 
-Project 3 的 clean-room 结果证明 Framework 能在不依赖 Legacy Project 3、Project 1、Project 2 或本地 Framework 路径的情况下完成 Bootstrap → Stage 1 → Gate 1.5 → Initialized。Project 3 继续绑定其显式选择的 immutable Framework snapshot；Framework `main` 或当前 HEAD 的后续变化不构成 Project 3 binding change。
-
-RC1 tag 与 GitHub prerelease 已发布，Phase 2 已完成 Human Review 并关闭。Phase 3 中 Project 2 Framework binding migration 与 Authority Cutover 已分别获得 Human Approval 并完成，Project 2 migration 已 `COMPLETE / CLOSED`；Project 2 Stage 2 仍未授权。下一个迁移对象是 Project 3，但当前只允许执行 `Project 3 Formal Migration Readiness Review — READ ONLY`；这不构成开始 Project 3 migration、执行 Framework Binding Migration 或 Authority Cutover、推进 Stage 2 的授权。Repository Rename 仍未授权或执行。
+以上只保留 roadmap orientation，不作为动态 Project 状态数据库。执行任何迁移时，必须从真实 GitHub 默认分支、Project 根 `README.md`、`FRAMEWORK.md` 与适用 authority marker 重新核对 HEAD、Stage、initialization、binding 和 authority；不得依赖本节保存易变的 Project HEAD 或详细 lifecycle wording。Framework `main` 的后续变化不构成任何 Project binding change。
 
 Migration 的 routine validation、CI、diff inspection、technical review 与 evidence collection 默认自动执行并合并报告。Compatible Framework Sync 在用户已明确要求后不另设 Human Gate；Framework Contract Migration、Authority Cutover、Stage / Gate 状态变化、release、repository identity transition 与 destructive change 按 [Framework Migration Guide](Framework_Migration_Guide.md) 保留各自的一次或必要 Human Approval。当前任务已授权范围内的普通 commit 与 push 不另设 Human Gate。
 
@@ -110,7 +99,40 @@ Outputs / Done：Project 3 Clean Bootstrap / Stage 1 / Gate 1.5 已通过并完�
 
 Goal：按 Project 2、Project 3、Project 1 顺序，逐个完成正式迁移验证与 Cutover。
 
-Actions：每个 Project 独立核对 Standalone 内容、Project Facts、真实 Hardware Stage、EDA / Evidence / References / History、固定 Framework binding、Project Validator、人工迁移检查，并取得用户明确批准。
+成熟执行模型统一为：
+
+```text
+Formal Migration Assessment — READ ONLY
+        ↓
+READY / READY WITH MINOR NOTES
+        ↓
+ONE required Human Approval
+        ↓
+Atomic Migration Transaction
+        ↓
+Automatic Closeout Verification
+```
+
+`Atomic` 表示 `one bounded, human-authorized logical migration transaction`，不表示多个 Git Repository 之间存在 ACID atomic commit。事务必须保留 preflight checks、known intended diffs、bounded file scope、ordered commits / pushes、post-push verification 与 rollback / recovery handling。
+
+每个 Project 的一次 Formal Migration Assessment 必须集中覆盖：
+
+- Current Project state；
+- Current Framework binding；
+- Target Framework release + immutable SHA；
+- Migration classification；
+- Standalone completeness；
+- Legacy artifact inventory；
+- Legacy → Standalone fact reconciliation；
+- Required pre-cutover fixes；
+- Validator / runtime compatibility；
+- Authority readiness；
+- Exact intended transaction；
+- Rollback / recovery expectations。
+
+Assessment 结果只能是 `READY`、`READY WITH MINOR NOTES` 或 `BLOCKED`。`BLOCKED` 必须报告 blocker 并停止；`READY WITH MINOR NOTES` 只有在 notes 不改变 transaction scope、风险边界或权威判断时才可进入批准。一次批准只授权 assessment 中列出的 exact bounded transaction；执行后自动完成 closeout verification，不再设置独立 Readiness、Compatible Sync、Cutover Assessment 或 Closeout STOP。
+
+该模型按独立风险边界应用。Framework Contract Migration 与 Authority Cutover 若同时适用于同一 Project，仍是两项 transaction 和两次各自批准，不得机械合并；已完成并验证的 Compatible Framework Sync 不需要在后续 Cutover 中重复执行或重复批准。
 
 若 Project 2 已在 Phase 1 完成获批的 Pilot Authority Cutover，本 Phase 对 Project 2 只执行 final migration verification、binding verification 与 closeout review，不执行第二次 Cutover。
 
@@ -123,6 +145,8 @@ Project 2 不需要为了 RC 进入 Stage 2。但若未来要在 Standalone Repo
 Goal：完成 Transition Repository 到正式 Framework Repository 的收尾。
 
 Actions：确认三个 Project 权威收敛；从 current tree 移除真实 Project 活动副本但保留 Git history；建立轻量 `examples/reference_project_v1/`；收尾 README、CHANGELOG 与 Migration Guide；按文档治理分类与获批处置清理 Transition-only 低价值内容；执行获批的 GitHub Rename 并修复身份与链接；验证 Template、Fixture、Validator 与 CI。
+
+Future backlog candidate：`scripts/validate_project_migration.py` 可作为 assessment helper，未来辅助检查 binding、target binding、validator snapshot identity、structure completeness、stage、initialization、legacy artifact inventory、authority markers 与明显 stale lifecycle wording。它不是 migration authority、不是新的 Human Gate、也不是 Runtime Contract；Phase 4 是否实现需另行评估，本轮不实现。
 
 #### Documentation Inventory & Rationalization
 

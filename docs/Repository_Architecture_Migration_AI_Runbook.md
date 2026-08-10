@@ -33,59 +33,9 @@ Phase 3 — Formal Project Migration & Authority Cutover：`ACTIVE`。
 
 Project 2 migration：`COMPLETE / CLOSED`。
 
-Next migration subject：`Project 3`。
+Next migration subject：`Project 3`。其 RC1 Compatible Framework Sync 已完成，Authority Cutover 尚未执行，因此 migration orientation 为 `IN PROGRESS / CUTOVER PENDING`。这不是 Authority Cutover 或 Stage 2 授权。
 
-Next allowed activity：`Project 3 Formal Migration Readiness Review — READ ONLY`。
-
-- Project 2 Hardware Stage：`Stage 1 — Requirements Definition`；
-- Project 2 Stage 2：`NOT AUTHORIZED`；
-- Project 2 Framework binding migration：`COMPLETED`；
-- Project 2 Authority Cutover：`COMPLETED`；
-- Project 2 Active Authority：`wum747349-debug/LiIon-Charger-Protection-Board`；
-- Legacy Project 2：`FROZEN MIGRATION SOURCE`；
-- Project 3 migration：`NOT STARTED`；
-- Project 3 Framework Binding Migration / Authority Cutover：`NOT AUTHORIZED / NOT EXECUTED`；
-- Repository Rename：`NOT AUTHORIZED / NOT EXECUTED`。
-
-### Project 2 Migration Milestone
-
-- Standalone initialization pilot completed.
-- Stage 1 / Gate 1.5 pilot completed.
-- Framework binding migration and Authority Cutover are complete.
-- The Standalone Repository is the Only Active Project Authority.
-- Legacy Project 2 is retained only as a Frozen Migration Source.
-
-本节只提供 migration orientation，不维护 Project Runtime Facts。Project 2 当前 Stage 以其根 `README.md` 为唯一权威源；当前 Framework binding 以其 `FRAMEWORK.md` 为权威源。执行任务前必须重新读取这些权威文件，不得把本 Runbook 当作 `Migration_Status.md`。
-
-### Project 3 Phase 2 Orientation
-
-Project 3 当前里程碑：
-
-- Clean Bootstrap：`COMPLETE`；
-- Stage 1：`COMPLETE`；
-- Gate 1.5：`PASS`；
-- Initialization Status：`Initialized`；
-- Phase 2 clean-room objective：`COMPLETE`。
-
-Phase 2 clean-room execution path（completed；保留为历史执行记录，不作为未来 Bootstrap 的重复审批模板）：
-
-```text
-Bootstrap Authorization
-  → Create empty Standalone Repository
-  → Bootstrap from fixed immutable Framework snapshot
-  → Automatic validation and Bootstrap Result Report
-  → STOP for Human approval to enter Stage 1
-  → Stage 1
-  → Gate 1.5 checklist and validation
-  → Human Gate 1.5 PASS
-  → Initialization Status = Initialized
-  → STOP
-  → Framework Generalization / RC Readiness input
-```
-
-Phase 2 closeout：`COMPLETE`。RC1 已作为 GitHub prerelease 发布。Project 2 Framework binding migration 与 Authority Cutover 已分别获得 Human Approval 并完成，Project 2 migration 已 `COMPLETE / CLOSED`；这不构成 Project 2 Stage 2 授权。Project 3 Stage 2：`NOT AUTHORIZED`；Project 3 migration：`NOT STARTED`。下一项允许的活动仅为 `Project 3 Formal Migration Readiness Review — READ ONLY`；不得据此开始 Project 3 migration、执行 Framework Binding Migration 或 Authority Cutover、推进 Stage 2。
-
-本节只提供当前 migration orientation 与已完成执行路径，不是 Project 3 Runtime Facts 或 Framework binding 的权威源。执行任务前仍须从 Project 3 根 `README.md` 与 `FRAMEWORK.md` 重新核对当前 Stage、初始化状态和 binding。
+本节只提供最小 migration orientation。Runbook 是 `AI decision router + transaction executor`，不是第二份动态 Migration Status database。执行任务前必须从真实 GitHub 默认分支、目标 Project 根 `README.md`、`FRAMEWORK.md` 与适用 authority marker 重新核对 HEAD、Stage、initialization、binding 和 authority；Project 3 的实时值不在本 Runbook 重复维护。
 
 ## Read Routing
 
@@ -114,21 +64,26 @@ Repository Migration Task 的建议顺序：
 
 Framework binding update 必须按 [Framework Migration Guide](Framework_Migration_Guide.md) 分类为 `Compatible Framework Sync` 或 `Framework Contract Migration`，不能据此自动升级真实 Project。Compatible Sync 需要固定 snapshot、impact check 与验证，但用户已明确要求执行时不另设 Human Gate；Contract Migration 需要完整差异审查、Project adaptation、受影响 Gate / Stage reassessment 与一次 Human Approval。Validator 只能实现 Contract 的可自动验证部分，不能反向创造 Contract，也不能要求用虚构事实换取 PASS。
 
-## Execution Loop
+## Execution Route
 
-1. 重新核对本地工作树、远端默认分支、HEAD、tag、CI 与目标 Project binding/authority；不把文档中的易变 SHA 当成实时事实。
-2. 确定本次只属于一个 Migration Phase 或明确的跨 Phase 审查，并记录允许与禁止动作。
-3. 按 Issue / Change Classification 建立最小修改集合；保护用户已有改动和 Legacy Project 内容。
-4. 运行与改动相称的 Framework、Template 或 Project 验证；人工事实、EDA、ERC、DRC、制造和测试不能由 Validator 替代。
-5. 汇总报告 Current Reality、修改、限制、验证与仍需用户决定的 Human approval。Routine checks 不单独触发停顿；仅在发现 blocker、Contract contradiction，或下一动作需要 Human approval 时停止。
+1. Re-check live repository state：核对工作树、远端默认分支、HEAD、tag、CI、目标 Project binding / authority 与适用权威文件，不把文档中的易变状态当成实时事实。
+2. Determine migration classification：区分 Compatible Framework Sync、Framework Contract Migration、Authority Cutover 或其他独立高风险动作，并锁定允许与禁止范围。
+3. Run ONE Formal Migration Assessment：一次覆盖 Current Project state、当前与目标 binding、classification、Standalone completeness、Legacy inventory 与事实 reconciliation、pre-cutover fixes、validator / runtime compatibility、authority readiness、exact intended transaction 和 rollback / recovery expectations；结果为 `READY`、`READY WITH MINOR NOTES` 或 `BLOCKED`。
+4. If `BLOCKED`：报告 blocker 并停止，不实施部分迁移。
+5. If ready and the classified next action requires Human Approval：报告 assessment，并且只停止一次。
+6. After approval：执行 assessment 中 exact bounded migration transaction，保护用户修改，限制文件范围，按计划排序 commit / push，并在失败时执行 recovery handling。
+7. Run automatic verification：运行适用 Validator、CI、diff / status、binding、authority marker 与 post-push remote verification；人工事实和 EDA / ERC / DRC / 制造 / 测试证据仍不能由 Validator 替代。
+8. Report `COMPLETE` / `FAILED`：合并报告 Current Reality、执行内容、验证、限制和恢复状态；automatic closeout verification 不设置新的 Human Approval。
+
+未来迁移取消重复形式化节点：不再设置独立 `Readiness STOP`、`Compatible Sync STOP`、`Cutover Assessment STOP` 或 `Closeout STOP`。这只删除 Pilot-style bureaucracy，不取消真正的高风险 Human Approval。
 
 ## Human Approval Policy
 
 长期 Human Approval Policy 以 [Framework Migration Guide](Framework_Migration_Guide.md) 为准；本 transition-only Runbook 只应用该政策，不另造 Runtime Contract。Migration execution 不为 Validator、review、CI check、diff inspection、clean-room validation、evidence collection、commit / push 或 report 分别设置 Human Gate。
 
-- Compatible Framework Sync：用户明确要求执行即构成 execution authorization；不另设 Readiness / Sync / Closeout Gate。
-- Framework Contract Migration：assessment 后一次 Human Approval；transaction 后的 Final Report 不是新 Gate。
-- Authority Cutover：只读 assessment 与 `READY / BLOCKED` report 后一次 Human Approval；Cutover Transaction 后的 Closeout Review 只是 verification / report。
+- Compatible Framework Sync：`Assessment → explicit execution authorization → Transaction → Verification`；明确授权后不另设 Human Gate。
+- Framework Contract Migration：`Assessment → ONE Human Approval → Contract Migration Transaction → Verification`。
+- Authority Cutover：`Formal Migration Assessment → ONE Human Approval → Authority Cutover Transaction → Automatic Closeout Verification`。
 - Project Hardware Stage advancement、Gate 1.5 Human PASS、RC / Final publication、Repository Rename、Legacy deletion / destructive operation：各自保留所需 Human Approval。
 - 当前任务已授权范围内的普通 documentation / code commit 与 push：不另设 Human Gate，但不能隐式执行上述 transition。
 
