@@ -31,7 +31,7 @@ Phase 2：`CLOSED — RC1 Published / Human Review Approved`。
 
 RC1：`hardware-project-framework-v1.0.0-rc1` @ `b36d9d399651e5c1a2b07dbc70d6e1487df57fd5`。
 
-Phase 3 — Formal Project Migration & Authority Cutover：`ACTIVE`。
+Phase 3 — Formal Project Migration & Authority Cutover：`CLOSED`。
 
 Project 2 migration：`COMPLETE / CLOSED`。
 
@@ -39,7 +39,13 @@ Project 3 migration：`COMPLETE / CLOSED`。
 
 Project 3 Authority Cutover：`COMPLETE`。
 
-Next migration subject：`Project 1`。
+Project 1 migration：`COMPLETE / CLOSED`。
+
+Project 1 Standalone：`Only Active Project Authority`。
+
+Legacy Project 1：`Frozen Migration Source`。
+
+Next mainline：`Phase 4 — Framework Closeout & v1 Final`。
 
 本节只提供最小 migration orientation。Runbook 是 `AI decision router + transaction executor`，不是第二份动态 Migration Status database。执行任务前必须从真实 GitHub 默认分支、目标 Project 根 `README.md`、`FRAMEWORK.md` 与适用 authority marker 重新核对 HEAD、Stage、initialization、binding 和 authority；Project 3 的实时值不在本 Runbook 重复维护。
 

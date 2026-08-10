@@ -9,6 +9,7 @@ Status: RC1 之后的 documentation-only maintenance；不属于 RC1 snapshot。
 ### Documentation Maintenance
 
 - 修正 release 状态、Gate 1.5 Human Approval 操作顺序与当前 migration orientation。
+- 完成 Project 1 Formal Migration、RC1 binding 与 Authority Cutover；Standalone 成为 Only Active Project Authority，Legacy Project 1 冻结为 Frozen Migration Source，Phase 3 关闭。
 - 未修改 Runtime / Structural Contract，也未发布 RC2。
 
 ## v1.0.0-rc1

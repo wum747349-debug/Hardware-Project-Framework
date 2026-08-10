@@ -1,9 +1,13 @@
 # STM32F103C8T6 数据采集/控制开发板
 
-> 文档状态：当前有效
+> 文档状态：Frozen Migration Source
 > 当前项目阶段：阶段 7：PCB 审查阶段
 > 当前硬件版本：Rev A
 > 最后核对依据：当前原理图 PDF、当前 BOM、PCB 辅助审查记录与已确认设计决定
+
+Authority Status: Frozen Migration Source
+
+自 `2026-08-10` Authority Cutover 起，`wum747349-debug/STM32-DAQ-Control-Board` 是 Project 1 的 Only Active Project Authority。本目录只保留迁移来源、恢复和审计用途；不得继续维护活动 Project Facts，也不得与 Standalone 双写。
 
 ## 项目简介
 

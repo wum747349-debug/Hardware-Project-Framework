@@ -70,14 +70,17 @@ Project 1 / 2 / 3 remain pinned to an immutable release
 - Phase 2 — Clean Bootstrap & RC Readiness：`CLOSED — RC1 Published / Human Review Approved`；
 - Project 2：Bootstrap / Stage 1 / Gate 1.5 Pilot、Framework binding migration 与 Authority Cutover 均已完成；Standalone Repository 是 Only Active Project Authority；
 - RC1：`hardware-project-framework-v1.0.0-rc1` @ `b36d9d399651e5c1a2b07dbc70d6e1487df57fd5`；
-- Phase 3 — Formal Project Migration & Authority Cutover：`ACTIVE`；
+- Phase 3 — Formal Project Migration & Authority Cutover：`CLOSED`；
 - Project 2 migration：`COMPLETE / CLOSED`；
 - Project 3 RC1 Compatible Framework Sync：`COMPLETE`；
 - Project 3 Authority Cutover：`COMPLETE`；
 - Project 3 migration：`COMPLETE / CLOSED`；
 - Project 3 Current Stage：`Stage 1 — Requirements Definition`；
 - Project 3 Stage 2：`NOT AUTHORIZED`；
-- Next migration subject：`Project 1`；
+- Project 1 migration：`COMPLETE / CLOSED`；
+- Project 1 Standalone：`Only Active Project Authority`；
+- Legacy Project 1：`Frozen Migration Source`；
+- Next mainline：`Phase 4 — Framework Closeout & v1 Final`；
 - Repository Rename：`NOT AUTHORIZED / NOT EXECUTED`。
 
 以上只保留 roadmap orientation，不作为动态 Project 状态数据库。执行任何迁移时，必须从真实 GitHub 默认分支、Project 根 `README.md`、`FRAMEWORK.md` 与适用 authority marker 重新核对 HEAD、Stage、initialization、binding 和 authority；不得依赖本节保存易变的 Project HEAD 或详细 lifecycle wording。Framework `main` 的后续变化不构成任何 Project binding change。
@@ -136,7 +139,7 @@ Outputs / Done：三个 Project 分别完成权威收敛；Standalone 成为各�
 
 Project 2 不需要为了 RC 进入 Stage 2。但若未来要在 Standalone Repository 真正开展 Stage 2，应先明确 Authority Cutover，避免形成两个活动事实源。
 
-Project 1 Formal Migration 不等待 Framework Final v1。Project 1 可继续基于已验证 RC1 完成 `Formal Migration → Authority Cutover → Automatic Closeout`；完成后关闭 Phase 3，再进入 Phase 4 Framework Closeout。Template cleanup、documentation cleanup、Repository Rename 与 Final v1 都不是 Project 1 migration 的前置依赖。
+Project 1 已基于已验证 RC1 完成 `Formal Migration → Authority Cutover → Automatic Closeout`；Standalone Repository 是 Only Active Project Authority，Legacy Project 1 是 Frozen Migration Source，Phase 3 已关闭。下一主线进入 Phase 4 Framework Closeout。Template cleanup、documentation cleanup、Repository Rename 与 Final v1 均未在 Project 1 migration transaction 中执行。
 
 ### Phase 4 — Framework Closeout & v1 Final
 
