@@ -33,7 +33,11 @@ Phase 3 — Formal Project Migration & Authority Cutover：`ACTIVE`。
 
 Project 2 migration：`COMPLETE / CLOSED`。
 
-Next migration subject：`Project 3`。其 RC1 Compatible Framework Sync 已完成，Authority Cutover 尚未执行，因此 migration orientation 为 `IN PROGRESS / CUTOVER PENDING`。这不是 Authority Cutover 或 Stage 2 授权。
+Project 3 migration：`COMPLETE / CLOSED`。
+
+Project 3 Authority Cutover：`COMPLETE`。
+
+Next migration subject：`Project 1`。
 
 本节只提供最小 migration orientation。Runbook 是 `AI decision router + transaction executor`，不是第二份动态 Migration Status database。执行任务前必须从真实 GitHub 默认分支、目标 Project 根 `README.md`、`FRAMEWORK.md` 与适用 authority marker 重新核对 HEAD、Stage、initialization、binding 和 authority；Project 3 的实时值不在本 Runbook 重复维护。
 

@@ -61,10 +61,11 @@ Framework 只定义方法。正式 Project 锁定固定 Release + immutable 40 �
 - Phase 3 — Formal Project Migration & Authority Cutover：`ACTIVE`；
 - Project 2 migration：`COMPLETE / CLOSED`；
 - Project 3 RC1 Compatible Framework Sync：`COMPLETE`；
-- Project 3 Authority Cutover：`NOT EXECUTED`；
-- Project 3 migration：`IN PROGRESS / CUTOVER PENDING`；
+- Project 3 Authority Cutover：`COMPLETE`；
+- Project 3 migration：`COMPLETE / CLOSED`；
 - Project 3 Current Stage：`Stage 1 — Requirements Definition`；
 - Project 3 Stage 2：`NOT AUTHORIZED`；
+- Next migration subject：`Project 1`；
 - Repository Rename：`NOT AUTHORIZED / NOT EXECUTED`。
 
 以上只保留 roadmap orientation，不作为动态 Project 状态数据库。执行任何迁移时，必须从真实 GitHub 默认分支、Project 根 `README.md`、`FRAMEWORK.md` 与适用 authority marker 重新核对 HEAD、Stage、initialization、binding 和 authority；不得依赖本节保存易变的 Project HEAD 或详细 lifecycle wording。Framework `main` 的后续变化不构成任何 Project binding change。
