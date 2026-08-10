@@ -4,13 +4,19 @@
 
 ## Unreleased
 
-Status: RC1 之后的 documentation-only maintenance；不属于 RC1 snapshot。
+Status: Phase 4 Framework Closeout Transaction complete；Repository Rename 与 Final publication 尚未执行，不属于 RC1 snapshot。
 
-### Documentation Maintenance
+### Phase 4 Framework Closeout
 
 - 修正 release 状态、Gate 1.5 Human Approval 操作顺序与当前 migration orientation。
 - 完成 Project 1 Formal Migration、RC1 binding 与 Authority Cutover；Standalone 成为 Only Active Project Authority，Legacy Project 1 冻结为 Frozen Migration Source，Phase 3 关闭。
-- 未修改 Runtime / Structural Contract，也未发布 RC2。
+- 完成 legacy / transition-era documentation inventory：将通用 Toolchain 知识并入 `Project_Initialization_Guide.md`，将运放与独立 ADC / Reference 选型维度并入 component-selection Skill，将 bring-up 与 debug record 方法收敛为 canonical Checklist，并 retire 8 份旧 source documents。
+- 将 Template human-facing documentation 清理为中文解释优先，同时保留 canonical English terms、schema keys、fixed values、paths、identifiers、commands 与 validator-sensitive wording。
+- 新增 synthetic、lightweight、validator-valid 的 `examples/reference_project_v1/`，用于 documentation / regression / final validation；不包含真实 Project facts、EDA、Manufacturing output 或 Hardware Evidence。
+- 在已完成 Authority Cutover 后，以普通 Git deletion 从 Framework current tree 移除三个 Legacy real-project copies，并保留轻量 history marker 与完整 Git history。
+- 将 Framework Validator `--mode final` 与 CI 对齐到 Reference Project validation。
+- Runtime Contract：UNCHANGED；Structural Contract：UNCHANGED；RC2 required：NO。
+- Repository Rename：NOT EXECUTED；Final v1 publication：NOT EXECUTED。
 
 ## v1.0.0-rc1
 

@@ -4,31 +4,31 @@ Project Identity: <PROJECT_NAME>
 Current Project Stage: Bootstrap
 Hardware Revision: <HARDWARE_REVISION>
 
-## Purpose
+## 项目目的（Purpose）
 
-TBD — replace when the project purpose is confirmed; do not invent it during Bootstrap.
+TBD — 在项目目的确认后填写；Bootstrap 期间不得虚构实现细节。
 
-## Current Status
+## 当前状态（Current Status）
 
-- Framework binding and initialization status: [FRAMEWORK.md](FRAMEWORK.md)
-- Project facts are Draft until confirmed in this repository.
-- No component, EDA, ERC, DRC, manufacturing, bring-up, or test result is implied by Bootstrap.
+- Framework binding 与初始化状态：[FRAMEWORK.md](FRAMEWORK.md)
+- Project facts 在本仓库确认前保持 Draft。
+- Bootstrap 不代表器件、EDA、ERC、DRC、Manufacturing、Bring-up 或 Test 已完成。
 
-## Project Facts
+## 项目事实入口（Project Facts）
 
-- [Requirements baseline](requirements.md)
-- [Block diagram](block_diagram.md)
-- [Design notes](design_notes.md)
-- [Reference index](references.md)
+- [需求基线（Requirements Baseline）](requirements.md)
+- [系统框图（Block Diagram）](block_diagram.md)
+- [设计说明（Design Notes）](design_notes.md)
+- [资料索引（Reference Index）](references.md)
 
-## Repository Navigation
+## 仓库导航（Repository Navigation）
 
-- [Project runtime rules](PROJECT_RULES.md)
-- [Stage document responsibilities](docs/README.md)
-- [Hardware source and evidence responsibilities](hardware/README.md)
-- [Local reference responsibilities](references/README.md)
-- [Project validator](scripts/validate_project_repository.py)
+- [Project Runtime Rules](PROJECT_RULES.md)
+- [Stage 文档职责](docs/README.md)
+- [Hardware source 与 Evidence 职责](hardware/README.md)
+- [本地资料职责](references/README.md)
+- [Project Validator](scripts/validate_project_repository.py)
 
-## Next Step
+## 下一步（Next Step）
 
-Complete Bootstrap, change `Current Project Stage` to `Stage 1 — Requirements Definition`, establish the first Requirements Baseline, then execute Gate 1.5.
+完成 Bootstrap，将 `Current Project Stage` 改为 `Stage 1 — Requirements Definition`，建立第一版 Requirements Baseline，然后执行 Gate 1.5。

@@ -16,6 +16,11 @@ from urllib.parse import unquote
 ROOT = Path(__file__).resolve().parents[1]
 TEMPLATE_ROOT = ROOT / "templates/hardware_project_template"
 FINAL_REFERENCE_ROOT = ROOT / "examples/reference_project_v1"
+FINAL_LEGACY_PROJECT_DIRS = (
+    "projects/01_STM32_DAQ_Control_Board",
+    "projects/02_LiIon_Charger_Protection_Board",
+    "projects/03_STM32_OpAmp_ADC_Acquisition_Board",
+)
 
 REQUIRED_FRAMEWORK_FILES = (
     "PROJECT_RULES.md",
@@ -468,11 +473,63 @@ def check_final_mode(validator: Validator) -> None:
     if validator.mode != "final":
         return
     reference_path = FINAL_REFERENCE_ROOT.relative_to(ROOT).as_posix()
-    validator.check(FINAL_REFERENCE_ROOT.is_dir(), reference_path, "Final mode requires the future Reference Project")
+    validator.check(FINAL_REFERENCE_ROOT.is_dir(), reference_path, "Final mode requires the Reference Project")
     if FINAL_REFERENCE_ROOT.is_dir():
+        actual_reference_files = {
+            path.relative_to(FINAL_REFERENCE_ROOT).as_posix()
+            for path in FINAL_REFERENCE_ROOT.rglob("*")
+            if path.is_file()
+        }
+        validator.check(
+            actual_reference_files == REQUIRED_TEMPLATE_FILES,
+            reference_path,
+            "Final Reference Project must remain a lightweight Required-files-only fixture",
+        )
+        reference_readme = (FINAL_REFERENCE_ROOT / "README.md").read_text(encoding="utf-8")
+        for phrase in (
+            "Fixture Type: Synthetic Framework documentation and regression fixture",
+            "Authority Status: Not an Active Project Authority",
+            "Current Project Stage: Bootstrap",
+        ):
+            validator.check(phrase in reference_readme, f"{reference_path}/README.md", f"Final Reference Project boundary missing: {phrase}")
+
         source = ROOT / "scripts/validate_project_repository.py"
-        result = subprocess.run([sys.executable, str(source), str(FINAL_REFERENCE_ROOT)], cwd=ROOT, check=False)
-        validator.check(result.returncode == 0, reference_path, "Final Reference Project validation failed")
+        reference_snapshot = FINAL_REFERENCE_ROOT / "scripts/validate_project_repository.py"
+        validator.check(
+            reference_snapshot.is_file() and source.read_bytes() == reference_snapshot.read_bytes(),
+            f"{reference_path}/scripts/validate_project_repository.py",
+            "Final Reference Project validator snapshot differs from the Framework development source",
+        )
+        result = subprocess.run(
+            [sys.executable, str(source), str(FINAL_REFERENCE_ROOT)],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            check=False,
+        )
+        details = (result.stdout + result.stderr).strip()
+        validator.check(result.returncode == 0, reference_path, f"Final Reference Project validation failed: {details}")
+
+    tracked_result = subprocess.run(
+        ["git", "ls-files", "--cached", "--", "projects"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        check=False,
+    )
+    tracked_projects = set(tracked_result.stdout.splitlines())
+    validator.check(tracked_result.returncode == 0, "projects", "Final mode could not inspect tracked current-tree content")
+    validator.check("projects/README.md" in tracked_projects, "projects/README.md", "Final mode requires the lightweight Legacy history marker")
+    for legacy_directory in FINAL_LEGACY_PROJECT_DIRS:
+        validator.check(
+            not any(path == legacy_directory or path.startswith(f"{legacy_directory}/") for path in tracked_projects),
+            legacy_directory,
+            "Final mode forbids tracked Legacy real-project copies",
+        )
 
 
 def validate(mode: str) -> Validator:
@@ -490,7 +547,7 @@ def validate(mode: str) -> Validator:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--mode", choices=("v0.9", "final"), default="v0.9", help="v0.9 does not require the future final Reference Project")
+    parser.add_argument("--mode", choices=("v0.9", "final"), default="v0.9", help="v0.9 keeps compatibility checks without requiring final closeout fixtures")
     args = parser.parse_args(argv)
     validator = validate(args.mode)
     if validator.errors:

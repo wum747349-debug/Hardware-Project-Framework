@@ -2,13 +2,15 @@
 
 Status: Draft
 
+本文件描述模块、能量流、信号流和系统边界；它不证明器件已选择或 EDA 已实现。
+
 ## System Boundary
 
 ```text
 [External Input] -> [Project Boundary] -> [External Output]
 ```
 
-Replace the generic boundary with the real energy flow, signal flow, and modules during Stage 1. Do not select parts merely to complete this document.
+在 Stage 1 用真实的能量流、信号流和模块替换通用边界。不得仅为填满本文而选择器件。
 
 ## Modules
 
@@ -18,6 +20,6 @@ Replace the generic boundary with the real energy flow, signal flow, and modules
 
 ## Cross-module Flows
 
-- Energy flow: TBD
-- Signal flow: TBD
-- Control and feedback boundaries: TBD
+- Energy flow（能量流）：TBD
+- Signal flow（信号流）：TBD
+- Control and feedback boundaries（控制与反馈边界）：TBD

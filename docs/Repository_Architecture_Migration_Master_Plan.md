@@ -80,7 +80,8 @@ Project 1 / 2 / 3 remain pinned to an immutable release
 - Project 1 migration：`COMPLETE / CLOSED`；
 - Project 1 Standalone：`Only Active Project Authority`；
 - Legacy Project 1：`Frozen Migration Source`；
-- Next mainline：`Phase 4 — Framework Closeout & v1 Final`；
+- Framework Closeout Transaction：`COMPLETE`；
+- Next risk boundary：`Repository Rename Approval`；
 - Repository Rename：`NOT AUTHORIZED / NOT EXECUTED`。
 
 以上只保留 roadmap orientation，不作为动态 Project 状态数据库。执行任何迁移时，必须从真实 GitHub 默认分支、Project 根 `README.md`、`FRAMEWORK.md` 与适用 authority marker 重新核对 HEAD、Stage、initialization、binding 和 authority；不得依赖本节保存易变的 Project HEAD 或详细 lifecycle wording。Framework `main` 的后续变化不构成任何 Project binding change。
@@ -152,6 +153,8 @@ READY WITH MINOR NOTES
 
 Minor notes 只要求按下述 bounded scope 完成兼容 cleanup、Rename 后 identity verification 与 Final Candidate Validation，不改变 Runtime / Structural Contract，也不增加新的 Gate、Approval 或 Phase。
 
+Framework Closeout Transaction execution status：`COMPLETE`。Repository Rename、Final Candidate Validation 与 Final v1 publication 尚未执行；下一风险边界是 Repository Rename Approval。
+
 最终执行模型收敛为：
 
 ```text
@@ -218,6 +221,8 @@ Inventory → Classification → Disposition → Rationalization
 - `docs/07_Resume_Project_Notes.md`。
 
 这些文件只是待审查候选，不是预先确定的删除清单。审查应识别重复职责、已被新 Contract / Guide / Skill / Checklist 替代的内容、transition-only wording、Legacy Monorepo assumption、三个具体 Project / portfolio assumption、应进入 Stage Method / Skill / Checklist 的长期工程方法，以及已无长期价值的历史说明。`docs/00_Project_Roadmap.md` 和 `docs/07_Resume_Project_Notes.md` 应作为 `Legacy Project / Portfolio Material` 的重点候选进行审查，但不预判最终 disposition。
+
+Final disposition：`00` / `07` 作为 Legacy Project / Portfolio Material retire；`01` 的 durable Toolchain knowledge 合并至 Project Initialization Guide；`03` 的运放与独立 ADC / Reference 选型维度合并至 component-selection Skill；`05` / `06` 合并为 canonical bring-up checklist；`02` / `04` 的长期内容已由现有 schematic / PCB Skill 与 Checklist 覆盖。上述 8 个旧 source documents 已从 current tree retire。
 
 Usability review 还应确认 human-facing documentation 提供足够中文解释，同时保留 canonical English terms、fields、schema key、identifier、path、command 与 validator-sensitive heading；不要求对历史文件机械全文翻译。既有 Project 的 readability debt 不重开 migration，可留待后续显式 Project cleanup 处理。
 

@@ -45,7 +45,9 @@ Project 1 Standalone：`Only Active Project Authority`。
 
 Legacy Project 1：`Frozen Migration Source`。
 
-Next mainline：`Phase 4 — Framework Closeout & v1 Final`。
+Framework Closeout Transaction：`COMPLETE`。
+
+Next risk boundary：`Repository Rename Approval`。
 
 本节只提供最小 migration orientation。Runbook 是 `AI decision router + transaction executor`，不是第二份动态 Migration Status database。执行任务前必须从真实 GitHub 默认分支、目标 Project 根 `README.md`、`FRAMEWORK.md` 与适用 authority marker 重新核对 HEAD、Stage、initialization、binding 和 authority；Project 3 的实时值不在本 Runbook 重复维护。
 
@@ -110,7 +112,7 @@ Formal Migration Assessment 必须一次覆盖 Current Project state、当前与
 
 ## Phase 4 Closeout Execution
 
-Master Plan 当前 Assessment 为 `READY WITH MINOR NOTES`。Phase 4 按以下单一路径执行：
+Master Plan 的 read-only Assessment 为 `READY WITH MINOR NOTES`；Framework Closeout Transaction execution result 为 `COMPLETE`。Repository Rename 与 Final publication 尚未执行。Phase 4 按以下单一路径继续：
 
 ```text
 Framework Closeout Transaction

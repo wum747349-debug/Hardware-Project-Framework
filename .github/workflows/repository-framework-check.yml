@@ -11,6 +11,8 @@ on:
       - "skills/**"
       - "checklists/**"
       - "templates/**"
+      - "examples/**"
+      - "projects/**"
       - "scripts/**"
       - ".github/workflows/repository-framework-check.yml"
   pull_request:
@@ -23,6 +25,8 @@ on:
       - "skills/**"
       - "checklists/**"
       - "templates/**"
+      - "examples/**"
+      - "projects/**"
       - "scripts/**"
       - ".github/workflows/repository-framework-check.yml"
 
@@ -38,5 +42,7 @@ jobs:
           python-version: "3.x"
       - name: Validate Framework repository
         run: python scripts/validate_framework_repository.py
+      - name: Validate Framework final mode
+        run: python scripts/validate_framework_repository.py --mode final
       - name: Validate Template fixture
         run: python scripts/validate_project_repository.py templates/hardware_project_template --template

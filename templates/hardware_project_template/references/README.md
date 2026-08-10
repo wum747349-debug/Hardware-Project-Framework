@@ -1,5 +1,5 @@
-# Local References
+# Local References（本地资料）
 
-Store only project-relevant local evidence here, and create subdirectories when real content exists. Typical conditional content includes datasheets grouped by module, supplier-search notes, standards, and mechanical documents.
+这里只保存与当前 Project 相关的本地 Evidence，并在真实内容存在时创建子目录。常见 Conditional content 包括按模块整理的 datasheet、supplier-search notes、standards 与 mechanical documents。
 
-Official datasheets, reference manuals, and application notes are the primary sources for critical parameters. Supplier pages are procurement aids, not substitutes for official technical evidence. Record each source and its purpose in the root `references.md`.
+官方 datasheet、reference manual 与 application note 是关键参数的主要来源。Supplier page 只辅助采购，不能替代官方技术证据；每项来源及用途记录在根 `references.md`。

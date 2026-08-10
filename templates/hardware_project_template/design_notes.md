@@ -2,9 +2,11 @@
 
 Status: Draft
 
+本文件记录整板设计意图、当前决策和跨模块约定；候选方案在形成依据前不得写成已选事实。
+
 ## Board-level Intent
 
-TBD — record the current architecture intent and constraints. Do not present candidate parts as selected facts.
+TBD — 记录当前架构意图和约束，不把候选器件写成已确认选择。
 
 ## Current Decisions
 
@@ -20,7 +22,7 @@ TBD — record the current architecture intent and constraints. Do not present c
 
 ## Pin and Connection Planning
 
-Pin maps and project network names are created only when supported by actual project decisions.
+只有真实 Project decision 已形成依据时，才创建 Pin Map 与项目网络名。
 
 | Function | Required Direction / Behavior | Candidate Mapping | Basis | Status |
 | --- | --- | --- | --- | --- |
@@ -28,10 +30,10 @@ Pin maps and project network names are created only when supported by actual pro
 
 ## PCB Inputs
 
-- Mechanical constraints: TBD
-- Sensitive or high-risk areas: TBD
-- Power and thermal constraints: TBD
-- Required official layout sources: TBD
+- Mechanical constraints（机械约束）：TBD
+- Sensitive or high-risk areas（敏感或高风险区域）：TBD
+- Power and thermal constraints（电源与热约束）：TBD
+- Required official layout sources（所需官方 Layout 资料）：TBD
 
 ## Open Decisions
 

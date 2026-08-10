@@ -1,6 +1,6 @@
-# Stage Documents
+# Stage Documents（阶段文档）
 
-This directory contains Stage-enabled and Conditional project documents. Bootstrap does not pre-create them.
+本目录保存 Stage-enabled 与 Conditional Project 文档。Bootstrap 不预建这些文件；只有真实活动触发时才创建。
 
 | Path | Responsibility | Enable When |
 | --- | --- | --- |
@@ -14,4 +14,4 @@ This directory contains Stage-enabled and Conditional project documents. Bootstr
 | `revision_history.md` | Hardware revisions, reasons, impact, required revalidation | First hardware revision or material change |
 | `user/` | User-facing setup, wiring, interface, and safety guidance | The project requires user documentation |
 
-The current project stage is maintained only in the repository root `README.md`. A file's existence never proves that its stage passed.
+当前 Project Stage 只在仓库根 `README.md` 维护。文件存在不证明对应 Stage 已通过。

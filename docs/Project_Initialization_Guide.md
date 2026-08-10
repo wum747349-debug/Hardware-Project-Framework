@@ -4,6 +4,17 @@
 
 本指南只给出操作顺序。结构、schema 与分类以 [Project Structure Standard](Project_Structure_Standard.md) 为准；Lifecycle 与 Gate 以 [Workflow](08_Project_Workflow.md) 为准；AI 读取范围以 [AI Context Guide](AI_Context_Guide.md) 为准。
 
+## 准备：Toolchain 与实验条件
+
+Project Bootstrap 前先确认完成当前工作所需的工具角色；Framework 不把特定品牌或单一工具链写成所有 Project 的固定要求。
+
+- EDA：用于原理图、PCB、封装、BOM 与制造输出；当前 Framework 的证据边界以 Altium Designer 工作流为主。
+- Firmware（仅实际需要时）：选择与目标 MCU / SoC 匹配的配置、编译、下载和调试工具，例如厂商配置工具、IDE、编译器与硬件调试器。
+- Version control 与 documentation：使用 Git、托管平台、Markdown、表格和截图工具维护可追溯版本与说明。
+- Bring-up / Test（仅进入实际活动时）：按项目风险准备万用表、可限流电源、适用调试器；示波器、逻辑分析仪、USB 转串口、焊接与返修工具按真实需求启用。
+
+在 Project Facts 或 Evidence 中按需记录关键工具、版本、配置与测量条件。工具可用不等于 EDA、ERC、DRC、制造、焊接或测试已经完成；实际结果仍由用户执行并提供证据。
+
 ## 1. 从固定 Release 获取 Template
 
 1. 选择已发布的 Framework Release；预发布评估可选择已发布的 RC，例如 `hardware-project-framework-v1.0.0-rc1`，Final 发布后可选择对应 Final Release。

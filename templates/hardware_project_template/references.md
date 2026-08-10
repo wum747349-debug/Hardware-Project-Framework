@@ -2,7 +2,7 @@
 
 Status: Draft
 
-Critical parameters must be verified against official datasheets, reference manuals, or application notes. Product pages may support availability and ordering research but do not replace official technical evidence. Open-source projects may inform method and structure but are not project facts.
+关键参数必须回到官方 datasheet、reference manual 或 application note 核对。商品页可辅助库存和采购研究，但不能替代官方技术证据；开源项目只能用于学习方法与结构，不能成为本 Project facts。
 
 ## Official Sources
 
