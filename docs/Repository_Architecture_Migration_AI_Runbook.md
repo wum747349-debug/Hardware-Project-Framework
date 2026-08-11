@@ -1,13 +1,23 @@
 # Repository Architecture Migration AI Runbook
 
-> Document Status: Active during Repository Architecture Transition
+> Document Status: RETIRED
 > Runtime Contract: No
-> Lifecycle: Retire or archive after Framework v1 closeout
-> 定位：AI Operational Guide for the one-time Repository Architecture Migration
+> Repository Architecture Migration: CLOSED
+> Lifecycle: Historical execution record retained in place
+> 定位：Retired AI Operational Guide for the completed one-time Repository Architecture Migration
+
+Repository Architecture Migration is CLOSED. Do not use this Runbook for normal Framework maintenance or current Project Framework adoption.
+
+Use:
+
+- [Framework Maintenance and Release Guide](Framework_Maintenance_and_Release_Guide.md) for Framework Repository maintenance、SemVer、RC 与 Release；
+- [Framework Migration Guide](Framework_Migration_Guide.md) for Project-side Framework adoption 与低频 Authority Cutover exception procedure。
+
+下文保留当时的 execution model、status snapshot 与 STOP conditions，属于历史 provenance，不是 current task router、current release roadmap 或 current Project status authority。
 
 ## Scope
 
-Only read this file for Repository Architecture Migration work.
+Do not use this retired file to execute new work. 只有显式审查已关闭 Repository Architecture Migration 的历史设计、证据或 provenance 时才读取。
 
 本 Runbook 只服务 Repository Architecture Transition、RC preparation、Project migration、Authority Cutover preparation、Framework Closeout、Repository Rename preparation 与 Final release preparation。普通 Project Requirements、Component Selection、Schematic、PCB、Bring-up 或 Test 任务不得默认读取本文件。本文件不复制到 Project Template 或 Standalone Project，也不是 Project Validator 输入。
 
@@ -49,11 +59,13 @@ Framework Closeout Transaction：`COMPLETE`。
 
 Repository Rename：`COMPLETE`。
 
-Next transaction：`Final Candidate Validation`。
+Next transaction：`NONE — Repository Architecture Migration CLOSED`。
 
 本节只提供最小 migration orientation。Runbook 是 `AI decision router + transaction executor`，不是第二份动态 Migration Status database。执行任务前必须从真实 GitHub 默认分支、目标 Project 根 `README.md`、`FRAMEWORK.md` 与适用 authority marker 重新核对 HEAD、Stage、initialization、binding 和 authority；Project 3 的实时值不在本 Runbook 重复维护。
 
-## Read Routing
+## Historical Read Routing
+
+本节记录迁移期间的旧 routing，不适用于当前 normal Framework maintenance。
 
 Repository Migration Task 的建议顺序：
 
@@ -112,9 +124,9 @@ Formal Migration Assessment 必须一次覆盖 Current Project state、当前与
 
 `READY WITH MINOR NOTES` 仅适用于 notes 不改变 transaction scope、风险边界或 authority 判断的情况。获批后执行一个 bounded logical migration transaction；`Atomic` 不声称跨多个 Git Repository 存在 ACID atomic commit。Automatic closeout verification 必须确认预定 commits / pushes、binding、authority marker、validators、remote state 与无意外 diff；任何失败都停止关闭并进入 recovery report。
 
-## Phase 4 Closeout Execution
+## Historical Phase 4 Closeout Execution
 
-Master Plan 的 read-only Assessment 为 `READY WITH MINOR NOTES`；Framework Closeout Transaction 与 Repository Rename execution result 均为 `COMPLETE`。Final publication 尚未执行。Phase 4 按以下单一路径继续：
+以下内容是 Final publication 前的 historical procedure snapshot。Framework Closeout Transaction、Repository Rename、Final publication 与 automatic verification 均已完成；不得按本节重新执行或创建 post-Final gate。
 
 ```text
 Framework Closeout Transaction

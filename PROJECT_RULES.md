@@ -2,7 +2,7 @@
 
 ## 1. 仓库身份与当前状态
 
-本仓库当前身份是 `wum747349-debug/Hardware-Project-Framework`；Repository Rename 已完成，但 Framework v1 Final 尚未发布。旧 Repository identity 仍可作为历史 provenance 或既有 Project 的 immutable binding 保留，不因 Rename 自动改写。
+本仓库当前身份是 `wum747349-debug/Hardware-Project-Framework`；Repository Architecture Migration 已关闭，Framework v1.0.0 已发布，仓库进入 Normal Framework Maintenance。旧 Repository identity 仍可作为历史 provenance 或既有 Project 的 immutable binding 保留，不因 Rename 或新 Release 自动改写。
 
 Framework 定义硬件项目的方法和契约，不作为真实 Project 的活动事实源。当前 `projects/` 中的内容属于 Legacy Migration Source；在各项目完成独立仓库验证和 Authority Cutover 前不得删除，也不得被提取为 Framework 默认器件、网络、规则值、板框或制造参数。
 
@@ -62,7 +62,7 @@ Framework Era
 - Project 不默认跟随或读取 Framework `main`。
 - 正式 Bootstrap 必须从固定 Framework Release 获取 Template；开发绑定只允许用于 Framework 自测和明确的预发布评估。
 - Framework binding update 必须由用户明确要求并锁定目标 Release + immutable Commit。若 Project Structure Version、`FRAMEWORK.md` schema、Project `AGENTS.md` context-routing contract、Required/Conditional/Stage-enabled 模型、Runtime Rules、Stage/Gate、Project 事实职责、Repository authority model 与 Validator required structure 均未改变，可按 Compatible Framework Sync 执行；发生任何 Runtime / Structural Contract 实质变化时，必须按 Framework Contract Migration 执行完整差异审查、Project adaptation、验证与一次 Human Approval。两类更新都不得自动跟随 Framework `main`，并只在验证通过后更新 binding；仅在结构契约变化时更新 `Project Structure Version`。
-- 发布顺序为 Baseline → Release Candidate → Final。RC 后若 Required files、`FRAMEWORK.md` schema、Project `AGENTS.md`、Gate 1.5、Runtime Rules、目录职责、Structure Version 或 Validator required structure 实质变化，必须发布新的 RC，不得继续声称旧 RC 已验证。
+- Framework Repository 的 normal maintenance、Semantic Versioning、risk-driven optional RC、candidate validation 与 Release publication 由 `docs/Framework_Maintenance_and_Release_Guide.md` 管理。RC 不是所有 Release 的 mandatory gate；每个新目标版本从 `rc1` 重新编号，Final 发布后不得继续该版本的 RC。Framework `main` 的普通 commit 不自动要求 Release。
 
 版本语义不得混淆：Framework Release 表示方法发布；Project Structure Version 表示项目仓库结构契约；Hardware Revision 表示硬件设计版本；Git tag/commit 表示源码身份。
 
@@ -80,7 +80,7 @@ Final v1 只表示发布候选已满足既定 Contract 与验证要求，不表�
 
 迁移前，Legacy Monorepo Project Directory 是 Current Authority。独立仓库完成验证并执行 Cutover 后，Standalone Project Repository 成为 Only Active Project Authority，原目录降级为 Frozen Migration Source：不继续开发、不再修改项目事实、只用于迁移核对，且在新仓库确认完整前不删除。禁止长期双写。
 
-Repository Architecture Migration 的一次性路线不属于 Project Runtime Contract；其当前计划与执行路由分别由 Migration Master Plan 和 Migration AI Runbook 维护。迁移计划不得改变上述单一活动权威源、Cutover 后冻结 Legacy Source 和禁止长期双写的稳定规则。
+Repository Architecture Migration 的一次性路线已关闭，不属于 Project Runtime Contract。Migration Master Plan 是 Historical Engineering Record，Migration AI Runbook 已 retired；两者不再维护当前计划或执行路由。未来若显式发生新的 Legacy / previous authority → Standalone Project Repository 切换，仍按 `docs/Framework_Migration_Guide.md` 的独立 Authority Cutover procedure 执行，不得改变上述单一活动权威源、Cutover 后冻结 Legacy Source 和禁止长期双写的稳定规则。
 
 ## 8. Git 安全
 

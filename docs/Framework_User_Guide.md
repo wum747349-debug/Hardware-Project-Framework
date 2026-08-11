@@ -92,7 +92,7 @@ README
 - Repository Rename；
 - Legacy deletion / destructive cleanup。
 
-常规 documentation、review、Validator、CI、diff inspection、Evidence 整理以及授权任务内的普通 commit / push 不制造重复 Human Gate。权威职责与审批边界见 [Framework Rules](../PROJECT_RULES.md)、[Project Workflow](08_Project_Workflow.md) 和 [Framework Migration Guide](Framework_Migration_Guide.md)。
+常规 documentation、review、Validator、CI、diff inspection、Evidence 整理以及授权任务内的普通 commit / push 不制造重复 Human Gate。Framework maintenance / Release publication 见 [Framework Maintenance and Release Guide](Framework_Maintenance_and_Release_Guide.md)；Project adoption 与 Authority Cutover 见 [Framework Migration Guide](Framework_Migration_Guide.md)。权威职责与审批边界仍以 [Framework Rules](../PROJECT_RULES.md) 和 [Project Workflow](08_Project_Workflow.md) 为准。
 
 ## 6. Framework 更新：Compatible Framework Sync 与 Framework Contract Migration
 
@@ -118,7 +118,8 @@ README
 | Bootstrap / Gate 1.5 操作 | [Project Initialization Guide](Project_Initialization_Guide.md) |
 | Stage lifecycle | [Project Workflow](08_Project_Workflow.md) |
 | AI context routing | [AI Context Guide](AI_Context_Guide.md) |
-| Framework 更新 / Human Approval | [Framework Migration Guide](Framework_Migration_Guide.md) |
+| Framework maintenance / Release | [Framework Maintenance and Release Guide](Framework_Maintenance_and_Release_Guide.md) |
+| Project Framework adoption | [Framework Migration Guide](Framework_Migration_Guide.md) |
 
 ## 8. 不同角色应该阅读哪些文档
 
@@ -140,11 +141,12 @@ Framework Maintainer：
 
 - [Framework Rules](../PROJECT_RULES.md)；
 - [Project Structure Standard](Project_Structure_Standard.md)、[Project Workflow](08_Project_Workflow.md) 和 [AI Context Guide](AI_Context_Guide.md)；
-- [Project Template Guide](Project_Template_Guide.md)、[Project Initialization Guide](Project_Initialization_Guide.md) 和 [Framework Migration Guide](Framework_Migration_Guide.md)；
+- [Framework Maintenance and Release Guide](Framework_Maintenance_and_Release_Guide.md) 与 [Framework Migration Guide](Framework_Migration_Guide.md)；
+- [Project Template Guide](Project_Template_Guide.md) 与 [Project Initialization Guide](Project_Initialization_Guide.md)；
 - 只按当前任务需要读取受影响的 Validator、Skill、Checklist 和 CI 文档。
 
-## 9. 一次性 Repository Architecture Migration
+## 9. Repository Architecture Migration 历史记录
 
-维护 Repository Architecture Transition 时，Framework Maintainer 可使用 [Repository Architecture Migration Master Plan](Repository_Architecture_Migration_Master_Plan.md) 了解 human-facing roadmap，使用 [Repository Architecture Migration AI Runbook](Repository_Architecture_Migration_AI_Runbook.md) 了解 migration-only 执行路由。
+Repository Architecture Migration 已关闭。[Repository Architecture Migration Master Plan](Repository_Architecture_Migration_Master_Plan.md) 是 closed historical engineering record，[Repository Architecture Migration AI Runbook](Repository_Architecture_Migration_AI_Runbook.md) 已 retired。
 
-这两个文档都不是 Standalone Project Runtime Contract，也不是普通 Project 工作的默认阅读路径。
+两者只在显式历史 architecture / provenance review 时按需读取，不是 Standalone Project Runtime Contract，也不是 normal Framework maintenance 或普通 Project 工作的默认阅读路径。

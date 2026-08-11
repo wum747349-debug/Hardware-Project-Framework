@@ -11,8 +11,8 @@
 3. 结构、初始化或模板任务按需读取 `docs/Project_Structure_Standard.md`、`docs/08_Project_Workflow.md`、`docs/Project_Template_Guide.md` 和模板。
 4. 具体默认、按需与禁止读取范围只以 `docs/AI_Context_Guide.md` 为准；不默认读取所有 Project、Skill、checklist、datasheet 或历史记录。
 5. Legacy Project 目录只在迁移核对确有需要时读取最小结构或事实；不得把其中的器件、网络、规则值、板框、板厂参数或阶段结果提取为 Framework 默认值。
-6. 普通 Framework maintenance 不默认读取 Repository Architecture Migration Master Plan 或 AI Runbook。
-7. Repository Architecture Migration task 读取 `docs/Repository_Architecture_Migration_AI_Runbook.md`；只有整体路线、Phase、RC、Cutover、Final 或计划修订任务才按需读取 Master Plan。
+6. Normal Framework maintenance、Semantic Versioning、RC 或 Release 任务读取 `docs/Framework_Maintenance_and_Release_Guide.md`；Project Framework binding adoption 读取 `docs/Framework_Migration_Guide.md`。Breaking Framework release + Project adoption 同时读取两者。
+7. Repository Architecture Migration 已关闭。普通工作不读取 Historical Master Plan 或 retired AI Runbook；只有用户显式要求历史 architecture / provenance review 时才按需读取。未来 Authority Cutover 使用 `docs/Framework_Migration_Guide.md`，不使用 retired Runbook。
 
 ## 文档语言与可读性
 

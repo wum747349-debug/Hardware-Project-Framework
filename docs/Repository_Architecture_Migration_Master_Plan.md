@@ -1,15 +1,19 @@
 # Repository Architecture Migration Master Plan
 
-> Document Status: Active Migration Roadmap
-> Audience: Human-facing Repository Architecture Migration Roadmap
+> Document Status: CLOSED — Historical Engineering Record
+> Repository Architecture Migration: CLOSED
+> Framework v1.0.0: PUBLISHED
+> Audience: Historical Repository Architecture Migration record
 > Runtime Contract: No
-> Lifecycle: Becomes a Historical Engineering Record after Framework v1 closeout
+> Current-state authority: No
+
+Repository Architecture Migration 已关闭。本文件保留历史 provenance、当时的 Phase、RC1 binding、assessment 与执行路线，不再作为 Current Phase authority、Next transaction authority、current Project status database 或 current release roadmap。Normal Framework maintenance / SemVer / RC / Release 使用 [Framework Maintenance and Release Guide](Framework_Maintenance_and_Release_Guide.md)；Project-side Framework adoption 使用 [Framework Migration Guide](Framework_Migration_Guide.md)。除本段 lifecycle clarification 与必要的现状纠正外，下文按历史工程记录保留，不机械替换旧 Repository identity。
 
 ## 1. Purpose and boundary
 
-本计划用于把 Legacy Monorepo 收敛为一个 Framework Repository 与多个 Standalone Project Repository。核心不是移动目录，而是分离方法与项目事实，让每个真实 Project 只有一个活动权威源，并以可恢复、可核对的方式完成发布和 Cutover。
+本计划记录 Legacy Monorepo 如何收敛为一个 Framework Repository 与多个 Standalone Project Repository。核心不是移动目录，而是分离方法与项目事实，让每个真实 Project 只有一个活动权威源，并以可恢复、可核对的方式完成发布和 Cutover。
 
-本计划是给用户阅读的 migration / release plan，主要维护当前 Phase、真实状态、路线理由、下一项主任务、真正风险边界与 Human Approval，以及 Framework Release、Project Binding 和 Final v1 的总体策略。AI/Codex 的 read-only assessment、transaction steps、validation sequence、STOP conditions 与 execution report 由 AI Runbook 维护，不在本计划重复展开。
+本计划曾作为 human-facing migration / release plan，记录当时的 Phase、状态、路线理由、风险边界与 Human Approval，以及 Framework Release、Project Binding 和 Final v1 策略。相应 AI execution model 曾由 AI Runbook 维护；该 Runbook 现已 retired。
 
 一次性 Migration Planning 与正常 Runtime Contract 相互独立：
 
@@ -27,9 +31,9 @@ Validator → Fixture
 
 本计划不复制 binding schema、八阶段细节、Skill 或 Validator 实现；不进入 Project Template，不定义 Project Hardware Stage，也不成为 Project Facts 的权威源。正式 Contract 仍以 `PROJECT_RULES.md`、`Project_Structure_Standard.md`、`08_Project_Workflow.md` 与 `AI_Context_Guide.md` 为准。
 
-## 2. Current and target architecture
+## 2. Closed target architecture
 
-当前 GitHub Repository 已重命名为 `wum747349-debug/Hardware-Project-Framework`，Repository Architecture Transition 尚待 Final Candidate Validation 与 Final publication 完成。旧 Repository identity 继续作为历史 provenance 和既有 immutable binding 保留。
+GitHub Repository 已重命名为 `wum747349-debug/Hardware-Project-Framework`，Repository Architecture Migration 已关闭，Framework v1.0.0 已发布。旧 Repository identity 继续作为历史 provenance 和既有 immutable binding 保留。
 
 ```text
 Current Framework-era / transition-closeout state:
@@ -65,7 +69,7 @@ Project 1 / 2 / 3 remain pinned to an immutable release
 
 这些里程碑不再沿用旧 Phase 0～8 作为未来主线。Git HEAD、Project binding 与 Hardware Stage 继续由 Git、Project `FRAMEWORK.md` 和根 `README.md` 维护。
 
-### Current Migration Status
+### Historical closeout status
 
 - Phase 1 — Pilot Stabilization：`CLOSED — Human Review Approved`；
 - Phase 2 — Clean Bootstrap & RC Readiness：`CLOSED — RC1 Published / Human Review Approved`；
@@ -83,13 +87,17 @@ Project 1 / 2 / 3 remain pinned to an immutable release
 - Legacy Project 1：`Frozen Migration Source`；
 - Framework Closeout Transaction：`COMPLETE`；
 - Repository Rename：`COMPLETE`；
-- Next transaction：`Final Candidate Validation`。
+- Repository Architecture Migration：`CLOSED`；
+- Framework v1.0.0：`PUBLISHED`；
+- Next transaction：`NONE — historical record only`。
 
 以上只保留 roadmap orientation，不作为动态 Project 状态数据库。执行任何迁移时，必须从真实 GitHub 默认分支、Project 根 `README.md`、`FRAMEWORK.md` 与适用 authority marker 重新核对 HEAD、Stage、initialization、binding 和 authority；不得依赖本节保存易变的 Project HEAD 或详细 lifecycle wording。Framework `main` 的后续变化不构成任何 Project binding change。
 
 Migration 的 routine validation、CI、diff inspection、technical review 与 evidence collection 默认自动执行并合并报告。真正风险边界是 Framework Contract Migration、Authority Cutover、Stage / Gate 状态变化、release publication、repository identity transition 与 destructive change；每项只保留其必要的一次 Human Approval，不把自动核验改写为人工 Gate。当前任务已授权范围内的普通 commit 与 push 不另设 Human Gate。
 
-## 4. Four active phases
+## 4. Four historical phases
+
+以下 Phase 内容保留其执行当时的未来式、candidate 状态与决策语境，仅用于历史追溯，不得作为当前任务路由或当前 release 状态。
 
 ### Phase 1 — Pilot Stabilization
 
@@ -154,7 +162,7 @@ READY WITH MINOR NOTES
 
 Minor notes 只要求按下述 bounded scope 完成兼容 cleanup、Rename 后 identity verification 与 Final Candidate Validation，不改变 Runtime / Structural Contract，也不增加新的 Gate、Approval 或 Phase。
 
-Framework Closeout Transaction 与 Repository Rename execution status：`COMPLETE`。Final Candidate Validation 与 Final v1 publication 尚未执行；下一项 transaction 是 Final Candidate Validation。
+Historical pre-publication snapshot：Framework Closeout Transaction 与 Repository Rename execution status 为 `COMPLETE`；当时 Final Candidate Validation 与 Final v1 publication 尚未执行，后续已完成并关闭。
 
 最终执行模型收敛为：
 
@@ -248,9 +256,9 @@ Repository Rename 是 Framework Repository identity transition，不只是 GitHu
 
 发布 `hardware-project-framework-v1.0.0` 不触发 bulk Project rebinding。Existing Project 仅在新 capability 确有需要、当前 binding 存在已知 Contract / Validator 问题、新 Stage 明确依赖新 Framework，或用户明确授权升级时，才执行 explicit Framework Contract Migration；否则继续使用原 immutable binding。
 
-## 5. Framework change management after the pilot
+## 5. Historical transition to long-term change management
 
-Project 2 pilot 已将长期 Framework change management 收敛为 `Compatible Framework Sync` 与 `Framework Contract Migration`。分类边界、执行流程与 Human Approval Policy 由 [Framework Migration Guide](Framework_Migration_Guide.md) 维护；本一次性 Master Plan 不重复定义或覆盖该长期治理。
+Project 2 pilot 曾帮助形成 Project-side 的 `Compatible Framework Sync` 与 `Framework Contract Migration`。当前 Framework Repository maintenance / SemVer / release publication 由 [Framework Maintenance and Release Guide](Framework_Maintenance_and_Release_Guide.md) 管理；Project-side adoption 与 Authority Cutover 由 [Framework Migration Guide](Framework_Migration_Guide.md) 管理。本一次性 Master Plan 不再定义或覆盖长期治理。
 
 Repository Architecture Transition 自身的 Authority Cutover、Repository Rename、Legacy deletion 与 RC / Final publication 仍按各自 Human Gate 执行。Transition closeout 后，本 Master Plan 成为 Historical Engineering Record，AI Runbook retire / archive；长期 Framework change management 不继承本计划的 Phase、Pilot 或 Closeout bureaucracy。该 lifecycle disposition 不要求为了物理 archive 再创建 post-Final approval 或 post-Final commit。Framework `main` 变化始终不等于 Project 自动变化。
 

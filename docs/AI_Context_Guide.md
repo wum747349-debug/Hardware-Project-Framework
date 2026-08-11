@@ -46,11 +46,14 @@ Project 不默认读取 Framework `main`，不默认读取其他 Project，也�
 | Template / Bootstrap | Structure、Workflow、Template Guide、Template、初始化 Skill/checklist/Validator | 所有真实 Project、全部 Skill |
 | Validator | 被检查的权威文档、Template、相关 Skill/checklist、现有 CI | Project 1/2/3 设计事实 |
 | 单一 Skill / Checklist | 对应权威文档和被修改文件 | 其他无关 Skill/checklist |
-| Legacy Migration | 迁移 Guide、目标 Project 最小事实与结构映射 | 其他 Project、无关历史输出 |
-| Repository Architecture Migration | `docs/Repository_Architecture_Migration_AI_Runbook.md`、相关 Contract、必要的目标 Project 最小事实 | 全部 Project、全部资料、Master Plan（除非任务涉及整体路线或计划修订） |
+| Normal Framework maintenance / Release | `docs/Framework_Maintenance_and_Release_Guide.md`、受影响 Framework 文件、Validator / CI | 历史 Migration Master Plan / retired Runbook、真实 Project facts |
+| Project Framework binding adoption | `docs/Framework_Migration_Guide.md`、目标 Project binding、最小 impact / compatibility evidence | 其他 Project、Framework `main` 的无关变化 |
+| Breaking Framework release + Project adoption | 上述两份 Guide，各自保持 publication 与 adoption 风险边界 | 历史 Migration 文档、无关 Project |
+| Authority Cutover | `docs/Framework_Migration_Guide.md`、目标 Project 最小事实与 authority evidence | retired Runbook、其他 Project、无关历史输出 |
+| Historical Repository Architecture review | Master Plan；只有核对旧 execution model / provenance 时读取 retired Runbook 或 Baseline | 全部 Project、全部资料 |
 | README / 通用文档 | 被修改文档及其直接权威引用 | 全部 Project 硬件细节 |
 
-普通 Framework maintenance 不默认读取 Repository Architecture Migration Master Plan 或 AI Runbook。只有核对永久 Baseline 恢复点时读取 `docs/Repository_Architecture_Migration_Baseline.md`。Legacy Project 只在兼容或迁移核对确有必要时读取最小结构信息；不得把其器件、网络、规则值、板框、板厂参数或阶段结果变成 Framework 默认值。
+Repository Architecture Migration 已关闭。普通 Framework maintenance 与 Project adoption 不默认读取 Historical Master Plan、retired AI Runbook 或 Baseline；只有显式历史 architecture / provenance review 才按上表最小读取。Legacy Project 只在 Authority Cutover 或迁移核对确有必要时读取最小结构信息；不得把其器件、网络、规则值、板框、板厂参数或阶段结果变成 Framework 默认值。
 
 ## 4. Bootstrap、Stage 1 与 Gate 1.5
 

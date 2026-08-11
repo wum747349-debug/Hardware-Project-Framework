@@ -1,8 +1,12 @@
 # Framework Migration Guide
 
-> 适用范围：Standalone Project 在固定 Framework Release + immutable Commit 之间执行 Compatible Framework Sync 或 Framework Contract Migration，以及 Legacy Project 的 Authority Cutover
+> 职责：Project-side adoption of an immutable Framework Release，以及低频 Authority Cutover exception procedure
+>
+> 不负责：Framework Repository 自身的 maintenance、Semantic Versioning、RC 或 Release publication
 
-本指南维护长期 Framework change-management 操作与 Human Approval Policy。Binding、Structure Version 与 Authority Contract 以 [Project Structure Standard](Project_Structure_Standard.md) 为准；Stage、Gate 与回退影响以 [Workflow](08_Project_Workflow.md) 为准。一次性 Repository Architecture Transition 的 Phase、Pilot、RC、Cutover 排期与 Closeout 不属于本指南定义的 Runtime Contract。
+Framework 维护与发布读取 [Framework Maintenance and Release Guide](Framework_Maintenance_and_Release_Guide.md)。若 breaking Framework release 需要由既有 Project 采用，应同时读取两份 Guide：Release Guide 负责“Framework publishes a version”，本 Guide 负责“Project decides whether and how to adopt that version”。
+
+Binding、Structure Version 与 Authority Contract 以 [Project Structure Standard](Project_Structure_Standard.md) 为准；Stage、Gate 与回退影响以 [Workflow](08_Project_Workflow.md) 为准。一次性 Repository Architecture Migration 的 Phase、Pilot、RC、Closeout 历史不属于本指南的长期 Project adoption flow。
 
 ## 1. 共同边界：不自动升级
 
@@ -10,7 +14,7 @@ Project 继续使用 `FRAMEWORK.md` 绑定的 Release + Commit。Framework `main
 
 禁止只修改版本字段而不核对实际差异，也禁止让 Project 同时依赖两个 Framework 版本。`No separate Human Approval gate` 只表示明确的用户执行请求已经构成授权，不允许 AI 主动升级 Project。
 
-长期 migration 模型统一为：
+Project-side adoption 的共同模型为：
 
 ```text
 Assessment
@@ -109,7 +113,7 @@ Cutover 前 Legacy Monorepo Project Directory 是 Current Authority；Cutover �
 | Project Stage advancement | Human Approval |
 | Gate 1.5 Human PASS | Human Approval |
 | Authority Cutover | One Human Approval |
-| RC / Final publication | Human Approval |
+| RC / Final publication | 由 Release Guide 管理，不属于 Project adoption transaction |
 | Repository Rename | Human Approval |
 | Legacy deletion / destructive operation | Human Approval |
 | Ordinary commit / push inside authorized task | No separate gate |
@@ -117,19 +121,21 @@ Cutover 前 Legacy Monorepo Project Directory 是 Current Authority；Cutover �
 
 Routine validation、review、CI、diff inspection、evidence collection 与 report 不分别设置 Human Gate。明确用户任务授权始终是执行前提；上表取消的是重复的形式化 `STOP / APPROVE / STOP`，不是用户对 Project 状态变化的控制权。
 
-## 7. Dynamic status single-source guidance
+## 7. Project-side impact、status 与 recovery
 
-使用现有 Project Contract 管理动态状态，不建立新 schema：
+每次 adoption 必须记录 target Release + immutable Commit、old → new impact、受影响 Project 文件、validator / compatibility evidence 与 rollback / recovery plan。使用现有 Project Contract 管理动态状态，不建立新 schema：
 
 - 根 `README.md` 维护 `Current Project Stage`，并可在有用时提供简洁的当前 lifecycle summary；
 - `FRAMEWORK.md` 维护当前 Framework binding、`Initialization Status` 与 initialization provenance；
 - `requirements.md`、`block_diagram.md`、`design_notes.md`、`references.md` 只维护 Project Facts / Baseline，避免重复 Gate、Migration 或 Authority 动态状态。
 
-`requirements.md` 如需状态措辞，应偏向稳定 baseline，例如 `Baseline: Stage 1 Requirements Baseline`，而不是长期复制 `Gate 1.5 PASS`、`Initialized`、Authority state 或 Migration state。执行迁移时仍须读取真实 GitHub 与上述权威文件，不能把 migration guide 或 runbook 当作动态状态源。
+`requirements.md` 如需状态措辞，应偏向稳定 baseline，例如 `Baseline: Stage 1 Requirements Baseline`，而不是长期复制 `Gate 1.5 PASS`、`Initialized`、Authority state 或 Migration state。执行 adoption 或 Authority Cutover 时仍须读取真实 GitHub 与上述权威文件，不能把本 Guide、历史 Master Plan 或 retired Runbook 当作动态状态源。失败时保持或恢复一致 binding；不得留下文件来自新版本但 `FRAMEWORK.md` 仍指向旧版本的部分切换。
 
 ## 8. 禁止事项
 
 - 不从 Framework `main` 直接覆盖 Project；
+- 不把新 RC、Final Release 或 Framework `main` commit 当作自动 rebinding 授权；
+- 不用 Authority Cutover 代替普通 Compatible Framework Sync 或 Framework Contract Migration；
 - 不用假 Release、branch 名或短 SHA 替代 binding；
 - 不重写 Framework Legacy history，不移动 `framework-pre-v1-migration`；
 - 不为结构外观改写或伪造 EDA、ERC、DRC、Manufacturing 或 Test；

@@ -1,5 +1,8 @@
 # Repository Architecture Migration Baseline
 
+> Document Status: Historical Baseline / Provenance Record
+> Current-state authority: No
+
 ## 1. Purpose
 
 本文记录 `Hardware-Practice-Projects` 从 Legacy Monorepo 向 Hardware Project Framework + Standalone Project Repositories 架构整改前的 Git Baseline。
@@ -8,7 +11,7 @@
 
 ### Historical Terminology Note
 
-本文保留原始 Baseline Freeze 当时使用的 migration terminology。文中的 `Phase 0` 与旧 Phase 1～8 migration model 仅是历史术语；当前活动路线以 [Repository Architecture Migration Master Plan](Repository_Architecture_Migration_Master_Plan.md) 为准。
+本文保留原始 Baseline Freeze 当时使用的 migration terminology。文中的 `Phase 0` 与旧 Phase 1～8 migration model 仅是历史术语；Repository Architecture Migration 已关闭，本文件与 [Repository Architecture Migration Master Plan](Repository_Architecture_Migration_Master_Plan.md) 都不是 current-state authority。
 
 ## 2. Repository Baseline
 

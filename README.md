@@ -1,12 +1,12 @@
 # Hardware Project Framework
 
-> 仓库状态：Repository Architecture Transition — Framework Closeout Transaction Complete
+> 仓库状态：Normal Framework Maintenance
 > 当前仓库：`wum747349-debug/Hardware-Project-Framework`
-> Framework 发布状态：RC1 已发布；Final 尚未发布
+> Framework 发布状态：`hardware-project-framework-v1.0.0` 已发布
 
-本仓库正在从 Legacy Monorepo 收敛为 Hardware Project Framework。Framework 定义方法和契约，不作为真实 Project 的活动事实源。Project 1 / 2 / 3 均已完成 Authority Cutover，各自 Standalone Repository 是 Only Active Project Authority；Framework current Git tree 已移除三个 Legacy real-project copies，只保留轻量 [history marker](projects/README.md)。
+本仓库是处于 normal maintenance lifecycle 的 Hardware Project Framework。Framework 定义方法和契约，不作为真实 Project 的活动事实源。Repository Architecture Migration 已关闭；Project 1 / 2 / 3 均已完成 Authority Cutover，各自 Standalone Repository 是 Only Active Project Authority。Framework current Git tree 只保留轻量 [history marker](projects/README.md)，迁移细节作为历史工程记录保存。
 
-Framework v0.9 已建立 Standalone Project Template、初始化 Guide/Skill/Checklist、Project Validator、Framework Validator 与轻量 CI；Framework v1 RC1 现已发布。Phase 4 Framework Closeout Transaction 与 Repository Rename 已完成。RC1 仍不是 Framework v1 Final；下一项 transaction 是 Final Candidate Validation，Final publication 尚未执行。
+Framework v1.0.0 已发布。今后的 Framework Repository maintenance、Semantic Versioning、optional risk-driven RC 与 Release publication 由 [Framework Maintenance and Release Guide](docs/Framework_Maintenance_and_Release_Guide.md) 管理；Existing Project 是否以及如何采用 immutable Framework Release 由 [Framework Migration Guide](docs/Framework_Migration_Guide.md) 管理。Framework `main` 或新 Release 均不自动 rebind Standalone Project。
 
 ## 普通用户入口
 
@@ -39,28 +39,29 @@ Project Bootstrap 位于八阶段之前，不是 Stage 0 或 Stage 1。Stage 1 �
 
 ## Framework 工作入口
 
+- [Framework 用户指南](docs/Framework_User_Guide.md)
+- [Framework Maintenance and Release Guide](docs/Framework_Maintenance_and_Release_Guide.md)
+- [Framework Migration Guide](docs/Framework_Migration_Guide.md)
 - [Framework 通用规则](PROJECT_RULES.md)
 - [Project 结构与绑定契约](docs/Project_Structure_Standard.md)
 - [Bootstrap、Gate 1.5 与八阶段 Workflow](docs/08_Project_Workflow.md)
 - [AI 最小上下文指南](docs/AI_Context_Guide.md)
 - [Template 使用与同步规则](docs/Project_Template_Guide.md)
 - [Standalone Project 初始化指南](docs/Project_Initialization_Guide.md)
-- [Framework Migration Guide](docs/Framework_Migration_Guide.md)
 - [Framework Changelog](CHANGELOG.md)
-- [Migration Baseline 历史记录](docs/Repository_Architecture_Migration_Baseline.md)
 - [Standalone Project Template](templates/hardware_project_template/README.md)
 - [Synthetic Reference Project](examples/reference_project_v1/README.md)
 - [Project Initialization Skill](skills/hardware-project-initialization/SKILL.md)
 - [Gate 1.5 Checklist](checklists/project_initialization_checklist.md)
 - [Bring-up 与硬件测试 Checklist](checklists/bringup_test_checklist.md)
 
-## Repository Architecture Transition
+## Repository Architecture Migration 历史记录
 
-- Human roadmap：[Repository Architecture Migration Master Plan](docs/Repository_Architecture_Migration_Master_Plan.md)
-- AI migration execution：[Repository Architecture Migration AI Runbook](docs/Repository_Architecture_Migration_AI_Runbook.md)
-- Runtime Contract：[PROJECT_RULES.md](PROJECT_RULES.md)、[Project Structure Standard](docs/Project_Structure_Standard.md)、[Project Workflow](docs/08_Project_Workflow.md)、[AI Context Guide](docs/AI_Context_Guide.md)
+- [Migration Master Plan — CLOSED / Historical](docs/Repository_Architecture_Migration_Master_Plan.md)
+- [Migration AI Runbook — RETIRED](docs/Repository_Architecture_Migration_AI_Runbook.md)
+- [Migration Baseline — Historical provenance](docs/Repository_Architecture_Migration_Baseline.md)
 
-Master Plan 是 human-facing 一次性迁移路线；AI Runbook 是 migration-only AI operational guide。两者都不属于 Standalone Project Runtime Contract，不复制到 Project Template 或真实 Project，也不改变八阶段 Workflow。
+这些文件只用于历史工程追溯，不是普通用户或 AI 的主要工作入口，不维护 Current Phase、Next transaction、current Project status 或 current release roadmap。它们都不属于 Standalone Project Runtime Contract，不复制到 Project Template 或真实 Project，也不改变八阶段 Workflow。
 
 ## Validation
 
@@ -83,9 +84,11 @@ python scripts/validate_project_repository.py --gate-1-5
 - Baseline Tag：`framework-pre-v1-migration`
 - Baseline Commit：`3e9d4801bdd5768f8edc0e14e8f01bf278721e54`
 - 当前 GitHub Repository 已重命名为 `wum747349-debug/Hardware-Project-Framework`。
-- Phase 3 已 `CLOSED`；Project 1 / 2 / 3 Standalone Repository 均为各自 Only Active Project Authority。
+- Repository Architecture Migration：`CLOSED — historical only`。
+- Framework operating mode：`NORMAL MAINTENANCE`。
+- Framework v1.0.0：`PUBLISHED`，tag 指向 `b526ad12680a69737ca4eb36021336bc4dfe307e`。
+- Project 1 / 2 / 3 Standalone Repository 均为各自 Only Active Project Authority。
 - Framework current Git tree 不再保存三个真实 Legacy Project copy；历史可通过 Git history、baseline tag 与 migration records 追溯。
 - `examples/reference_project_v1/` 已建立为 synthetic、lightweight、validator-valid fixture，不是第四个真实 Project。
-- Phase 4 Framework Closeout Transaction 与 Repository Rename 已完成；下一项 transaction 是 Final Candidate Validation。
-- Framework v1 RC1 已发布；Final 尚未发布。
-- `development-v0.9` 只用于 Framework 自测或明确预发布评估，不是正式 Release。
+- Framework v0.9 是 v1.0.0-rc1 之前的 historical Executable Candidate，不是当前 Release。
+- Framework `main` 的普通 commit 不自动要求 Release，也不自动修改任何 Project binding。
