@@ -32,16 +32,17 @@ Validator → Fixture
 当前 GitHub Repository 已重命名为 `wum747349-debug/Hardware-Project-Framework`，Repository Architecture Transition 尚待 Final Candidate Validation 与 Final publication 完成。旧 Repository identity 继续作为历史 provenance 和既有 immutable binding 保留。
 
 ```text
-Current: Legacy Monorepo
-├─ Framework candidate content
-└─ projects/ (Legacy Migration Sources)
-
-Target:
-Framework Repository
-└─ Contract / Template / Skill / Checklist / Validator / Fixture
+Current Framework-era / transition-closeout state:
+Hardware-Project-Framework
+├─ Contract / Template / Skill / Checklist / Validator
+├─ examples/reference_project_v1/ (synthetic documentation / regression fixture)
+└─ projects/README.md (lightweight historical / migration history marker only)
 
 Standalone Project Repositories
-└─ each Project's facts / EDA / evidence / history
+└─ each Project's facts / EDA / evidence / history / active authority
+
+Historical provenance
+└─ Legacy Monorepo commits, baseline tag and migration records remain traceable in Git history
 ```
 
 Framework 只定义方法。正式 Project 锁定固定 Release + immutable 40 位 Commit SHA，不自动跟随 `main`。每个 Project 的 Cutover 独立批准；Cutover 前 Legacy Directory 是 Current Authority，之后 Standalone Repository 是 Only Active Project Authority，Legacy 只作 Frozen Migration Source，禁止长期双写。
