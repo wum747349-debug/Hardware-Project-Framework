@@ -29,7 +29,7 @@ Validator → Fixture
 
 ## 2. Current and target architecture
 
-当前 GitHub Repository 仍是 `wum747349-debug/Hardware-Practice-Projects`，处于 Repository Architecture Transition。目标名称是 `Hardware-Project-Framework`，但 GitHub 实际 Rename 前，文档、链接和 binding 必须继续使用真实身份。
+当前 GitHub Repository 已重命名为 `wum747349-debug/Hardware-Project-Framework`，Repository Architecture Transition 尚待 Final Candidate Validation 与 Final publication 完成。旧 Repository identity 继续作为历史 provenance 和既有 immutable binding 保留。
 
 ```text
 Current: Legacy Monorepo
@@ -81,8 +81,8 @@ Project 1 / 2 / 3 remain pinned to an immutable release
 - Project 1 Standalone：`Only Active Project Authority`；
 - Legacy Project 1：`Frozen Migration Source`；
 - Framework Closeout Transaction：`COMPLETE`；
-- Next risk boundary：`Repository Rename Approval`；
-- Repository Rename：`NOT AUTHORIZED / NOT EXECUTED`。
+- Repository Rename：`COMPLETE`；
+- Next transaction：`Final Candidate Validation`。
 
 以上只保留 roadmap orientation，不作为动态 Project 状态数据库。执行任何迁移时，必须从真实 GitHub 默认分支、Project 根 `README.md`、`FRAMEWORK.md` 与适用 authority marker 重新核对 HEAD、Stage、initialization、binding 和 authority；不得依赖本节保存易变的 Project HEAD 或详细 lifecycle wording。Framework `main` 的后续变化不构成任何 Project binding change。
 
@@ -153,7 +153,7 @@ READY WITH MINOR NOTES
 
 Minor notes 只要求按下述 bounded scope 完成兼容 cleanup、Rename 后 identity verification 与 Final Candidate Validation，不改变 Runtime / Structural Contract，也不增加新的 Gate、Approval 或 Phase。
 
-Framework Closeout Transaction execution status：`COMPLETE`。Repository Rename、Final Candidate Validation 与 Final v1 publication 尚未执行；下一风险边界是 Repository Rename Approval。
+Framework Closeout Transaction 与 Repository Rename execution status：`COMPLETE`。Final Candidate Validation 与 Final v1 publication 尚未执行；下一项 transaction 是 Final Candidate Validation。
 
 最终执行模型收敛为：
 

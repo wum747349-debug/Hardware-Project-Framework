@@ -2,7 +2,7 @@
 
 ## 1. 仓库身份与当前状态
 
-本仓库当前仍是 `wum747349-debug/Hardware-Practice-Projects`，处于 Legacy Monorepo 向 Framework Repository 过渡期间。目标名称是 `Hardware-Project-Framework`，但在后续仓库身份切换完成前，文档、脚本和绑定不得假装 GitHub Repository 已经改名。
+本仓库当前身份是 `wum747349-debug/Hardware-Project-Framework`；Repository Rename 已完成，但 Framework v1 Final 尚未发布。旧 Repository identity 仍可作为历史 provenance 或既有 Project 的 immutable binding 保留，不因 Rename 自动改写。
 
 Framework 定义硬件项目的方法和契约，不作为真实 Project 的活动事实源。当前 `projects/` 中的内容属于 Legacy Migration Source；在各项目完成独立仓库验证和 Authority Cutover 前不得删除，也不得被提取为 Framework 默认器件、网络、规则值、板框或制造参数。
 
@@ -65,6 +65,16 @@ Framework Era
 - 发布顺序为 Baseline → Release Candidate → Final。RC 后若 Required files、`FRAMEWORK.md` schema、Project `AGENTS.md`、Gate 1.5、Runtime Rules、目录职责、Structure Version 或 Validator required structure 实质变化，必须发布新的 RC，不得继续声称旧 RC 已验证。
 
 版本语义不得混淆：Framework Release 表示方法发布；Project Structure Version 表示项目仓库结构契约；Hardware Revision 表示硬件设计版本；Git tag/commit 表示源码身份。
+
+后续 Stage 反馈必须按影响范围处理，不自动重新打开旧 RC、Framework Migration 或 Authority Cutover：
+
+- Project-specific issue 留在对应 Project 处理；
+- Documentation、Skill 或 Checklist usability issue 进入 normal Framework maintenance；
+- 不改变 Contract 的 Validator bug 作为 compatible Framework fix；
+- Runtime / Structural Contract 的实质变化进入新的 Framework Contract Migration 和适当的后续版本；
+- Final v1 发布后发现问题不回到旧的 `v1.0.0-rc2` 路线，而按正常版本演进处理：`v1.0.x` 用于 compatible fixes，`v1.x.0` 用于 backward-compatible improvements，`v2.0.0` 用于 breaking Runtime / Structural Contract change。
+
+Final v1 只表示发布候选已满足既定 Contract 与验证要求，不表示未来所有 Stage 2–8 engineering scenario 已被穷尽验证；真实 Project 在 Final publication 后继续提供反馈。
 
 ## 7. Authority Cutover
 

@@ -293,7 +293,7 @@ def prepare_stage_1_fixture(target: Path, framework_commit: str) -> None:
     replacements = {
         "<PROJECT_NAME>": "Framework Validator Fixture",
         "<HARDWARE_REVISION>": "TEST-REV-A",
-        "<FRAMEWORK_REPOSITORY>": "wum747349-debug/Hardware-Practice-Projects",
+        "<FRAMEWORK_REPOSITORY>": "wum747349-debug/Hardware-Project-Framework",
         "<FRAMEWORK_RELEASE>": "development-v0.9",
         "<FRAMEWORK_COMMIT>": framework_commit,
         "<PROJECT_STRUCTURE_VERSION>": "1",

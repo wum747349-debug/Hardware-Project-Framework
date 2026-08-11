@@ -1,6 +1,6 @@
 # Framework Binding
 
-Framework Repository: wum747349-debug/Hardware-Practice-Projects
+Framework Repository: wum747349-debug/Hardware-Project-Framework
 Framework Release: development-v0.9
 Framework Commit: 667587904e975500c63ffcda84586f8a202e9a42
 Project Structure Version: 1

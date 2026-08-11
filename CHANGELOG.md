@@ -4,7 +4,7 @@
 
 ## Unreleased
 
-Status: Phase 4 Framework Closeout Transaction complete；Repository Rename 与 Final publication 尚未执行，不属于 RC1 snapshot。
+Status: Phase 4 Framework Closeout Transaction 与 Repository Rename complete；Final publication 尚未执行，不属于 RC1 snapshot。
 
 ### Phase 4 Framework Closeout
 
@@ -16,7 +16,7 @@ Status: Phase 4 Framework Closeout Transaction complete；Repository Rename 与 
 - 在已完成 Authority Cutover 后，以普通 Git deletion 从 Framework current tree 移除三个 Legacy real-project copies，并保留轻量 history marker 与完整 Git history。
 - 将 Framework Validator `--mode final` 与 CI 对齐到 Reference Project validation。
 - Runtime Contract：UNCHANGED；Structural Contract：UNCHANGED；RC2 required：NO。
-- Repository Rename：NOT EXECUTED；Final v1 publication：NOT EXECUTED。
+- Repository Rename：COMPLETE；Final v1 publication：NOT EXECUTED。
 
 ## v1.0.0-rc1
 

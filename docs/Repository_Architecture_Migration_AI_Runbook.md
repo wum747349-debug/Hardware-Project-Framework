@@ -47,7 +47,9 @@ Legacy Project 1：`Frozen Migration Source`。
 
 Framework Closeout Transaction：`COMPLETE`。
 
-Next risk boundary：`Repository Rename Approval`。
+Repository Rename：`COMPLETE`。
+
+Next transaction：`Final Candidate Validation`。
 
 本节只提供最小 migration orientation。Runbook 是 `AI decision router + transaction executor`，不是第二份动态 Migration Status database。执行任务前必须从真实 GitHub 默认分支、目标 Project 根 `README.md`、`FRAMEWORK.md` 与适用 authority marker 重新核对 HEAD、Stage、initialization、binding 和 authority；Project 3 的实时值不在本 Runbook 重复维护。
 
@@ -112,7 +114,7 @@ Formal Migration Assessment 必须一次覆盖 Current Project state、当前与
 
 ## Phase 4 Closeout Execution
 
-Master Plan 的 read-only Assessment 为 `READY WITH MINOR NOTES`；Framework Closeout Transaction execution result 为 `COMPLETE`。Repository Rename 与 Final publication 尚未执行。Phase 4 按以下单一路径继续：
+Master Plan 的 read-only Assessment 为 `READY WITH MINOR NOTES`；Framework Closeout Transaction 与 Repository Rename execution result 均为 `COMPLETE`。Final publication 尚未执行。Phase 4 按以下单一路径继续：
 
 ```text
 Framework Closeout Transaction
@@ -204,5 +206,7 @@ Bootstrap Authorization 不是 Hardware Gate，也不是 Stage 0。用户若明�
 Cutover 准备完成不等于 Cutover 已执行。只有用户一次批准且每个 Project 的迁移完整性、Facts、真实 Hardware Stage、EDA/Evidence/References/History、固定 binding、Validator 与人工核对均满足时，才能将 Standalone 标记为 Only Active Project Authority；随后 Legacy 只能是 Frozen Migration Source，禁止双写。
 
 Framework v1 closeout 后，本 Runbook 应 retire / archive；Master Plan 成为 Historical Engineering Record。该 lifecycle disposition 不要求为了物理 archive 再建立 post-Final approval 或 post-Final commit。长期正常 Framework change management 只使用 Compatible Framework Sync 或 Framework Contract Migration，不继承本次 Repository Transition 的 Phase、Pilot 或 Closeout bureaucracy。
+
+Final publication 不表示未来所有 Stage 2–8 engineering scenario 已被穷尽验证。后续反馈按影响范围进入对应 Project、normal Framework maintenance、compatible Validator fix 或新的 Framework Contract Migration；不得因此回到旧 RC、重开已关闭的 Authority Cutover，或把普通 Skill / Checklist usability issue 升级为 Contract Migration。Final 后的修复按正常版本演进进入 `v1.0.x`、`v1.x.0` 或 breaking change 所需的 `v2.0.0`。
 
 Stop condition：若权威 Project Facts、Framework binding、Migration Phase 意图或 Human Gate 状态与 Runbook 假设冲突，或 classification 不明确，停止相应变更并报告差异，不自行推进 Stage、Cutover、Rename 或 Release。
