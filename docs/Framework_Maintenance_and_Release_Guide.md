@@ -13,13 +13,14 @@ Framework `main` 的普通 commit 不自动要求创建 Release；新 RC、Final
 ```text
 Framework Maintenance
         ↓
-Change Classification
+Validate + commit + push
         ↓
-SemVer Decision
+Unreleased
         ↓
-RC needed?
-   ├─ NO  → Final Candidate
-   └─ YES → rc1 / rc2 / ...
+optional Pinned Project Evaluation
+        ↓
+Release Assessment
+  (Patch / Minor / Major? target version? RC required?)
         ↓
 Candidate Validation
         ↓
@@ -34,7 +35,9 @@ DONE
 
 Routine validation、CI、diff inspection、technical review、documentation review、evidence collection 与普通授权范围内的 commit / push 都不建立额外 Human Gate。Release lifecycle 只有一次 Human Publish Approval；validation 输出仅为 `READY` 或 `NOT READY`。
 
-## 2. Change Classification 与 Semantic Versioning
+## 2. Release Assessment
+
+Release Assessment 在一次评估中回答：`Patch / Minor / Major?`、`target version?`、`RC required?`。它合并高层表达，不删除 Change Classification、Semantic Versioning 或 risk assessment 的安全检查。
 
 先按实际 Contract 影响分类，再决定版本号，不能仅凭文件类型判断：
 

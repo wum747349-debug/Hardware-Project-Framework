@@ -58,31 +58,31 @@ Initialization Status: <INITIALIZATION_STATUS>
 | 字段 | 含义 |
 | --- | --- |
 | Framework Repository | 提供该绑定快照的 Git repository 身份，不是本地绝对路径 |
-| Framework Release | 人类可读的固定 Framework release/tag，例如 `hardware-project-framework-v1.0.0` |
-| Framework Commit | 与该 Release 对应、不可歧义的 40 位 immutable Git SHA |
+| Framework Release | 人类可读的固定 Framework identity：已发布 release/tag，例如 `hardware-project-framework-v1.0.0`；或 prerelease evaluation 使用的 `development-vX.Y.Z` |
+| Framework Commit | 当前 binding 的实际不可歧义身份，必须是 40 位 immutable Git SHA；Development Binding 不要求存在同名 published tag |
 | Project Structure Version | Project Repository 使用的结构契约版本；当前为 `1` |
 | Repository Model | 固定为 `Standalone Project` |
 | Initialization Framework Release | 首次 Bootstrap 使用的 Framework Release，用于来源追溯 |
-| Initialization Status | `Bootstrap Draft`、`Gate 1.5 Pending` 或 `Initialized`；`Development Bootstrap` 仅用于 development-v0.9 绑定的 Bootstrap 状态 |
+| Initialization Status | `Bootstrap Draft`、`Gate 1.5 Pending` 或 `Initialized`；`Development Bootstrap` 仅用于 Pinned Development Binding 的 Bootstrap 状态 |
 
 Project 必须锁定 Release + Commit，不默认跟随 Framework `main`。`Framework Release`、`Framework Commit` 和 `Initialization Framework Release` 不能用 branch 名代替。
 
-### 3.2 正式与 Development Binding
+### 3.2 正式与 Pinned Development Binding
 
 正式 Project Bootstrap 必须从已发布的固定 Framework Release 获取 Template，`Framework Commit` 必须解析到该 Release 的实际 commit。
 
-在 Framework 尚未发布 RC/Final 时，只允许 Framework 自测或明确预发布评估使用：
+Framework 自测或明确的 prerelease Project evaluation 可以使用长期有效的 Pinned Development Binding：
 
 ```text
-Framework Release: development-v0.9
-Framework Commit: <本次测试实际使用的完整 immutable commit>
-Initialization Framework Release: development-v0.9
+Framework Release: development-v1.1.0
+Framework Commit: <本次 evaluation 实际使用的完整 immutable commit>
+Initialization Framework Release: development-v1.1.0
 Initialization Status: Development Bootstrap
 ```
 
-Development Binding 不是正式 Release，不得写成已发布的 `hardware-project-framework-v1.0.0-rc1` 或 Final。
+`development-vX.Y.Z` 是目标版本的人类可读 development identity，不是 published release，也不声称存在同名 tag；`Framework Commit` 才是该 snapshot 的实际 immutable identity。`development-v0.9` 继续合法，用于历史 Bootstrap / provenance compatibility。不得使用 `latest`、`HEAD`、`main`、moving branch 或 short SHA，也不得增加第二套 evaluation / previous / stable binding 字段；一个 Project 始终只有一个 active Layer-0 binding。
 
-`Development Bootstrap` 不是 development-v0.9 绑定的永久状态。Project 进入 Stage 1 后，`Initialization Status` 按正常 Workflow 转为 `Gate 1.5 Pending`；Gate 1.5 PASS 后可转为 `Initialized`。在此状态生命周期中，`Framework Release` 仍保持 `development-v0.9`，直到 Project 显式执行 binding migration。
+`Development Bootstrap` 不是 Pinned Development Binding 的永久状态。Project 进入 Stage 1 后，`Initialization Status` 按正常 Workflow 转为 `Gate 1.5 Pending`；Gate 1.5 PASS 后可转为 `Initialized`。状态变化不会自动改变 binding；Project 保持当前 `development-vX.Y.Z` + Commit，直到用户显式要求 repin 或采用 published Release。
 
 ## 4. Project `AGENTS.md` Contract
 

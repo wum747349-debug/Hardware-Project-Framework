@@ -327,6 +327,15 @@ def initialize_fixture(target: Path) -> None:
     )
 
 
+def set_fixture_binding(target: Path, release: str, commit: str) -> None:
+    binding = target / "FRAMEWORK.md"
+    text = binding.read_text(encoding="utf-8")
+    text = re.sub(r"^Framework Release: .*?$", f"Framework Release: {release}", text, flags=re.MULTILINE)
+    text = re.sub(r"^Framework Commit: .*?$", f"Framework Commit: {commit}", text, flags=re.MULTILINE)
+    text = re.sub(r"^Initialization Framework Release: .*?$", f"Initialization Framework Release: {release}", text, flags=re.MULTILINE)
+    binding.write_text(text, encoding="utf-8")
+
+
 def check_project_smoke_tests(validator: Validator) -> None:
     commit_result = subprocess.run(
         ["git", "rev-parse", "HEAD"],
@@ -373,6 +382,36 @@ def check_project_smoke_tests(validator: Validator) -> None:
         normal_result = run_fixture_validator(clean_project)
         normal_details = (normal_result.stdout + normal_result.stderr).strip()
         validator.check(normal_result.returncode == 0, "Clean Bootstrap Smoke", f"Initialized normal validation failed: {normal_details}")
+
+        valid_bindings = (
+            "development-v0.9",
+            "development-v1.1.0",
+            "development-v1.2.0",
+            "development-v2.0.0",
+            "hardware-project-framework-v1.1.0",
+            "hardware-project-framework-v1.1.0-rc1",
+        )
+        for release in valid_bindings:
+            binding_project = temporary_path / f"binding-valid-{release}"
+            shutil.copytree(clean_project, binding_project)
+            set_fixture_binding(binding_project, release, framework_commit)
+            result = run_fixture_validator(binding_project)
+            details = (result.stdout + result.stderr).strip()
+            validator.check(result.returncode == 0, "Framework Binding Regression", f"valid binding rejected: {release}: {details}")
+
+        invalid_bindings = (
+            ("main", framework_commit),
+            ("HEAD", framework_commit),
+            ("latest", framework_commit),
+            ("development-v1.1", framework_commit),
+            ("development-v1.1.0", framework_commit[:12]),
+        )
+        for index, (release, commit) in enumerate(invalid_bindings):
+            binding_project = temporary_path / f"binding-invalid-{index}"
+            shutil.copytree(clean_project, binding_project)
+            set_fixture_binding(binding_project, release, commit)
+            result = run_fixture_validator(binding_project)
+            validator.check(result.returncode != 0, "Framework Binding Regression", f"invalid binding accepted: {release} @ {commit}")
 
         stage_enabled_project = temporary_path / "stage-enabled-semantics"
         prepare_stage_1_fixture(stage_enabled_project, framework_commit)

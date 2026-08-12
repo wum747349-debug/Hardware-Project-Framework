@@ -47,7 +47,7 @@ Project 不默认读取 Framework `main`，不默认读取其他 Project，也�
 | Validator | 被检查的权威文档、Template、相关 Skill/checklist、现有 CI | Project 1/2/3 设计事实 |
 | 单一 Skill / Checklist | 对应权威文档和被修改文件 | 其他无关 Skill/checklist |
 | Normal Framework maintenance / Release | `docs/Framework_Maintenance_and_Release_Guide.md`、受影响 Framework 文件、Validator / CI | 历史 Migration Master Plan / retired Runbook、真实 Project facts |
-| Project Framework binding adoption | `docs/Framework_Migration_Guide.md`、目标 Project binding、最小 impact / compatibility evidence | 其他 Project、Framework `main` 的无关变化 |
+| Project Framework binding adoption / pinned evaluation | `docs/Framework_Migration_Guide.md`、目标 Project binding、目标 immutable SHA、最小 impact / compatibility evidence | 其他 Project、Framework `main` 的无关变化 |
 | Breaking Framework release + Project adoption | 上述两份 Guide，各自保持 publication 与 adoption 风险边界 | 历史 Migration 文档、无关 Project |
 | Authority Cutover | `docs/Framework_Migration_Guide.md`、目标 Project 最小事实与 authority evidence | retired Runbook、其他 Project、无关历史输出 |
 | Historical Repository Architecture review | Master Plan；只有核对旧 execution model / provenance 时读取 retired Runbook 或 Baseline | 全部 Project、全部资料 |

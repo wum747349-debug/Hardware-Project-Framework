@@ -22,13 +22,13 @@ Project Bootstrap 前先确认完成当前工作所需的工具角色；Framewor
 3. 从该 Release 快照取得 `templates/hardware_project_template/`，不要复制 Framework `main` 的漂移工作树。
 4. 将 Template 内容复制到一个新的空白 Project repository root。
 
-`development-v0.9` 只用于 Framework 自测或明确的 development binding，并绑定测试实际使用的 immutable commit；正常 Standalone Project Bootstrap 应选择实际已发布的固定 Release。不得把未发布的名称写成正式 Release，也不得把 Framework `main` 当作 Release。
+`development-vX.Y.Z` 只用于 Framework 自测或明确的 Pinned Framework Evaluation，并绑定 evaluation 实际使用的 immutable full commit；`development-v0.9` 继续用于历史 Bootstrap / provenance compatibility。正常 Standalone Project Bootstrap 应选择实际已发布的固定 Release。Development identity 不是 published Release；不得把 Framework `main` 当作 Release。
 
 ## 2. 填写 Project Identity 与 Binding
 
 1. 在根 `README.md` 替换 `<PROJECT_NAME>` 与 `<HARDWARE_REVISION>`，写入真实 Project Identity。
 2. 按 Structure Standard 的唯一 schema 填写 `FRAMEWORK.md`。
-3. 正式绑定填写固定 Release + 对应 Commit；开发自测填写 `development-v0.9` + 实际 immutable commit。
+3. 正式绑定填写固定 Release + 对应 Commit；开发自测或明确 prerelease evaluation 填写 `development-vX.Y.Z` + 实际 immutable full commit。
 4. 初始化期间使用 `Bootstrap Draft` 或 `Development Bootstrap`；进入 Stage 1 后可使用 `Gate 1.5 Pending`。
 5. 不使用本机绝对路径、branch 名、假 SHA 或其他 Project 的仓库身份。
 
