@@ -12,12 +12,11 @@ Status: Normal Framework Maintenance after published v1.0.0.
 - 将 development binding 推广为长期 Pinned Development Binding，新增轻量 Pinned Framework Evaluation、Same-SHA Formalization fast path，并把普通 Project adoption 压缩为 `Assess → Execute when authorized → Verify`；保持一个 active Layer-0 binding、既有 Human Approval 风险边界与 Authority Cutover 独立性。
 - Project Validator 接受 `development-v0.9` 与通用 `development-vX.Y.Z`，同时继续要求 40 位 immutable Framework Commit，并拒绝 moving branch、`HEAD` 与 short SHA。
 - 将 Framework release 高层流程收敛为 Release Assessment、Candidate Validation、ONE Human Publish Approval、Publication 与 Automatic Verification；RC 继续为 risk-driven optional prerelease。
-- Component Selection Skill 增加 procurement-aware、JLCPCB/LCSC-first candidate discovery：AI/Codex 在具备公开搜索能力时主动发现 marketplace candidates，并以 Manufacturer datasheet / official documentation 作为 technical qualification authority；默认形成 Primary / Alternate，并在 purchasing、ordering 或 PCBA BOM submission 前轻量复核 availability。
+- Component Selection Skill 增加 procurement-aware、JLCPCB/LCSC-first candidate discovery：AI/Codex 在具备公开搜索能力时主动发现 marketplace candidates，并以 Manufacturer datasheet / official documentation 作为 technical qualification authority；默认形成 Primary / Alternate，在 purchasing、ordering 或 PCBA BOM submission 前轻量复核 availability，并将默认输出收敛为 complexity-adaptive Candidate Table、Primary / Alternate Decision 与 Open Issues，其他比较、风险、datasheet 和后置外围输出仅在有助于决策、风险处理或可追溯性时生成。
 - 将长期 Framework maintenance / Semantic Versioning / optional RC / Release publication 职责提取到 `docs/Framework_Maintenance_and_Release_Guide.md`。
 - 将 `Framework_Migration_Guide.md` 收窄为 Project-side immutable Release adoption，并保留 Authority Cutover 低频 exception procedure。
 - 将 Repository Architecture Migration Master Plan 标记为 `CLOSED — Historical Engineering Record`，AI Runbook 标记为 `RETIRED`，并清理 README 与 AI routing 的 transition-era current-state wording。
 - Runtime Contract、Structural Contract、Project Structure Version、Project binding 与 Standalone Project：UNCHANGED。
-- 本次 procurement-aware Component Selection capability improvement：Runtime Contract：UNCHANGED；Structural Contract：UNCHANGED；Project Structure Version：UNCHANGED。
 
 ## v1.0.0
 

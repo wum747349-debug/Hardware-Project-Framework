@@ -145,32 +145,33 @@ AI/Codex 根据公开搜索结果或用户提供的信息建立精简候选表�
 
 ## 输出格式
 
-### 1. 候选器件记录表
+输出应根据选型复杂度自适应。简单器件选型不得为了满足模板而机械生成多张表。
+
+### 默认输出
+
+#### 1. Candidate Table
 
 | Module | Function | JLC C# | Manufacturer | MPN | Package | Availability | Key requirements | Datasheet verified | Decision | Notes |
 |---|---|---|---|---|---|---|---|---|---|---|
 
 `Availability` 统一使用 `Good / Limited / Unavailable / Unknown`；`Decision` 统一使用 `Primary / Alternate / Conditional / Rejected`。需要记录时，将 availability checked date 写入 `Notes`，不默认保存长期具体库存数字。
 
-### 2. 关键参数比较表
+#### 2. Primary / Alternate Decision
 
-| 模块 | 器件类别 | MPN | 参数 | 项目需求 | 器件规格 | 是否满足 | 备注 |
-|---|---|---|---|---|---|---|---|
+用简洁文字说明 `Primary`、`Alternate` 及主要选型依据。仅在确有工程意义时补充 `Conditional` 或 `Rejected` 的决策说明。
 
-### 3. 选型风险表
+#### 3. Open Issues
 
-| 编号 | 模块 | 器件 | 风险描述 | 风险等级 | 建议处理 |
-|---|---|---|---|---|---|
+用简洁列表统一记录尚未关闭的问题，并按需要使用 `[Datasheet]`、`[Risk]`、`[Deferred]` 或 `[Procurement]` 标记。
 
-### 4. 待核对 datasheet 项
+### 按需输出
 
-| 模块 | 器件 | 需要核对的参数 | 原因 | 当前状态 |
-|---|---|---|---|---|
+- Parameter Comparison
+- Risk Table
+- Pending Datasheet
+- Deferred Peripherals
 
-### 5. 后置外围器件清单
-
-| 模块 | 外围器件 | 后置原因 | 需要等待的关键参数 |
-|---|---|---|---|
+Only generate these when they materially improve the decision, risk handling, or traceability.
 
 ## 常见模块检查重点
 
