@@ -35,14 +35,41 @@
 ## 核心原则
 
 - 第一轮只关注关键器件候选，不生成完整最终 BOM。
-- 关键器件优先，普通外围器件后置。
-- 普通电阻、电容、LED、按键、排针、测试点、跳帽等，应等模块电路参数明确后再选。
-- 每类关键器件至少给出主选、替代、低成本或易采购方案；如果资料不足，应明确标注“待用户搜索/待 datasheet 核对”。
-- AI/Codex 不默认自动搜索、爬取或批量下载立创商城资料。
-- 用户手动在立创商城搜索、筛选、检查库存/价格/封装/基础库或扩展库状态，并下载 datasheet。
-- AI/Codex 根据用户提供的资料整理、提取参数、生成对比表和风险提示。
-- 立创商品页只能作为 C 编号、库存、价格、封装、库状态和资料入口参考，不能替代 datasheet。
+- 关键器件优先，普通外围器件后置。器件何时确定取决于 architecture impact、safety / risk impact、critical parameter dependency 与 Layout / thermal impact，不按 MOSFET、TVS、NTC、inductor 等器件类别硬编码 Stage；不影响架构的普通阻容、LED 等仍可后置。
+- 默认工作流是 `Requirements → JLCPCB / LCSC-first candidate discovery → Manufacturer datasheet qualification → Primary + Alternate decision → purchase-time availability recheck`。
+- `JLCPCB/LCSC-first` 是现实采购候选池的优先级，不是 `JLCPCB/LCSC-only`。只有满足工程 Hard Requirements 的器件才是有效候选；不得为满足采购优先级而选择明显技术更差或不满足要求的器件。
+- 当前执行环境具备公开 Web/Search 能力时，AI/Codex 可以且应优先搜索公开的 JLCPCB、LCSC 或 JLCPCB Parts 信息进行候选发现；不声明所有环境都具备公网或商城访问能力，也不默认进行受限访问、爬取或批量下载。
+- 当前环境没有相关搜索能力时，由用户提供 C 编号、MPN、candidate 或商品页信息，再继续 qualification。
+- 默认筛出约 2–4 个 realistic candidates，正常结果优先形成 `Primary` 与 `Alternate`；只有确有工程意义时增加 `Conditional` 或 `Rejected`，不为填满类别制造低质量候选。
+- JLCPCB/LCSC 没有合理候选时，可扩大到 Manufacturer、Mouser、DigiKey 或其他适当 distributor / sourcing channel。
 - 禁止一上来生成完整最终 BOM。
+
+## Evidence 边界
+
+### Procurement evidence
+
+JLCPCB/LCSC、JLCPCB Parts、marketplace 或 distributor 信息主要用于确认：
+
+- JLC C-number
+- Manufacturer 与 MPN
+- listed package
+- current availability 与 price
+- procurement convenience
+- 适用时的公开 SMT / sourcing information
+
+库存、价格与商城 availability 是 `point-in-time procurement evidence`，不是永久 Project Fact。Availability 使用 `Good / Limited / Unavailable / Unknown`；必要时记录 `checked date`，不默认长期保存具体库存数字。
+
+### Technical evidence
+
+Manufacturer official datasheet、reference manual、application note 与其他官方 documentation 是技术 qualification 的权威依据，用于核对：
+
+- functionality、operating voltage/current
+- Recommended Operating Conditions、Absolute Maximum Ratings 与 electrical characteristics
+- thermal、pinout、state machine / control behavior
+- required external components、typical application
+- package drawing、Layout requirements 与 safety-critical parameters
+
+Marketplace data cannot replace manufacturer datasheet / official documentation for critical technical qualification. 商品页的 listed package 也必须与 Manufacturer official package information 一致后才能完成技术确认。
 
 ## 选型流程
 
@@ -61,9 +88,9 @@
 
 需求不完整时，标注“不确定项”，不要强行确定最终器件。
 
-### 2. 识别第一轮关键器件
+### 2. 识别第一轮关键器件与后置外围
 
-优先识别会影响模块架构、外围参数、封装、供电、散热、保护和 PCB Layout 的器件，例如：
+优先识别会影响模块架构、外围参数、供电、散热、保护和 PCB Layout，或存在关键参数依赖与安全风险的器件，例如：
 
 - MCU
 - USB 转 UART 芯片
@@ -74,47 +101,56 @@
 - 关键保护器件
 - 运放、ADC、参考电压源等模拟关键器件
 
-### 3. 给出立创搜索建议
+这些示例不是固定 Stage 分类。普通不影响架构的阻容、LED、按键、排针、测试点和跳帽等，可等模块电路参数明确后再选；任何外围一旦影响 architecture、safety、critical parameter、Layout 或 thermal，应前移处理。
 
-AI/Codex 应输出：
+### 3. JLCPCB / LCSC-first 候选发现
+
+先从公开的 JLCPCB/LCSC/JLCPCB Parts 信息发现约 2–4 个 realistic candidates，并记录搜索时点。AI/Codex 应使用当前环境实际具备的公开 Web/Search 能力；若不可用，则给用户输出：
 
 - 搜索关键词
 - 筛选条件
 - 需要重点查看的参数
 - 建议候选数量
-- 资料下载和保存路径
+- 需要返回的 C 编号、MPN、candidate 或商品页信息
 
-但不默认自动访问、爬取或批量下载立创商城资料。
+先应用工程 Hard Requirements；不满足者不因库存好、价格低或 SMT 便利而进入有效候选。如果首选采购池没有合理结果，再扩大到 Manufacturer、Mouser、DigiKey 或其他适当渠道。
 
 ### 4. 建立候选记录
 
-用户手动搜索后，AI/Codex 根据用户提供的信息整理候选表，并标注：
+AI/Codex 根据公开搜索结果或用户提供的信息建立精简候选表，区分 procurement evidence 与 technical evidence，并标注：
 
-- 是否进入候选
-- 风险等级
-- 待核对 datasheet 项
-- 是否需要替代料
+- Availability：`Good / Limited / Unavailable / Unknown`
+- Datasheet verified：是否已依据 Manufacturer official documentation 完成关键参数核对
+- Decision：`Primary / Alternate / Conditional / Rejected`
+- 尚未满足的 Hard Requirement、风险或待核对项
 
-### 5. datasheet 核对
+### 5. Manufacturer datasheet qualification
 
-关键器件进入候选前必须核对：
+器件成为 `Primary` 或 `Alternate` 前，必须用 Manufacturer official documentation 核对：
 
-- 工作电压范围
-- 最大输入/输出条件
-- 电流能力或驱动能力
-- 功耗和温升
-- 封装与引脚
-- 外围电容、电阻和保护要求
-- 典型应用电路
-- PCB Layout 要求
-- 采购和替代风险
+- functionality、工作电压/电流与 Recommended Operating Conditions
+- Absolute Maximum Ratings、electrical characteristics 与 safety-critical parameters
+- 功耗、温升与 thermal limits
+- pinout、state machine / control behavior
+- required external components 与 typical application
+- package drawing 与 PCB Layout requirements
+
+资料不足时保留为 `Conditional` 或 `Rejected`，不得仅凭 marketplace data 完成关键技术 qualification。
+
+### 6. Primary / Alternate 决策与采购前复核
+
+综合 Hard Requirements、Manufacturer qualification、架构与风险影响、采购便利性形成 `Primary` 和 `Alternate`。只有确有条件约束或明确淘汰依据时才保留 `Conditional` / `Rejected`。
+
+在真正 purchasing、ordering 或 PCBA BOM submission 前，对 Primary 与 Alternate 执行一次 lightweight availability recheck，更新 Availability，必要时记录 `checked date`。这不是新 Stage、Gate 或专门 approval；如果状态变为 `Limited`、`Unavailable` 或无法核对，则重新评估 Primary / Alternate，不把旧库存或价格记录当作当前事实。
 
 ## 输出格式
 
 ### 1. 候选器件记录表
 
-| 模块 | 器件类别 | 立创搜索关键词 | 立创 C 编号 | 厂商 | MPN | 封装 | 基础库/扩展库 | 库存/采购便利性 | datasheet 路径或链接 | 关键参数 | 选型依据 | 风险等级 | 是否进入候选 | 后续要核对的问题 |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Module | Function | JLC C# | Manufacturer | MPN | Package | Availability | Key requirements | Datasheet verified | Decision | Notes |
+|---|---|---|---|---|---|---|---|---|---|---|
+
+`Availability` 统一使用 `Good / Limited / Unavailable / Unknown`；`Decision` 统一使用 `Primary / Alternate / Conditional / Rejected`。需要记录时，将 availability checked date 写入 `Notes`，不默认保存长期具体库存数字。
 
 ### 2. 关键参数比较表
 
@@ -228,3 +264,12 @@ AI/Codex 应输出：
 - 不要忽略电源、MOSFET、ADC、运放、参考电压等高风险模块。
 - 不要把普通阻容、LED、排针、测试点、普通按键作为第一轮重点资料收集对象。
 - 不要生成未经核对的最终 BOM。
+- 不要把 JLCPCB/LCSC 或其他 marketplace data 当作关键技术 qualification authority。
+- 不要为了形成固定数量或分类而制造低质量候选。
+- 不要把 point-in-time 库存、价格或 availability 固化为永久 Project Fact。
+
+## 本 Skill 的流程边界
+
+本 Skill 不增加 EDA Library Acceptance、新 Gate、新 Stage、symbol approval workflow、footprint acceptance workflow、mandatory footprint documentation、supplier-specific Framework lifecycle 或 mandatory inventory database。
+
+Package、pin / pad mapping、polarity、Pin 1 与 mechanical fit 继续在正常设计及 Schematic / PCB Review 生命周期中核对；候选选型记录不构成 EDA symbol 或 footprint acceptance。

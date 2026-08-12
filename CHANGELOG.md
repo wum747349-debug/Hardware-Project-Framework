@@ -8,10 +8,12 @@ Status: Normal Framework Maintenance after published v1.0.0.
 
 ### Changed
 
+- Component Selection Skill 增加 procurement-aware、JLCPCB/LCSC-first candidate discovery：AI/Codex 在具备公开搜索能力时主动发现 marketplace candidates，并以 Manufacturer datasheet / official documentation 作为 technical qualification authority；默认形成 Primary / Alternate，并在 purchasing、ordering 或 PCBA BOM submission 前轻量复核 availability。
 - 将长期 Framework maintenance / Semantic Versioning / optional RC / Release publication 职责提取到 `docs/Framework_Maintenance_and_Release_Guide.md`。
 - 将 `Framework_Migration_Guide.md` 收窄为 Project-side immutable Release adoption，并保留 Authority Cutover 低频 exception procedure。
 - 将 Repository Architecture Migration Master Plan 标记为 `CLOSED — Historical Engineering Record`，AI Runbook 标记为 `RETIRED`，并清理 README 与 AI routing 的 transition-era current-state wording。
 - Runtime Contract、Structural Contract、Project Structure Version、Project binding 与 Standalone Project：UNCHANGED。
+- 本次 procurement-aware Component Selection capability improvement：Runtime Contract：UNCHANGED；Structural Contract：UNCHANGED；Project Structure Version：UNCHANGED。
 
 ## v1.0.0
 
