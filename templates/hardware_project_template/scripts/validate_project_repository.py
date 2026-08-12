@@ -353,7 +353,7 @@ def check_runtime_contract(validator: Validator) -> None:
     if rules.is_file():
         text = rules.read_text(encoding="utf-8")
         validator.check(len(re.findall(r"^\d+\. ", text, flags=re.MULTILINE)) == 10, "PROJECT_RULES.md", "Project Runtime Rules must contain the ten Contract rules")
-        for phrase in ("facts come only from this repository", "Framework version", "explicit migration", ".SchDoc", ".PcbDoc", "current Project stage only", "Stage Skill"):
+        for phrase in ("facts come only from this repository", "Framework version", "Pinned Framework Evaluation", "Compatible Framework Sync", "Framework Contract Migration", ".SchDoc", ".PcbDoc", "current Project stage only", "Stage Skill"):
             validator.check(phrase in text, "PROJECT_RULES.md", f"missing Project Runtime Rule coverage: {phrase}")
 
 

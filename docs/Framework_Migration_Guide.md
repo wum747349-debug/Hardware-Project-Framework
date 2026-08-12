@@ -39,6 +39,8 @@ Assess
 
 Pinned Framework Evaluation 不是新 Stage、不是新 Gate、不是 RC、不是 Authority Cutover，也不是 Framework Contract Migration。它不新增 `FRAMEWORK.md` 字段、不创建第二 binding source；Project 始终只有一个 active Layer-0 binding。验证失败时保持或恢复原 binding，并输出 `FAIL` 或 `NOT READY`。
 
+Existing Project 进入 Pinned Framework Evaluation 时，只更新 current binding 的 `Framework Release`、`Framework Commit`，必要时更新 `Framework Repository` identity；不得重置 `Initialization Framework Release` 或 `Initialization Status`。`Development Bootstrap` 只适用于真正以 development binding 首次 Bootstrap 的 Project，不适用于 Existing Project 的后续 evaluation。
+
 ## 3. Compatible Framework Sync
 
 Compatible Sync 可包括 Validator bug / false-positive fix、文档澄清、Skill / Checklist 澄清、链接修正、CI 改进和兼容工具增强。只有以下语义全部保持不变时才能采用此分类：
@@ -65,10 +67,10 @@ Transaction 包含以下步骤：
 
 1. 选择目标固定 Framework Release + immutable Commit；
 2. 执行 compatibility / impact check，并记录为何不改变上述 Contract 语义；
-3. 应用最小兼容改动，必要时同步 `scripts/validate_project_repository.py` 发布快照；
-4. 运行 Project Validator 与受影响检查；
-5. 验证通过后更新 `FRAMEWORK.md` binding；
-6. 提交、推送并报告结果。
+3. 在 working tree 准备并应用 bounded intended changes：目标 `FRAMEWORK.md` current binding、必要的 `scripts/validate_project_repository.py` 发布快照，以及仅有的必要 compatible Project adaptations；
+4. 对最终计划提交的 binding + files 组合运行 Project Validator 与受影响检查；
+5. 核对 final intended diff 后提交、推送；
+6. 验证 remote commit / repository state 并报告结果。
 
 用户已明确要求执行该 Sync 时，不再设置 Readiness Gate、Sync Gate 或 Closeout Gate。若发现 blocker、Contract contradiction 或分类不明确，保持原 binding 并停止报告。
 
@@ -79,9 +81,9 @@ Transaction 包含以下步骤：
 1. 验证 published release tag 精确指向 `SHA-X`；
 2. 验证 Project 已经使用同一 `SHA-X`；
 3. 只把 `Framework Release` 更新为正式 release identifier，保持 `Framework Commit` 不变；
-4. 运行 Project Validator；
-5. 核对 diff 与 repository state；
-6. 提交、推送并报告 `DONE`。
+4. 对上述 final intended binding + files 组合运行 Project Validator；
+5. 核对 diff 后提交、推送；
+6. 验证 remote commit / repository state 并报告 `DONE`。
 
 该 fast path 不重做完整 old → new capability review、Project migration、Stage replay、dogfooding replay 或 Authority Cutover。若 Final Release SHA 与 evaluation SHA 不同，则检查 evaluation SHA → final SHA 的实际 diff，只重新验证受影响范围，再按普通 Compatible Framework Sync 更新 binding。
 

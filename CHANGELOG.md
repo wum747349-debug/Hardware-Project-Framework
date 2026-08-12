@@ -8,6 +8,7 @@ Status: Normal Framework Maintenance after published v1.0.0.
 
 ### Changed
 
+- 对齐 Project Runtime Rules 的三类 adoption taxonomy，明确 Compatible Sync 必须验证最终计划提交的 binding + files 组合，并澄清 Existing Project 进入 Pinned Framework Evaluation 时不得重置 initialization provenance / status；lifecycle architecture 与 Contract 均未改变。
 - 将 development binding 推广为长期 Pinned Development Binding，新增轻量 Pinned Framework Evaluation、Same-SHA Formalization fast path，并把普通 Project adoption 压缩为 `Assess → Execute when authorized → Verify`；保持一个 active Layer-0 binding、既有 Human Approval 风险边界与 Authority Cutover 独立性。
 - Project Validator 接受 `development-v0.9` 与通用 `development-vX.Y.Z`，同时继续要求 40 位 immutable Framework Commit，并拒绝 moving branch、`HEAD` 与 short SHA。
 - 将 Framework release 高层流程收敛为 Release Assessment、Candidate Validation、ONE Human Publish Approval、Publication 与 Automatic Verification；RC 继续为 risk-driven optional prerelease。

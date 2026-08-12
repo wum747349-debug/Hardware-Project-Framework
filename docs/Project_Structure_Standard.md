@@ -82,7 +82,14 @@ Initialization Status: Development Bootstrap
 
 `development-vX.Y.Z` 是目标版本的人类可读 development identity，不是 published release，也不声称存在同名 tag；`Framework Commit` 才是该 snapshot 的实际 immutable identity。`development-v0.9` 继续合法，用于历史 Bootstrap / provenance compatibility。不得使用 `latest`、`HEAD`、`main`、moving branch 或 short SHA，也不得增加第二套 evaluation / previous / stable binding 字段；一个 Project 始终只有一个 active Layer-0 binding。
 
-`Development Bootstrap` 不是 Pinned Development Binding 的永久状态。Project 进入 Stage 1 后，`Initialization Status` 按正常 Workflow 转为 `Gate 1.5 Pending`；Gate 1.5 PASS 后可转为 `Initialized`。状态变化不会自动改变 binding；Project 保持当前 `development-vX.Y.Z` + Commit，直到用户显式要求 repin 或采用 published Release。
+`Development Bootstrap` 只适用于真正以 Pinned Development Binding 首次 Bootstrap 的 Project，不是永久状态。Project 进入 Stage 1 后，`Initialization Status` 按正常 Workflow 转为 `Gate 1.5 Pending`；Gate 1.5 PASS 后可转为 `Initialized`。状态变化不会自动改变 binding；Project 保持当前 `development-vX.Y.Z` + Commit，直到用户显式要求 repin 或采用 published Release。
+
+Existing Project 后续进入 Pinned Framework Evaluation 时，只更新 current Framework binding：`Framework Release`、`Framework Commit`，必要时更新 `Framework Repository` identity。`Initialization Framework Release` 与 `Initialization Status` 是 initialization provenance / lifecycle state，不得因后续 evaluation 重置。例如，一个最初从 `development-v0.9` Bootstrap 且已 `Initialized` 的 Project，改为评估 `development-v1.1.0 @ <SHA>` 后仍保持：
+
+```text
+Initialization Framework Release: development-v0.9
+Initialization Status: Initialized
+```
 
 ## 4. Project `AGENTS.md` Contract
 

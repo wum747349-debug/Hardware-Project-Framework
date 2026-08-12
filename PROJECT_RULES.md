@@ -61,7 +61,7 @@ Framework Era
 - 正式 Project 必须通过 `FRAMEWORK.md` 锁定一个 Framework Release 和对应不可歧义的完整 Commit SHA。
 - Project 不默认跟随或读取 Framework `main`。
 - 正式 Bootstrap 必须从固定 Framework Release 获取 Template；开发绑定只允许用于 Framework 自测和明确的预发布评估。
-- Framework binding update 必须由用户明确要求并锁定目标 Release + immutable Commit。若 Project Structure Version、`FRAMEWORK.md` schema、Project `AGENTS.md` context-routing contract、Required/Conditional/Stage-enabled 模型、Runtime Rules、Stage/Gate、Project 事实职责、Repository authority model 与 Validator required structure 均未改变，可按 Compatible Framework Sync 执行；发生任何 Runtime / Structural Contract 实质变化时，必须按 Framework Contract Migration 执行完整差异审查、Project adaptation、验证与一次 Human Approval。两类更新都不得自动跟随 Framework `main`，并只在验证通过后更新 binding；仅在结构契约变化时更新 `Project Structure Version`。
+- Framework binding update 必须由用户明确要求并锁定目标 identity + immutable Commit。Prerelease dogfooding 使用 Pinned Framework Evaluation；上述 Contract 语义均未改变的 backward-compatible adoption 使用 Compatible Framework Sync；发生任何 Runtime / Structural Contract 实质变化时，才使用 Framework Contract Migration 并执行完整差异审查、Project adaptation、验证与一次 Human Approval。所有路径都执行适用 validation，不得自动跟随 Framework `main`；仅在结构契约变化时更新 `Project Structure Version`。
 - Framework Repository 的 normal maintenance、Semantic Versioning、risk-driven optional RC、candidate validation 与 Release publication 由 `docs/Framework_Maintenance_and_Release_Guide.md` 管理。RC 不是所有 Release 的 mandatory gate；每个新目标版本从 `rc1` 重新编号，Final 发布后不得继续该版本的 RC。Framework `main` 的普通 commit 不自动要求 Release。
 
 版本语义不得混淆：Framework Release 表示方法发布；Project Structure Version 表示项目仓库结构契约；Hardware Revision 表示硬件设计版本；Git tag/commit 表示源码身份。
