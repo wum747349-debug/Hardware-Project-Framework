@@ -150,7 +150,7 @@ Gate 1.5 已 PASS，Requirements Baseline 足以筛选器件。
 
 ### 目标与活动
 
-依据 Requirements、器件决策和关键资料完成模块连接、外围参数、保护与专项 Layout 要求；由用户在 Altium Designer 中实现正式原理图并导出同版完整原理图 PDF 与当前 BOM。
+使用 `skills/hardware-schematic-design/SKILL.md`，依据 Requirements、器件决策和关键资料按需执行 module planning、module-by-module design、parameter calculation、EDA capture guidance 与 Cross-Module Integration Check；完成模块连接、外围参数、startup / fault behavior、保护与专项 Layout 输入。由用户在 Altium Designer 中实现正式原理图并导出同版完整原理图 PDF 与当前 BOM。
 
 ### 进入条件
 
@@ -158,7 +158,7 @@ Gate 1.5 已 PASS，Requirements Baseline 足以筛选器件。
 
 ### 主要输出与退出条件
 
-按需启用 `docs/module_design/*.md`；形成可追溯模块依据、BOM 草稿、Altium 原理图、同版完整 PDF 与当前 BOM。AI 不声称完成 EDA 实现。
+按复杂度和追溯价值启用 `docs/module_design/*.md`；形成可追溯模块依据、BOM 草稿、Altium 原理图、同版完整 PDF 与当前 BOM，并完成轻量整板自洽检查。满足 Stage 3 条件时只报告 `READY FOR SCHEMATIC REVIEW`；该结论不等于 ERC PASS、Stage 4 PASS 或 PCB Layout approval。AI 不声称完成 EDA 实现。
 
 器件/资料不成立回到 Stage 2；需求或模块边界冲突回到 Stage 1 与 Gate 1.5。
 
