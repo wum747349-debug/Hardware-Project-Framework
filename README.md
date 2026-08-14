@@ -65,14 +65,13 @@ Project Bootstrap 位于八阶段之前，不是 Stage 0 或 Stage 1。Stage 1 �
 
 ## Validation
 
+Framework maintenance 使用一个 canonical full validation entry point；该命令已聚合 Template、Reference Project、smoke 与 regression coverage：
+
 ```bash
 python scripts/validate_framework_repository.py
-python scripts/validate_framework_repository.py --mode final
-python scripts/validate_project_repository.py templates/hardware_project_template --template
-python scripts/validate_project_repository.py examples/reference_project_v1
 ```
 
-复制到 Standalone Project 后可在项目根运行：
+Standalone Project 继续使用独立 Project Validator，在项目根运行：
 
 ```bash
 python scripts/validate_project_repository.py

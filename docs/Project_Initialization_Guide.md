@@ -110,7 +110,6 @@ Framework 维护者运行：
 
 ```bash
 python scripts/validate_framework_repository.py
-python scripts/validate_project_repository.py templates/hardware_project_template --template
 ```
 
-Template 中的 Project Validator 是 Framework 唯一开发源 `scripts/validate_project_repository.py` 的发布快照；不得人工分叉维护。
+canonical Framework validation 已包含 Template validation 与 snapshot consistency。Template 中的 Project Validator 是 Framework 唯一开发源 `scripts/validate_project_repository.py` 的发布快照；不得人工分叉维护。

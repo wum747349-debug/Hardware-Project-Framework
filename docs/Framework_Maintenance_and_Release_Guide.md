@@ -69,7 +69,7 @@ RC Candidate 和 Final Candidate 都必须锁定一个 immutable full Commit SHA
 
 - target version、candidate SHA、预期 tag / release name 唯一且一致；
 - working tree、candidate diff、Contract classification 与 SemVer decision 已核对；
-- Framework Validator、Final Mode Validator、Template Validator、Reference Project Validator 与适用测试通过；
+- canonical Framework validation 通过；该入口聚合 Framework contract、Markdown links、Template / snapshot、clean Bootstrap / Gate 1.5、binding / Stage-enabled / migration regressions、Reference Project 与 final-state checks；
 - `git diff --check`、Markdown link、CI、release notes 与文档状态一致；
 - Runtime / Structural Contract 的变化与声明一致；若声称 compatible，则 Project Structure Version、`FRAMEWORK.md` schema、Project `AGENTS.md` routing、Required / Conditional / Stage-enabled、Stage / Gate、facts authority 与 repository authority 均未发生 breaking change；
 - publication plan、automatic verification 与 recovery handling 已确定。

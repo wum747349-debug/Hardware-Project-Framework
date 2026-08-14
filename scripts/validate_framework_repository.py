@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate Framework v0.9 implementation against the Framework v1 Contract."""
+"""Run the canonical full validation for the Hardware Project Framework."""
 
 from __future__ import annotations
 
@@ -119,7 +119,7 @@ def framework_markdown_files() -> list[Path]:
 
 def check_required_files(validator: Validator) -> None:
     for relative_path in REQUIRED_FRAMEWORK_FILES:
-        validator.check((ROOT / relative_path).is_file(), relative_path, "missing Framework v0.9 required file")
+        validator.check((ROOT / relative_path).is_file(), relative_path, "missing required Framework file")
 
     actual_template_files = {
         path.relative_to(TEMPLATE_ROOT).as_posix()
@@ -508,11 +508,11 @@ def check_project_smoke_tests(validator: Validator) -> None:
         validator.check(not temporary_path.exists(), "Temporary Project Fixtures", "Smoke-test temporary directory was not removed")
 
 
-def check_final_mode(validator: Validator) -> None:
-    if validator.mode != "final":
+def check_full_mode(validator: Validator) -> None:
+    if validator.mode not in {"full", "final"}:
         return
     reference_path = FINAL_REFERENCE_ROOT.relative_to(ROOT).as_posix()
-    validator.check(FINAL_REFERENCE_ROOT.is_dir(), reference_path, "Final mode requires the Reference Project")
+    validator.check(FINAL_REFERENCE_ROOT.is_dir(), reference_path, "Full validation requires the Reference Project")
     if FINAL_REFERENCE_ROOT.is_dir():
         actual_reference_files = {
             path.relative_to(FINAL_REFERENCE_ROOT).as_posix()
@@ -522,7 +522,7 @@ def check_final_mode(validator: Validator) -> None:
         validator.check(
             actual_reference_files == REQUIRED_TEMPLATE_FILES,
             reference_path,
-            "Final Reference Project must remain a lightweight Required-files-only fixture",
+            "Full validation Reference Project must remain a lightweight Required-files-only fixture",
         )
         reference_readme = (FINAL_REFERENCE_ROOT / "README.md").read_text(encoding="utf-8")
         for phrase in (
@@ -561,13 +561,13 @@ def check_final_mode(validator: Validator) -> None:
         check=False,
     )
     tracked_projects = set(tracked_result.stdout.splitlines())
-    validator.check(tracked_result.returncode == 0, "projects", "Final mode could not inspect tracked current-tree content")
-    validator.check("projects/README.md" in tracked_projects, "projects/README.md", "Final mode requires the lightweight Legacy history marker")
+    validator.check(tracked_result.returncode == 0, "projects", "Full validation could not inspect tracked current-tree content")
+    validator.check("projects/README.md" in tracked_projects, "projects/README.md", "Full validation requires the lightweight Legacy history marker")
     for legacy_directory in FINAL_LEGACY_PROJECT_DIRS:
         validator.check(
             not any(path == legacy_directory or path.startswith(f"{legacy_directory}/") for path in tracked_projects),
             legacy_directory,
-            "Final mode forbids tracked Legacy real-project copies",
+            "Full validation forbids tracked Legacy real-project copies",
         )
 
 
@@ -580,13 +580,18 @@ def validate(mode: str) -> Validator:
     check_validator_snapshot(validator)
     run_template_validator(validator)
     check_project_smoke_tests(validator)
-    check_final_mode(validator)
+    check_full_mode(validator)
     return validator
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--mode", choices=("v0.9", "final"), default="v0.9", help="v0.9 keeps compatibility checks without requiring final closeout fixtures")
+    parser.add_argument(
+        "--mode",
+        choices=("full", "final", "v0.9"),
+        default="full",
+        help="full is canonical; final is a compatibility alias; v0.9 retains the legacy reduced check set",
+    )
     args = parser.parse_args(argv)
     validator = validate(args.mode)
     if validator.errors:
