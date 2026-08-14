@@ -142,7 +142,7 @@ Gate 1.5 已 PASS，Requirements Baseline 足以筛选器件。
 
 ### 主要输出与退出条件
 
-启用 `docs/component_selection_plan.md`，更新 `references.md` 与 `design_notes.md`。影响架构/封装/Layout 的关键器件有可靠依据或明确核对计划，候选记录未被误写为最终 BOM。
+启用 `docs/component_selection_plan.md` 并由其维护 selection decision。只有 `design_notes.md` 负责的整板架构/跨模块事实或 `references.md` 负责的资料索引与核对事实实际变化时，才更新相应文件。影响架构/封装/Layout 的关键器件有可靠依据或明确核对计划，候选记录未被误写为最终 BOM。
 
 需求、供电、接口、尺寸、装配或制造边界因器件选择实质变化时回到 Stage 1 并重新执行 Gate 1.5。
 
@@ -159,6 +159,8 @@ Gate 1.5 已 PASS，Requirements Baseline 足以筛选器件。
 ### 主要输出与退出条件
 
 按复杂度和追溯价值启用 `docs/module_design/*.md`；形成可追溯模块依据、BOM 草稿、Altium 原理图、同版完整 PDF 与当前 BOM，并完成轻量整板自洽检查。满足 Stage 3 条件时只报告 `READY FOR SCHEMATIC REVIEW`；该结论不等于 ERC PASS、Stage 4 PASS 或 PCB Layout approval。AI 不声称完成 EDA 实现。
+
+**No automatic reverse implementation sync：**普通 resistor / capacitor、pull-up、net naming、support component、module pin connection、filter 或 NTC 外围值调整，通常只更新当前 module design record；若 underlying component decision、qualification basis、architecture impact、selection risk 或 requirement 实质变化，则更新对应 owner，并按影响范围返回相关 Stage reevaluation。Stage 2 artifacts 不是 immutable，但不因普通实现调整而机械同步。
 
 器件/资料不成立回到 Stage 2；需求或模块边界冲突回到 Stage 1 与 Gate 1.5。
 

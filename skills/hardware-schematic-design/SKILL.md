@@ -25,6 +25,7 @@
 - 只核对当前连接所需的官方资料；关键连接必须有 Manufacturer documentation、计算或显式 engineering basis。
 - 普通 support components 可在模块设计中按需确定，不因普通外围自动重新进入完整 Stage 2。
 - 设计时同时明确 startup、shutdown、default 与 fault behavior，并提取 schematic-relevant Layout inputs。
+- Module-specific connections、support values 与 calculations 默认记录在当前 module design context，不自动反向同步 Stage 2 selection artifacts 或 board-level documents；selection、qualification、architecture 或 requirement 实质变化时，更新对应 owner 或返回相关 Stage reevaluation。
 
 ## 4. Workflow
 

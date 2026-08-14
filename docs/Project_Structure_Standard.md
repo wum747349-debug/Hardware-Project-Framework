@@ -218,14 +218,18 @@ Conditional 与 Stage-enabled 内容不在该树中预建。正式 EDA 源通常
 | `README.md` | 项目身份、范围摘要、唯一当前阶段、硬件版本、导航和下一步 |
 | `requirements.md` | 第一版目标、不做内容、功能/电源/接口/安全/制造边界、验收标准与待确认问题 |
 | `block_diagram.md` | 模块、能量流、信号流与模块边界 |
-| `design_notes.md` | 整板设计意图、当前方案、Pin Map、接口与跨模块约定 |
+| `design_notes.md` | 整板架构、系统级设计意图、接口/跨模块约定与架构权衡 |
 | `references.md` | 项目资料索引、来源、用途、阅读状态与待核对项 |
 | `docs/README.md` | Stage-enabled / Conditional 文档职责与导航，不维护当前阶段 |
 | `hardware/README.md` | EDA 源、输出、图片及证据边界，不声称内容已产生 |
 | `references/README.md` | 本地资料目录职责与来源规则 |
 | `scripts/validate_project_repository.py` | Framework 唯一开发源的发布快照，用于独立验证本 Project |
 
-同一事实只在一个主事实源维护。Checklist 不保存项目状态，Skill 不保存项目事实，Validator 不判断硬件设计正确性。
+同一事实只在一个主事实源维护（Single Authority），同时允许其他层级保留服务于自身语境的摘要或引用（Contextual Reference）。例如，选型记录维护器件的 Primary 决策，`design_notes.md` 说明其整板职责，module design record 维护具体外围值；这些内容职责不同，不属于有害重复。
+
+同一个 detailed implementation fact 不应形成多个独立维护源。存在对应 module design record 时，Stage 3 的逐引脚连接、普通 R/C 值和模块计算通常由该 record 维护；`design_notes.md` 不需要并行维护这些细节，但可保留必要的整板摘要和跨模块约定。**Update the owning document, not every document that mentions the fact.** 其他文档仅在其负责的 requirement、architecture、cross-module contract、component selection decision、qualification basis 或 evidence index 实际变化时更新。
+
+普通 Project 文档默认不重复维护 generic file-level `Status`；具有明确工程语义的局部状态，例如 Initialization Status、Review Result、Release Decision、Test Result、Review Status、Decision State、Resolution State 或 Evidence State，可以按其职责保留。Checklist 不保存项目状态，Skill 不保存项目事实，Validator 不判断硬件设计正确性。
 
 ## 10. README 当前阶段字段
 

@@ -1,7 +1,5 @@
 # Requirements Baseline
 
-Status: Draft
-
 本文件保存第一版需求边界。未知事实可保持 `TBD` / `待确认`，不得为完成模板而虚构器件、参数或验证结果。
 
 ## Project Goal
@@ -38,12 +36,12 @@ TBD — 记录已知板材、层数、板厚、铜厚、装配、机械和供应
 
 ## Acceptance Criteria
 
-| ID | Requirement | Verification Method | Expected Result | Status |
-| --- | --- | --- | --- | --- |
-| REQ-001 | TBD | TBD | TBD | Draft |
+| ID | Requirement | Verification Method | Expected Result |
+| --- | --- | --- | --- |
+| REQ-001 | TBD | TBD | TBD |
 
 ## Open Questions
 
-| ID | Question | Impact | Owner / Source | Resolution Plan | Status |
+| ID | Question | Impact | Owner / Source | Resolution Plan | Resolution State |
 | --- | --- | --- | --- | --- | --- |
 | OPEN-001 | TBD | TBD | TBD | TBD | Open |

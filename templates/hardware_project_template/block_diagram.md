@@ -1,7 +1,5 @@
 # Block Diagram
 
-Status: Draft
-
 本文件描述模块、能量流、信号流和系统边界；它不证明器件已选择或 EDA 已实现。
 
 ## System Boundary
