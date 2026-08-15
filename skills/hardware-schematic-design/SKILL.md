@@ -41,13 +41,31 @@
 2. **Verify**：只用 Manufacturer official documentation 核对当前设计真正需要的 pin behavior、operating conditions、typical application、required peripherals、package 与 Layout 要求；复杂提取转交 datasheet-reading Skill。
 3. **Design**：确定 pin connections、net naming、power / ground、enable / reset / mode、feedback / sense、protection、required support components 与 unused-pin handling。
 4. **Calculate**：在 schematic freeze 前，为决定关键电气行为的外围值记录 datasheet basis / equation、calculated or selected value、tolerance / assumption、expected behavior 与 remaining uncertainty。适用对象包括 feedback divider、current-limit / charge-current resistor、timing capacitor、inductor、capacitor、filter、NTC 与 gain network。
-5. **Record**：保留 connection plan、parameter decisions、重要 assumptions、Layout-sensitive notes、open issues 与 capture status；不复制无关 Project Facts。
+5. **Record**：保留可检索的 connection facts、parameter decisions、重要 assumptions、Layout-sensitive notes、open issues 与 capture status；不复制无关 Project Facts，也不把 `.SchDoc` 重写成一整份长期文本副本。
 
 普通 resistor、capacitor、diode、LED、test point、jumper、small MOSFET、small logic gate 与 analog switch 可随模块设计确定。只有新辅助器件影响 architecture、safety、critical electrical behavior、thermal 或 package / Layout boundary 时，才对相关部分调用 component-selection Skill 或重新评估关键器件。
 
 ### User EDA Capture
 
 AI/Codex 可以提供 module plan、connection plan、pin-by-pin guidance、参数计算、net naming、capture sequence 与 Layout-sensitive notes。用户负责在 Altium Designer 中实际创建 Sheet、放置 symbol、连接 wire / net、设置 value / parameter、确认 footprint、保存 `.SchDoc`、执行 ERC，并导出与当前版本对应的完整 schematic PDF 和 BOM。
+
+Functional block diagram / signal-flow diagram 只用于 architecture、module planning 与接口流向表达。当用户正在设计具体模块、询问“怎么接”、准备 EDA capture 或要求最终接线时，不得停留在抽象框图；默认先提供可直接指导 Altium 等 EDA capture 的 **Schematic-like Connection Diagram**，再提供 **Pin-by-Pin Final Wiring**、**Component / Parameter Values**，最后列出必要的 engineering notes / open issues。
+
+Schematic-like diagram 按适用性清楚展示 IC pin number / pin name、junction / shared node、branch connection、power / GND、net label、resistor / capacitor / support component、NC / unused handling、diode / LED / MOSFET / polarized device 的方向或 terminal identity，以及 cross-module net。不得要求用户从一串自然语言箭头自行推导实际 topology。完整 pin-by-pin wiring 主要作为 completeness cross-check，避免漏脚；只有需要 completeness audit 时才使用 pin table。
+
+### Project Module Documentation
+
+长期 module design record 遵循：**Diagram on ambiguity, structured text by default.** 记录应对人足够清楚、对 AI / Review 可稳定检索、不重复 authoritative `.SchDoc`，且不因 presentation 明显膨胀。默认使用简洁、无歧义的 structured connection text，例如：
+
+```text
+U6.1 EN/UVLO → EN_UVLO
+R21 160kΩ: 3V3 ↔ EN_UVLO
+R22 100kΩ: EN_UVLO ↔ GND
+```
+
+只有 shared node / wired-AND / wired-OR、多处分支 junction、MOSFET / transistor control、diode / polarity-sensitive path、divider + switch / comparator combination、多器件共同驱动一个 control net，或纯文字容易产生 topology 歧义的 cross-module control path，才建议附 compact schematic-like textual diagram。简单 power、GND、单一 pin-to-net connection 不要求额外 diagram。
+
+Diagram 用于表达 topology / ambiguity；structured connection record 用于保存长期可检索事实；pin table 只在 completeness 需要时使用。不得机械地把同一连接同时复制到 diagram、pin table、net table、component table 与 prose。Project documentation 只保存真正具有长期追溯价值的 design intent、connections、key values、cross-module interface、open issue 与 evidence boundary。
 
 ### Cross-Module Integration
 
@@ -93,7 +111,7 @@ AI/Codex 可以提供 module plan、connection plan、pin-by-pin guidance、参�
 
 1. Module Plan：模块责任、接口、边界和设计顺序
 2. Module Design Record：Define / Verify / Design / Calculate / Record 的关键结果
-3. EDA Capture Guidance：net naming、pin / connection plan、capture sequence 和待用户确认项
+3. EDA Capture Guidance：默认依次给出 Schematic-like Connection Diagram、Pin-by-Pin Final Wiring、Component / Parameter Values，以及必要的 engineering notes / open issues；另列 net naming、capture sequence 和待用户确认项
 4. Cross-Module Integration：六类检查的结论、冲突和 open issues
 5. Stage 3 Readiness：`READY FOR SCHEMATIC REVIEW` 或明确列出尚未满足的条件
 
@@ -105,3 +123,5 @@ AI/Codex 可以提供 module plan、connection plan、pin-by-pin guidance、参�
 - 不复制 datasheet-reading、component-selection 或 schematic checklist 的完整方法。
 - 不用商品页、教程、博客或开源项目替代关键参数的 Manufacturer official documentation。
 - 不伪造 EDA capture、ERC、pin mapping、cross-sheet net 或 footprint mapping 结果。
+- 当任务目标是实际 schematic capture guidance 时，不得仅用 functional block diagram、signal-flow arrows、abstract text chain、prose-only connection summary 或 incomplete pin table 替代具体接线指导。
+- 不把所有 module documentation 强制变成完整 ASCII schematic，也不为 presentation 重复保存第二份原理图。
