@@ -50,6 +50,7 @@
 - ERC 输出不是默认必需审查输入。AI 只有在用户提供 ERC 报告、Messages 导出或相关截图时，才分析 ERC 问题；未提供 ERC 输出时，不声称已经核对 ERC，不记录 ERC 执行或结果状态，也不把“未提供 ERC 输出”本身作为审查未完成或不能进入 PCB Layout 的理由。
 - 网表、元件报告、引脚或封装映射报告和局部截图均为条件触发证据。局部截图只能补充局部证据，不能代替完整原理图 PDF。
 - `requirements.md`、`design_notes.md` 和 `docs/module_design/*.md` 是需求和设计意图，不能单独证明 EDA 实现已经同步。
+- Stage 4 formal review 可以复用可追溯且足以覆盖当前目标的既有 review evidence，对 unchanged coverage 不要求机械重复审查；应按当前 design 相对既有 coverage 的 relevant delta，重新审查 changed、previously uncovered 或 evidence-insufficient areas。这种复用不等于跳过 Stage 4，也不要求 schematic、PDF 或 BOM byte-identical、SHA-identical 或完全相同；既有 review 不能把缺少证据的 ERC、实际 EDA mapping 或 footprint mapping 自动升级为 PASS，ERC 未验证时仍保持未验证，但不因此自动成为 Stage 4 blocker。
 
 ## 审查目标
 

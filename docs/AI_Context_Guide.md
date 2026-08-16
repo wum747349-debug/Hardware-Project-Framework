@@ -94,6 +94,8 @@ Gate 1.5 不读取或产生后续阶段设计结果；Validator 结果不能替�
 | Stage 7 — PCB Release Review | Layer 0/1 + PCB Skill + README/Requirements/PCB Rules/PCB Review + 当前 BOM/Evidence + 用户 Batch DRC + 制造输出清单 + Release Checklist | 局部 Gerber、Drill、坐标、截图和报告片段 | 其他 Project 历史 |
 | Stage 8 — Bring-up/Test | Layer 0/1 + README + Bring-up/Test 记录 + 原理图与接口说明 | PCB Review、关键 datasheet、安全 checklist、Revision | 其他 Project、Template |
 
+Stage Method 应按实际 task intent 选择，不机械服从用户提供的 Stage label，也不按 `review`、`pin`、`BOM` 等单个关键词路由。模块设计、局部连接核对、参数计算、当前模块或局部设计的 verification，以及轻量 Cross-Module Integration 属于 Stage 3；针对 completed whole-design evidence（完整 schematic / BOM）的整板 formal review 和 PCB Layout-entry / preflight decision 属于 Stage 4。
+
 ## 6. 条件触发与证据边界
 
 - 目标板厂官方能力：仅在制造基线、规则、裕量或下单核对时读取。
