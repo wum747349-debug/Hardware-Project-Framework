@@ -146,7 +146,7 @@ Scoped review / risk review 的结论如果具有长期价值，应记录回当�
 ## 禁止事项
 
 - 不要只说“看起来没问题”。
-- 不要跳过电源、电池、ADC、MOSFET、运放、参考电压等高风险模块。
+- Formal Review 不得跳过当前项目适用的高风险模块；Scoped Review / Risk Review 不得跳过其明确 scope 内的高风险因素。
 - 不要在没有 datasheet 依据时确认关键连接完全正确。
 - 不要把开源项目原理图当作最终依据。
 - 不要忽略测试点、调试接口和首次上电安全检查。
