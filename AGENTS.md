@@ -51,7 +51,7 @@ Project `AGENTS.md` 不复制 Framework 的完整方法。完整 schema、四层
 | 原理图设计检查 / 画 PCB 前审查                                               | `skills/hardware-schematic-review/SKILL.md`       |
 | PCB Layout Preflight / Layout-Routing Review / PCB Release Review | `skills/hardware-pcb-layout-review/SKILL.md`      |
 
-只读取当前任务对应 Skill；跨阶段任务才按需读取上游 Skill。Stage 3 Design 使用 schematic-design，Stage 4 正式 Review 使用 schematic-review；逐项 Gate 检查优先使用 `checklists/`。
+只读取当前任务对应 Skill；跨阶段任务才按需读取上游 Skill。Stage 3 日常设计与 verification 默认使用 schematic-design，Stage 4 Formal Schematic Review 使用 schematic-review；明确的 scoped schematic review / risk review 按 `docs/AI_Context_Guide.md` 的 task-intent routing，可按需使用 schematic-review 作为 supporting method。逐项 Gate 检查优先使用 `checklists/`。
 
 ## AI/Codex 与用户职责
 

@@ -1,5 +1,7 @@
 # 原理图通用检查表
 
+本 checklist 默认支持 Stage 4 Formal Schematic Review。Formal Review 使用适用的完整检查范围，并遵守完整 PDF / BOM 输入要求。用于 explicit scoped review / risk review 时，只应用与当前 scope 相关的 checklist items，证据要求与 scope 匹配；完整整板 PDF / BOM 和整板 Layout-entry decision 不因此成为 scoped review 的默认要求。
+
 ## 审查输入
 
 - [ ] 默认必需审查输入已具备：可追溯到当前 `.SchDoc` 版本的完整原理图 PDF，以及当前版本 BOM；BOM 至少包含位号、数量、参数或型号、PCB 封装
