@@ -2,44 +2,29 @@
 
 ## 适用场景
 
-当需要审查原理图、PDF 原理图、Altium 截图、模块连接关系、接口定义或设计思路时，使用本 Skill。
+本 Skill 提供 schematic review 方法，主要用于 Stage 4 Formal Schematic Review，也可在其他 Stage 对明确的 scoped review / risk-review 任务按需使用。Stage 3 日常模块设计、连接核对、参数计算和轻量 verification 默认由 `hardware-schematic-design` Skill 处理；读取或按需使用本 Skill 不自动改变 Project Stage，不自动构成 Stage 4 Formal Review，也不等同于 Stage 4 PASS 或 PCB Layout approval。
 
 本 Skill 用于在进入 PCB Layout 前发现电源、接口、保护、最小系统、模拟前端和调试可达性问题。
 
 ## 适用项目范围
 
-本 Skill 默认服务当前仓库已有的三个硬件项目：
-
-1. STM32 数据采集/控制开发板
-2. 单节锂电池充电与保护电源板
-3. STM32 + 运放 + ADC 模拟信号采集板
-
-同时也适用于后续新增的低压嵌入式硬件、传感器采集、电源管理、模拟前端、MCU 控制类项目。
-
-如果新增项目涉及高压、射频、高速数字、隔离电源、汽车电子、医疗电子或安规认证，需要在本 Skill 基础上增加专项检查项。
+本 Skill 适用于常见低压嵌入式、电源管理、传感器采集、模拟前端和 MCU 控制类项目。高压、射频、高速数字、隔离、汽车、医疗或安规场景需增加专项检查方法。
 
 ## 最小读取上下文
 
 进行原理图审查前，AI 默认读取：
 
-1. `PROJECT_RULES.md`
-2. `AGENTS.md`
-3. `docs/AI_Context_Guide.md`
-4. `skills/hardware-schematic-review/SKILL.md`
-5. 当前项目的 `requirements.md`
-6. 当前项目的 `design_notes.md`
-7. 当前项目的 `references.md`
-8. 默认必需实现证据：可追溯到当前 `.SchDoc` 版本的完整原理图 PDF，以及当前版本 BOM；BOM 至少包含位号、数量、参数或型号、PCB 封装。关键器件应尽量包含明确制造商型号或器件料号；通用电阻、电容、LED、测试点、排针等不强制具体制造商料号，不能为满足格式虚构料号
+1. Layer 0/1：Project `FRAMEWORK.md`、`PROJECT_RULES.md` 与绑定 Framework 的 `docs/AI_Context_Guide.md`
+2. 本 Skill
+3. 当前 Project 的 `requirements.md`、`design_notes.md`、`references.md`
+4. Stage 4 Formal Schematic Review 所需的当前完整原理图 PDF 与当前 BOM
 
 按需读取：
 
-- `skills/hardware-datasheet-reading/SKILL.md`，仅在需要核对关键器件参数时读取
-- `skills/hardware-component-selection/SKILL.md`，仅在需要追溯选型依据时读取
-- 当前项目已有的 `docs/schematic_review.md`，仅在继续审查或追踪历史问题时读取
+- 当前 Project 已有的 `docs/schematic_review.md`
+- `skills/hardware-datasheet-reading/SKILL.md` 或 `skills/hardware-component-selection/SKILL.md`
 - 相关 checklist
-- 条件触发证据：网表用于核对复杂网络、跨页网络、网络标签或实际引脚连接关系；ERC 报告、Messages 导出或截图仅在用户明确提供并要求 AI 分析时用于补充 ERC 问题；元件报告用于 BOM 信息不足或需核对额外属性；引脚或封装映射报告用于关键器件引脚、原理图库与 PCB 封装映射存在风险；局部截图用于补充 Altium 属性、引脚编号、封装模型、ERC 消息或局部连接证据
-
-如果当前项目没有 `docs/schematic_review.md`，应在审查完成后创建。
+- 当前问题需要的 netlist、ERC、component / pin / footprint mapping 或 screenshot evidence
 
 ## 审查输入能力边界
 
@@ -50,7 +35,7 @@
 - ERC 输出不是默认必需审查输入。AI 只有在用户提供 ERC 报告、Messages 导出或相关截图时，才分析 ERC 问题；未提供 ERC 输出时，不声称已经核对 ERC，不记录 ERC 执行或结果状态，也不把“未提供 ERC 输出”本身作为审查未完成或不能进入 PCB Layout 的理由。
 - 网表、元件报告、引脚或封装映射报告和局部截图均为条件触发证据。局部截图只能补充局部证据，不能代替完整原理图 PDF。
 - `requirements.md`、`design_notes.md` 和 `docs/module_design/*.md` 是需求和设计意图，不能单独证明 EDA 实现已经同步。
-- Stage 4 formal review 可以复用可追溯且足以覆盖当前目标的既有 review evidence，对 unchanged coverage 不要求机械重复审查；应按当前 design 相对既有 coverage 的 relevant delta，重新审查 changed、previously uncovered 或 evidence-insufficient areas。这种复用不等于跳过 Stage 4，也不要求 schematic、PDF 或 BOM byte-identical、SHA-identical 或完全相同；既有 review 不能把缺少证据的 ERC、实际 EDA mapping 或 footprint mapping 自动升级为 PASS，ERC 未验证时仍保持未验证，但不因此自动成为 Stage 4 blocker。
+- Stage 4 可复用可追溯且足以覆盖当前目标的既有 review evidence；无需 schematic、PDF 或 BOM byte- / SHA-identical。对 unchanged coverage 不机械重审，只复核 changed、previously uncovered 或 evidence-insufficient areas。Reuse 不等于跳过 Stage 4，也不得把未验证的 ERC、EDA mapping 或 footprint mapping 升级为 PASS；ERC 未验证不因此自动成为 Stage 4 blocker。
 
 ## 审查目标
 
@@ -137,6 +122,8 @@ Skill 只规定审查方法和输出结构；逐项检查句应维护在 `checkl
 
 - 当前项目的 `docs/schematic_review.md`
 - 必要时更新当前项目的 `design_notes.md`、BOM 草稿、`requirements.md` 或 `docs/revision_history.md`
+
+如果当前项目没有 `docs/schematic_review.md`，应在审查完成后创建。
 
 只有在实现证据足够、修改已由用户在 EDA 中完成并通过默认必需证据或与问题类型匹配的条件触发证据复核后，才能关闭对应问题；证据不足时标记为“待 EDA 核对”。高风险问题如果依赖 ERC、网表或封装映射才能关闭，则必须补充对应证据。
 
