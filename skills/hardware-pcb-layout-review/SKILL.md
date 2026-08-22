@@ -25,12 +25,12 @@ description: Guide interactive PCB placement and review placement, layout, routi
 
 ## 2. 选择模式
 
-| 用户请求 | 模式 | 必需结论 |
-|---|---|---|
-| 是否可开始布局、规则准备 | Layout Preflight | `批准开始正式布局` / `不批准开始正式布局` |
-| “现在先摆什么？”、“哪些器件必须靠近？”、“下一步移动哪些器件？”或逐步完成布局 | **B1 — Interactive Placement Guidance** | 工程指导；不要求每轮给出正式阶段门结论 |
-| 已有 Placement / Routing Evidence 的布局、布线、铺铜、回流或 PCB 图片正式/明确审查 | **B2 — Layout / Routing Review** | `可进入 PCB Release Review` / `修改后复审` / `存在高风险，停止推进` |
-| Batch DRC、Gerber、钻孔、坐标、制造包或放行 | PCB Release Review | `批准制造` / `有条件批准` / `不批准制造` |
+| 用户请求                                                        | 模式                                      | 必需结论                                              |
+| ----------------------------------------------------------- | --------------------------------------- | ------------------------------------------------- |
+| 是否可开始布局、规则准备                                                | Layout Preflight                        | `批准开始正式布局` / `不批准开始正式布局`                          |
+| “现在先摆什么？”、“哪些器件必须靠近？”、“下一步移动哪些器件？”或逐步完成布局                   | **B1 — Interactive Placement Guidance** | 工程指导；不要求每轮给出正式阶段门结论                               |
+| 已有 Placement / Routing Evidence 的布局、布线、铺铜、回流或 PCB 图片正式/明确审查 | **B2 — Layout / Routing Review**        | `可进入 PCB Release Review` / `修改后复审` / `存在高风险，停止推进` |
+| Batch DRC、Gerber、钻孔、坐标、制造包或放行                               | PCB Release Review                      | `批准制造` / `有条件批准` / `不批准制造`                        |
 
 跨正式审查模式的请求按 A → B2 → C 顺序处理并分别给出阶段门结论，后续证据不能抵消前一阶段的阻断项。B1 可在 Mode B 内的任意合理 Placement 增量中使用，不应被强制包装为 Formal Review。
 
@@ -112,7 +112,7 @@ Placement envelope 只根据 footprint、机械间隙、布线空间、热要求
 
 | 区域 | 优先关系 |
 |---|---|
-| Switching regulator | `Cin → Power IC → Inductor / Cout` 紧凑；控制 hot-loop、switch-node 面积、pin-specific 去耦与安静 FB 路径。 |
+| Switching regulator | 将 Power IC、input capacitor、switching / energy-storage components 与 output capacitor 按当前 topology / datasheet 组织成紧凑 critical loop；控制 hot-loop、switch-node area、pin-specific 去耦与 quiet feedback path。 |
 | Charger / power-path IC | 输入、储能/去耦、功率路径与电池/负载端按功能流向紧凑；保留热与大电流布线空间。 |
 | Load switch / eFuse | 保护/控制器靠近受保护电源路径；输入/输出去耦和电流路径短、直接。 |
 | Protected external interface | 连接器入口先经过 ESD / protection；保护回路短，并与内部敏感区域分开。 |
