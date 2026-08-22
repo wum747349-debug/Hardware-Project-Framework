@@ -1,13 +1,13 @@
 ---
 name: hardware-pcb-layout-review
-description: Review low-voltage embedded PCB readiness, layout, routing, copper, user-provided DRC evidence, and manufacturing release. Use for Layout Preflight, Layout / Routing Review, PCB Release Review, Altium rule Scope/Priority review, rule exemptions, or manufacturing-output checks.
+description: Guide interactive PCB placement and review placement, layout, routing, copper, user-provided DRC evidence, and PCB release. Use for Layout Preflight, Layout / Routing Review, PCB Release Review, Altium rule Scope/Priority review, rule exemptions, or manufacturing-output checks.
 ---
 
 # PCB Layout 与制造放行审查
 
 ## 1. 目的与边界
 
-本 Skill 用于低压嵌入式、MCU 控制、传感器采集、电源管理、模拟前端和通信接口板，提供三种 PCB 协作模式：
+本 Skill 用于低压嵌入式、MCU 控制、传感器采集、电源管理、模拟前端和通信接口板，提供三种 PCB 协作模式；其中 Mode B 包含交互式 Placement 指导与正式 Layout / Routing Review：
 
 1. **Layout Preflight**：确认正式布局前的制造、机械、封装、原理图门禁和规则基线。
 2. **Layout / Routing Review**：审查布局、关键路径、布线、回流、过孔和铺铜。
@@ -28,16 +28,17 @@ description: Review low-voltage embedded PCB readiness, layout, routing, copper,
 | 用户请求 | 模式 | 必需结论 |
 |---|---|---|
 | 是否可开始布局、规则准备 | Layout Preflight | `批准开始正式布局` / `不批准开始正式布局` |
-| 布局、布线、铺铜、回流或 PCB 图片审查 | Layout / Routing Review | `可进入 PCB Release Review` / `修改后复审` / `存在高风险，停止推进` |
+| “现在先摆什么？”、“哪些器件必须靠近？”、“下一步移动哪些器件？”或逐步完成布局 | **B1 — Interactive Placement Guidance** | 工程指导；不要求每轮给出正式阶段门结论 |
+| 已有 Placement / Routing Evidence 的布局、布线、铺铜、回流或 PCB 图片正式/明确审查 | **B2 — Layout / Routing Review** | `可进入 PCB Release Review` / `修改后复审` / `存在高风险，停止推进` |
 | Batch DRC、Gerber、钻孔、坐标、制造包或放行 | PCB Release Review | `批准制造` / `有条件批准` / `不批准制造` |
 
-跨模式请求按 A → B → C 顺序处理并分别给出阶段门结论，后续证据不能抵消前一阶段的阻断项。
+跨正式审查模式的请求按 A → B2 → C 顺序处理并分别给出阶段门结论，后续证据不能抵消前一阶段的阻断项。B1 可在 Mode B 内的任意合理 Placement 增量中使用，不应被强制包装为 Formal Review。
 
 ## 3. 最小上下文
 
-三种模式的默认、按需和禁止读取范围以 `docs/AI_Context_Guide.md` 的“PCB 三种模式最小上下文”为准；本 Skill 不重复维护文件清单。
+默认、按需和禁止读取范围以 `docs/AI_Context_Guide.md` 的 Stage / Task context table 为准；本 Skill 不重复维护文件清单。
 
-执行时仍按第 2 节选择 Layout Preflight、Layout / Routing Review 或 PCB Release Review，并按下文对应方法、证据边界和 checklist 完成审查。
+执行时仍按第 2 节选择 Layout Preflight、B1、B2 或 PCB Release Review，并按下文对应方法、证据边界和 checklist 完成工作。
 
 ## 4. 能力与证据边界
 
@@ -60,7 +61,65 @@ description: Review low-voltage embedded PCB readiness, layout, routing, copper,
 
 Layout Preflight 不要求初始 DRC。用户可以使用 Altium 在线规则检查或临时检查，但不得把 DRC 结果作为批准开始正式布局的默认仓库门禁。
 
-## 6. 模式 B 方法：Layout / Routing Review
+## 6. 模式 B 方法
+
+### B1 — Interactive Placement Guidance
+
+适用于用户询问当前先摆什么、模块内部如何摆、哪些器件必须靠近、哪些可以稍远、下一步移动什么、哪些先不要动，或要求一步一步完成布局。它是基于用户提供的当前事实、截图和器件/资料的工程指导，不替代 `.PcbDoc`、不证明 EDA 实现，也不要求每轮形成正式审查结论。
+
+按以下顺序推进，除非当前证据表明应先解决明确冲突：
+
+```text
+已确认的机械锚点
+        ↓
+外部连接器 / 用户可操作器件
+        ↓
+宏观功能区
+        ↓
+关键模块锚定器件
+        ↓
+暂定宏观布局冻结
+        ↓
+一次处理一个关键模块
+        ↓
+布局敏感的局部 cluster
+        ↓
+普通支持器件
+        ↓
+测试点 / 指示器 / 丝印
+        ↓
+可开始布线
+```
+
+“暂定宏观布局冻结”不是永久锁定；仅当出现机械冲突、关键环路冲突、热冲突或布线不可能等合理原因时，重新打开宏观布局。
+
+指导具体模块时，优先明确：
+
+1. Anchor device、must-stay-close cluster，以及每个关键 capacitor / resistor / support component 对应的 pin 或功能。
+2. 必须最短的 current loop / sensitive path、noisy side 与 quiet side。
+3. 可稍远的器件、暂时不要摆的 ordinary support components，以及所需的相对 placement envelope / routing space。
+4. 当前 `Keep fixed`、`Move now`、`Move next`、`Do not move yet`。
+
+Placement envelope 只根据 footprint、机械间隙、布线空间、热要求与装配/探测可达性做相对或粗略判断；不得虚构具体毫米尺寸。布局敏感支持器件应早摆，普通非敏感支持器件可后摆。常见前者包括去耦电容、反馈电阻、补偿 RC、bootstrap 电容、电流采样电阻、栅极电阻、晶振负载电容、端接和 ESD / protection 器件。
+
+电气/机械关系优先于视觉对齐/对称，后者又优先于飞线外观。飞线可作为辅助信息，但不得为缩短或整齐飞线而破坏去耦、反馈、关键电流环路、保护位置、晶振 cluster 或高阻模拟 cluster。
+
+每次协作优先只完成一个有意义的 Placement 变更：用户提供当前截图 → 审查当前 cluster → 已接受器件暂定冻结 → 进入下一 cluster。不要要求用户先一次摆完几十个器件。
+
+相对位置难以文字表达时，可使用 top-view ASCII PCB sketch 或模块内部 Placement sketch；它们仅为 conceptual、not to scale、not EDA evidence，只表达相对位置、方向和功能关系，不能证明实际间隙、线宽、网络连通、DRC 或机械尺寸。
+
+通用 Placement archetype（具体 pinout 与资料要求仍以当前项目事实为准）：
+
+| 区域 | 优先关系 |
+|---|---|
+| Switching regulator | `Cin → Power IC → Inductor / Cout` 紧凑；控制 hot-loop、switch-node 面积、pin-specific 去耦与安静 FB 路径。 |
+| Charger / power-path IC | 输入、储能/去耦、功率路径与电池/负载端按功能流向紧凑；保留热与大电流布线空间。 |
+| Load switch / eFuse | 保护/控制器靠近受保护电源路径；输入/输出去耦和电流路径短、直接。 |
+| Protected external interface | 连接器入口先经过 ESD / protection；保护回路短，并与内部敏感区域分开。 |
+| Analog / high-impedance region | 输入与反馈/偏置 cluster 紧凑、远离 noisy side；保留安静参考与回流空间。 |
+| Clock / crystal region | 晶体与 load capacitors 靠近相关器件引脚；远离开关节点、大电流和噪声路径。 |
+
+### B2 — Layout / Routing Review
 
 1. 先确认审查对象、PCB / Git 版本、视图类型和证据限制。
 2. 从板框、安装孔、连接器、机械边界和功能分区开始检查布局。
@@ -69,7 +128,7 @@ Layout Preflight 不要求初始 DRC。用户可以使用 Altium 在线规则检
 5. 用户在相关修改后执行 Repour，并提供需要复审的当前证据。
 6. 将需要跨回合追踪的重要问题写入 `docs/pcb_review.md`，普通即时建议不强制沉淀。
 
-本模式不要求 DRC 作为默认输入，也不要求保存中间 DRC 记录。具体逐项顺序以 PCB Layout Checklist 为准。
+本正式 Review 不要求 DRC 作为默认输入，也不要求保存中间 DRC 记录。具体逐项顺序以 PCB Layout Checklist 为准。
 
 ## 7. 模式 C 方法：PCB Release Review
 
@@ -120,6 +179,30 @@ Layout Preflight 不要求初始 DRC。用户可以使用 Altium 在线规则检
 证据不足不自动改变问题的电气严重性，但会限制问题关闭或制造放行结论。
 
 ## 11. 输出格式
+
+### B1 — Interactive Placement Guidance
+
+```text
+Current placement goal
+
+Keep fixed
+
+Move now
+
+Move next
+
+Do not move yet
+
+Critical relationships
+
+Optional ASCII top-view
+
+What screenshot / evidence to provide next
+```
+
+该模板不要求完整 Findings table 或 Stage Gate conclusion。
+
+### Formal Review（A、B2、C）
 
 ### 当前结论
 
