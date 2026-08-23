@@ -59,6 +59,12 @@ description: Guide interactive PCB placement and review placement, layout, routi
 6. 由用户确认 Altium 实际规则已配置，并人工核对关键 Scope 与 Priority。
 7. 使用 Preflight Checklist 记录阻断项与结论。
 
+Rule organization principle：使用能够准确表达工程意图的最简单 Scope，并保持最小且可维护的规则集。
+
+- 多个对象共享相同 electrical、routing 或 manufacturing behavior，且形成稳定、有工程意义的类别时，优先使用对应的 Net Class 或 Object Class scope，避免重复成员 Query。
+- 单个特殊 Net、Object、Layer 或例外情况，使用最简单准确的 Explicit Scope 或 Custom Query；不要仅因工具支持复杂 Query 就增加复杂度。
+- 只有存在真实的 electrical、manufacturing、mechanical 或 verification / traceability difference 时，才新增 higher-priority exception rule；不要创建行为完全相同的重复 Rule。
+
 Layout Preflight 不要求初始 DRC。用户可以使用 Altium 在线规则检查或临时检查，但不得把 DRC 结果作为批准开始正式布局的默认仓库门禁。
 
 ## 6. 模式 B 方法
