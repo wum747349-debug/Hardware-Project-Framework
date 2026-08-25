@@ -1,17 +1,17 @@
 ---
 name: hardware-pcb-layout-review
-description: Guide interactive PCB placement and review placement, layout, routing, copper, user-provided DRC evidence, and PCB release. Use for Layout Preflight, Layout / Routing Review, PCB Release Review, Altium rule Scope/Priority review, rule exemptions, or manufacturing-output checks.
+description: Guide interactive PCB placement and routing, and review placement, layout, routing, copper, user-provided DRC evidence, and PCB release. Use for Layout Preflight, interactive Layout / Routing work, Layout / Routing Review, PCB Release Review, Altium Rule Scope / Rule Priority review, rule exemptions, or manufacturing-output checks.
 ---
 
 # PCB Layout 与制造放行审查
 
 ## 1. 目的与边界
 
-本 Skill 用于低压嵌入式、MCU 控制、传感器采集、电源管理、模拟前端和通信接口板，提供三种 PCB 协作模式；其中 Mode B 包含交互式 Placement 指导与正式 Layout / Routing Review：
+本 Skill 用于低压嵌入式、MCU 控制、传感器采集、电源管理、模拟前端和通信接口板，提供三种 PCB 协作模式；其中 Mode B 包含交互式 Placement、交互式 Routing 与正式 Layout / Routing Review：
 
-1. **Layout Preflight**：确认正式布局前的制造、机械、封装、原理图门禁和规则基线。
-2. **Layout / Routing Review**：审查布局、关键路径、布线、回流、过孔和铺铜。
-3. **PCB Release Review**：审查完整 Batch DRC 结果、装配信息、制造输出、规则豁免和制造放行。
+1. **Mode A — Layout Preflight**：确认正式布局前的制造、机械、封装、原理图门禁和规则基线。
+2. **Mode B — PCB Layout / Routing Work**：逐步指导 Placement / Routing，并正式审查布局、关键路径、布线、回流、过孔和铺铜。
+3. **Mode C — PCB Release Review**：审查完整 Batch DRC 结果、装配信息、制造输出、规则豁免和制造放行。
 
 高压、射频、复杂高速数字、隔离电源、汽车、医疗、安规、HDI 或刚挠结合项目只能复用本 Skill 的通用部分，必须增加专项方法、checklist、标准和有资质的审查。
 
@@ -27,25 +27,26 @@ description: Guide interactive PCB placement and review placement, layout, routi
 
 | 用户请求                                                        | 模式                                      | 必需结论                                              |
 | ----------------------------------------------------------- | --------------------------------------- | ------------------------------------------------- |
-| 是否可开始布局、规则准备                                                | Layout Preflight                        | `批准开始正式布局` / `不批准开始正式布局`                          |
+| 是否可开始布局、规则准备                                                | **Mode A — Layout Preflight**           | `批准开始正式布局` / `不批准开始正式布局`                          |
 | “现在先摆什么？”、“哪些器件必须靠近？”、“下一步移动哪些器件？”或逐步完成布局                   | **B1 — Interactive Placement Guidance** | 工程指导；不要求每轮给出正式阶段门结论                               |
-| 已有 Placement / Routing Evidence 的布局、布线、铺铜、回流或 PCB 图片正式/明确审查 | **B2 — Layout / Routing Review**        | `可进入 PCB Release Review` / `修改后复审` / `存在高风险，停止推进` |
-| Batch DRC、Gerber、钻孔、坐标、制造包或放行                               | PCB Release Review                      | `批准制造` / `有条件批准` / `不批准制造`                        |
+| “下一根线先走什么？”、“当前模块先走哪些网络？”或逐步解决 routing conflict                 | **B2 — Interactive Routing Guidance**  | 工程指导；不要求每轮给出正式阶段门结论                               |
+| 已有 Placement / Routing Evidence 的布局、布线、铺铜、回流或 PCB 图片正式/明确审查 | **B3 — Layout / Routing Review**        | `可进入 PCB Release Review` / `修改后复审` / `存在高风险，停止推进` |
+| Batch DRC、Gerber、钻孔、坐标、制造包或放行                               | **Mode C — PCB Release Review**         | `批准制造` / `有条件批准` / `不批准制造`                        |
 
-跨正式审查模式的请求按 A → B2 → C 顺序处理并分别给出阶段门结论，后续证据不能抵消前一阶段的阻断项。B1 可在 Mode B 内的任意合理 Placement 增量中使用，不应被强制包装为 Formal Review。
+跨正式审查模式的请求按 A → B3 → C 顺序处理并分别给出阶段门结论，后续证据不能抵消前一阶段的阻断项。B1 / B2 可在 Mode B 内的任意合理 Placement / Routing 增量中使用，不应被强制包装为 Formal Review。
 
 ## 3. 最小上下文
 
 默认、按需和禁止读取范围以 `docs/AI_Context_Guide.md` 的 Stage / Task context table 为准；本 Skill 不重复维护文件清单。
 
-执行时仍按第 2 节选择 Layout Preflight、B1、B2 或 PCB Release Review，并按下文对应方法、证据边界和 checklist 完成工作。
+执行时仍按第 2 节选择 Layout Preflight、B1、B2、B3 或 PCB Release Review，并按下文对应方法、证据边界和 checklist 完成工作。
 
 ## 4. 能力与证据边界
 
 - `.PcbDoc` 是 PCB 权威实现源文件。没有可靠解析器、脚本或自动化接口时，不声称读取其内部对象、网络、规则、层、铺铜、尺寸或属性。
 - PCB 图片只支持视觉判断，不能证明网络、精确间距、线宽、孔径、环宽、规则命中、铺铜状态、未布线数量或 DRC 通过。
 - 不声称运行 Altium Designer、配置规则、布线、Repour、Batch DRC 或导出制造文件。
-- 实际规则配置、Scope/Priority 核对、布局布线、Repour、DRC 和导出均由用户执行。
+- 实际规则配置、Rule Scope / Altium Rule Priority 核对、布局布线、Repour、DRC 和导出均由用户执行。
 - 无法由当前证据确认的实现项标记为 `待 EDA 核对`。
 - 始终区分“文档已定义”“用户确认 AD 已配置”“用户提供 DRC 结果”三种状态。
 
@@ -55,8 +56,8 @@ description: Guide interactive PCB placement and review placement, layout, routi
 2. 确认目标板厂、材料、层数、板厚、铜厚、装配方式、板框、安装孔和机械边界。
 3. 核对关键封装、Pin/Pad mapping、极性、Pin 1、机械模型和器件 Layout 要求。
 4. 根据项目需求形成规则基线，区分板厂制造能力、项目设计默认值和制造极限。
-5. 选择必要的 Net Class 或明确 Scope，记录规则值、依据、单位、Scope、Priority 和覆盖关系。
-6. 由用户确认 Altium 实际规则已配置，并人工核对关键 Scope 与 Priority。
+5. 选择必要的 Net Class 或明确 Scope，记录规则值、依据、单位、Scope、Altium Rule Priority 和覆盖关系。
+6. 由用户确认 Altium 实际规则已配置，并人工核对关键 Scope 与 Altium Rule Priority。
 7. 使用 Preflight Checklist 记录阻断项与结论。
 
 Rule organization principle：使用能够准确表达工程意图的最简单 Scope，并保持最小且可维护的规则集。
@@ -125,7 +126,56 @@ Placement envelope 只根据 footprint、机械间隙、布线空间、热要求
 | Analog / high-impedance region | 输入与反馈/偏置 cluster 紧凑、远离 noisy side；保留安静参考与回流空间。 |
 | Clock / crystal region | 晶体与 load capacitors 靠近相关器件引脚；远离开关节点、大电流和噪声路径。 |
 
-### B2 — Layout / Routing Review
+### B2 — Interactive Routing Guidance
+
+适用于逐步决定下一根线、当前模块 routing 顺序、冲突让路、short crossover、routing corridor、GND 时机或是否局部重开 Placement。它提供工程施工指导，不要求每轮形成 Formal Findings table、Stage Gate 或 PCB Release 结论。
+
+#### Evidence before specificity
+
+具体 net / pin-to-pin routing 指令必须遵守 `docs/AI_Context_Guide.md` 的 context / evidence boundary，并有足够可靠的 connectivity evidence。只有 PCB 视觉证据时，指导限于视觉或几何 routing review，明确不推断 connectivity 或 net function；不得根据 PCB screenshot 与丝印猜测 pad net、pin function 或 feedback、enable、threshold、sensing 等分类。
+
+#### Routing Criticality 与 Dominant Constraint
+
+只对真正需要特殊保护的 route 使用以下轻量分级；未分类 routing 默认为 **Ordinary**，开始 Stage 6 前不要求建立全网完整分级表。
+
+- **Critical**：存在 topology、datasheet、safety、power integrity、signal integrity、noise 或 measurement 等明确关键约束，明显恶化 routing geometry 会产生实际工程风险。
+- **Constrained**：存在明确 routing preference / constraint，但通常可在不违反自身 mandatory constraint 的情况下向 Critical routing 让路。
+- **Ordinary**：没有特殊 routing geometry requirement。
+
+Routing Criticality 是 engineering routing decision，与用于 Width、Clearance、Polygon 等规则覆盖关系的 **Altium Rule Priority** 不同，不得混用。
+
+对 Critical 及必要的 Constrained route，同时说明其 **Dominant Constraint**，即该 route 为何重要，例如 critical loop area、current capacity / voltage drop、quiet sensing / reference、high impedance / noise coupling、continuous return/reference、matched geometry 或 datasheet-defined path。这是工程描述，不建立额外编码 taxonomy。只有长期有价值时，才在 Project `docs/pcb_design_rules.md` 记录具体 Critical / Constrained route 与 dominant constraint；Ordinary nets 不需要持久化完整表格。
+
+Topology- 或 datasheet-defined routing constraints 在适用时覆盖 generic routing order，例如 switching hot loop、Kelvin sensing、high-speed differential、RF、crystal 与 precision reference；不得把这些示例固化为 universal Criticality ranking。
+
+#### Reserve globally, route locally
+
+采用 `Reserve critical constraints globally; execute routing locally.`：开始或继续 routing 前，先识别全板的重要 critical corridors、跨模块关键 route、关键 loop / return geometry、reference-plane needs，以及 Ordinary nets 不应占用的空间；实际人工施工仍以 module、local functional block 或 local cluster 为单位。
+
+典型局部顺序为 current local Critical → current local Constrained → nearby Ordinary。Global reservation 不要求先完成全板每一条 Critical route 才能进行局部 routing；相邻 Ordinary route 只要不占用尚未解决的 critical routing space，也不破坏关键 return/reference geometry，就可以在当前 local block 一起完成。
+
+#### Conflict resolution
+
+Routing conflict 按以下顺序处理：
+
+1. **Mandatory constraint**：不得为 routing convenience 牺牲 safety、required clearance、manufacturing requirement、mandatory datasheet / topology constraint 或其他 hard project requirement。
+2. **Routing Criticality**：较低关键度 routing 让路，但不能因此违反其自身 mandatory constraint。
+3. **Dominant electrical / return-reference constraint**：同一 Routing Criticality 时，优先保持 dominant electrical constraint 与 return / reference continuity。
+4. **Optimization tie-break**：多个方案都满足上述要求后，再权衡 unwanted coupling、reference-plane disruption、via count、route length 与 routing simplicity；视觉整齐最后考虑。
+
+Via count 与 route length 没有固定先后；若其中一项本身就是某 route 的 dominant constraint，则按前一层工程约束处理。不得为了让较低关键度网络少一两个 via 而明显恶化更关键的 route。
+
+#### Layer、reference 与 return planning
+
+遵循 Project layer / copper strategy，不预设 Bottom = GND 或固定的 Top routing / Bottom ground plane。当某层主要用于保持连续 reference plane 时，应控制该层 signal routing，避免实质割裂预期 return/reference path。需要且电气合理时允许 short crossover；保持其合理短小、避免长 slot / barrier、保护较高关键度 return path，并在可行时回到 primary routing layer。复杂高速、RF、HDI 等继续使用专项方法。
+
+Return planning is early; GND implementation is flexible。若 local GND via、critical reference connection 或 critical current return 本身属于 critical loop / reference geometry，应与该 critical route 同步实现，不机械推迟到统一 GND pass。其他普通 component GND vias、stitching vias、bulk ground completion 与 polygon completion 可在 dedicated GND pass 完成，但所需 return geometry、via landing 与 reference continuity 必须提前规划并保留。
+
+#### Placement reopen
+
+遵守 B1 的“暂定宏观布局冻结”（provisional placement freeze）。只有 routing-critical constraint 无法合理满足，或小范围移动能显著降低 electrical、thermal 或 mechanical risk 时，才局部 reopen placement；不要为了一个 Ordinary via、视觉整齐或略短的 Ordinary route 频繁重开 Placement。
+
+### B3 — Layout / Routing Review
 
 1. 先确认审查对象、PCB / Git 版本、视图类型和证据限制。
 2. 从板框、安装孔、连接器、机械边界和功能分区开始检查布局。
@@ -208,7 +258,28 @@ What screenshot / evidence to provide next
 
 该模板不要求完整 Findings table 或 Stage Gate conclusion。
 
-### Formal Review（A、B2、C）
+### B2 — Interactive Routing Guidance
+
+```text
+Current routing objective
+
+Protect / reserve
+
+Route now
+
+Yield / crossover candidate
+
+Return / layer note
+
+Placement reopen
+<No / local reopen + reason>
+
+Next evidence
+```
+
+无关字段可以省略；该模板不要求 Formal Findings table、Stage Gate result 或 full-board checklist。
+
+### Formal Review（A、B3、C）
 
 ### 当前结论
 

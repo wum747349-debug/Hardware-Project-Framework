@@ -90,7 +90,7 @@ Gate 1.5 不读取或产生后续阶段设计结果；Validator 结果不能替�
 | Stage 3 — Schematic Design | Layer 0/1 + schematic-design Skill + 当前需求、设计说明、资料索引、当前模块文档 | 选型/datasheet Skill、BOM 草稿、封装资料、当前模块所需 Manufacturer official documentation | 其他 Project、全部 Skill、全部 datasheet、全部历史记录 |
 | Stage 4 — Schematic Review | Layer 0/1 + Review Skill + Requirements/Design/References + 完整 PDF + 当前 BOM + Review 记录 | 当前模块文档；网表/ERC/报告/截图按具体问题触发 | 其他 Project、Template、全部 Skill |
 | Stage 5 — Layout Preflight | Layer 0/1 + PCB Skill + README/Requirements/Design/References + Schematic Review + PCB Rules + 关键 Layout 资料 | PDF/BOM/机械/板厂官方能力 | Batch DRC、制造输出、其他 Project |
-| Stage 5–6 — Layout/Routing Review | Layer 0/1 + PCB Skill + README/Requirements/Design/PCB Rules + 当前 PCB Evidence | 模块资料、关键 datasheet、已有 PCB 问题 | 全部资料、Release checklist、制造输出 |
+| Stage 5–6 — PCB Layout / Routing Guidance & Review | Layer 0/1 + PCB Skill + README/Requirements/Design/PCB Rules + 当前 PCB Evidence | 模块资料、关键 datasheet、已有 PCB 问题 | 全部资料、Release checklist、制造输出 |
 | Stage 7 — PCB Release Review | Layer 0/1 + PCB Skill + README/Requirements/PCB Rules/PCB Review + 当前 BOM/Evidence + 用户 Batch DRC + 制造输出清单 + Release Checklist | 局部 Gerber、Drill、坐标、截图和报告片段 | 其他 Project 历史 |
 | Stage 8 — Bring-up/Test | Layer 0/1 + README + Bring-up/Test 记录 + 原理图与接口说明 | PCB Review、关键 datasheet、安全 checklist、Revision | 其他 Project、Template |
 
@@ -105,6 +105,10 @@ Stage 3 的日常模块设计、连接核对、参数计算、当前模块或局
 - 原理图 PDF / BOM / 报告：仅在相应 Review 或具体追溯问题需要时读取。
 - DRC 局部证据：用户摘要不足以判断具体违规、规则或豁免时读取。
 - Gerber、Drill、坐标与装配输出：制造放行时读取。
+
+Stage 5–6 中，精确到具体 net 或 pin-to-pin 的 routing guidance 必须具备足以回答当前限定问题、可靠且属于当前版本的 connectivity evidence；可按任务最小选用可靠可读的 `.PcbDoc` / `.SchDoc`、当前 netlist、当前 schematic PDF、当前模块连接记录或用户提供的局部 pin/net mapping，不要求形成固定来源层级或全部加载。仅有 PCB 图片时，可以进行视觉 routing review 和相对几何指导，但不能据此确定精确连接或 net function。普通视觉 routing review 不自动扩展读取 schematic、BOM 或模块文档；net-specific 问题只加载所需的最小 connectivity evidence。
+
+BOM 只在 MPN、value、footprint、rating 或 population 信息与当前问题相关时按需读取，不能替代 connectivity evidence。
 
 无可靠 `.SchDoc` / `.PcbDoc` 解析能力时，只使用用户提供的 PDF、BOM、图片、报告、规则摘要和输出。图片不能证明网络、间距、线宽、孔径、规则命中、铺铜或 DRC 通过。无法确认的实现事项标记“待 EDA 核对”，不得据此关闭问题或制造放行。
 
