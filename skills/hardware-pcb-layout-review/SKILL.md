@@ -1,6 +1,6 @@
 ---
 name: hardware-pcb-layout-review
-description: Guide interactive PCB placement and routing, and review placement, layout, routing, copper, user-provided DRC evidence, and PCB release. Use for Layout Preflight, interactive Layout / Routing work, Layout / Routing Review, PCB Release Review, Altium Rule Scope / Rule Priority review, rule exemptions, or manufacturing-output checks.
+description: Guide interactive PCB placement and routing, and review placement, layout, routing, copper, user-provided DRC evidence, and PCB release. Use for Layout Preflight, interactive Layout / Routing work, Layout / Routing Review, PCB Release Review, Rule Scope / Altium Rule Priority review, rule exemptions, or manufacturing-output checks.
 ---
 
 # PCB Layout 与制造放行审查
@@ -64,7 +64,7 @@ Rule organization principle：使用能够准确表达工程意图的最简单 S
 
 - 多个对象共享相同 electrical、routing 或 manufacturing behavior，且形成稳定、有工程意义的类别时，优先使用对应的 Net Class 或 Object Class scope，避免重复成员 Query。
 - 单个特殊 Net、Object、Layer 或例外情况，使用最简单准确的 Explicit Scope 或 Custom Query；不要仅因工具支持复杂 Query 就增加复杂度。
-- 只有存在真实的 electrical、manufacturing、mechanical 或 verification / traceability difference 时，才新增 higher-priority exception rule；不要创建行为完全相同的重复 Rule。
+- 只有存在真实的 electrical、manufacturing、mechanical 或 verification / traceability difference 时，才新增 Altium Rule Priority 更高的 exception rule；不要创建行为完全相同的重复 Rule。
 
 Layout Preflight 不要求初始 DRC。用户可以使用 Altium 在线规则检查或临时检查，但不得把 DRC 结果作为批准开始正式布局的默认仓库门禁。
 
@@ -136,7 +136,7 @@ Placement envelope 只根据 footprint、机械间隙、布线空间、热要求
 
 #### Routing Criticality 与 Dominant Constraint
 
-只对真正需要特殊保护的 route 使用以下轻量分级；未分类 routing 默认为 **Ordinary**，开始 Stage 6 前不要求建立全网完整分级表。
+只对真正需要特殊保护的 route 使用以下轻量分级。已有足够 Project evidence 可判断当前 route 的 connectivity、function 与 applicable constraints 时，未被识别为 Critical 或 Constrained 的 routing 才默认按 **Ordinary** 处理；evidence-unknown / function-unknown routing 不得仅因未分类而视为 Ordinary。开始 Stage 6 前仍不要求建立全网完整分级表。
 
 - **Critical**：存在 topology、datasheet、safety、power integrity、signal integrity、noise 或 measurement 等明确关键约束，明显恶化 routing geometry 会产生实际工程风险。
 - **Constrained**：存在明确 routing preference / constraint，但通常可在不违反自身 mandatory constraint 的情况下向 Critical routing 让路。
@@ -206,7 +206,7 @@ Return planning is early; GND implementation is flexible。若 local GND via、c
 2. 确认对应 Git / PCB 版本和 `docs/pcb_design_rules.md` 规则基线。
 3. 记录运行日期、Warnings 和 Rule Violations 数量。
 4. 记录主要检查类别与关键违规文本；仅有 `0 violations` 但无法确认规则基线或关键类别时，给出受限结论。
-5. 判断问题属于真实设计问题、规则定义/Scope/Priority 问题，还是合理豁免。
+5. 判断问题属于真实设计问题、规则定义 / Rule Scope / Altium Rule Priority 问题，还是合理豁免。
 6. 用户修改后重新运行完整 Batch DRC。
 7. 记录用户对最终结果的明确确认。
 
@@ -214,7 +214,7 @@ Return planning is early; GND implementation is flexible。若 local GND via、c
 
 ## 9. 规则与豁免
 
-`docs/pcb_design_rules.md` 负责规则值、Scope、Priority、AD 配置/人工核对状态和豁免定义，不长期维护“DRC 已验证”列。
+`docs/pcb_design_rules.md` 负责规则值、Rule Scope、Altium Rule Priority、AD 配置/人工核对状态和豁免定义，不长期维护“DRC 已验证”列。
 
 每项豁免必须：
 

@@ -66,8 +66,8 @@
 
 | 检查项 | 结论 | 依据 / 证据 | 状态 |
 |---|---|---|---|
-| 需要特殊保护的 routing-critical functions / constraints 可从当前 Project evidence 明确识别，实际关键路径未明显破坏其 dominant constraints |  |  |  |
-| Ordinary / 较低关键度 routing 未明显占用关键 routing corridor，或破坏 return/reference continuity 与其他 dominant routing constraint |  |  |  |
+| 总体 routing / signal flow 清楚，无明显不必要绕行、长支线或悬空支路；需要特殊保护的 routing-critical functions / constraints 可从当前 Project evidence 识别，实际关键路径未明显破坏其 dominant constraints |  |  |  |
+| 关键电源、负载、模拟、参考等适用路径满足当前 Project 的短、直接和隔离噪声目标；Ordinary / 较低关键度 routing 未明显占用 critical routing corridor，或破坏 return/reference continuity 与其他 dominant routing constraint |  |  |  |
 | 关键网络没有不必要的反复换层，换层位置与路径目标一致 |  |  |  |
 | 信号换层附近存在合理回流路径或地过孔，参考面连续性未被明显破坏 |  |  |  |
 | 过孔数量和位置合理，密集区域没有造成局部拥挤、细颈或回流阻断 |  |  |  |
