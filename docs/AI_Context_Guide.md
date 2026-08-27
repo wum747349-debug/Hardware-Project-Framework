@@ -104,7 +104,8 @@ Stage 3 的日常模块设计、连接核对、参数计算、当前模块或局
 - 关键器件官方资料：仅在当前参数、连接、封装、Layout 或安全判断需要时读取。
 - 原理图 PDF / BOM / 报告：仅在相应 Review 或具体追溯问题需要时读取。
 - DRC 局部证据：用户摘要不足以判断具体违规、规则或豁免时读取。
-- Gerber、Drill、坐标与装配输出：制造放行时读取。
+- 制造数据与解读：Stage 7 按 actual manufacturing-data / submission path 读取支持当前结论所需的 manufacturing representation，不默认要求 Gerber / Drill 或特定 viewer。
+- Pick & Place、Assembly 等 PCBA outputs：仅在项目实际需要 PCB Assembly 时读取。
 
 正式结论前，先判断当前 evidence 是否足以支持该具体结论。不足时应分别说明已能确认、尚不能确认的内容与最小 evidence gap，只请求弥补该 gap 的 minimum missing evidence，不为保险批量索要无关资料。Evidence 必须与所评估的 PCB / Git / hardware version 兼容且对该结论仍然新鲜；无法识别版本关系时只能给出受限结论。
 
