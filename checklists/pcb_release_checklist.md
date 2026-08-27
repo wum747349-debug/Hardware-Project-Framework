@@ -2,134 +2,129 @@
 
 > 文档状态：当前有效
 > 适用阶段：阶段 7：PCB 审查阶段
-> 适用对象：待 PCB Release Review 与制造放行的项目和硬件版本
-> 最后核对依据：项目事实文件、当前 PCB 实现证据、用户 Batch DRC 摘要与同版制造输出
+> 适用对象：待 PCB Release Review / Manufacturing Preparation 的项目和硬件版本
+> 最后核对依据：exact release candidate、用户 Final Full Batch DRC 结果、实际 manufacturing-data path 与最终制造解读
 
 ## 使用说明
 
-- 将本清单复制或引用到当前项目 `docs/pcb_review.md` 后填写。
-- `状态` 使用：`待核对`、`已确认`、`不通过`、`不适用`、`已豁免`。
-- `不适用` 和 `已豁免` 必须说明依据、风险和批准记录。
-- 实际 Altium、Repour、Batch DRC 和制造导出由用户执行；AI/Codex 只分析用户提供的结果。
-- Batch DRC 信息可直接来自用户对话，默认不要求专门文件、导出报告或截图；具体问题无法判断时再补局部截图。
-- 没有报告文件不等于未完成；但缺少 PCB / Git 版本、规则基线或关键检查类别时，AI/Codex 只能给出受限结论。
-- 制造放行必须填写显式结论，不能由清单完成率自动推导。
+- 将本清单复制或引用到当前 Project `docs/pcb_review.md` 后填写；Stage 7 方法使用 `skills/hardware-pcb-release-review/SKILL.md`。
+- `状态` 使用：`待核对`、`已确认`、`不通过`、`不适用`、`已豁免`；`不适用` 和 `已豁免` 必须说明依据、风险和批准记录。
+- 用户负责实际 Altium、Repour、Batch DRC、制造数据生成/提交与下单；AI/Codex 只分析用户提供的结果。
+- 已完成的 Stage 5–6 design-quality review 不在此默认重复。只有 unresolved Stage 6 finding 或 Stage 7 design delta 才按影响范围调用 PCB Layout / Routing Review。
+- 审查实际 submission path 所用制造数据的一个 capable and faithful representation；只在 evidence gap 存在时增加其他适当 representation。
+- 清单完成率不能自动推导制造放行，必须填写显式 Manufacturing Release Decision。
 
-## 1. 审查对象与版本一致性
+## 1. Release Identity / Evidence
 
 | 检查项 | 结论 | 依据 / 证据 | 状态 |
-|---|---|---|---|
-| 项目名称、硬件版本和 PCB 审查对象明确 |  |  |  |
-| `.PcbDoc` / Git 版本已记录 |  |  |  |
-| PCB、BOM、Batch DRC 摘要和制造输出来自同一待放行版本 |  |  |  |
-| 审查输入不存在陈旧、重复、临时或跨版本文件 |  |  |  |
+| --- | --- | --- | --- |
+| 项目、hardware revision 与待生产 PCB 已无歧义识别 |  |  |  |
+| `.PcbDoc` / EDA source、Git identity 与 release candidate 关系已记录 |  |  |  |
+| 当前 evidence 对本轮具体结论足够且与 release candidate 版本兼容 |  |  |  |
+| session implementation 与 persistent repository source 的同步/漂移状态已说明 |  |  |  |
+| 只存在已明确记录的 minimum evidence gaps |  |  |  |
 
-## 2. 用户提供的完整 Batch DRC 摘要
+## 2. Final Full Batch DRC
 
 | 项目 | 结果 |
-|---|---|
-| PCB / Git 版本 |  |
-| 运行日期 |  |
+| --- | --- |
+| PCB / Git / hardware version |  |
+| 运行日期与 context |  |
 | 规则基线 |  |
-| Warnings |  |
-| Rule Violations |  |
-| 关键类别 |  |
-| 关键问题 |  |
-| 最终状态 |  |
+| Warnings / Rule Violations |  |
+| 关键检查类别与问题 |  |
+| 修改 / Repour / rerun 状态 |  |
 | 用户确认完整 Batch DRC 已运行 |  |
 
-本记录来自：`<用户对话摘要 / 用户提供截图 / 用户提供报告>`
+| 检查项 | 结论 | 依据 / 证据 | 状态 |
+| --- | --- | --- | --- |
+| Final Full Batch DRC 针对 exact release candidate |  |  |  |
+| 适用规则与关键类别已启用，结果足以支持判断 |  |  |  |
+| Warnings / Rule Violations 已分类处置 |  |  |  |
+| 实际违规已解决或进入明确、合理、可追溯的 waiver |  |  |  |
+| 适用修改与 Repour 后已重跑 Final Full Batch DRC |  |  |  |
 
-DRC 审查确认：
+## 3. Manufacturing Data Path
 
 | 检查项 | 结论 | 依据 / 证据 | 状态 |
-|---|---|---|---|
-| 用户确认已对当前版本运行完整 Batch DRC |  |  |  |
-| DRC 使用当前 `docs/pcb_design_rules.md` 规则基线 |  |  |  |
-| 关键检查类别已启用，结果足以支持判断 |  |  |  |
-| Warnings 与 Rule Violations 已记录并分类处置 |  |  |  |
-| 修改和 Repour 后已重新运行完整 Batch DRC |  |  |  |
-| 所有实际违规已解决或进入明确、合理、可追溯的豁免 |  |  |  |
+| --- | --- | --- | --- |
+| 实际 manufacturing-data / submission path 已识别 |  |  |  |
+| 被审查表示与实际提交/生产使用的最终制造数据对应 |  |  |  |
+| 当前 representation 有能力显示本项目需核对的 feature |  |  |  |
+| 若发现 interpretation / conversion gap，已用其他适当 representation 弥补 |  |  |  |
 
-## 3. 电气、布线与铺铜
+## 4. Core Manufacturing Interpretation
 
 | 检查项 | 结论 | 依据 / 证据 | 状态 |
-|---|---|---|---|
-| 未布线和短路问题已关闭 |  |  |  |
-| Clearance、Width、Via、Hole 与 Annular Ring 结果已核对 |  |  |  |
-| 关键电源、负载、模拟、高速和晶振路径已人工复核 |  |  |  |
-| 回流路径、换层、地过孔和关键细颈已人工复核 |  |  |  |
-| 用户确认 Polygon 已对当前版本 Repour |  |  |  |
+| --- | --- | --- | --- |
+| Copper / layer mapping：层数、正反面、铜层几何与制造意图一致 |  |  |  |
+| Solder Mask：开窗、遮盖、sliver 与 pad-level override 符合意图 |  |  |  |
+| Drill / Slot / PTH / NPTH：数量、位置、形状、孔类与 plating semantics 正确 |  |  |  |
+| Board Outline / Cutout / routed geometry：外形、内挖、槽与铣切几何完整无歧义 |  |  |  |
+| Composite / Registration：铜、阻焊、钻孔与外形的 cross-layer 对位合理 |  |  |  |
 
-## 4. 板框、机械、阻焊、丝印与装配
-
-| 检查项 | 结论 | 依据 / 证据 | 状态 |
-|---|---|---|---|
-| Board Outline、板边间距、安装孔和机械禁布已核对 |  |  |  |
-| 外壳、连接器插拔、线缆、器件高度和操作空间已核对 |  |  |  |
-| Solder Mask、Paste Mask 和特殊钢网要求已核对 |  |  |  |
-| 丝印不压焊盘/开窗/孔/板边，关键标识可读 |  |  |  |
-| IC Pin 1、极性器件、连接器编号和装配方向已核对 |  |  |  |
-
-## 5. BOM、Footprint 与装配变体
+## 5. Basic Fabrication Parameters / Critical Marking
 
 | 检查项 | 结论 | 依据 / 证据 | 状态 |
-|---|---|---|---|
-| BOM 位号、数量、参数/型号和 PCB Footprint 完整 |  |  |  |
-| 关键器件制造商型号及必要采购信息明确 |  |  |  |
-| BOM、PCB 与装配资料的器件清单一致 |  |  |  |
-| DNP、可选装、装配变体和替代料风险已核对 |  |  |  |
+| --- | --- | --- | --- |
+| 适用的板材、层数、成品板厚、铜厚与表面处理已确认 |  |  |  |
+| 阻焊、数量、单片/拼板、外形与其他适用下单参数已确认 |  |  |  |
+| Pin 1、极性、power / GND、connector identity 和 critical user-facing / safety marking 正确 |  |  |  |
+| 普通位号或 outline clipping 若存在，已按实际工程影响处置 |  |  |  |
 
-## 6. 制造输出
+## 6. PCBA — Conditional
 
-| 检查项 | 结论 | 依据 / 证据 | 状态 |
-|---|---|---|---|
-| Gerber 层清单、板框、铜层、阻焊、钢网和丝印输出完整 |  |  |  |
-| PTH / NPTH、槽孔、异形孔及其他适用 Drill 输出完整 |  |  |  |
-| Gerber / Drill 的单位、格式、极性、原点和查看器复核已确认 |  |  |  |
-| Pick and Place 的单位、原点、正反面、旋转和位号已核对或确认不适用 |  |  |  |
-| 装配图包含必要外形、位号、极性、Pin 1 和装配面信息 |  |  |  |
-| 制造包只包含当前版本，无缓存、日志、预览或旧文件 |  |  |  |
-
-## 7. 制造说明与下单参数
+> 只有项目实际需要 PCB Assembly 时执行；否则记录 `不适用`及理由。
 
 | 检查项 | 结论 | 依据 / 证据 | 状态 |
-|---|---|---|---|
-| 板材、层数、成品板厚、铜厚和表面处理已确认 |  |  |  |
-| 阻焊、丝印、装配面和装配方式已确认 |  |  |  |
-| 拼板、工艺边、尺寸、外形和特殊孔要求已确认或不适用 |  |  |  |
-| 受控阻抗、特殊叠层和特殊工艺已确认或不适用 |  |  |  |
-| 下单参数与目标板厂服务及当前制造说明一致 |  |  |  |
+| --- | --- | --- | --- |
+| BOM 与 release candidate 的位号、数量、型号 / 参数和 footprint 一致 |  |  |  |
+| Pick & Place 的单位、原点、正反面、旋转和位号正确 |  |  |  |
+| Paste Mask 和特殊钢网要求正确 |  |  |  |
+| Assembly Drawing 包含所需外形、位号、极性、Pin 1 和装配面信息 |  |  |  |
+| DNP / Variant、population 与 orientation 已核对 |  |  |  |
 
-## 8. 规则豁免
+## 7. Special Fabrication — Conditional
 
-| 编号 | 规则 / 对象 | 原因与风险 | 验证、用户批准与状态 |
-|---|---|---|---|
-|  |  |  |  |
+> 只有实际存在 non-standard fabrication feature 时执行；普通 rigid PCB、standard PTH / NPTH 和 ordinary plated slots 不因此自动进入专项流程。
 
-确认每项豁免仅覆盖明确对象，具有技术理由和验证方式，已评估电气、机械、制造与装配风险，并在 `docs/pcb_design_rules.md` 定义、由 `docs/pcb_review.md` 引用。
+| 检查项 | 结论 | 依据 / 证据 | 状态 |
+| --- | --- | --- | --- |
+| controlled impedance / special stackup 的设计、制造数据与下单声明一致或不适用 |  |  |  |
+| blind / buried vias、HDI、castellated holes、edge plating 或 rigid-flex 已使用适用方法核对或不适用 |  |  |  |
+| special copper / solder-mask process 或其他 non-standard feature 的制造语义与能力已确认或不适用 |  |  |  |
 
-## 9. 制造放行结论
+## 8. Findings / Waivers
+
+| ID | 对象 | Finding / waiver | 影响与风险 | 动作 / 验证 | 批准与状态 |
+| --- | --- | --- | --- | --- | --- |
+|  |  |  |  |  |  |
+
+确认修改后已刷新适用输出、重跑 Final Full Batch DRC 并复审受影响的 manufacturing interpretation。只在 delta 影响 placement、routing、via topology、copper 或 critical return/reference geometry 时，才记录 scoped B3 upstream re-review 结果。
+
+## 9. Manufacturing Release Decision
 
 | 结论项 | 填写内容 |
-|---|---|
+| --- | --- |
 | 当前结论 | `<批准制造 / 有条件批准 / 不批准制造>` |
-| 阻断问题 |  |
-| 未关闭的非阻断问题 |  |
-| 已批准豁免 |  |
-| 有条件批准的条件与风险 |  |
-| 是否属于正式规则豁免 |  |
-| 完整 Batch DRC 用户确认 |  |
-| 制造输出与下单参数用户确认 |  |
-| 确认日期 |  |
-| 对应 `.PcbDoc` / Git 版本 |  |
+| Exact release candidate |  |
+| Final Full Batch DRC 用户确认 |  |
+| Actual manufacturing-data / submission path |  |
+| Final manufacturing interpretation |  |
+| 适用 fabrication / order parameters |  |
+| PCBA / special fabrication applicability |  |
+| 阻断问题与未关闭非阻断问题 |  |
+| 已批准 waivers |  |
+| 有条件批准的条件、风险与责任 |  |
+| Durable summary 的 date / context、limitations 与 decision |  |
 | 下一步 |  |
 
 最终确认：
 
-- [ ] 用户已运行并明确确认当前版本的完整 Batch DRC。
-- [ ] 所有实际违规已解决，或具有明确、合理、可追溯的已批准豁免。
-- [ ] PCB、BOM 和适用制造输出版本一致。
-- [ ] 用户已确认最终制造输出和下单参数。
-- [ ] “有条件批准”已写明条件、风险、用户确认及是否为正式规则豁免。
-- [ ] 已显式填写制造放行结论。
+- [ ] Exact release candidate 已无歧义识别。
+- [ ] 用户已运行并确认该版本的 Final Full Batch DRC。
+- [ ] 所有实际违规已解决，或具有明确、合理、可追溯的已批准 waiver。
+- [ ] 实际 submission path 与一个 capable and faithful final manufacturing interpretation 已确认。
+- [ ] 适用的 bare-PCB、conditional PCBA 与 conditional special-fabrication 项已确认。
+- [ ] `docs/pcb_review.md` 已按 AI Context Guide 留下最小 durable summary。
+- [ ] 已显式填写 Manufacturing Release Decision。

@@ -8,6 +8,9 @@ Status: Normal Framework Maintenance after published v1.0.0.
 
 ### Changed
 
+- 将 Stage 7 PCB Release Review / Manufacturing Preparation 从 Stage 5–6 PCB design / review 方法中分离，引入独立 release Skill，并将正常放行收敛为 Core Bare PCB + conditional PCBA / special fabrication 流程。
+- 精简 manufacturing-data verification：Final Full Batch DRC 与最终制造解读互补但不可互换，并按实际 submission path 审查一个忠实且能力足够的表示。
+- 明确 specific-conclusion sufficiency、minimum missing evidence、session evidence / persistent authority 与 formal checkpoint 的最小 durable summary；raw evidence 仍为 optional。
 - 强化 Stage 3 / Stage 4 的 task-intent routing，并明确 Stage 4 可复用充分、可追溯的既有 schematic-review evidence 覆盖 unchanged areas、聚焦 relevant delta；Stage architecture、Runtime Contract 与 Structural Contract 均未改变。
 - 对齐 Project Runtime Rules 的三类 adoption taxonomy，明确 Compatible Sync 必须验证最终计划提交的 binding + files 组合，并澄清 Existing Project 进入 Pinned Framework Evaluation 时不得重置 initialization provenance / status；lifecycle architecture 与 Contract 均未改变。
 - 将 development binding 推广为长期 Pinned Development Binding，新增轻量 Pinned Framework Evaluation、Same-SHA Formalization fast path，并把普通 Project adoption 压缩为 `Assess → Execute when authorized → Verify`；保持一个 active Layer-0 binding、既有 Human Approval 风险边界与 Authority Cutover 独立性。

@@ -204,13 +204,15 @@ Stage 6 不要求保存、导出或归档中间 DRC 记录，也不以中间 DRC
 
 ### 目标与活动
 
-审查当前 PCB/Git 版本、规则基线、PCB 实现、机械、装配、BOM 与制造输出；分析用户运行的完整 Batch DRC，并区分设计问题、规则问题和可追溯豁免。
+无歧义识别 exact release candidate，确认当前 evidence 足以支持放行判断；由用户对该版本运行 Final Full Batch DRC，识别实际 manufacturing-data / submission path，审查一个对该路径所用最终制造数据忠实且能力足够的 manufacturing interpretation，确认适用的制造与下单参数，处理 findings / waivers，并给出显式 Manufacturing Release Decision。PCBA 与 special fabrication 只在项目实际需要时触发。
+
+Stage 7 不重复已完成的 Stage 5–6 design-quality review；只有未关闭的 Stage 6 finding 或 Stage 7 design delta 需要重新评估时，才按影响范围调用 PCB Layout / Routing 方法。Evidence 选择、充分性、新鲜度与持久化边界以 [AI Context Guide](AI_Context_Guide.md) 为准，具体方法与逐项核对分别由 PCB Release Skill 与 Release Checklist 维护。
 
 ### 主要输出与退出条件
 
-在 `docs/pcb_review.md` 记录 Release Review、用户 Batch DRC 摘要、豁免引用、制造输出检查与显式放行结论。用户确认当前版本完整 Batch DRC 已运行；实际违规已解决或具有批准的合理豁免；同版制造输出完整。
+在 `docs/pcb_review.md` 留下最小 durable summary，使 release candidate、Final Full Batch DRC、actual manufacturing-data path、final manufacturing interpretation、findings / waivers、适用的 conditional review 与 Manufacturing Release Decision 可追溯。退出前，用户确认当前 release candidate 的完整 Batch DRC 已运行；实际违规已解决或具有批准的合理豁免；实际提交路径与最终制造解读已确认；放行结论已显式记录。
 
-AI 只分析用户提供的 DRC 和制造证据，不因缺少专门报告文件自动判失败，也不声称自行运行工具或导出输出。
+AI 的 evidence 使用与能力边界按 AI Context Guide 和 PCB Release Skill 执行；不声称自行运行工具、导出输出或批准制造。
 
 ## 12. Stage 8 — Assembly, Bring-up and Hardware Test
 

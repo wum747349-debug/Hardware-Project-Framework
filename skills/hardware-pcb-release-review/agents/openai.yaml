@@ -1,0 +1,4 @@
+interface:
+  display_name: "PCB Release Review / Manufacturing Preparation"
+  short_description: "复核 Final Batch DRC、制造数据解读与制造放行"
+  default_prompt: "使用 $hardware-pcb-release-review 执行 Stage 7 PCB Release Review，包括 Final Batch DRC、manufacturing-data interpretation、条件性 PCBA / special fabrication 与 Manufacturing Release Decision。"

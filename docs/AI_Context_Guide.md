@@ -90,8 +90,8 @@ Gate 1.5 不读取或产生后续阶段设计结果；Validator 结果不能替�
 | Stage 3 — Schematic Design | Layer 0/1 + schematic-design Skill + 当前需求、设计说明、资料索引、当前模块文档 | 选型/datasheet Skill、BOM 草稿、封装资料、当前模块所需 Manufacturer official documentation | 其他 Project、全部 Skill、全部 datasheet、全部历史记录 |
 | Stage 4 — Schematic Review | Layer 0/1 + Review Skill + Requirements/Design/References + 完整 PDF + 当前 BOM + Review 记录 | 当前模块文档；网表/ERC/报告/截图按具体问题触发 | 其他 Project、Template、全部 Skill |
 | Stage 5 — Layout Preflight | Layer 0/1 + PCB Skill + README/Requirements/Design/References + Schematic Review + PCB Rules + 关键 Layout 资料 | PDF/BOM/机械/板厂官方能力 | Batch DRC、制造输出、其他 Project |
-| Stage 5–6 — PCB Layout / Routing Guidance & Review | Layer 0/1 + PCB Skill + README/Requirements/Design/PCB Rules + 当前 PCB Evidence | 模块资料、关键 datasheet、已有 PCB 问题 | 全部资料、Release checklist、制造输出 |
-| Stage 7 — PCB Release Review | Layer 0/1 + PCB Skill + README/Requirements/PCB Rules/PCB Review + 当前 BOM/Evidence + 用户 Batch DRC + 制造输出清单 + Release Checklist | 局部 Gerber、Drill、坐标、截图和报告片段 | 其他 Project 历史 |
+| Stage 5–6 — PCB Layout / Routing Guidance & Review | Layer 0/1 + `hardware-pcb-layout-review` Skill + README/Requirements/Design/PCB Rules + 当前 PCB Evidence | 模块资料、关键 datasheet、已有 PCB 问题 | 全部资料、Release checklist、制造输出 |
+| Stage 7 — PCB Release Review | Layer 0/1 + README + PCB Rules + PCB Review + `hardware-pcb-release-review` Skill + 当前 release candidate evidence + Final Full Batch DRC evidence + actual manufacturing interpretation + PCB Release Checklist | schematic、BOM、模块文档、Stage 5–6 PCB Skill、PCBA data、special fabrication data；只按 unresolved finding / design delta / 实际制造路径触发 | 其他 Project 历史、与当前放行结论无关的全部上游资料 |
 | Stage 8 — Bring-up/Test | Layer 0/1 + README + Bring-up/Test 记录 + 原理图与接口说明 | PCB Review、关键 datasheet、安全 checklist、Revision | 其他 Project、Template |
 
 Stage controls lifecycle；task intent selects method。Stage Method 应按实际 task intent 选择，不机械服从用户提供的 Stage label，也不按 `review`、`pin`、`BOM` 等单个关键词路由。Skill 的 primary / default Stage 不表示该 Skill 只能在该 Stage 使用；当前任务明确需要 supporting method 时可以按需读取对应 Skill。这种 supporting use 不自动改变 Project 当前 Stage，不自动满足该 Skill primary Stage 的进入或退出条件，也不自动要求产生该 Stage 的 artifact 或 PASS。
@@ -105,6 +105,12 @@ Stage 3 的日常模块设计、连接核对、参数计算、当前模块或局
 - 原理图 PDF / BOM / 报告：仅在相应 Review 或具体追溯问题需要时读取。
 - DRC 局部证据：用户摘要不足以判断具体违规、规则或豁免时读取。
 - Gerber、Drill、坐标与装配输出：制造放行时读取。
+
+正式结论前，先判断当前 evidence 是否足以支持该具体结论。不足时应分别说明已能确认、尚不能确认的内容与最小 evidence gap，只请求弥补该 gap 的 minimum missing evidence，不为保险批量索要无关资料。Evidence 必须与所评估的 PCB / Git / hardware version 兼容且对该结论仍然新鲜；无法识别版本关系时只能给出受限结论。
+
+当前会话中的 PCB / Altium / DRC 截图、用户对当前 EDA 状态的确认、manufacturer CAM / Gerber preview 以及其他 implementation evidence 可以支持当前分析，但不会自动更新 persistent Project authority。当 local/session implementation 新于 committed repository source 时，Interactive Placement、Interactive Routing 和 scoped analysis 不因此自动停止；Formal Review 可对明确识别的最新 evidence 做受限判断，同时说明 persistent repository source 是否同步。Manufacturing Release 前必须无歧义识别 exact release candidate，不得在 repo / local version drift 仍模糊时放行。
+
+B1 / B2 普通交互不要求每轮持久化 evidence。B3 Formal Layout / Routing Review、Stage transition、Final Batch DRC acceptance、Manufacturing Release 和 major waiver 才在现有 owning record `docs/pcb_review.md` 留下最小 durable summary：通常记录 evidence source、对应 PCB / Git / hardware version、date / context、result、limitations 与 decision，不建立严格 metadata schema。Durable summary 不等于所有 raw screenshots / reports 必须提交；raw evidence 默认 optional，仅在项目可追溯需求实际要求时保存。
 
 Stage 5–6 中，精确到具体 net 或 pin-to-pin 的 routing guidance 必须具备足以回答当前限定问题、可靠且属于当前版本的 connectivity evidence；可按任务最小选用可靠可读的 `.PcbDoc` / `.SchDoc`、当前 netlist、当前 schematic PDF、当前模块连接记录或用户提供的局部 pin/net mapping，不要求形成固定来源层级或全部加载。仅有 PCB 图片时，可以进行视觉 routing review 和相对几何指导，但不能据此确定精确连接或 net function。普通视觉 routing review 不自动扩展读取 schematic、BOM 或模块文档；net-specific 问题只加载所需的最小 connectivity evidence。
 

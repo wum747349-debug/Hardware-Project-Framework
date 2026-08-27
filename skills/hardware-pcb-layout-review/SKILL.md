@@ -1,27 +1,24 @@
 ---
 name: hardware-pcb-layout-review
-description: Guide interactive PCB placement and routing, and review placement, layout, routing, copper, user-provided DRC evidence, and PCB release. Use for Layout Preflight, interactive Layout / Routing work, Layout / Routing Review, PCB Release Review, Rule Scope / Altium Rule Priority review, rule exemptions, or manufacturing-output checks.
+description: Guide and review PCB placement, routing, copper, return paths, and related rule preparation. Use for Layout Preflight, Interactive Placement, Interactive Routing, Layout / Routing Review, or Rule Scope / Altium Rule Priority review during Stage 5–6.
 ---
 
-# PCB Layout 与制造放行审查
+# PCB Layout / Routing
 
 ## 1. 目的与边界
 
-本 Skill 用于低压嵌入式、MCU 控制、传感器采集、电源管理、模拟前端和通信接口板，提供三种 PCB 协作模式；其中 Mode B 包含交互式 Placement、交互式 Routing 与正式 Layout / Routing Review：
+本 Skill 用于低压嵌入式、MCU 控制、传感器采集、电源管理、模拟前端和通信接口板的 Stage 5–6 PCB Layout / Routing 协作：
 
 1. **Mode A — Layout Preflight**：确认正式布局前的制造、机械、封装、原理图门禁和规则基线。
 2. **Mode B — PCB Layout / Routing Work**：逐步指导 Placement / Routing，并正式审查布局、关键路径、布线、回流、过孔和铺铜。
-3. **Mode C — PCB Release Review**：审查完整 Batch DRC 结果、装配信息、制造输出、规则豁免和制造放行。
-
 高压、射频、复杂高速数字、隔离电源、汽车、医疗、安规、HDI 或刚挠结合项目只能复用本 Skill 的通用部分，必须增加专项方法、checklist、标准和有资质的审查。
 
 本 Skill 只维护方法、判断逻辑、风险分类、输出结论和能力边界。逐项检查使用：
 
 - [PCB Layout Preflight Checklist](../../checklists/pcb_layout_preflight_checklist.md)
 - [PCB Layout Checklist](../../checklists/pcb_layout_checklist.md)
-- [PCB Release Checklist](../../checklists/pcb_release_checklist.md)
 
-项目规则值写入 `docs/pcb_design_rules.md`；实际问题、关闭状态、Batch DRC 摘要、豁免引用和制造结论写入 `docs/pcb_review.md`。
+项目规则值写入 `docs/pcb_design_rules.md`；需要跨回合追踪的 Layout / Routing 问题与 Formal Review 结论写入 `docs/pcb_review.md`。Stage 7 由 `hardware-pcb-release-review` 负责。
 
 ## 2. 选择模式
 
@@ -31,15 +28,14 @@ description: Guide interactive PCB placement and routing, and review placement, 
 | “现在先摆什么？”、“哪些器件必须靠近？”、“下一步移动哪些器件？”或逐步完成布局                   | **B1 — Interactive Placement Guidance** | 工程指导；不要求每轮给出正式阶段门结论                               |
 | “下一根线先走什么？”、“当前模块先走哪些网络？”或逐步解决 routing conflict                 | **B2 — Interactive Routing Guidance**  | 工程指导；不要求每轮给出正式阶段门结论                               |
 | 已有 Placement / Routing Evidence 的布局、布线、铺铜、回流或 PCB 图片正式/明确审查 | **B3 — Layout / Routing Review**        | `可进入 PCB Release Review` / `修改后复审` / `存在高风险，停止推进` |
-| Batch DRC、Gerber、钻孔、坐标、制造包或放行                               | **Mode C — PCB Release Review**         | `批准制造` / `有条件批准` / `不批准制造`                        |
 
-跨正式审查模式的请求按 A → B3 → C 顺序处理并分别给出阶段门结论，后续证据不能抵消前一阶段的阻断项。B1 / B2 可在 Mode B 内的任意合理 Placement / Routing 增量中使用，不应被强制包装为 Formal Review。
+跨正式审查模式的 Stage 5–6 请求按 A → B3 顺序处理并分别给出阶段门结论，后续证据不能抵消前一阶段的阻断项。B1 / B2 可在 Mode B 内的任意合理 Placement / Routing 增量中使用，不应被强制包装为 Formal Review。
 
 ## 3. 最小上下文
 
 默认、按需和禁止读取范围以 `docs/AI_Context_Guide.md` 的 Stage / Task context table 为准；本 Skill 不重复维护文件清单。
 
-执行时仍按第 2 节选择 Layout Preflight、B1、B2、B3 或 PCB Release Review，并按下文对应方法、证据边界和 checklist 完成工作。
+执行时仍按第 2 节选择 Layout Preflight、B1、B2 或 B3，并按下文对应方法、证据边界和 checklist 完成工作。
 
 ## 4. 能力与证据边界
 
@@ -186,55 +182,15 @@ Return planning is early; GND implementation is flexible。若 local GND via、c
 
 本正式 Review 不要求 DRC 作为默认输入，也不要求保存中间 DRC 记录。具体逐项顺序以 PCB Layout Checklist 为准。
 
-## 7. 模式 C 方法：PCB Release Review
-
-1. 确认 PCB、BOM、Batch DRC 摘要和制造输出对应同一版本。
-2. 按 Release Checklist 审查规则、实现、机械、装配、BOM 和制造输出。
-3. 分析用户提供的完整 Batch DRC 结果与规则豁免。
-4. 对修改项要求用户实际修改、Repour，并重新运行完整 Batch DRC。
-5. 确认所有实际违规已解决或形成明确、合理、可追溯的豁免。
-6. 由用户确认最终 Batch DRC、制造输出和下单参数。
-7. 在 `docs/pcb_review.md` 给出显式制造结论。
-
-文件存在不等于输出正确或已放行。制造输出的逐项核对由 Release Checklist 承担，本 Skill 不重复展开。
-
-## 8. Batch DRC 分析
-
-正式 Batch DRC 只在 PCB Release Review 中要求：
-
-1. 确认用户运行的是当前 PCB 版本的完整 Batch DRC。
-2. 确认对应 Git / PCB 版本和 `docs/pcb_design_rules.md` 规则基线。
-3. 记录运行日期、Warnings 和 Rule Violations 数量。
-4. 记录主要检查类别与关键违规文本；仅有 `0 violations` 但无法确认规则基线或关键类别时，给出受限结论。
-5. 判断问题属于真实设计问题、规则定义 / Rule Scope / Altium Rule Priority 问题，还是合理豁免。
-6. 用户修改后重新运行完整 Batch DRC。
-7. 记录用户对最终结果的明确确认。
-
-结果默认可直接来自用户对话，不要求专门 DRC 文件、导出报告或完整截图。只有具体问题无法判断时，才请求局部截图或报告片段。缺少报告文件不构成自动阻断，但制造放行必须有用户明确确认完整 Batch DRC 已运行。
-
-## 9. 规则与豁免
-
-`docs/pcb_design_rules.md` 负责规则值、Rule Scope、Altium Rule Priority、AD 配置/人工核对状态和豁免定义，不长期维护“DRC 已验证”列。
-
-每项豁免必须：
-
-- 只覆盖明确对象；
-- 有技术理由，不能用于隐藏设计错误；
-- 评估电气、机械、制造和装配风险；
-- 说明验证方式并由用户批准；
-- 在规则文档中定义，并由 `docs/pcb_review.md` 引用。
-
-项目选择不声明某项规则，不自动构成规则豁免。
-
-## 10. 风险分类
+## 7. 风险分类
 
 - **高风险**：可能损坏硬件、造成不安全使用、反接/短路、关键连接失效、不可制造，或使关键规则/DRC 证据不可信；阻断当前阶段门。
 - **中风险**：可能影响功能、信号/电源完整性、热、装配、可靠性、机械适配或造成高返工成本；制造前解决，或经合理豁免。
 - **低风险**：主要影响可读性、丝印、探测便利或维护性；记录并安排处理。
 
-证据不足不自动改变问题的电气严重性，但会限制问题关闭或制造放行结论。
+证据不足不自动改变问题的电气严重性，但会限制问题关闭或当前 Formal Review 结论。
 
-## 11. 输出格式
+## 8. 输出格式
 
 ### B1 — Interactive Placement Guidance
 
@@ -279,7 +235,7 @@ Next evidence
 
 无关字段可以省略；该模板不要求 Formal Findings table、Stage Gate result 或 full-board checklist。
 
-### Formal Review（A、B3、C）
+### Formal Review（A、B3）
 
 ### 当前结论
 
@@ -299,14 +255,13 @@ Next evidence
 
 ### 阶段门与下一步
 
-先列阻断项，再列用户 EDA 动作、需要补充的证据和允许进入的下一阶段。Release Review 另记录 Batch DRC 摘要、豁免引用和制造结论。
+先列阻断项，再列用户 EDA 动作、需要补充的证据和允许进入的下一阶段。
 
-## 12. 禁止事项
+## 9. 禁止事项
 
 - 不复制其他项目的数值、网络名、封装、尺寸、下单参数、问题或豁免。
 - 不把参考项目当作默认规则集。
-- 不虚构板厂能力、规则配置、DRC 结果、制造输出或验证状态。
+- 不虚构板厂能力、规则配置、Repour、DRC 结果或验证状态。
 - 不为得到零违规而放宽、关闭或删除必要规则。
 - 不把视觉整洁等同于电气正确或可制造。
-- 不在缺少用户完整 Batch DRC 确认时批准制造。
 - 不把未制造、未装配、未上电或未测试的状态描述为已完成。

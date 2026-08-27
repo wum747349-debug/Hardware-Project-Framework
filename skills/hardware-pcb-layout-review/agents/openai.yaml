@@ -1,4 +1,4 @@
 interface:
-  display_name: "硬件 PCB 布局与放行审查"
-  short_description: "审查 PCB 布局布线、用户 DRC 结果与制造放行"
-  default_prompt: "使用 $hardware-pcb-layout-review 按 Layout Preflight、Layout / Routing Review 或 PCB Release Review 模式执行审查。"
+  display_name: "硬件 PCB 布局与布线审查"
+  short_description: "执行 Layout Preflight、交互式布局布线与 Layout / Routing Review"
+  default_prompt: "使用 $hardware-pcb-layout-review 执行 Layout Preflight、Interactive Placement、Interactive Routing 或 Layout / Routing Review。"
