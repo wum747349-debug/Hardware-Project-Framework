@@ -4,23 +4,34 @@
 
 ## Unreleased
 
-Status: Normal Framework Maintenance after published v1.0.0.
+Status: Candidate content for Hardware Project Framework v1.1.0.
 
 ### Changed
 
-- 将 Stage 7 PCB Release Review / Manufacturing Preparation 从 Stage 5–6 PCB design / review 方法中分离，引入独立 release Skill，并将正常放行收敛为 Core Bare PCB + conditional PCBA / special fabrication 流程。
-- 精简 manufacturing-data verification：Final Full Batch DRC 与最终制造解读互补但不可互换，并按实际 submission path 审查一个忠实且能力足够的表示。
-- 明确 specific-conclusion sufficiency、minimum missing evidence、session evidence / persistent authority 与 formal checkpoint 的最小 durable summary；raw evidence 仍为 optional。
-- 强化 Stage 3 / Stage 4 的 task-intent routing，并明确 Stage 4 可复用充分、可追溯的既有 schematic-review evidence 覆盖 unchanged areas、聚焦 relevant delta；Stage architecture、Runtime Contract 与 Structural Contract 均未改变。
-- 对齐 Project Runtime Rules 的三类 adoption taxonomy，明确 Compatible Sync 必须验证最终计划提交的 binding + files 组合，并澄清 Existing Project 进入 Pinned Framework Evaluation 时不得重置 initialization provenance / status；lifecycle architecture 与 Contract 均未改变。
-- 将 development binding 推广为长期 Pinned Development Binding，新增轻量 Pinned Framework Evaluation、Same-SHA Formalization fast path，并把普通 Project adoption 压缩为 `Assess → Execute when authorized → Verify`；保持一个 active Layer-0 binding、既有 Human Approval 风险边界与 Authority Cutover 独立性。
-- Project Validator 接受 `development-v0.9` 与通用 `development-vX.Y.Z`，同时继续要求 40 位 immutable Framework Commit，并拒绝 moving branch、`HEAD` 与 short SHA。
-- 将 Framework release 高层流程收敛为 Release Assessment、Candidate Validation、ONE Human Publish Approval、Publication 与 Automatic Verification；RC 继续为 risk-driven optional prerelease。
-- Component Selection Skill 增加 procurement-aware、JLCPCB/LCSC-first candidate discovery：AI/Codex 在具备公开搜索能力时主动发现 marketplace candidates，并以 Manufacturer datasheet / official documentation 作为 technical qualification authority；默认形成 Primary / Alternate，在 purchasing、ordering 或 PCBA BOM submission 前轻量复核 availability，并将默认输出收敛为 complexity-adaptive Candidate Table、Primary / Alternate Decision 与 Open Issues，其他比较、风险、datasheet 和后置外围输出仅在有助于决策、风险处理或可追溯性时生成。
-- 将长期 Framework maintenance / Semantic Versioning / optional RC / Release publication 职责提取到 `docs/Framework_Maintenance_and_Release_Guide.md`。
-- 将 `Framework_Migration_Guide.md` 收窄为 Project-side immutable Release adoption，并保留 Authority Cutover 低频 exception procedure。
-- 将 Repository Architecture Migration Master Plan 标记为 `CLOSED — Historical Engineering Record`，AI Runbook 标记为 `RETIRED`，并清理 README 与 AI routing 的 transition-era current-state wording。
-- Runtime Contract、Structural Contract、Project Structure Version、Project binding 与 Standalone Project：UNCHANGED。
+- 强化 Stage 2 Component Selection：新增 procurement-aware、JLCPCB/LCSC-first candidate discovery，以 Manufacturer official documentation 作为 technical qualification authority；默认形成 Primary / Alternate，并在 purchasing、ordering 或 PCBA BOM submission 前轻量复核 point-in-time availability。
+
+- 新增独立 `hardware-schematic-design` Skill，明确 Stage 3 module planning、module-by-module design、parameter calculation、EDA capture guidance 与 Cross-Module Integration Check；同时进一步区分 Stage 3 日常设计与 Stage 4 Formal Schematic Review，并允许 Formal Review 对 unchanged areas 复用充分、可追溯的既有 evidence，只聚焦 relevant delta。
+
+- 强化 Stage 5–6 PCB Layout / Routing 方法：完善 interactive placement 与 interactive routing guidance，明确 routing criticality、dominant constraint、关键 routing corridor、return/reference planning、冲突处理与局部 placement reopen；同时将 PCB rule organization 收敛为能够表达工程意图的最简单 Scope / Net Class 结构，避免不必要的规则复杂化。
+
+- 将 Stage 7 PCB Release Review / Manufacturing Preparation 从 Stage 5–6 Layout / Routing 方法中独立出来，新增 `hardware-pcb-release-review` Skill；正常裸板放行收敛为 exact release candidate → Final Full Batch DRC → actual manufacturing-data path → one faithful and capable manufacturing interpretation → explicit Manufacturing Release Decision，PCBA 与 special fabrication 仅在实际适用时触发。
+
+- 统一 Context / Evidence architecture：按 specific conclusion 判断 evidence sufficiency，只请求 minimum missing evidence；明确 evidence freshness / version compatibility、session evidence 与 persistent Project authority 的边界，以及 Formal Review / Stage transition / Manufacturing Release 所需的 minimum durable summary。Stage 5–6 net-specific routing 只按需读取最小 connectivity evidence，BOM 不再作为固定输入。
+
+- 简化 Framework maintenance、release 与 Project adoption lifecycle：引入长期 Pinned Development Binding、Pinned Framework Evaluation 与 Same-SHA Formalization fast path；普通 adoption 收敛为 `Assess → Execute when authorized → Verify`。Framework publication 收敛为 Release Assessment → Candidate Validation → ONE Human Publish Approval → Publication → Automatic Verification，RC 为 risk-driven optional prerelease。
+
+- 简化并增强 Validator / CI：canonical Framework validation 统一聚合 Framework Contract、Markdown links、Template / snapshot consistency、clean Bootstrap / Gate 1.5、binding / Stage-enabled / migration regression、Reference Project 与 final-state checks；Project Validator 兼容 `development-v0.9` 与通用 `development-vX.Y.Z`，继续要求 immutable 40-character SHA 并拒绝 moving branch、`HEAD` 与 short SHA。
+
+### Compatibility
+
+- Runtime Contract: UNCHANGED
+- Structural Contract: UNCHANGED
+- Project Structure Version: 1 — UNCHANGED
+- `FRAMEWORK.md` schema: UNCHANGED
+- Required / Conditional / Stage-enabled model: UNCHANGED
+- Stage / Gate architecture: UNCHANGED
+- Project facts authority and repository authority model: UNCHANGED
+- Existing Standalone Projects are not automatically rebound by this release.
 
 ## v1.0.0
 
