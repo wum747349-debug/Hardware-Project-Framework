@@ -85,6 +85,62 @@ SMOKE_STAGE_PATHS = (
     "docs/revision_history.md",
 )
 
+RUNTIME_RULE_SEMANTIC_GUARDS = {
+    1: (
+        ("current Project facts", r"(?:Project facts|项目事实|fixture facts)"),
+        ("current repository authority", r"(?:only\s+from|只(?:能)?来自)"),
+    ),
+    2: (
+        ("FRAMEWORK.md binding", r"`?FRAMEWORK\.md`?"),
+        ("Framework version identity", r"Framework\s+(?:version|版本)"),
+        ("binding authority", r"(?:Release\s*\+\s*Commit|以.*为准|recorded in)"),
+    ),
+    3: (
+        ("automatic-adoption prohibition", r"(?:不自动|do not (?:automatically|default))"),
+        ("Framework main", r"Framework\s+`main`"),
+    ),
+    4: (
+        ("explicit user request", r"(?:用户明确要求|explicit(?:ly)? request(?:ed)?)"),
+        ("Pinned Framework Evaluation", r"Pinned Framework Evaluation"),
+        ("Compatible Framework Sync", r"Compatible Framework Sync"),
+        ("Framework Contract Migration", r"Framework Contract Migration"),
+        ("applicable validation", r"validation"),
+    ),
+    5: (
+        ("official documentation", r"(?:官方|official)"),
+        ("datasheet", r"datasheet"),
+        ("reference manual", r"reference manual"),
+        ("application note", r"application note"),
+    ),
+    6: (
+        ("SchDoc authority", r"\.SchDoc"),
+        ("PcbDoc authority", r"\.PcbDoc"),
+        ("EDA implementation authority", r"(?:authoritative|权威)"),
+    ),
+    7: (
+        ("fabricated-result prohibition", r"(?:不得伪造|must not (?:fabricate|falsify))"),
+        ("EDA result", r"EDA"),
+        ("ERC result", r"ERC"),
+        ("DRC result", r"DRC"),
+        ("manufacturing result", r"Manufacturing"),
+        ("test result", r"Test"),
+    ),
+    8: (
+        ("Project Stage", r"(?:Project\s+stage|项目阶段)"),
+        ("root README authority", r"README\.md"),
+        ("single Stage authority", r"(?:only|只)"),
+    ),
+    9: (
+        ("other Project boundary", r"(?:其他|another|other)\s+Project"),
+        ("fact-source prohibition", r"(?:fact source|事实源)"),
+    ),
+    10: (
+        ("current-task scope", r"(?:current task|当前任务)"),
+        ("Stage Skill", r"Stage Skill"),
+        ("minimum-read boundary", r"(?:Read only|只读取|所需|必要)"),
+    ),
+}
+
 
 class Validator:
     def __init__(self, mode: str) -> None:
@@ -250,6 +306,54 @@ def check_template_contract(validator: Validator) -> None:
 
     snapshot_text = (TEMPLATE_ROOT / "scripts/validate_project_repository.py").read_text(encoding="utf-8")
     validator.check("D:\\Hardware-Practice-Projects" not in snapshot_text, "templates/hardware_project_template/scripts/validate_project_repository.py", "Project Validator depends on the current local Framework path")
+
+
+def check_project_runtime_rule_alignment(validator: Validator) -> None:
+    structure_path = "docs/Project_Structure_Standard.md"
+    structure = validator.read(structure_path)
+    section_match = re.search(
+        r"^## 5\.[^\n]*PROJECT_RULES\.md[^\n]*Contract\s*$\n(?P<body>.*?)(?=^##\s)",
+        structure,
+        flags=re.MULTILINE | re.DOTALL,
+    )
+    validator.check(section_match is not None, structure_path, "Project Runtime Rules Section 5 missing")
+
+    sources = []
+    if section_match is not None:
+        sources.append((f"{structure_path} Section 5", section_match.group("body")))
+    sources.extend(
+        (
+            ("templates/hardware_project_template/PROJECT_RULES.md", validator.read("templates/hardware_project_template/PROJECT_RULES.md")),
+            ("examples/reference_project_v1/PROJECT_RULES.md", validator.read("examples/reference_project_v1/PROJECT_RULES.md")),
+        )
+    )
+
+    expected_rule_numbers = set(RUNTIME_RULE_SEMANTIC_GUARDS)
+    for path, text in sources:
+        rules = {
+            int(match.group("number")): match.group("body").strip()
+            for match in re.finditer(
+                r"^(?P<number>\d+)\.\s+(?P<body>.*?)(?=^\d+\.\s+|\Z)",
+                text,
+                flags=re.MULTILINE | re.DOTALL,
+            )
+        }
+        validator.check(set(rules) == expected_rule_numbers, path, "Project Runtime Rules must preserve Rule #1-#10 identities")
+        for number, semantic_guards in RUNTIME_RULE_SEMANTIC_GUARDS.items():
+            rule = rules.get(number, "")
+            for identity, pattern in semantic_guards:
+                validator.check(
+                    re.search(pattern, rule, flags=re.IGNORECASE) is not None,
+                    path,
+                    f"Runtime Rule #{number} semantic drift: missing {identity}",
+                )
+
+        if path != f"{structure_path} Section 5":
+            validator.check(
+                re.search(r"\bEvidence\b", rules.get(10, ""), flags=re.IGNORECASE) is not None,
+                path,
+                "Runtime Rule #10 semantic drift: missing task-required Evidence boundary",
+            )
 
 
 def check_validator_snapshot(validator: Validator) -> None:
@@ -577,6 +681,7 @@ def validate(mode: str) -> Validator:
     check_markdown_links(validator)
     check_contract_authorities(validator)
     check_template_contract(validator)
+    check_project_runtime_rule_alignment(validator)
     check_validator_snapshot(validator)
     run_template_validator(validator)
     check_project_smoke_tests(validator)
