@@ -2,9 +2,7 @@
 
 本文件记录 Framework 方法、结构、Template、Skill、Checklist 与 Validator 的发布级变化。真实 Project 的硬件 revision 和项目 release 由各 Standalone Project Repository 自己维护。
 
-## Unreleased
-
-Status: Candidate content for Hardware Project Framework v1.1.0.
+## v1.1.0
 
 ### Changed
 
@@ -20,7 +18,7 @@ Status: Candidate content for Hardware Project Framework v1.1.0.
 
 - 简化 Framework maintenance、release 与 Project adoption lifecycle：引入长期 Pinned Development Binding、Pinned Framework Evaluation 与 Same-SHA Formalization fast path；普通 adoption 收敛为 `Assess → Execute when authorized → Verify`。Framework publication 收敛为 Release Assessment → Candidate Validation → ONE Human Publish Approval → Publication → Automatic Verification，RC 为 risk-driven optional prerelease。
 
-- 简化并增强 Validator / CI：canonical Framework validation 统一聚合 Framework Contract、Markdown links、Template / snapshot consistency、clean Bootstrap / Gate 1.5、binding / Stage-enabled / migration regression、Reference Project 与 final-state checks；Project Validator 兼容 `development-v0.9` 与通用 `development-vX.Y.Z`，继续要求 immutable 40-character SHA 并拒绝 moving branch、`HEAD` 与 short SHA。
+- 简化并增强 Validator / CI：canonical Framework validation 统一聚合 Framework Contract、Markdown links、Template / snapshot consistency、clean Bootstrap / Gate 1.5、binding / Stage-enabled / migration regression、Reference Project 与 final-state checks，并增加 Runtime Rule semantic-alignment regression guard；Project Validator 兼容 `development-v0.9` 与通用 `development-vX.Y.Z`，继续要求 immutable 40-character SHA 并拒绝 moving branch、`HEAD` 与 short SHA。
 
 ### Compatibility
 
