@@ -112,7 +112,7 @@ Standalone Project 的精简 `PROJECT_RULES.md` 只保存所有阶段始终成�
 1. 当前项目事实只能来自本项目；
 2. Framework 版本以 `FRAMEWORK.md` 为准；
 3. 不自动采用或读取 Framework `main`；
-4. Framework 升级必须显式迁移；
+4. Framework binding change 必须由用户明确要求：prerelease dogfooding 使用 Pinned Framework Evaluation，backward-compatible adoption 使用 Compatible Framework Sync，只有 breaking Runtime / Structural Contract adoption 使用 Framework Contract Migration；所有路径执行适用 validation。
 5. 关键硬件参数必须回到官方 datasheet、reference manual 或 application note 核对；
 6. `.SchDoc` / `.PcbDoc` 是 EDA 权威实现源；
 7. AI 不得伪造 EDA、ERC、DRC、Manufacturing 或 Test 结果；
