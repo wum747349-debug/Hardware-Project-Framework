@@ -110,7 +110,7 @@ Assessment
 6. 运行 Validator 与受影响 Gate / checklist；失败时按 rollback plan 保持或恢复一致 binding，不留下部分切换；
 7. 提交、推送并给出 Final Report。
 
-`One Contract Migration = One Human Approval Gate`。Framework Contract Migration 改变 Runtime / Structural Contract 适配边界；Authority Cutover 改变唯一活动 Project authority，两者是不同风险边界。如果同一 Project 同时需要两者，不得机械合并为一次批准：先按已批准的 Contract Migration transaction 完成并验证，再对 Authority Cutover 的独立 assessment 与 transaction 取得一次批准。Stage advancement、Repository Rename、Legacy deletion 或 Release publication 同样按各自 Human Gate 处理。
+`One Contract Migration = One Human Approval Gate`。Framework Contract Migration 改变 Runtime / Structural Contract 适配边界；Authority Cutover 改变唯一活动 Project authority，两者是不同风险边界。如果同一 Project 同时需要两者，不得机械合并为一次批准：先按已批准的 Contract Migration transaction 完成并验证，再对 Authority Cutover 的独立 assessment 与 transaction 取得一次批准。Stage advancement、Repository Rename、Legacy deletion 或 Release publication 分别遵循其 authoritative Workflow / procedure 定义的 authorization boundary。
 
 ## 5. Structure Version Change
 
