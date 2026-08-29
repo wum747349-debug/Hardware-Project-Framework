@@ -24,7 +24,7 @@ Bootstrap / Stage 1 创建 human-facing Project documentation 时，遵守 Frame
 
 ## Bootstrap 协作
 
-- 确认 Template 来自固定 Release；开发自测明确使用 `development-v0.9`。
+- 确认 Template 来自固定 Release；Framework 自测或明确 prerelease evaluation 使用 `development-vX.Y.Z` + 实际 immutable full commit，`development-v0.9` 仅作为 historical Bootstrap / provenance compatibility 保留。
 - 帮助填写 Project Identity 和唯一 `FRAMEWORK.md` schema。
 - 建立 Required files、导航和职责目录。
 - 保留真实未知项为 `TBD`、`待确认` 或 Draft。
@@ -44,9 +44,13 @@ Bootstrap / Stage 1 创建 human-facing Project documentation 时，遵守 Frame
 1. 使用 Initialization Checklist 检查 Identity、Binding、Required、Navigation、placeholder、residue 与 Requirements Baseline。
 2. 保持 `Initialization Status: Gate 1.5 Pending`，运行 Project Validator 的 `--gate-1-5` 模式。
 3. 将自动检查与人工事实审查分开报告。
-4. 任一阻断项存在时输出 FAIL，并保持 `Gate 1.5 Pending`。
-5. 只有全部阻断项关闭时输出 PASS，再将 `Initialization Status` 更新为 `Initialized`。
-6. 更新状态后运行普通 Project Validator；通过后才允许进入 Stage 2。Gate 本身不产生设计结果。
+4. 任一阻断项存在时输出 `NOT READY`，并保持 `Gate 1.5 Pending`。
+5. 全部阻断项关闭时 technical conclusion 为 `READY`。
+6. Read-only request 只报告 `READY / NOT READY`，不得记录 Gate PASS、更新 `Initialization Status` 或推进 Stage。
+7. Explicit execution request 已明确要求执行 Gate 1.5、完成初始化或条件满足后进入下一阶段时，该请求本身构成 execution authorization；若结论为 `READY`，不再请求第二次 approval，直接记录 Gate 1.5 PASS 并将 `Initialization Status` 更新为 `Initialized`。
+8. 更新状态后运行普通 Project Validator；通过后才允许进入 Stage 2。Gate 本身不产生设计结果。
+
+`READY` 不等于自动执行；只有当前用户任务已明确授权状态变化时才执行 Gate PASS。
 
 ## 事实与证据禁止事项
 
@@ -62,4 +66,4 @@ Bootstrap / Stage 1 创建 human-facing Project documentation 时，遵守 Frame
 - Bootstrap / Stage 1 / Gate 1.5 当前结论；
 - 已确认事实与明确未决项；
 - Validator command 与结果；
-- Gate 阻断项、所需动作和下一步。
+- Gate 阻断项、授权边界、所需动作和下一步。

@@ -79,28 +79,34 @@ python scripts/validate_project_repository.py --gate-1-5
 ```
 
 4. 如失败，保持 `Gate 1.5 Pending`，修正阻断项并重新执行。
-5. Checklist 与 Validator 均无阻断项只表示 Gate 1.5 达到 technical readiness；它们不会自动授权 Gate 1.5 Human PASS。未获得 Human Approval 时必须保持 `Gate 1.5 Pending`。
-6. Technical readiness 确认后，取得 Gate 1.5 PASS 的明确 Human Approval。
-7. 只有获得该 Human Approval 后，才记录 Gate 1.5 PASS，并将 `Initialization Status` 更新为 `Initialized`。
+5. Checklist、Validator 与人工事实审查均无阻断项时，Gate 1.5 technical conclusion 为 `READY`；任何阻断项存在时为 `NOT READY`。
+6. Read-only request（例如检查 Gate 1.5 是否可以通过、审查是否 READY、评估是否满足进入 Stage 2 条件）只允许输出 `READY / NOT READY`。即使为 `READY`，也不得记录 Gate PASS、不得把 `Initialization Status` 改为 `Initialized`、不得推进 Stage。
+7. Explicit execution request（例如完成初始化并在条件满足后通过 Gate 1.5、执行 Gate 1.5、满足条件后直接进入下一阶段）本身已经构成 Gate 1.5 execution authorization。若当前任务已包含该授权且结论为 `READY`，不再追加第二次 Human Approval round-trip；直接记录 Gate 1.5 PASS，并将 `Initialization Status` 更新为 `Initialized`。
 8. 更新状态后运行普通 Validator，确认最终 Project 状态仍合法：
 
 ```bash
 python scripts/validate_project_repository.py
 ```
 
-9. 普通 Validator 通过后才允许进入 Stage 2。
+9. 普通 Validator 通过后才允许进入 Stage 2；若 final validation 失败，必须停止并修复，不得宣告 Gate 1.5 closeout 完成。
 
 ```text
-Checklist + Validator PASS
+Checklist + Gate Validator + Fact Review PASS
         ↓
-technical readiness
+READY?
         ↓
-Human Approval for Gate 1.5 PASS
-        ↓
-record Gate 1.5 PASS
+current task explicitly authorizes Gate 1.5 execution?
+   no  → report READY and STOP
+   yes → record Gate 1.5 PASS
         ↓
 Initialization Status = Initialized
+        ↓
+final Project Validator PASS
+        ↓
+Stage 2 allowed
 ```
+
+该模型删除的是重复 approval round-trip，不是用户授权边界。`READY` 从不等于自动执行；只有当前用户任务已经明确要求执行 Gate 1.5 / 完成初始化 / 条件满足后推进时，才允许状态变化。
 
 Validator 只检查可自动判定的结构、binding、placeholder、链接、阶段文件和明显残留；它不能判断真实硬件需求是否充分，也不能证明 EDA、ERC、DRC、Manufacturing 或 Test。
 

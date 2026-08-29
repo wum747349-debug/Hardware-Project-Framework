@@ -24,16 +24,18 @@ Release Assessment
         ↓
 Candidate Validation
         ↓
-ONE Human Publish Approval
+READY?
         ↓
-Publication
+current task contains explicit Publication authorization?
+   no  → report READY and STOP
+   yes → Publication
         ↓
 Automatic Verification
         ↓
 DONE
 ```
 
-Routine validation、CI、diff inspection、technical review、documentation review、evidence collection 与普通授权范围内的 commit / push 都不建立额外 Human Gate。Release lifecycle 只有一次 Human Publish Approval；validation 输出仅为 `READY` 或 `NOT READY`。
+Routine validation、CI、diff inspection、technical review、documentation review、evidence collection 与普通授权范围内的 commit / push 都不建立额外 Human Gate。Candidate Validation 只输出 `READY` 或 `NOT READY`；`READY` 本身不授权 Publication。Read-only publication review 只报告 readiness 并停止；当前用户任务中的 Explicit Publication request 已经构成 Publication Authorization 时，Candidate Validation 通过后不再请求第二次 approval round-trip。
 
 ## 2. Release Assessment
 
@@ -76,18 +78,22 @@ RC Candidate 和 Final Candidate 都必须锁定一个 immutable full Commit SHA
 
 任何 required check 失败、candidate SHA 漂移、版本已存在或 classification 不明确，都输出 `NOT READY` 并 `STOP`。修改 candidate 后必须针对新 SHA 重新验证；不得沿用旧 candidate 的结果。
 
-## 5. ONE Human Publish Approval
+## 5. Publication Authorization Boundary
 
-Candidate Validation 为 `READY` 后，只请求一次 Human Publish Approval。批准必须绑定 target version、release type（RC / Final）与 immutable candidate SHA。
+Candidate Validation 为 `READY` 后，先检查当前用户任务是否已经明确授权 Publication。
 
-不存在独立的 RC Gate、Release Readiness Approval、Technical Approval、Documentation Gate、Maintenance Gate 或 Final Closeout Approval。普通 review 与验证结论合并进 Candidate Validation evidence，不拆成额外批准。
+- Read-only publication review，例如“检查能不能发布”“做 Final Publication Review”“判断是否 READY”，只输出 `READY` / `NOT READY`；即使 `READY` 也必须停止，不得创建 tag 或 GitHub Release。
+- Explicit Publication request，例如“正式发布 vX.Y.Z”“检查全部通过后直接发布”“执行 Final Publication，失败就停止”，该请求本身已经构成 Publication Authorization。Candidate Validation 通过后不再追加一次独立 Human Publish Approval。
+- Publication Authorization 必须明确覆盖 exact target version 与 release type（RC / Final）。Publication 前必须锁定 immutable candidate SHA，并确认它仍位于当前授权任务的 bounded candidate scope；若版本、release type、candidate scope 或用户意图发生实质漂移，必须 `STOP` 并重新取得明确授权。
+
+不存在独立的 RC Gate、Release Readiness Approval、Technical Approval、Documentation Gate、Maintenance Gate 或 Final Closeout Approval。普通 review 与验证结论合并进 Candidate Validation evidence，不拆成额外批准。该模型删除的是重复 approval round-trip，不是用户对 Publication 的控制权，也绝不允许 `Candidate Validation PASS → 自动发布`。
 
 ## 6. Atomic Publication
 
-获批后，在一个 bounded publication transaction 中：
+已存在有效 Publication Authorization 后，在一个 bounded publication transaction 中：
 
-1. 再次确认远端默认分支、candidate SHA、目标 tag / Release 不存在且 approval 未漂移；
-2. 创建目标 tag 时遵循仓库既定命名，并确保 tag 指向获批 SHA；
+1. 再次确认远端默认分支、candidate SHA、目标 tag / Release 不存在且 authorization scope 未漂移；
+2. 创建目标 tag 时遵循仓库既定命名，并确保 tag 指向该 immutable candidate SHA；
 3. 推送 tag；
 4. 发布对应 GitHub prerelease（RC）或 final Release；
 5. 不执行 Project rebinding、Repository Rename、Authority Cutover 或其他未包含动作。
@@ -98,7 +104,7 @@ Candidate Validation 为 `READY` 后，只请求一次 Human Publish Approval。
 
 Publication 后自动核对：
 
-- remote tag 存在且精确指向获批 candidate SHA；
+- remote tag 存在且精确指向获授权的 candidate SHA；
 - GitHub Release 存在，RC / Final 属性、版本名、target 与 release notes 正确；
 - 默认分支及关联 GitHub Actions 状态符合发布要求；
 - 未创建额外 tag / Release，未修改任何 Standalone Project binding；

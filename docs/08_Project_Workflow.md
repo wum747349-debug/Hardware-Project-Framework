@@ -122,9 +122,13 @@ Gate 1.5 位于 Stage 1 与 Stage 2 之间。它验证 Project 容器、Framewor
 - 尚未开始的选型、EDA、Review、DRC、Manufacturing、Bring-up、Test 明确保持未开始/未验证状态；
 - 没有提前产生或声称后续阶段结论。
 
-### 结论
+### 结论与授权边界
 
-只有全部阻断项关闭后，Gate 1.5 才能 `PASS` 并将 `Initialization Status` 更新为 `Initialized`。任何阻断项存在时结论为 `FAIL`，Project 保持 Stage 1 / `Gate 1.5 Pending`。
+全部阻断项关闭、Gate Validator 通过且人工事实审查无阻断项时，technical conclusion 为 `READY`；任何阻断项存在时为 `NOT READY`，Project 保持 Stage 1 / `Gate 1.5 Pending`。
+
+Read-only request 只允许输出 `READY / NOT READY`，不得记录 Gate PASS、不得把 `Initialization Status` 更新为 `Initialized`、不得推进 Stage。Explicit execution request 已明确要求执行 Gate 1.5、完成初始化或在条件满足后进入下一阶段时，该请求本身构成 execution authorization；若结论为 `READY`，无需第二次 approval round-trip，可直接记录 Gate 1.5 PASS、将 `Initialization Status` 更新为 `Initialized`，再运行 final Project Validator。只有 final Project Validator 通过后才允许进入 Stage 2。
+
+`READY` 本身从不授权状态变化。该简化不新增或删除 Gate，也不削弱用户控制；它只删除重复的 separate approval round-trip。
 
 Gate 1.5 PASS 是进入 Stage 2 的必要条件，但不证明任何关键器件、EDA 或验证结果。
 

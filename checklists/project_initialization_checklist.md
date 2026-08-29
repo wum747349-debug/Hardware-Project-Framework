@@ -50,10 +50,12 @@
 - [ ] 没有虚构器件、原理图、PCB、ERC、DRC、制造或测试结论。
 - [ ] Gate 1.5 没有产生设计结果。
 
-## Validation
+## Validation and Authorization
 
 - [ ] 执行 Gate Validator 前真实保持 `Initialization Status: Gate 1.5 Pending`。
 - [ ] `python scripts/validate_project_repository.py --gate-1-5` 通过。
-- [ ] 人工事实审查无阻断项。
-- [ ] Gate 1.5 PASS 后才将 `Initialization Status` 更新为 `Initialized`。
+- [ ] 人工事实审查无阻断项；technical conclusion 为 `READY`。
+- [ ] 若当前任务只是 read-only review，只报告 `READY / NOT READY`，不记录 Gate PASS、不更新 `Initialization Status`、不推进 Stage。
+- [ ] 若当前任务已明确要求执行 Gate 1.5、完成初始化或条件满足后进入下一阶段，该请求视为 execution authorization；无需第二次 approval round-trip。
+- [ ] 只有在 `READY` 且当前任务已有 execution authorization 时，才记录 Gate 1.5 PASS 并将 `Initialization Status` 更新为 `Initialized`。
 - [ ] 更新状态后的 `python scripts/validate_project_repository.py` 通过，才允许进入 Stage 2。

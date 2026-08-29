@@ -2,6 +2,26 @@
 
 本文件记录 Framework 方法、结构、Template、Skill、Checklist 与 Validator 的发布级变化。真实 Project 的硬件 revision 和项目 release 由各 Standalone Project Repository 自己维护。
 
+## v1.1.1
+
+### Changed
+
+- 修正 Gate 1.5 authorization wording drift：统一为 `Checklist + Gate Validator + Fact Review → READY / NOT READY`；read-only review 只报告 readiness，不改变状态；当前用户任务已明确要求执行 Gate 1.5、完成初始化或条件满足后推进时，该请求本身构成 execution authorization，不再追加第二次 approval round-trip。Gate PASS 后仍必须更新 `Initialization Status = Initialized` 并运行 final Project Validator，之后才允许 Stage 2。
+- 修正 Framework Publication authorization wording drift：Candidate Validation 仍只输出 `READY / NOT READY`；read-only publication review 在 `READY` 后停止；当前任务已明确要求发布 exact target version / release type 时，该请求构成 Publication Authorization，Candidate Validation 通过后不再重复请求独立 Human Publish Approval。Immutable candidate SHA、drift/conflict STOP、bounded publication transaction、automatic verification 与 recovery boundaries 保持不变。
+- 将 Initialization Skill 的 development binding wording 与 Structure Standard / Initialization Guide 对齐为通用 `development-vX.Y.Z`；`development-v0.9` 仅保留 historical Bootstrap / provenance compatibility。
+- Framework Validator 本次不新增自然语言 authorization parser；现有 structural / semantic regression coverage 保持不变，避免将用户意图判断绑定到脆弱 exact wording。
+
+### Compatibility
+
+- Runtime Contract: UNCHANGED
+- Structural Contract: UNCHANGED
+- Project Structure Version: 1 — UNCHANGED
+- `FRAMEWORK.md` schema: UNCHANGED
+- Required / Conditional / Stage-enabled model: UNCHANGED
+- Stage / Gate architecture: UNCHANGED
+- Project authority model: UNCHANGED
+- Existing Standalone Projects are not automatically rebound by this patch.
+
 ## v1.1.0
 
 ### Changed
