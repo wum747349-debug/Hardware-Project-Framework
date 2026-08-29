@@ -107,7 +107,7 @@ Stage 3 的日常模块设计、连接核对、参数计算、当前模块或局
 - 制造数据与解读：Stage 7 按 actual manufacturing-data / submission path 读取支持当前结论所需的 manufacturing representation，不默认要求 Gerber / Drill 或特定 viewer。
 - Pick & Place、Assembly 等 PCBA outputs：仅在项目实际需要 PCB Assembly 时读取。
 
-正式结论前，先判断当前 evidence 是否足以支持该具体结论。不足时应分别说明已能确认、尚不能确认的内容与最小 evidence gap，只请求弥补该 gap 的 minimum missing evidence，不为保险批量索要无关资料。Evidence 必须与所评估的 PCB / Git / hardware version 兼容且对该结论仍然新鲜；无法识别版本关系时只能给出受限结论。
+正式结论或动作前，先判断当前 evidence 是否足以支持该具体结论或动作。证据缺失只阻断依赖该证据的具体结论或动作，不自动阻断无关工作、准备性分析、交互式工程指导、scoped review、可安全限定范围的建议或文档准备；只要仍能形成有价值、边界明确的受限结果，就应继续并明确 limitation，不得将受限结论升级为已经验证的 PASS、confirmed fact 或 release approval。仅当当前请求所需的 minimum evidence 无法从现有 Project authority、适用 authoritative source 或当前可用工具取得，并因此阻断所请求的具体结论或动作时，才向用户索取该 minimum missing evidence，不为保险批量索要无关资料。Evidence 必须与所评估的 PCB / Git / hardware version 兼容且对该结论仍然新鲜；无法识别版本关系时只能给出受限结论。
 
 当前会话中的 PCB / Altium / DRC 截图、用户对当前 EDA 状态的确认、manufacturer CAM / Gerber preview 以及其他 implementation evidence 可以支持当前分析，但不会自动更新 persistent Project authority。当 local/session implementation 新于 committed repository source 时，Interactive Placement、Interactive Routing 和 scoped analysis 不因此自动停止；Formal Review 可对明确识别的最新 evidence 做受限判断，同时说明 persistent repository source 是否同步。Manufacturing Release 前必须无歧义识别 exact release candidate，不得在 repo / local version drift 仍模糊时放行。
 

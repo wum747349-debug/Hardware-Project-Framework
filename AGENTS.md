@@ -69,7 +69,7 @@ Project `AGENTS.md` 不复制 Framework 的完整方法。完整 schema、四层
 
 - `.SchDoc` 和 `.PcbDoc` 分别是原理图和 PCB 的权威设计源。没有可靠解析能力时，不得声称已读取或核对其内部对象、规则、铺铜或 DRC 状态。
 - 不得声称运行过 Altium、ERC、Repour、Batch DRC、制造输出、焊接或测试；只有用户提供实际结果时才分析，并明确结果来源。
-- 证据不足时必须说明结论限制，不得关闭问题或批准制造。
+- Evidence sufficiency、minimum missing evidence 与缺证据时的 continuation behavior 按 `docs/AI_Context_Guide.md` 执行；证据不足时必须说明结论限制，不得无证据关闭依赖该证据的相应问题、确认相应结论或批准相应制造动作。
 - Framework 文档、Template 或 Reference Project 不证明任何真实 Project 的 EDA 实现或测试状态。
 
 ## Git 安全与默认交付
