@@ -257,7 +257,7 @@ Only generate these when they materially improve the decision, risk handling, or
 
 ## 禁止事项
 
-- 不要直接照抄开源项目 BOM。
+- 不要将 external BOM、Manufacturer reference design、prior Project BOM 或 field-used legacy component choice 未经当前 Project requirements 与适用 Manufacturer official documentation qualification，就直接导入为当前 Project 的 `Primary`、`Alternate` 或最终器件决策；它们可以作为 candidate discovery 或 qualified reuse input。
 - 不要只给型号，不说明依据。
 - 不要在没有 datasheet 依据时确认关键参数。
 - 不要推荐采购困难、封装过难或资料不完整的器件作为第一版主选。

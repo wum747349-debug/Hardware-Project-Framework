@@ -27,6 +27,14 @@
 - 设计时同时明确 startup、shutdown、default 与 fault behavior，并提取 schematic-relevant Layout inputs。
 - Module-specific connections、support values 与 calculations 默认记录在当前 module design context，不自动反向同步 Stage 2 selection artifacts 或 board-level documents；selection、qualification、architecture 或 requirement 实质变化时，更新对应 owner 或返回相关 Stage reevaluation。
 
+### Proven Design Reuse
+
+- 优先采用经过证明且适合当前需求的实现，避免不必要的重新设计。
+- 适用时，Manufacturer-recommended implementation、prior field-used design 和 evidence-backed external design 可作为 design starting point 或 qualified reuse input。
+- Reuse 不会转移 qualification；采用前按当前 Project 实际相关项重新核对 voltage、current、logic behavior、load、startup / default state、fault behavior、protection、thermal、package、availability 与 Layout-sensitive constraints。
+- 关键参数仍以 Manufacturer official documentation 为技术权威。
+- 不要仅为追求原创性而重新设计本来合适的成熟实现；若当前 Project 明确要求 independent reimplementation，则该 Project requirement 优先于 Framework 的默认复用许可。
+
 ## 4. Workflow
 
 ### Determine Module Plan

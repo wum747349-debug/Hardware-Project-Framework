@@ -1,6 +1,6 @@
 # 开源硬件参考项目索引
 
-> 本索引只记录可学习的开源硬件项目来源和参考方向。禁止直接复制第三方项目的原理图、PCB、BOM、Gerber、生产文件、源工程文件或文字说明作为本仓库成果。
+> 本索引中各条目的学习用途描述与“不直接复用”结论只反映其历史 / 示例用途，不定义 Framework 的全局 reuse policy。实际 Project 是否采用外部设计，应依据当前 Project requirements、qualification evidence、Manufacturer official documentation，以及适用的 provenance / license requirements 判断。
 
 ## 01_STM32_DAQ_Control_Board
 

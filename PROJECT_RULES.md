@@ -45,7 +45,7 @@ Framework Era
 - 不要求项目一开始收集全部 datasheet；普通阻容、LED、排针和测试点等不影响架构的器件可以后置。
 - 官方 datasheet、reference manual 和 application note 是关键参数的主要依据。
 - 商品页只可用于库存、价格、封装、料号和资料入口，不能替代官方资料。
-- 开源项目只可学习结构、方法和文档组织；不得直接复制其原理图、PCB、BOM、Gerber、生产文件或源工程作为项目成果。
+- 外部、Legacy、Manufacturer reference 或开源设计可作为参考或 qualified reuse input，但不会自动成为当前 Project facts 或已验证的设计决策；复用内容必须按当前 Project requirements 完成必要 qualification，关键参数仍以 Manufacturer official documentation 为技术权威。只有当前 Project 明确要求时，才必须独立重新实现。
 - 电源、电池、MOSFET、ADC 输入保护、运放供电、参考电压及其他安全风险必须回到官方资料核对。
 
 ## 5. EDA、制造与实测证据边界
