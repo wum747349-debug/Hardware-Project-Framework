@@ -139,8 +139,7 @@ Cutover 前 Legacy Monorepo Project Directory 是 Current Authority；Cutover �
 | Pinned Framework Evaluation | No separate gate once explicitly requested |
 | Compatible Framework Sync | No separate gate once explicitly requested |
 | Framework Contract Migration | One Human Approval |
-| Project Stage advancement | Human Approval |
-| Gate 1.5 Human PASS | Human Approval |
+| Gate 1.5 / ordinary Project Stage advancement | Follow authoritative Workflow / Stage authorization boundary; no additional approval is introduced by this Guide |
 | Authority Cutover | One Human Approval |
 | RC / Final publication | 由 Release Guide 管理，不属于 Project adoption transaction |
 | Repository Rename | Human Approval |
@@ -149,6 +148,8 @@ Cutover 前 Legacy Monorepo Project Directory 是 Current Authority；Cutover �
 | Migration Closeout Review | No new approval |
 
 Routine validation、review、CI、diff inspection、evidence collection 与 report 不分别设置 Human Gate。明确用户任务授权始终是执行前提；上表取消的是重复的形式化 `STOP / APPROVE / STOP`，不是用户对 Project 状态变化的控制权。
+
+Gate 1.5 authorization 由 [Workflow](08_Project_Workflow.md) 与 [Project Initialization Guide](Project_Initialization_Guide.md) 管理，ordinary Project Stage advancement authorization 由对应 Workflow / Stage procedure 管理。明确的 execution request 可以按对应权威流程构成授权，read-only review 不得执行；本 Migration Guide 不重新定义授权语义，也不增加第二次 approval round-trip。
 
 ## 8. Project-side impact、status 与 recovery
 
@@ -168,4 +169,5 @@ Routine validation、review、CI、diff inspection、evidence collection 与 rep
 - 不用假 Release、branch 名或短 SHA 替代 binding；
 - 不重写 Framework Legacy history，不移动 `framework-pre-v1-migration`；
 - 不为结构外观改写或伪造 EDA、ERC、DRC、Manufacturing 或 Test；
-- 不在所需 Human Approval 前执行 Contract Migration、Project Stage advancement、Gate 1.5 PASS、Authority Cutover、Release、Rename 或 destructive operation。
+- 不得绕过对应 authoritative Guide / Workflow 定义的 authorization boundary；Gate 1.5 / ordinary Project Stage advancement 不由本 Guide 增设第二次 approval round-trip；
+- 不在所需独立 Human Approval 前执行 Framework Contract Migration、Authority Cutover、Repository Rename、Legacy deletion 或 destructive operation。
