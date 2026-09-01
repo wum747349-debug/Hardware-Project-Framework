@@ -4,7 +4,7 @@
 
 当需要进行关键器件候选选型、替代料选择、候选方案比较、BOM 草稿依据整理或采购风险分析时，使用本 Skill。
 
-本 Skill 服务于渐进式硬件设计流程：关键器件优先，外围器件后置。第一轮只做关键器件候选，不生成最终 BOM。
+本 Skill 服务于渐进式硬件设计流程：Stage 2 完成建立 architecture / module direction 所必需的 component identity；Stage 3/4 在 exact identity 确实影响当前验证或 convergence 时，可将本 Skill 作为 supporting method。第一轮只做必要的关键器件候选，不生成最终 BOM。
 
 ## 最小读取上下文
 
@@ -22,6 +22,7 @@
 
 - `skills/hardware-datasheet-reading/SKILL.md`，仅在需要提取或核对已下载 datasheet 参数时读取。
 - 当前模块相关 datasheet。
+- Stage 3/4 supporting task 所涉及的当前 module record、BOM 草稿、封装资料或最小 schematic / library / footprint mapping evidence。
 - 相关 checklist。
 
 不默认读取：
@@ -34,13 +35,13 @@
 
 ## 核心原则
 
-- 第一轮只关注关键器件候选，不生成完整最终 BOM。
-- 关键器件优先，普通外围器件后置。器件何时确定取决于 architecture impact、safety / risk impact、critical parameter dependency 与 Layout / thermal impact，不按 MOSFET、TVS、NTC、inductor 等器件类别硬编码 Stage；不影响架构的普通阻容、LED 等仍可后置。
-- 默认工作流是 `Requirements → JLCPCB / LCSC-first candidate discovery → Manufacturer datasheet qualification → Primary + Alternate decision → purchase-time availability recheck`。
+- 第一轮只关注建立 architecture / module direction 所必需的 component identity，不生成完整最终 BOM。
+- 器件何时确定取决于 architecture impact、safety / risk impact、electrical behavior dependency 与 thermal / package / Layout impact，不按器件类别硬编码 Stage；尚不影响当前工程判断的 exact procurement identity 可以后置。
+- 对需要候选决策与替代风险管理的选型任务，默认工作流是 `Requirements → JLCPCB / LCSC-first candidate discovery → Manufacturer datasheet qualification → Primary + Alternate decision → purchase-time availability recheck`。Stage 3/4 supporting use 应与当前影响和风险成比例；普通 actual-part、supplier-part、library 或 footprint convergence 不自动要求完整多候选分析。
 - `JLCPCB/LCSC-first` 是现实采购候选池的优先级，不是 `JLCPCB/LCSC-only`。只有满足工程 Hard Requirements 的器件才是有效候选；不得为满足采购优先级而选择明显技术更差或不满足要求的器件。
 - 当前执行环境具备公开 Web/Search 能力时，AI/Codex 可以且应优先搜索公开的 JLCPCB、LCSC 或 JLCPCB Parts 信息进行候选发现；不声明所有环境都具备公网或商城访问能力，也不默认进行受限访问、爬取或批量下载。
 - 当前环境没有相关搜索能力时，由用户提供 C 编号、MPN、candidate 或商品页信息，再继续 qualification。
-- 默认筛出约 2–4 个 realistic candidates，正常结果优先形成 `Primary` 与 `Alternate`；只有确有工程意义时增加 `Conditional` 或 `Rejected`，不为填满类别制造低质量候选。
+- 需要候选比较时，默认筛出约 2–4 个 realistic candidates，正常结果优先形成 `Primary` 与 `Alternate`；只有确有工程意义时增加 `Conditional` 或 `Rejected`，不为填满类别制造低质量候选。若 supporting task 只需 qualification 一个满足既定 electrical / package requirements 的普通实际装配料，不强制制造 Alternate。
 - JLCPCB/LCSC 没有合理候选时，可扩大到 Manufacturer、Mouser、DigiKey 或其他适当 distributor / sourcing channel。
 - 禁止一上来生成完整最终 BOM。
 
@@ -140,6 +141,8 @@ AI/Codex 根据公开搜索结果或用户提供的信息建立精简候选表�
 ### 6. Primary / Alternate 决策与采购前复核
 
 综合 Hard Requirements、Manufacturer qualification、架构与风险影响、采购便利性形成 `Primary` 和 `Alternate`。只有确有条件约束或明确淘汰依据时才保留 `Conditional` / `Rejected`。
+
+上述完整决策适用于需要替代风险管理的候选选型。Stage 3/4 supporting task 若不改变既定 architecture 或 electrical design，只需收敛普通实际料、supplier part、library 或 footprint mapping，可以记录一个满足已定义 requirements 的 qualified choice、依据与剩余风险，不机械生成多候选 `Primary / Alternate` 表。
 
 在真正 purchasing、ordering 或 PCBA BOM submission 前，对 Primary 与 Alternate 执行一次 lightweight availability recheck，更新 Availability，必要时记录 `checked date`。这不是新 Stage、Gate 或专门 approval；如果状态变为 `Limited`、`Unavailable` 或无法核对，则重新评估 Primary / Alternate，不把旧库存或价格记录当作当前事实。
 
@@ -261,7 +264,7 @@ Only generate these when they materially improve the decision, risk handling, or
 - 不要只给型号，不说明依据。
 - 不要在没有 datasheet 依据时确认关键参数。
 - 不要推荐采购困难、封装过难或资料不完整的器件作为第一版主选。
-- 不要忽略替代料。
+- 不要在替代风险会影响架构、安全、关键行为、采购可行性或项目验收时忽略替代料；也不要为普通低风险 convergence 强造 Alternate。
 - 不要忽略电源、MOSFET、ADC、运放、参考电压等高风险模块。
 - 不要把普通阻容、LED、排针、测试点、普通按键作为第一轮重点资料收集对象。
 - 不要生成未经核对的最终 BOM。

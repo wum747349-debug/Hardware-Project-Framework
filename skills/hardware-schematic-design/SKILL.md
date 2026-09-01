@@ -15,15 +15,16 @@
 3. 当前 Project 的 `requirements.md`、`design_notes.md`、`references.md`
 4. 当前任务涉及的器件决策和已有模块文档
 
-按需读取当前 BOM 草稿、封装资料，以及当前连接真正需要的 Manufacturer official documentation。复杂 datasheet extraction 调用 `skills/hardware-datasheet-reading/SKILL.md`；关键器件需要重新评估时才调用 `skills/hardware-component-selection/SKILL.md`。不默认读取全部 Skill、全部 datasheet、其他 Project 或全部历史记录。
+按需读取当前 BOM 草稿、封装资料，以及当前连接真正需要的 Manufacturer official documentation。复杂 datasheet extraction 调用 `skills/hardware-datasheet-reading/SKILL.md`；当 exact component identity 是验证 electrical behavior、safety、thermal behavior 或 package / Layout-sensitive assumption 的必要条件，或既有关键器件需要重新评估时，对相关部分调用 `skills/hardware-component-selection/SKILL.md`。不默认读取全部 Skill、全部 datasheet、其他 Project 或全部历史记录。
 
 ## 3. Core Principles
 
 - Module plan 按 functional boundary、power domain / power flow、signal / control flow、sequencing、protection / safety boundary、complexity 与 Layout-sensitive boundary 决定，不固定数量，禁止使用 `One IC = One Module`。
 - 简单项目允许单页 schematic；复杂项目可使用 Top Sheet + Functional Sheets，但不强制 Top Sheet、固定 sheet 数量或一模块一 Markdown。
-- `docs/module_design/*.md` 只在复杂度或追溯价值需要时创建，不要求每个简单模块都有独立文件。
+- Stage 3 entry 至少需要一个 owning `docs/module_design/*.md` record 承接当前 detailed design work；是否按模块拆分更多 records 由复杂度和追溯价值决定，不要求每个简单模块都有独立文件。
 - 只核对当前连接所需的官方资料；关键连接必须有 Manufacturer documentation、计算或显式 engineering basis。
 - 普通 support components 可在模块设计中按需确定，不因普通外围自动重新进入完整 Stage 2。
+- Stage 3 定义全部 required components 的 electrical requirements。只有 exact identity 对当前 electrical、safety、thermal 或 package / Layout-sensitive validation 必不可少时才必须完成相应 qualification；否则可以保留充分 specification，而不虚构或提前锁定 procurement identity。
 - 设计时同时明确 startup、shutdown、default 与 fault behavior，并提取 schematic-relevant Layout inputs。
 - Module-specific connections、support values 与 calculations 默认记录在当前 module design context，不自动反向同步 Stage 2 selection artifacts 或 board-level documents；selection、qualification、architecture 或 requirement 实质变化时，更新对应 owner 或返回相关 Stage reevaluation。
 
@@ -46,12 +47,12 @@
 每个模块执行五步：
 
 1. **Define**：明确 module responsibility、inputs / outputs、relevant requirements 与 cross-module interfaces。
-2. **Verify**：只用 Manufacturer official documentation 核对当前设计真正需要的 pin behavior、operating conditions、typical application、required peripherals、package 与 Layout 要求；复杂提取转交 datasheet-reading Skill。
+2. **Verify**：为全部 required components 定义当前电路所需的 electrical requirements；只用 Manufacturer official documentation 核对当前设计真正需要的 pin behavior、operating conditions、typical application、required peripherals、package 与 Layout 要求。复杂提取转交 datasheet-reading Skill；若这些验证依赖 exact identity，对相关部分调用 component-selection supporting method。
 3. **Design**：确定 pin connections、net naming、power / ground、enable / reset / mode、feedback / sense、protection、required support components 与 unused-pin handling。
 4. **Calculate**：在 schematic freeze 前，为决定关键电气行为的外围值记录 datasheet basis / equation、calculated or selected value、tolerance / assumption、expected behavior 与 remaining uncertainty。适用对象包括 feedback divider、current-limit / charge-current resistor、timing capacitor、inductor、capacitor、filter、NTC 与 gain network。
 5. **Record**：保留可检索的 connection facts、parameter decisions、重要 assumptions、Layout-sensitive notes、open issues 与 capture status；不复制无关 Project Facts，也不把 `.SchDoc` 重写成一整份长期文本副本。
 
-普通 resistor、capacitor、diode、LED、test point、jumper、small MOSFET、small logic gate 与 analog switch 可随模块设计确定。只有新辅助器件影响 architecture、safety、critical electrical behavior、thermal 或 package / Layout boundary 时，才对相关部分调用 component-selection Skill 或重新评估关键器件。
+Support component 可随模块设计按实际影响确定，不按器件类别固定 Stage。只有新辅助器件影响 architecture、safety、critical electrical behavior、thermal 或 package / Layout boundary，或 exact identity 是验证这些假设的必要条件时，才对相关部分调用 component-selection Skill；普通低风险实际料无需因此重新执行完整 Stage 2 候选流程。
 
 ### User EDA Capture
 
@@ -93,6 +94,8 @@ Diagram 用于表达 topology / ambiguity；structured connection record 用于�
 只有同时满足以下条件，才可报告 `READY FOR SCHEMATIC REVIEW`：
 
 - 主要模块设计完成；
+- 至少一个 owning module design record 已承接当前 detailed design work，additional records 的拆分与复杂度和追溯需求相称；
+- 全部 required components 的 electrical requirements 已定义；尚未确定的 exact procurement identity 不阻断当前 electrical、safety、thermal 或 package / Layout-sensitive validation；
 - 关键连接具有 Manufacturer documentation、计算或显式 engineering basis；
 - 必要关键外围参数已确定，或未决项边界清晰且不阻止审查；
 - startup / default / fault behavior 已分析；
@@ -109,9 +112,9 @@ Diagram 用于表达 topology / ambiguity；structured connection record 用于�
 
 ## 6. Return / Escalation Rules
 
-- 若关键器件不满足 electrical requirement、功能 / pin behavior 不成立、thermal / package 不可接受，或 procurement condition 失效且无合理替代，只将相关部分返回 Stage 2 reevaluation。
+- 只有建立 architecture / module direction 所依赖的关键 component identity 或 qualification 不成立时，才将相关部分返回 Stage 2 reevaluation。
 - 若必须修改 confirmed functional requirement、safety boundary、system interface 或 architecture-level requirement，返回 Stage 1 / relevant Gate 处理。
-- 普通外围参数调整不触发 Stage rollback；不得自动修改 Project `README.md` 的 Current Project Stage。
+- Topology、connection、electrical requirement 与 calculated-value issue 在 Stage 3 处理；普通 actual-part、supplier-part、library、footprint mapping 或外围参数调整若不否定上游 electrical design，不触发 Stage 2 rollback。不得自动修改 Project `README.md` 的 Current Project Stage。
 
 ## 7. Output
 

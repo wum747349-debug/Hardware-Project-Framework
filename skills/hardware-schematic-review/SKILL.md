@@ -17,7 +17,7 @@
 1. Layer 0/1：Project `FRAMEWORK.md`、`PROJECT_RULES.md` 与绑定 Framework 的 `docs/AI_Context_Guide.md`
 2. 本 Skill
 
-Stage 4 Formal Schematic Review 还默认读取当前 Project 的 `requirements.md`、`design_notes.md`、`references.md`、当前完整原理图 PDF 与当前 BOM。Scoped review / risk review 只读取足以判断当前明确 scope 的 owning design context 与 evidence，不默认扩展为整板输入。
+Stage 4 Formal Schematic Review 还默认读取当前 Project 的 `requirements.md`、`design_notes.md`、`references.md`，以及 component / footprint convergence 后由 authoritative `.SchDoc` 导出的当前完整原理图 PDF 与当前 BOM。Scoped review / risk review 只读取足以判断当前明确 scope 的 owning design context 与 evidence，不默认扩展为整板输入。
 
 按需读取：
 
@@ -30,7 +30,7 @@ Stage 4 Formal Schematic Review 还默认读取当前 Project 的 `requirements.
 
 ### Formal Schematic Review
 
-用于 Stage 4。审查 completed whole-design evidence，执行适用的完整检查范围，形成 formal findings 和 `docs/schematic_review.md`，并给出明确的 PCB Layout-entry conclusion。可按现有证据复用规则复用 unchanged coverage，但不得削弱完整原理图 PDF、当前 BOM 和整板适用范围的要求。
+用于 Stage 4。Formal Review 在剩余 component / footprint convergence 已反映到 authoritative schematic 与当前 BOM 后开始；本 Skill 审查该 post-convergence completed whole-design evidence，不承担前置 procurement workflow。执行适用的完整检查范围，形成 formal findings 和 `docs/schematic_review.md`，并给出明确的 PCB Layout-entry conclusion。可按现有证据复用规则复用 unchanged coverage，但不得削弱 post-convergence 完整原理图 PDF、当前 BOM 和整板适用范围的要求。
 
 ### Scoped Review / Risk Review
 
@@ -42,7 +42,7 @@ Scoped review / risk review 不默认要求完整整板原理图 PDF、完整整
 
 - `.SchDoc` 是 Altium 原理图的权威设计源文件，用于人工编辑、版本追踪和工程归档。
 - 在没有可靠 Altium 解析器、脚本或自动化接口时，AI 不得声称已经读取、解析或核对 `.SchDoc` 内部电路。
-- 原理图 PDF 主要用于图形连线、网络名和页面结构审查；BOM 用于核对位号、数量、参数或型号和 PCB 封装。Stage 4 Formal Schematic Review 使用完整原理图 PDF 和当前版本 BOM 支持整板系统审查；无法由二者确认的实际网络、引脚映射、封装映射或其他 EDA 实现事项，应说明结论限制或标记为“待 EDA 核对”。
+- 原理图 PDF 主要用于图形连线、网络名和页面结构审查；BOM 用于核对位号、数量、参数或型号和 PCB 封装。Stage 4 Formal Schematic Review 使用 convergence 后同一 current design 的完整原理图 PDF 和当前版本 BOM 支持整板系统审查；无法由二者确认的实际网络、引脚映射、封装映射或其他 EDA 实现事项，应说明结论限制或标记为“待 EDA 核对”。
 - BOM 最低字段不要求所有行都有具体制造商料号；关键器件缺少明确型号或封装时应记录具体缺失项，通用件可用参数、额定值、精度和封装描述。
 - ERC 输出不是默认必需审查输入。AI 只有在用户提供 ERC 报告、Messages 导出或相关截图时，才分析 ERC 问题；未提供 ERC 输出时，不声称已经核对 ERC，不记录 ERC 执行或结果状态，也不把“未提供 ERC 输出”本身作为审查未完成或不能进入 PCB Layout 的理由。
 - 网表、元件报告、引脚或封装映射报告和局部截图均为条件触发证据。局部截图可作为 scoped review 的局部证据，但结论必须受其覆盖范围限制；在 Formal Schematic Review 中只能补充局部证据，不能代替完整原理图 PDF。

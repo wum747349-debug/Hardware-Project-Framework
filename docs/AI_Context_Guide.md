@@ -88,7 +88,7 @@ Gate 1.5 不读取或产生后续阶段设计结果；Validator 结果不能替�
 | Stage 1 — Requirements | Layer 0/1 + 当前项目五个根事实入口 + 初始化 Skill | Workflow Stage 1、专项安全方法 | 其他 Project、全部 datasheet、后续 Skill |
 | Stage 2 — Component Selection | Layer 0/1 + 选型 Skill + Requirements/Design/References | 当前候选官方资料、datasheet Skill、专项 checklist | 原理图/PCB Review Skill、无关资料 |
 | Stage 3 — Schematic Design | Layer 0/1 + schematic-design Skill + 当前需求、设计说明、资料索引、当前模块文档 | 选型/datasheet Skill、BOM 草稿、封装资料、当前模块所需 Manufacturer official documentation | 其他 Project、全部 Skill、全部 datasheet、全部历史记录 |
-| Stage 4 — Schematic Review | Layer 0/1 + Review Skill + Requirements/Design/References + 完整 PDF + 当前 BOM + Review 记录 | 当前模块文档；网表/ERC/报告/截图按具体问题触发 | 其他 Project、Template、全部 Skill |
+| Stage 4 — Formal Schematic Review | Layer 0/1 + Review Skill + Requirements/Design/References + post-convergence 完整 PDF + 当前 BOM + Review 记录 | 当前模块文档；网表/ERC/报告/截图按具体问题触发 | 其他 Project、Template、全部 Skill |
 | Stage 5 — Layout Preflight | Layer 0/1 + PCB Skill + README/Requirements/Design/References + Schematic Review + PCB Rules + 关键 Layout 资料 | PDF/BOM/机械/板厂官方能力 | Batch DRC、制造输出、其他 Project |
 | Stage 5–6 — PCB Layout / Routing Guidance & Review | Layer 0/1 + `hardware-pcb-layout-review` Skill + README/Requirements/Design/PCB Rules + 当前 PCB Evidence | 模块资料、关键 datasheet、已有 PCB 问题 | 全部资料、Release checklist、制造输出 |
 | Stage 7 — PCB Release Review | Layer 0/1 + README + PCB Rules + PCB Review + `hardware-pcb-release-review` Skill + 当前 release candidate evidence + Final Full Batch DRC evidence + actual manufacturing interpretation + PCB Release Checklist | schematic、BOM、模块文档、Stage 5–6 PCB Skill、PCBA data、special fabrication data；只按 unresolved finding / design delta / 实际制造路径触发 | 其他 Project 历史、与当前放行结论无关的全部上游资料 |
@@ -97,6 +97,8 @@ Gate 1.5 不读取或产生后续阶段设计结果；Validator 结果不能替�
 Stage controls lifecycle；task intent selects method。Stage Method 应按实际 task intent 选择，不机械服从用户提供的 Stage label，也不按 `review`、`pin`、`BOM` 等单个关键词路由。Skill 的 primary / default Stage 不表示该 Skill 只能在该 Stage 使用；当前任务明确需要 supporting method 时可以按需读取对应 Skill。这种 supporting use 不自动改变 Project 当前 Stage，不自动满足该 Skill primary Stage 的进入或退出条件，也不自动要求产生该 Stage 的 artifact 或 PASS。
 
 Stage 3 的日常模块设计、连接核对、参数计算、当前模块或局部设计的 lightweight verification，以及轻量 Cross-Module Integration 默认使用 `hardware-schematic-design`。明确限定范围的 schematic review / risk review 可按需使用 `hardware-schematic-review` 作为 supporting method，同时保持当前 lifecycle Stage。只有针对 completed whole-design evidence（完整 schematic / BOM）的正式整板审查和 PCB Layout-entry decision 才属于 Stage 4 Formal Schematic Review。
+
+Stage 3 中只有当 exact component identity 是验证当前 electrical behavior、safety、thermal 或 package / Layout-sensitive assumption 的必要条件时，才按需使用 `hardware-component-selection` 作为 supporting method。Stage 4 的 component / footprint convergence task 也可按需使用该选型方法；完成 convergence 并更新 authoritative schematic、完整 PDF 与当前 BOM 后，Formal Schematic Review 使用 `hardware-schematic-review`。Stage controls lifecycle；task intent selects method，不因处于 Stage 4 就把 convergence 与 Formal Review 混成同一方法。
 
 执行 Stage transition 时，在构造 bounded transaction scope 前读取 Workflow 的 transition semantics 与 Structure Standard 的 Stage-enabled activation rules，只纳入 target-stage 合法 post-state 立即需要的 artifacts。不要因 transition 默认加载或执行 target Stage 的完整 engineering method；仅在实际 target-stage activity 同时属于当前授权任务时，才按 task intent 加载相应方法与 evidence。
 

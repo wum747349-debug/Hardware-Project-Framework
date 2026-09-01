@@ -148,7 +148,7 @@ Gate 1.5 PASS 是进入 Stage 2 的必要条件，但不证明任何关键器件
 
 ### 目标与活动
 
-选择影响架构、外围、封装、布局、散热和采购的关键器件，依据官方资料形成主选、备选与淘汰理由。普通阻容等不影响架构的器件可以后置。
+按实际影响选择并 qualification 关键器件：Stage 2 确定进入 Stage 3 前建立 architecture / module direction 所必需的 component identity，依据官方资料形成适合该决策风险的候选与依据。器件确定时机由 architecture、system / safety、electrical behavior、thermal、package / Layout 等影响驱动，不由器件类别决定；不影响上述方向的 exact procurement identity 可以后置。
 
 ### 进入条件
 
@@ -156,7 +156,7 @@ Gate 1.5 已 PASS，Requirements Baseline 足以筛选器件。
 
 ### 主要输出与退出条件
 
-启用 `docs/component_selection_plan.md` 并由其维护 selection decision。只有 `design_notes.md` 负责的整板架构/跨模块事实或 `references.md` 负责的资料索引与核对事实实际变化时，才更新相应文件。影响架构/封装/Layout 的关键器件有可靠依据或明确核对计划，候选记录未被误写为最终 BOM。
+启用 `docs/component_selection_plan.md` 并由其维护 selection decision。只有 `design_notes.md` 负责的整板架构/跨模块事实或 `references.md` 负责的资料索引与核对事实实际变化时，才更新相应文件。建立 architecture / module direction 所需的 component identity 已有可靠依据或明确核对计划；其他 required components 可以保留足以进入 Stage 3 定义其 electrical requirements 的 specification boundary，候选记录未被误写为最终 BOM。
 
 需求、供电、接口、尺寸、装配或制造边界因器件选择实质变化时回到 Stage 1 并重新执行 Gate 1.5。
 
@@ -164,7 +164,7 @@ Gate 1.5 已 PASS，Requirements Baseline 足以筛选器件。
 
 ### 目标与活动
 
-使用 `skills/hardware-schematic-design/SKILL.md`，依据 Requirements、器件决策和关键资料按需执行 module planning、module-by-module design、parameter calculation、EDA capture guidance 与 Cross-Module Integration Check；完成模块连接、外围参数、startup / fault behavior、保护与专项 Layout 输入。由用户在 Altium Designer 中实现正式原理图并导出同版完整原理图 PDF 与当前 BOM。
+使用 `skills/hardware-schematic-design/SKILL.md`，依据 Requirements、器件决策和关键资料按需执行 module planning、module-by-module design、parameter calculation、EDA capture guidance 与 Cross-Module Integration Check；定义全部 required components 的 electrical requirements，并完成模块连接、外围参数、startup / fault behavior、保护与专项 Layout 输入。若验证 electrical behavior、safety、thermal behavior 或 package / Layout-sensitive assumption 必须知道 exact component identity，则对相关部分使用 `hardware-component-selection` 作为 supporting method 完成必要 qualification；否则允许以足够 specification 保留尚不需要的 exact procurement identity。由用户在 Altium Designer 中实现正式原理图并导出同版完整原理图 PDF 与当前 BOM。
 
 ### 进入条件
 
@@ -172,23 +172,31 @@ Gate 1.5 已 PASS，Requirements Baseline 足以筛选器件。
 
 ### 主要输出与退出条件
 
-Stage 3 entry 至少启用一个 owning module design record，承接当前 detailed design work；是否按模块拆分更多 `docs/module_design/*.md` 仍由复杂度和追溯价值决定，不要求每个模块各有一份文件。形成可追溯模块依据、BOM 草稿、Altium 原理图、同版完整 PDF 与当前 BOM，并完成轻量整板自洽检查。满足 Stage 3 条件时只报告 `READY FOR SCHEMATIC REVIEW`；该结论不等于 ERC PASS、Stage 4 PASS 或 PCB Layout approval，也不自行改变 `Current Project Stage`。AI 不声称完成 EDA 实现。
+Stage 3 entry 至少启用一个 owning module design record，承接当前 detailed design work；是否按模块拆分更多 `docs/module_design/*.md` 仍由复杂度和追溯价值决定，不要求每个模块各有一份文件。形成可追溯模块依据、全部 required components 的 electrical requirement、BOM 草稿、Altium 原理图、同版完整 PDF 与当前 BOM，并完成轻量整板自洽检查；未确定的 exact identity 不得阻断当前 electrical verification。满足 Stage 3 条件时只报告 `READY FOR SCHEMATIC REVIEW`；该结论不等于 ERC PASS、Stage 4 PASS 或 PCB Layout approval，也不自行改变 `Current Project Stage`。AI 不声称完成 EDA 实现。
 
 **No automatic reverse implementation sync：**普通 resistor / capacitor、pull-up、net naming、support component、module pin connection、filter 或 NTC 外围值调整，通常只更新当前 module design record；若 underlying component decision、qualification basis、architecture impact、selection risk 或 requirement 实质变化，则更新对应 owner，并按影响范围返回相关 Stage reevaluation。Stage 2 artifacts 不是 immutable，但不因普通实现调整而机械同步。
 
-器件/资料不成立回到 Stage 2；需求或模块边界冲突回到 Stage 1 与 Gate 1.5。
+只有建立 architecture / module direction 所依赖的关键 component identity 或 qualification 不成立时，才返回 Stage 2 reevaluation；topology、connection、electrical requirement 或 calculated-value 问题留在 Stage 3 处理；requirement、system 或 safety boundary 冲突返回 Stage 1 / relevant Gate。
 
 ## 8. Stage 4 — Schematic Review
 
 ### 目标与活动
 
-依据可追溯完整原理图 PDF、当前 BOM、Requirements、Design Notes、References 与模块资料，审查供电、接口、保护、封装、引脚、板级安全与关键 Layout 输入。只在用户提供 ERC 结果时分析 ERC。
+Stage 4 先完成剩余 component / footprint convergence；当 exact identity 的技术 qualification 确有必要时，可使用 `hardware-component-selection` 作为 supporting method，但普通 deferred commodity part 不因进入 Stage 4 自动要求完整的多候选 `Primary / Alternate` 分析。实际装配器件必须与当前 schematic / BOM 和 PCB footprint 形成无歧义 mapping；不需要 exact manufacturer / supplier identity 的普通器件仍可由充分 specification、rating 与 footprint 表达。
+
+随后由用户更新 authoritative `.SchDoc` 与当前 BOM，并导出对应的完整原理图 PDF；再使用 `hardware-schematic-review` 对该 post-convergence current design 执行 Formal Schematic Review，审查供电、接口、保护、封装、引脚、板级安全与关键 Layout 输入。只在用户提供 ERC 结果时分析 ERC。该顺序不新增 Stage 4A / Stage 4B、Gate 或 lifecycle state：
+
+```text
+remaining component / footprint convergence
+→ update authoritative schematic + current BOM
+→ Formal Schematic Review
+```
 
 ### 主要输出与退出条件
 
 启用 `docs/schematic_review.md`。高风险及影响封装、接口、安全和关键 Layout 的问题关闭；其他问题有明确处置；给出是否允许进入 Layout Preflight 的显式技术结论。该 Stage exit conclusion 不自行执行 Stage 4 → Stage 5 transition。
 
-器件或封装问题回 Stage 2；连接/参数问题回 Stage 3；功能/安全边界变化回 Stage 1 与 Gate 1.5。
+Formal Review finding 按影响处理：requirement / system / safety-boundary change 返回 Stage 1 / relevant Gate；critical component identity / qualification failure 返回 Stage 2 reevaluation；topology / connection / electrical requirement / calculated-value issue 返回 Stage 3；ordinary actual-part / supplier-part / library / footprint-mapping correction 若不否定上游 electrical design，则保持 Stage 4，更新 authoritative schematic 与当前 BOM 后重新审查。不得仅因 finding 涉及 component 或 footprint 就机械返回 Stage 2。
 
 ## 9. Stage 5 — PCB Layout
 

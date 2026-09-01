@@ -70,7 +70,7 @@
 
 ## 封装、测试点和可制造性
 
-- [ ] 原理图库封装、PCB 封装和采购型号一致
+- [ ] Formal Review 使用的 post-convergence current design 中，所有实际装配器件与当前 schematic / BOM / PCB footprint mapping 无歧义；不需要具体 MPN 的普通器件已有充分 specification、rating 与 footprint
 - [ ] 极性器件方向、接插件脚位和丝印方向明确
 - [ ] 测试点可接触，覆盖电源、复位、调试、通信、ADC 和关键输出
 - [ ] 器件封装适合当前焊接能力和 PCB 工艺
