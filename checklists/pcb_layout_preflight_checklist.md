@@ -73,7 +73,7 @@
 | 仅在存在真实 electrical behavior、routing behavior、manufacturing requirement、mechanical 或 verification / traceability need 差异时，已建立必要分类或明确 Scope |  |  |  |
 | Net Class 或明确网络 Scope 的选择与项目需求一致 |  |  |  |
 | 当前项目实际适用的 electrical、routing、placement、plane-copper、mechanical 与 manufacturing constraints 已形成必要规则基线 |  |  |  |
-| 差分、高速、模拟、电源和负载专项规则已按实际需求定义或标记不适用 |  |  |  |
+| 只有存在真实专项 electrical、routing、signal-integrity、power、isolation 或其他约束时才定义专项规则；不因类别名称机械逐项建立或标记规则 |  |  |  |
 | 用户已在 Altium Designer 中配置关键实际规则 |  |  |  |
 | 用户已人工核对关键 Scope 仅匹配预期对象，默认规则无覆盖空洞 |  |  |  |
 | 用户已人工核对专项规则 Priority 高于重叠默认规则，文档与 AD 配置一致 |  |  |  |

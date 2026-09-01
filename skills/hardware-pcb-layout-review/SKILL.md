@@ -60,7 +60,7 @@ Rule organization principle：使用能够准确表达工程意图的最简单 S
 
 - 多个对象共享相同 electrical、routing 或 manufacturing behavior，且形成稳定、有工程意义的类别时，优先使用对应的 Net Class 或 Object Class scope，避免重复成员 Query。
 - 单个特殊 Net、Object、Layer 或例外情况，使用最简单准确的 Explicit Scope 或 Custom Query；不要仅因工具支持复杂 Query 就增加复杂度。
-- 只有存在真实的 electrical、manufacturing、mechanical 或 verification / traceability difference 时，才新增 Altium Rule Priority 更高的 exception rule；不要创建行为完全相同的重复 Rule。
+- 只有存在真实的 electrical、routing、manufacturing、mechanical 或 verification / traceability difference 时，才新增 Altium Rule Priority 更高的 exception rule；不要创建行为完全相同的重复 Rule。
 
 当当前任务意图主要是 PCB rule preparation、EDA rule preparation、Altium rule configuration 或 Layout Preflight rule baseline 时，Mode A 默认采用 configuration-first 输出：先给出已知的 manufacturer / stackup baseline，再给出当前证据可支持、可直接配置的规则表示，随后补充简短工程依据、例外和真正未决项；若制造与 stackup baseline 已明确，不机械重复完整背景说明。不要先长篇解释全部 rule category，也不要因为 EDA tool 或 checklist 中存在某类 rule 就逐项展开。
 
