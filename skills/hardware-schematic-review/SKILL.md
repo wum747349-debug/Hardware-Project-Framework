@@ -135,9 +135,9 @@ Scoped review / risk review 可使用与 scope 对应的精简 findings，不要
 Formal Schematic Review 完成后，应提醒用户将结论写入或更新：
 
 - 当前项目的 `docs/schematic_review.md`
-- 必要时更新当前项目的 `design_notes.md`、BOM 草稿、`requirements.md` 或 `docs/revision_history.md`
+- 必要时更新当前项目的 `design_notes.md`、当前 BOM、`requirements.md` 或 `docs/revision_history.md`
 
-如果当前项目没有 `docs/schematic_review.md`，应在 Formal Schematic Review 完成后创建。
+`docs/schematic_review.md` 的启用时机以 Project Structure Standard 的 Stage-enabled contract 为准；Stage 4 Formal Schematic Review 完成后更新其中的 findings、evidence limits 与 review result。
 
 Scoped review / risk review 的结论如果具有长期价值，应记录回当前 owning design context、module record 或相关 Project fact owner；不得仅因调用本 Skill 就创建或要求创建 `docs/schematic_review.md`。
 

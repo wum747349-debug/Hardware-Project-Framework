@@ -40,7 +40,7 @@
 
 ### Determine Module Plan
 
-从 Requirements、component decisions 和 system interfaces 确定实际需要的模块边界。为每个模块记录 responsibility、inputs / outputs、power domain、cross-module interfaces、sequencing / protection boundary 和关键 Layout sensitivity；仅在有追溯价值时形成模块文档。
+从 Requirements、component decisions 和 system interfaces 确定实际需要的模块边界。为每个模块记录 responsibility、inputs / outputs、power domain、cross-module interfaces、sequencing / protection boundary 和关键 Layout sensitivity。Stage 3 至少使用一个 owning module design record 承接当前 detailed design work；additional per-module records 仅在复杂度或追溯价值需要时形成。
 
 ### Module Design Loop
 
