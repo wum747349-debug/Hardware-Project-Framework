@@ -30,6 +30,16 @@ Bootstrap 位于八阶段之前，不是 Stage 0，也不属于 Stage 1。Gate 1
 - 证据不足的结论必须明确限制或标记 `TBD` / `待确认` / `待 EDA 核对` / `待用户确认` / `待实测`。
 - 回退到上游阶段后，所有受影响下游 Gate 必须重新评估。
 
+### Stage exit 与授权转换
+
+Stage exit / readiness conclusion 只是技术就绪结论。例如“可以进入 PCB Layout / Layout Preflight”不表示根 `README.md` 的 `Current Project Stage` 已改变，不表示下一 Stage 已自动执行或完成，也不授权修改 repository state。
+
+只有用户明确授权完成 transition / 进入下一 Stage 时，AI/Codex 才能执行 Stage transition。获授权的 transition 必须作为一个 bounded、validation-closed transaction 规划和交付：在 transaction 完成时，根 `README.md` 已指向 target Stage，且 [Project Structure Standard](Project_Structure_Standard.md) 定义为该 target Stage entry 立即启用、Project Validator 在该 post-state 立即要求的 Stage-enabled artifacts 已存在，final Project Validator 对该 post-state 通过。只要原授权已经覆盖完成 transition / 进入下一 Stage，不应把 `README.md` 更新与上述 artifact activation 人为拆成需要第二次授权的两个 transaction。
+
+若 target Stage entry 需要的 artifact 尚不存在，可在同一 authorized transition 中做 minimum truthful initialization。初始化只能记录已确认的 Project facts、已有工程事实、有实际职责的结构，以及真实的 `TBD`、`待确认` 或 `Pending <relevant activity>`；不得为 Validator、文件完整度或 transition completion 虚构工程参数，也不得创建只有标题或没有职责内容的低信息量 placeholder。Artifact activation 只建立 target-stage 合法 repository state，不表示 target-stage engineering activity 已开始，更不表示该 Stage 已完成。
+
+用户明确给出的更窄 Exact Scope 始终优先。若用户限定只能修改 A、B，而合法 target-stage post-state 还必须创建或修改 C，则不得自行扩大 scope，也不得提交 partial transition；应停止并报告 blocker。上述规则解决 transition scope planning，不构成 scope override。仅由 target Stage 中实际 activity 触发的 artifact 不因 Stage entry 自动创建，具体 activation condition 以 Project Structure Standard 为准。
+
 ## 3. Project Bootstrap
 
 ### 目标
@@ -162,7 +172,7 @@ Gate 1.5 已 PASS，Requirements Baseline 足以筛选器件。
 
 ### 主要输出与退出条件
 
-按复杂度和追溯价值启用 `docs/module_design/*.md`；形成可追溯模块依据、BOM 草稿、Altium 原理图、同版完整 PDF 与当前 BOM，并完成轻量整板自洽检查。满足 Stage 3 条件时只报告 `READY FOR SCHEMATIC REVIEW`；该结论不等于 ERC PASS、Stage 4 PASS 或 PCB Layout approval。AI 不声称完成 EDA 实现。
+Stage 3 entry 至少启用一个 owning module design record，承接当前 detailed design work；是否按模块拆分更多 `docs/module_design/*.md` 仍由复杂度和追溯价值决定，不要求每个模块各有一份文件。形成可追溯模块依据、BOM 草稿、Altium 原理图、同版完整 PDF 与当前 BOM，并完成轻量整板自洽检查。满足 Stage 3 条件时只报告 `READY FOR SCHEMATIC REVIEW`；该结论不等于 ERC PASS、Stage 4 PASS 或 PCB Layout approval，也不自行改变 `Current Project Stage`。AI 不声称完成 EDA 实现。
 
 **No automatic reverse implementation sync：**普通 resistor / capacitor、pull-up、net naming、support component、module pin connection、filter 或 NTC 外围值调整，通常只更新当前 module design record；若 underlying component decision、qualification basis、architecture impact、selection risk 或 requirement 实质变化，则更新对应 owner，并按影响范围返回相关 Stage reevaluation。Stage 2 artifacts 不是 immutable，但不因普通实现调整而机械同步。
 
@@ -176,7 +186,7 @@ Gate 1.5 已 PASS，Requirements Baseline 足以筛选器件。
 
 ### 主要输出与退出条件
 
-启用 `docs/schematic_review.md`。高风险及影响封装、接口、安全和关键 Layout 的问题关闭；其他问题有明确处置；给出是否允许进入 Layout Preflight 的显式结论。
+启用 `docs/schematic_review.md`。高风险及影响封装、接口、安全和关键 Layout 的问题关闭；其他问题有明确处置；给出是否允许进入 Layout Preflight 的显式技术结论。该 Stage exit conclusion 不自行执行 Stage 4 → Stage 5 transition。
 
 器件或封装问题回 Stage 2；连接/参数问题回 Stage 3；功能/安全边界变化回 Stage 1 与 Gate 1.5。
 
@@ -200,7 +210,7 @@ Stage 5 不要求初始 DRC，也不以 DRC 作为正式布局门禁。制造/�
 
 ### 主要输出与退出条件
 
-完成可追溯 `.PcbDoc` 与 Review 输入，在同一 `docs/pcb_review.md` 记录需要跨回合追踪的重要问题。计划布局布线铺铜完成，关键路径已人工检查，重要问题已处理。
+完成可追溯 `.PcbDoc` 与 Review 输入；若 Stage 5 尚未因记录 Layout Preflight 而启用 `docs/pcb_review.md`，则在进入 Stage 6 的 authorized transition 中启用它，Stage 6/7 继续维护同一文件并记录需要跨回合追踪的重要问题，不创建第二份 artifact。计划布局布线铺铜完成，关键路径已人工检查，重要问题已处理。
 
 Stage 6 不要求保存、导出或归档中间 DRC 记录，也不以中间 DRC 作为继续工作的仓库门禁。
 

@@ -431,6 +431,19 @@ def initialize_fixture(target: Path) -> None:
     )
 
 
+def set_fixture_stage(target: Path, stage_number: int, stage_name: str) -> None:
+    readme = target / "README.md"
+    readme.write_text(
+        re.sub(
+            r"^Current Project Stage: .*?$",
+            f"Current Project Stage: Stage {stage_number} — {stage_name}",
+            readme.read_text(encoding="utf-8"),
+            flags=re.MULTILINE,
+        ),
+        encoding="utf-8",
+    )
+
+
 def set_fixture_binding(target: Path, release: str, commit: str) -> None:
     binding = target / "FRAMEWORK.md"
     text = binding.read_text(encoding="utf-8")
@@ -520,24 +533,66 @@ def check_project_smoke_tests(validator: Validator) -> None:
         stage_enabled_project = temporary_path / "stage-enabled-semantics"
         prepare_stage_1_fixture(stage_enabled_project, framework_commit)
         initialize_fixture(stage_enabled_project)
-        stage_readme = stage_enabled_project / "README.md"
-        stage_readme.write_text(
-            stage_readme.read_text(encoding="utf-8").replace(
-                "Current Project Stage: Stage 1 — Requirements Definition",
-                "Current Project Stage: Stage 5 — PCB Layout",
-            ),
-            encoding="utf-8",
-        )
         stage_documents = {
-            "docs/component_selection_plan.md": "# Component Selection Fixture\n\nFixture activity evidence.\n",
-            "docs/module_design/fixture.md": "# Module Design Fixture\n\nFixture activity evidence.\n",
-            "docs/schematic_review.md": "# Schematic Review Fixture\n\nFixture activity evidence.\n",
-            "docs/pcb_design_rules.md": "# PCB Design Rules Fixture\n\nFixture activity evidence.\n",
+            "docs/component_selection_plan.md": (
+                "# Component Selection Plan Fixture\n\n"
+                "Status: Pending current component-selection work.\n\n"
+                "## Record Responsibility\n\n"
+                "Own the fixture's current critical-component candidates, sources, decisions, and open questions.\n"
+            ),
+            "docs/module_design/fixture.md": (
+                "# Owning Module Design Fixture\n\n"
+                "Status: Pending current detailed design work.\n\n"
+                "## Record Responsibility\n\n"
+                "Own the fixture's current module design basis, open calculations, interfaces, and verification needs.\n"
+            ),
         }
         for relative_path, content in stage_documents.items():
             document = stage_enabled_project / relative_path
             document.parent.mkdir(parents=True, exist_ok=True)
             document.write_text(content, encoding="utf-8")
+
+        set_fixture_stage(stage_enabled_project, 3, "Schematic Module Design and Capture")
+        stage_3_result = run_fixture_validator(stage_enabled_project)
+        stage_3_details = (stage_3_result.stdout + stage_3_result.stderr).strip()
+        validator.check(stage_3_result.returncode == 0, "Stage Transition Regression", f"valid Stage 3 fixture failed: {stage_3_details}")
+
+        set_fixture_stage(stage_enabled_project, 4, "Schematic Review")
+        stage_4_missing_result = run_fixture_validator(stage_enabled_project)
+        stage_4_missing_details = (stage_4_missing_result.stdout + stage_4_missing_result.stderr).strip()
+        validator.check(
+            stage_4_missing_result.returncode != 0 and "docs/schematic_review.md" in stage_4_missing_details,
+            "Stage Transition Regression",
+            f"Stage 4 accepted missing schematic_review.md: {stage_4_missing_details}",
+        )
+        (stage_enabled_project / "docs/schematic_review.md").write_text(
+            "# Schematic Review Fixture\n\n"
+            "Status: Pending Formal Schematic Review.\n\n"
+            "## Record Responsibility\n\n"
+            "Record the review scope, evidence, findings, limitations, and eventual Stage exit conclusion.\n",
+            encoding="utf-8",
+        )
+        stage_4_result = run_fixture_validator(stage_enabled_project)
+        stage_4_details = (stage_4_result.stdout + stage_4_result.stderr).strip()
+        validator.check(stage_4_result.returncode == 0, "Stage Transition Regression", f"initialized Stage 4 fixture failed: {stage_4_details}")
+
+        set_fixture_stage(stage_enabled_project, 5, "PCB Layout")
+        stage_5_missing_result = run_fixture_validator(stage_enabled_project)
+        stage_5_missing_details = (stage_5_missing_result.stdout + stage_5_missing_result.stderr).strip()
+        validator.check(
+            stage_5_missing_result.returncode != 0 and "docs/pcb_design_rules.md" in stage_5_missing_details,
+            "Stage Transition Regression",
+            f"Stage 5 accepted missing pcb_design_rules.md: {stage_5_missing_details}",
+        )
+        (stage_enabled_project / "docs/pcb_design_rules.md").write_text(
+            "# PCB Design Rules Fixture\n\n"
+            "Status: Pending Layout Preflight.\n\n"
+            "## Record Responsibility\n\n"
+            "Own the verified manufacturing, mechanical, placement, routing, and rule baseline.\n\n"
+            "## Current Rule Values\n\n"
+            "TBD — Pending Layout Preflight; no engineering values are asserted by this fixture.\n",
+            encoding="utf-8",
+        )
         stage_5_result = run_fixture_validator(stage_enabled_project)
         stage_5_details = (stage_5_result.stdout + stage_5_result.stderr).strip()
         validator.check(
@@ -546,17 +601,59 @@ def check_project_smoke_tests(validator: Validator) -> None:
             f"Stage 5 incorrectly required pcb_review.md before review activity: {stage_5_details}",
         )
 
+        reusable_review_project = temporary_path / "stage-5-existing-pcb-review"
+        shutil.copytree(stage_enabled_project, reusable_review_project)
+        reusable_review = reusable_review_project / "docs/pcb_review.md"
+        reusable_review.write_text(
+            "# PCB Review Fixture\n\n"
+            "Status: Pending Layout Preflight review.\n\n"
+            "## Record Responsibility\n\n"
+            "Maintain the durable Stage 5-7 review record without asserting an engineering result.\n",
+            encoding="utf-8",
+        )
+        reusable_content = reusable_review.read_bytes()
+        reusable_stage_5_result = run_fixture_validator(reusable_review_project)
+        reusable_stage_5_details = (reusable_stage_5_result.stdout + reusable_stage_5_result.stderr).strip()
+        validator.check(
+            reusable_stage_5_result.returncode == 0,
+            "Stage Transition Regression",
+            f"Stage 5 rejected an existing Preflight review record: {reusable_stage_5_details}",
+        )
+        set_fixture_stage(reusable_review_project, 6, "Routing and Copper")
+        reusable_stage_6_result = run_fixture_validator(reusable_review_project)
+        reusable_stage_6_details = (reusable_stage_6_result.stdout + reusable_stage_6_result.stderr).strip()
+        validator.check(
+            reusable_stage_6_result.returncode == 0
+            and reusable_review.read_bytes() == reusable_content
+            and len(list((reusable_review_project / "docs").glob("pcb_review*.md"))) == 1,
+            "Stage Transition Regression",
+            f"Stage 6 failed to reuse the existing pcb_review.md: {reusable_stage_6_details}",
+        )
+
+        set_fixture_stage(stage_enabled_project, 6, "Routing and Copper")
+        stage_6_missing_result = run_fixture_validator(stage_enabled_project)
+        stage_6_missing_details = (stage_6_missing_result.stdout + stage_6_missing_result.stderr).strip()
+        validator.check(
+            stage_6_missing_result.returncode != 0 and "docs/pcb_review.md" in stage_6_missing_details,
+            "Stage Transition Regression",
+            f"Stage 6 accepted missing pcb_review.md: {stage_6_missing_details}",
+        )
         (stage_enabled_project / "docs/pcb_review.md").write_text(
-            "# PCB Review Fixture\n\nFixture Stage 6/7 activity evidence.\n",
+            "# PCB Review Fixture\n\n"
+            "Status: Pending Routing and Copper review.\n\n"
+            "## Record Responsibility\n\n"
+            "Maintain the durable Stage 6-7 review scope, evidence, findings, limitations, and decisions.\n",
             encoding="utf-8",
         )
-        stage_readme.write_text(
-            stage_readme.read_text(encoding="utf-8").replace(
-                "Current Project Stage: Stage 5 — PCB Layout",
-                "Current Project Stage: Stage 8 — Assembly, Bring-up and Hardware Test",
-            ),
-            encoding="utf-8",
+        stage_6_result = run_fixture_validator(stage_enabled_project)
+        stage_6_details = (stage_6_result.stdout + stage_6_result.stderr).strip()
+        validator.check(
+            stage_6_result.returncode == 0,
+            "Stage Transition Regression",
+            f"initialized Stage 6 fixture failed: {stage_6_details}",
         )
+
+        set_fixture_stage(stage_enabled_project, 8, "Assembly, Bring-up and Hardware Test")
         stage_8_result = run_fixture_validator(stage_enabled_project)
         stage_8_details = (stage_8_result.stdout + stage_8_result.stderr).strip()
         validator.check(

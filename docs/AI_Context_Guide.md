@@ -98,6 +98,8 @@ Stage controls lifecycle；task intent selects method。Stage Method 应按实�
 
 Stage 3 的日常模块设计、连接核对、参数计算、当前模块或局部设计的 lightweight verification，以及轻量 Cross-Module Integration 默认使用 `hardware-schematic-design`。明确限定范围的 schematic review / risk review 可按需使用 `hardware-schematic-review` 作为 supporting method，同时保持当前 lifecycle Stage。只有针对 completed whole-design evidence（完整 schematic / BOM）的正式整板审查和 PCB Layout-entry decision 才属于 Stage 4 Formal Schematic Review。
 
+执行 Stage transition 时，在构造 bounded transaction scope 前读取 Workflow 的 transition semantics 与 Structure Standard 的 Stage-enabled activation rules，只纳入 target-stage 合法 post-state 立即需要的 artifacts。不要因 transition 默认加载或执行 target Stage 的完整 engineering method；仅在实际 target-stage activity 同时属于当前授权任务时，才按 task intent 加载相应方法与 evidence。
+
 ## 6. 条件触发与证据边界
 
 - 目标板厂官方能力：仅在制造基线、规则、裕量或下单核对时读取。

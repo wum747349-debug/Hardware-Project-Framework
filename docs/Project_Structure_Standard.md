@@ -166,18 +166,20 @@ scripts/validate_project_repository.py
 
 `firmware/` 不再是所有项目 Required。无固件的电源板等项目必须能通过 Project Validator。
 
-### 7.3 Stage-enabled — 进入相关阶段时创建
+### 7.3 Stage-enabled — 在适用 Stage entry 或 Stage activity 时启用
 
-| 路径 | 最早启用时机 |
+Stage-enabled 保持单一正式分类；下表中的 entry-activated / activity-triggered 只是 activation condition 的描述，不新增 artifact taxonomy。entry-activated artifact 在 authorized transition 完成时必须存在；activity-triggered artifact 不因仅处于该 Stage 而自动要求存在。Minimum truthful initialization 可以包含已确认事实、有职责的结构以及真实的 `TBD`、`待确认` 或 `Pending <relevant activity>`，但文件启用不表示对应工程活动或 Stage 已完成，也不得用低信息量 placeholder 或虚构参数满足结构要求。
+
+| 路径 | Activation condition |
 | --- | --- |
-| `docs/component_selection_plan.md` | Stage 2 开始关键器件候选与决策时 |
-| `docs/module_design/*.md` | Stage 3 某模块进入详细设计时 |
-| `docs/schematic_review.md` | Stage 4 正式原理图审查时 |
-| `docs/pcb_design_rules.md` | Stage 5 Layout Preflight 前 |
-| `docs/pcb_review.md` | Stage 5 记录 Layout Preflight 时，Stage 6/7 继续维护同一文件 |
-| `docs/bringup_log.md` | Stage 8 准备焊接或首次上电时 |
-| `docs/test_report.md` | Stage 8 开始正式测试时 |
-| `docs/revision_history.md` | 确立首个硬件版本或发生重要设计变更时 |
+| `docs/component_selection_plan.md` | Stage 2 entry |
+| `docs/module_design/*.md` | Stage 3 entry 至少启用一个 owning record 承接当前 detailed design work；是否拆分更多记录按复杂度与追溯价值决定，不要求每模块一份 |
+| `docs/schematic_review.md` | Stage 4 entry |
+| `docs/pcb_design_rules.md` | Stage 5 entry |
+| `docs/pcb_review.md` | Stage 5 在实际需要持久记录 Layout Preflight review 时启用；若此前未启用，则 Stage 6 entry 必须启用，Stage 6/7 继续维护同一文件 |
+| `docs/bringup_log.md` | Stage 8 实际开始 Bring-up、焊接或首次上电 activity 时 |
+| `docs/test_report.md` | Stage 8 实际开始 formal test activity 时 |
+| `docs/revision_history.md` | 确立首个真实硬件版本或发生重要设计变更时，保持既有实际 revision trigger |
 
 Stage-enabled 文件不得为目录整齐而在 Bootstrap 全部预建。文件存在不证明阶段完成，文件不存在也不能反向推断当前阶段；当前阶段只取自根 `README.md`。
 
