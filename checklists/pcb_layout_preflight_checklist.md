@@ -70,9 +70,9 @@
 | 检查项 | 结论 | 依据 / 证据 | 状态 |
 |---|---|---|---|
 | `docs/pcb_design_rules.md` 已形成，包含单位、依据、规则值、Scope 和 Priority |  |  |  |
-| 电源、GND、负载、模拟、数字、晶振、高速及其他关键网络已按需要分类 |  |  |  |
+| 仅在存在真实 electrical behavior、routing behavior、manufacturing requirement、mechanical 或 verification / traceability need 差异时，已建立必要分类或明确 Scope |  |  |  |
 | Net Class 或明确网络 Scope 的选择与项目需求一致 |  |  |  |
-| Clearance、Width、Via、Hole、Annular Ring、Mask、Silkscreen、Board 和 Polygon 等适用规则已定义 |  |  |  |
+| 当前项目实际适用的 electrical、routing、placement、plane-copper、mechanical 与 manufacturing constraints 已形成必要规则基线 |  |  |  |
 | 差分、高速、模拟、电源和负载专项规则已按实际需求定义或标记不适用 |  |  |  |
 | 用户已在 Altium Designer 中配置关键实际规则 |  |  |  |
 | 用户已人工核对关键 Scope 仅匹配预期对象，默认规则无覆盖空洞 |  |  |  |

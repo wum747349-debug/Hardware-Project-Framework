@@ -62,6 +62,14 @@ Rule organization principle：使用能够准确表达工程意图的最简单 S
 - 单个特殊 Net、Object、Layer 或例外情况，使用最简单准确的 Explicit Scope 或 Custom Query；不要仅因工具支持复杂 Query 就增加复杂度。
 - 只有存在真实的 electrical、manufacturing、mechanical 或 verification / traceability difference 时，才新增 Altium Rule Priority 更高的 exception rule；不要创建行为完全相同的重复 Rule。
 
+当当前任务意图主要是 PCB rule preparation、EDA rule preparation、Altium rule configuration 或 Layout Preflight rule baseline 时，Mode A 默认采用 configuration-first 输出：先给出已知的 manufacturer / stackup baseline，再给出当前证据可支持、可直接配置的规则表示，随后补充简短工程依据、例外和真正未决项；若制造与 stackup baseline 已明确，不机械重复完整背景说明。不要先长篇解释全部 rule category，也不要因为 EDA tool 或 checklist 中存在某类 rule 就逐项展开。
+
+规则表示优先使用紧凑表格或等价结构，使用户不需要从散文中重新拼装配置。字段可按规则类型调整，通常应让 `Rule`、`Scope`、`Value / Range / Setting`、`Unit`、`Priority / Note` 清楚可见；使用 Net Class、Differential Pair Class 或 Object Class 时，列出当前可靠 evidence 已确认的实际 members，无法可靠确认的成员标记为 `待 Project / netlist / EDA evidence 核对`，不得猜测。存在重叠规则时，应明确 default rule、exception rule 及其覆盖 / priority 关系；不要求所有规则使用数字 Priority，也不要求所有规则都建立 Class。
+
+第一轮 rule baseline 只展开当前项目真正适用的 electrical、routing、placement、plane-copper、mechanical 或 manufacturing constraints。普通项目中 Clearance、Width、Routing Via Style、Component Clearance，以及使用 polygon / copper pour 时的 Polygon Connect Style 等可能常见；Differential Pair、Impedance、Length / Matched Length、creepage / isolation、Board Outline / mechanical clearance、hole / drilling、mask / paste / silkscreen 或其他特殊制造约束只在项目需求、资料或制造基线实际触发时展开。这些只是 examples，不是固定分类或强制清单。
+
+Rule Preparation 默认回答 `what to configure`，不主动输出 Altium click-by-click UI tutorial；只有用户明确询问设置位置、提供 AD 截图要求操作指导，或配置问题需要 Interactive EDA Guidance 时，才说明具体 UI 操作。单纯 Rule Preparation 也不自动扩展到 placement、routing sequence、GND stitching、polygon geometry、copper shape 或铺铜实现建议，除非规则定义本身依赖这些内容，或用户明确询问。
+
 Layout Preflight 不要求初始 DRC。用户可以使用 Altium 在线规则检查或临时检查，但不得把 DRC 结果作为批准开始正式布局的默认仓库门禁。
 
 ## 6. 模式 B 方法
