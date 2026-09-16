@@ -2,13 +2,25 @@
 
 > 文档状态：Framework v1 Contract
 > 适用对象：Framework 维护、Standalone Project 与显式迁移任务
-> 权威职责：默认、按需与禁止读取范围
+> 权威职责：默认、按需与禁止读取范围，以及不改变 Project Runtime / Structural Contract 的会话连续性与纠错复核指导
 
 ## 1. 核心规则
 
 AI/Codex 只读取“当前身份与绑定 + 当前 Runtime Rules + 当前 Project Facts + 当前 Stage Method + 当前任务 Evidence”。不为保险加载全部 Project、Skill、checklist、datasheet、模板或历史记录。
 
 Framework Repository 与 Standalone Project 的启动路径不同，不能混用。
+
+当前状态冲突时遵循以下抽象优先级：
+
+```text
+当前目标 Repository 的有效 Authority / Current State
+> Session Handoff
+> Conversation history / AI memory
+```
+
+Framework maintenance 的 Authority / Current State 由 Framework 当前权威文件与 Git state 决定；Standalone Project 的 Authority / Current State 由该 Project 自己的权威文件、Evidence 与 `FRAMEWORK.md` 绑定的 immutable Framework snapshot 决定。Session Handoff、Session Starter、Conversation history 与 AI memory 可以帮助恢复 working set 或发现来源，但不能覆盖当前权威状态。
+
+本指南中的 Session Management、Session Handoff、Session Starter、User-Reported Error Review 与 Affected Conclusions 属于 collaboration / context-use guidance；它们不新增 Project Runtime Rule、Project Structure Version、`FRAMEWORK.md` 字段、Stage / Gate、Required / Conditional / Stage-enabled 分类，也不改变 Project `AGENTS.md` 的七步启动路由。
 
 ## 2. Standalone Project 四层上下文
 
@@ -123,7 +135,40 @@ BOM 只在 MPN、value、footprint、rating 或 population 信息与当前问题
 
 无可靠 `.SchDoc` / `.PcbDoc` 解析能力时，只使用用户提供的 PDF、BOM、图片、报告、规则摘要和输出。图片不能证明网络、间距、线宽、孔径、规则命中、铺铜或 DRC 通过。无法确认的实现事项标记“待 EDA 核对”，不得据此关闭问题或制造放行。
 
-## 7. 完整 Workflow 读取条件
+## 7. 会话管理与交接
+
+会话管理只解决“继续当前 Conversation，还是切换并如何把当前 working set 交给下一会话”，不改变四层 Project Context、Stage / Gate 或持久事实源。
+
+继续当前会话的默认条件是：目标、当前 Stage / task、Authority 组成、write target 与 working set 仍连续且清楚。出现以下情况时，应优先形成最小 Session Handoff，并考虑开启新会话：
+
+- 目标或主要任务阶段明显变化；
+- 关键决策已经冻结，后续进入不同问题域；
+- 大量旧讨论已失效，继续携带会增加 stale-state interference；
+- 参与的 Repository / Workspace 组合明显变化；
+- Conversation history 已使当前 Authority / Current State 或下一步 scope 开始混淆。
+
+消息数量、token 数量或对话长度本身不是切换理由。不得设置固定 token threshold、Context Score、自动 Session 切换机制，也不新增 Session storage、database、runtime 或 agent。
+
+Session Handoff 只保留下一轮可靠继续所需的最小 working set，通常包括：目标、相关 Repository / branch、适用 Authority、当前 Stage / state、已冻结决策、未解决问题、禁止事项与下一步行动。Domain-specific 项目可以按实际需要增减，不建立统一 schema，也不要求把完整聊天复制进 Repository。
+
+Session Starter 是新会话的轻量入口，用于指出 Repository、branch、适用 Authority、工作原则、执行边界和当前任务；它不是新的 Framework / Project Contract，也不替代 Handoff。新会话必须重新读取目标 Repository 的当前 Authority / Current State，再核对 Handoff；若冲突，以当前 Authority / Current State 为准。
+
+## 8. 用户报错复核与受影响结论
+
+用户明确质疑某个 AI/Codex 结论时：
+
+1. 精确识别被质疑的结论，并暂停继续依赖它；
+2. 只读取完成独立复核所需的最小 Authority、Current State、Evidence 与可靠来源；
+3. 输出 `Confirmed`、`Corrected` 或 `Unresolved`；
+4. `Unresolved` 不恢复为可靠前提；
+5. 若为 `Corrected`，检查 Affected Conclusions，包括后续推理、建议、Stage / Gate 判断、文件修改、Validation、Release / Manufacturing decision 与其他依赖结果；
+6. 只修复实际失效的最小范围，并重新执行受影响的 validation / review；没有传播时明确说明影响仅限当前结论。
+
+“修复最小失效层”表示先定位目标 Framework / Project 模型中真正出错的 Authority、Context / Retrieval、Evidence、Tool、Workflow、Validation 或 reasoning boundary，再修复该范围；它不要求复制 Workspace Hub 的 Failure Taxonomy，也不假设所有 Project 拥有相同诊断层级。
+
+单次、局部错误在当前任务内解决。只有真实重复、高影响或系统性问题才值得进入 Framework maintenance 评估；不得因为一次错误自动增加 Runtime、Agent、Database、Vector Search、Dashboard、多 Agent、错误日志平台或新的复杂 Context Score。
+
+## 9. 完整 Workflow 读取条件
 
 只在以下情况完整读取 `docs/08_Project_Workflow.md`：
 

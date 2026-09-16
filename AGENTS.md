@@ -14,6 +14,24 @@
 6. Normal Framework maintenance、Semantic Versioning、RC 或 Release 任务读取 `docs/Framework_Maintenance_and_Release_Guide.md`；Project Framework binding adoption 读取 `docs/Framework_Migration_Guide.md`。Breaking Framework release + Project adoption 同时读取两者。
 7. Repository Architecture Migration 已关闭。普通工作不读取 Historical Master Plan 或 retired AI Runbook；只有用户显式要求历史 architecture / provenance review 时才按需读取。未来 Authority Cutover 使用 `docs/Framework_Migration_Guide.md`，不使用 retired Runbook。
 
+## 权威优先级与会话连续性
+
+本节属于 AI collaboration / context-use guidance，不新增 Project Runtime Rule、Structural Contract、Stage / Gate、Project `AGENTS.md` routing step 或持久化 schema。详细规则以 `docs/AI_Context_Guide.md` 为准。
+
+- Framework maintenance 中，当前 Repository Authority / Git state 高于 Session Handoff、Conversation history 与 AI memory。
+- Standalone Project 中，当前 Project Authority 与其 `FRAMEWORK.md` 绑定的 immutable Framework snapshot 高于 Session Handoff、Conversation history 与 AI memory。
+- Session Handoff 只传递当前工作集，不是事实权威；Session Starter 只说明新会话如何开始，也不是新的 Contract。
+- 目标、阶段、Authority 组成与 working set 连续且清楚时继续当前会话；目标或阶段明显变化、关键决策已冻结、旧讨论大量失效或当前状态开始混淆时，先形成最小 Handoff，再考虑新会话。
+- 消息数量、token 数量或“对话看起来很长”不能单独作为换会话理由；不得建立固定 Context Score、自动 Session 切换、Session database、runtime 或 agent 机制。
+
+## 用户报错复核与影响分析
+
+用户明确质疑 AI/Codex 的某个结论时，先暂停把该结论作为后续可靠前提，再回到完成复核所需的最小 Framework / Project Authority、当前 Git / EDA / Evidence state 与可靠来源独立核对。用户质疑不等于结论自动错误。
+
+复核结果使用：`Confirmed`（复核后原结论成立）、`Corrected`（原结论被确认错误）或 `Unresolved`（当前证据不足）。`Unresolved` 不得继续作为已确认前提。
+
+若结果为 `Corrected`，必须检查该错误是否已传播到后续推理、建议、Stage / Gate 判断、文件修改、Validation、Release / Manufacturing decision 或其他依赖结论，明确 Affected Conclusions。未传播时可说明影响仅限当前结论；已传播时只修复实际失效的最小范围，并重新验证所有受影响结果。不得因单个错误自动扩建 Failure Taxonomy、错误数据库、Runtime、Agent、Vector Search 或其他平台能力。
+
 ## 文档语言与可读性
 
 本节是 Documentation Language / Readability 的 single source of truth，属于 authoring / usability guidance，不是 Project Runtime Contract 或 Structural Contract，也不改变 Standalone Project `AGENTS.md` context-routing contract。
@@ -22,7 +40,7 @@
 - 上述 human-facing 内容默认以中文为主要解释语言，使普通用户无需依赖完整英文阅读能力也能理解当前流程、状态、职责、风险、推理依据与下一步；需要时使用中英双语。
 - 已稳定使用的英文正式术语应保留，例如 Framework、Standalone Project、Runtime Contract、Framework Contract Migration、Compatible Framework Sync、Authority Cutover、Stage / Gate、Validator、CI 和 EDA。
 - 文件名、路径、schema key、identifier、命令、固定字段及其值、validator-sensitive heading 不得为了中文化而改名或机械翻译。
-- 推荐使用“中文解释 + 必要英文正式术语”，例如“兼容 Framework 同步（Compatible Framework Sync）”、“Framework Contract Migration”和“Authority Cutover”。
+- 推荐使用“中文解释 + 必要英文正式术语”，例如“兼容 Framework 同步（Compatible Framework Sync）”、“Framework Contract Migration”和“Authority Cutover”。对普通技术术语在含义已明确后，不要反复增加英文括注。
 - Human-facing Guide、README、操作说明和 AI/Codex 最终报告在无明确必要时不得整篇使用英文；明确面向外部英文读者的文档可按其 Audience 使用英文。
 - Skill、Template 或 Guide 只引用本节作为执行提示，不复制整套语言规则，也不成为第二权威源。
 

@@ -2,6 +2,34 @@
 
 本文件记录 Framework 方法、结构、Template、Skill、Checklist 与 Validator 的发布级变化。真实 Project 的硬件 revision 和项目 release 由各 Standalone Project Repository 自己维护。
 
+## v1.2.0
+
+### Changed
+
+- 新增会话连续性与 Authority Safety 指导：当前 Framework / Project Authority 与 Current State 始终高于 Session Handoff、Conversation history 与 AI memory；Session Handoff 只保存当前 working set，Session Starter 只作为新会话轻量入口。是否切换会话由任务、阶段、Authority 与 working-set 清晰度决定，不以固定 token threshold、Context Score 或自动 Session switching 驱动。
+- 新增 User-Reported Error Review：用户质疑某结论后暂停依赖该结论，回到最小充分 Authority / Evidence 独立复核并输出 `Confirmed / Corrected / Unresolved`；`Corrected` 时检查 Affected Conclusions，只修复实际失效的最小范围并重新验证受影响结果，不引入统一 Failure Taxonomy、错误数据库、Runtime 或 Agent。
+- 强化中文优先与技术术语可读性：保留必要正式英文术语、文件名与 schema key，但普通技术术语含义已经建立后不反复堆叠英文括注。
+- 允许 Manufacturer reference、prior field-used design 与 evidence-backed external design 作为 qualified reuse input；复用不转移 qualification，关键参数继续以 Manufacturer official documentation 为技术权威，并保留适用 provenance / license 要求。
+- 澄清 missing-evidence continuation behavior：缺失证据只阻断依赖该证据的具体结论或动作，不自动阻断无关分析、准备性工作或 scoped guidance；只索取真正阻断当前任务的 minimum missing evidence。
+- 完善 Stage transition transaction：readiness conclusion 不自动改变 `Current Project Stage`；获授权 transition 在一个 bounded、validation-closed transaction 中更新 Stage 与 entry-activated artifacts，并禁止用虚构参数或低信息量 placeholder 满足 Validator。
+- 完善 Stage-enabled activation semantics 与 Stage 3/4 record ownership：Stage 3 entry 至少启用一个 owning module design record；Stage 4/5/6 entry artifact 按结构契约激活，activity-triggered artifact 不因仅处于某 Stage 而机械创建。
+- 细化渐进式器件最终化：Stage 2 只要求建立 architecture / module direction 所必需的 component identity；Stage 3 定义全部 required components 的 electrical requirements，Stage 4 在 Formal Schematic Review 前完成必要 component / footprint convergence，避免普通器件 MPN 过早锁定或 finding 机械回退 Stage 2。
+- 优化 PCB rule preparation UX：默认 configuration-first，只建立当前项目实际需要的 electrical / routing / placement / plane-copper / mechanical / manufacturing constraints；Class、special rule、priority 与 Altium UI 操作均由真实差异或用户任务触发，不为类别完整度机械扩张规则体系。
+
+### Compatibility
+
+- Release classification: MINOR — backward-compatible Framework capability improvement
+- Runtime Contract: UNCHANGED
+- Structural Contract: UNCHANGED
+- Project Structure Version: 1 — UNCHANGED
+- `FRAMEWORK.md` schema: UNCHANGED
+- Project `AGENTS.md` routing contract: UNCHANGED
+- Required / Conditional / Stage-enabled model: UNCHANGED
+- Stage / Gate architecture: UNCHANGED
+- Project facts authority and repository authority model: UNCHANGED
+- Existing Standalone Projects are not automatically rebound by this release.
+- Existing v1.1.1 Projects may adopt v1.2.0 through Compatible Framework Sync after project-specific impact validation; no Gate replay is implied unless the actual project delta affects that Gate.
+
 ## v1.1.1
 
 ### Changed
