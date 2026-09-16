@@ -2,7 +2,7 @@
 
 > 仓库状态：Normal Framework Maintenance
 > 当前仓库：`wum747349-debug/Hardware-Project-Framework`
-> Framework release line：v1.2.0；准确 publication 状态以 GitHub tag / Release 为准
+> Framework target release line：v1.2.0；正式 publication 状态以 GitHub tag / Release 为准
 
 本仓库是处于 normal maintenance lifecycle 的 Hardware Project Framework。Framework 定义方法和契约，不作为真实 Project 的活动事实源。Repository Architecture Migration 已关闭；Project 1 / 2 / 3 均已完成 Authority Cutover，各自 Standalone Repository 是 Only Active Project Authority。Framework current Git tree 只保留轻量 [history marker](projects/README.md)，迁移细节作为历史工程记录保存。
 
@@ -85,7 +85,7 @@ python scripts/validate_project_repository.py --gate-1-5
 - 当前 GitHub Repository 已重命名为 `wum747349-debug/Hardware-Project-Framework`。
 - Repository Architecture Migration：`CLOSED — historical only`。
 - Framework operating mode：`NORMAL MAINTENANCE`。
-- Framework v1.2.0：当前 release line；release-level summary 见 `CHANGELOG.md`，publication 状态以 GitHub tag / Release 为准。
+- Framework v1.2.0：当前 target release line；release-level summary 见 `CHANGELOG.md`，正式 publication 状态以 GitHub tag / Release 为准。
 - Project 1 / 2 / 3 Standalone Repository 均为各自 Only Active Project Authority。
 - Framework current Git tree 不再保存三个真实 Legacy Project copy；历史可通过 Git history、baseline tag 与 migration records 追溯。
 - `examples/reference_project_v1/` 已建立为 synthetic、lightweight、validator-valid fixture，不是第四个真实 Project。
