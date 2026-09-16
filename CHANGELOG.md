@@ -2,6 +2,30 @@
 
 本文件记录 Framework 方法、结构、Template、Skill、Checklist 与 Validator 的发布级变化。真实 Project 的硬件 revision 和项目 release 由各 Standalone Project Repository 自己维护。
 
+## v1.2.1
+
+### Changed
+
+- 修复 Documentation Language / Readability guidance 的可达性：将既有 Chinese-first authoring / usability guidance 的权威位置从 Framework 根 `AGENTS.md` 迁移到 Standalone Project 正常启动路由必读的 `docs/AI_Context_Guide.md`；根 `AGENTS.md`、Template Guide 与 Framework User Guide 仅保留引用和导航，不复制第二套完整规则。
+- 明确 Chinese-first migration 必须保留正式术语、工程缩写、文件名、schema key、identifier、代码、器件型号、网络名、参数符号、固定 lifecycle field 与 validator-sensitive wording，并且不得改变工程需求、Project facts、Stage / Gate、数值约束、Evidence 或 authority relationship。
+- 复核 Standalone Project Template 的五个根事实入口；其 human-facing content 已以中文解释为主，且标题与固定短语受 Validator / Contract 约束，因此本 Patch 不做机械翻译或无意义内容改写。
+
+### Compatibility
+
+- Release classification: PATCH — compatible documentation/usability fix
+- RC required: NO — low-risk compatible documentation reachability fix covered by canonical validation
+- Runtime Contract: UNCHANGED
+- Structural Contract: UNCHANGED
+- Project Structure Version: 1 — UNCHANGED
+- `FRAMEWORK.md` schema: UNCHANGED
+- Project `AGENTS.md` routing contract: UNCHANGED
+- Project `PROJECT_RULES.md` Runtime Rules contract: UNCHANGED
+- Required / Conditional / Stage-enabled model: UNCHANGED
+- Stage / Gate architecture: UNCHANGED
+- Project facts authority and repository authority model: UNCHANGED
+- Validator required structure: UNCHANGED
+- Existing Standalone Projects are not automatically rebound by this release; eligible Projects may adopt v1.2.1 through Compatible Framework Sync after project-specific impact validation.
+
 ## v1.2.0
 
 ### Changed

@@ -6,7 +6,7 @@
 >
 > 用途（Purpose）：解释与导航，不定义新的 Framework Contract
 
-本文以中文解释为主，并保留 Framework 中已稳定使用的英文 Contract、Stage、Gate、文件名和技术术语。本指南只用于降低理解门槛并导航到现有权威源，不创建 Framework Contract、Project Runtime Rule、Stage Rule 或 Human Approval Rule。
+Framework 与 Standalone Project 的 human-facing documentation 默认采用 Chinese-first：以中文作为主要解释语言，同时保留必要英文正式术语、工程缩写、文件名和固定字段。完整 Documentation Language / Readability convention 以 [AI Context Guide](AI_Context_Guide.md) 为权威；本指南只负责解释和导航，不创建第二规则源，也不创建 Framework Contract、Project Runtime Rule、Stage Rule 或 Human Approval Rule。
 
 ## 1. Framework 是什么
 

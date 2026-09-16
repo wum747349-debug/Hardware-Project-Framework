@@ -10,6 +10,8 @@
 
 Template 只提供 Project container、Binding/Runtime 入口、事实入口、职责说明和 Project Validator 发布快照，不提供任何真实 Project 的器件、网络、板框、规则值、板厂参数、Review、DRC、Manufacturing 或 Test 事实。
 
+Template 的 human-facing content 遵循 [AI Context Guide](AI_Context_Guide.md) 中的 Documentation Language / Readability convention；本 Guide 只引用该权威规则，不复制另一套语言配置。
+
 ## 2. 获取与复制规则
 
 正式 Project Bootstrap 必须从已发布的固定 Framework Release 获取 Template，不复制漂移的 Framework `main`。Framework 尚未发布时，只允许自测或明确预发布评估使用 Structure Standard 定义的 Development Binding。

@@ -22,7 +22,20 @@ Framework maintenance 的 Authority / Current State 由 Framework 当前权威�
 
 本指南中的 Session Management、Session Handoff、Session Starter、User-Reported Error Review 与 Affected Conclusions 属于 collaboration / context-use guidance；它们不新增 Project Runtime Rule、Project Structure Version、`FRAMEWORK.md` 字段、Stage / Gate、Required / Conditional / Stage-enabled 分类，也不改变 Project `AGENTS.md` 的七步启动路由。
 
-## 2. Standalone Project 四层上下文
+## 2. 文档语言与可读性
+
+本节是 Documentation Language / Readability 的 single source of truth，属于 authoring / usability guidance，不是 Project Runtime Contract 或 Structural Contract，也不改变 Standalone Project `AGENTS.md` context-routing contract。
+
+本指导适用于 Framework human-facing documentation、由 Framework 指导的 Standalone Project creation / migration / maintenance、Project `README.md`、Project Facts、后续 Stage human-facing documentation，以及 AI/Codex 最终面向用户的说明：
+
+1. Human-facing 内容默认以中文为主要解释语言，使普通用户无需依赖完整英文阅读能力也能理解当前流程、状态、职责、风险、推理依据与下一步；明确面向外部英文读者的内容可按其 Audience 使用英文。
+2. 必要英文技术术语、正式 Framework 术语与工程缩写可以保留。不常见术语首次出现时可采用“中文解释 + 英文正式术语”；普通技术术语含义明确后，不反复堆叠英文括注。
+3. 文件名、路径、schema key、identifier、命令、代码、器件型号、网络名、参数符号、protocol / interface abbreviation、fixed lifecycle field 及其值、validator-sensitive wording 保持正式原文，不进行机械翻译。
+4. 同一文档中的术语、模块名称和状态字段保持一致。
+5. 中文化不得改变 engineering requirement、Project fact、lifecycle state、Stage / Gate meaning、numerical constraint、Evidence meaning 或 authority relationship。
+6. Skill、Template 或 Guide 只引用本节作为执行提示，不复制整套规则，也不成为第二权威源。
+
+## 3. Standalone Project 四层上下文
 
 | Layer                       | 默认入口                                                         | 内容                                                             |
 | --------------------------- | ------------------------------------------------------------ | -------------------------------------------------------------- |
@@ -41,7 +54,7 @@ Standalone Project `AGENTS.md` 必须按顺序：
 
 Project 不默认读取 Framework `main`，不默认读取其他 Project，也不依赖 Framework 与 Project 位于同一父目录。
 
-## 3. Framework Repository 维护路由
+## 4. Framework Repository 维护路由
 
 仓库接手、架构、导航或 Framework 整体维护先读取：
 
@@ -67,7 +80,7 @@ Project 不默认读取 Framework `main`，不默认读取其他 Project，也�
 
 Repository Architecture Migration 已关闭。普通 Framework maintenance 与 Project adoption 不默认读取 Historical Master Plan、retired AI Runbook 或 Baseline；只有显式历史 architecture / provenance review 才按上表最小读取。Legacy Project 只在 Authority Cutover 或迁移核对确有必要时读取最小结构信息；不得把其器件、网络、规则值、板框、板厂参数或阶段结果变成 Framework 默认值。
 
-## 4. Bootstrap、Stage 1 与 Gate 1.5
+## 5. Bootstrap、Stage 1 与 Gate 1.5
 
 ### Bootstrap
 
@@ -93,7 +106,7 @@ Repository Architecture Migration 已关闭。普通 Framework maintenance 与 P
 
 Gate 1.5 不读取或产生后续阶段设计结果；Validator 结果不能替代对 Requirements Baseline 真实性的人工判断。
 
-## 5. 八阶段最小读取范围
+## 6. 八阶段最小读取范围
 
 | Stage / Task | 默认读取 | 按需读取 | 不应默认读取 |
 | --- | --- | --- | --- |
@@ -114,7 +127,7 @@ Stage 3 中只有当 exact component identity 是验证当前 electrical behavio
 
 执行 Stage transition 时，在构造 bounded transaction scope 前读取 Workflow 的 transition semantics 与 Structure Standard 的 Stage-enabled activation rules，只纳入 target-stage 合法 post-state 立即需要的 artifacts。不要因 transition 默认加载或执行 target Stage 的完整 engineering method；仅在实际 target-stage activity 同时属于当前授权任务时，才按 task intent 加载相应方法与 evidence。
 
-## 6. 条件触发与证据边界
+## 7. 条件触发与证据边界
 
 - 目标板厂官方能力：仅在制造基线、规则、裕量或下单核对时读取。
 - 关键器件官方资料：仅在当前参数、连接、封装、Layout 或安全判断需要时读取。
@@ -135,7 +148,7 @@ BOM 只在 MPN、value、footprint、rating 或 population 信息与当前问题
 
 无可靠 `.SchDoc` / `.PcbDoc` 解析能力时，只使用用户提供的 PDF、BOM、图片、报告、规则摘要和输出。图片不能证明网络、间距、线宽、孔径、规则命中、铺铜或 DRC 通过。无法确认的实现事项标记“待 EDA 核对”，不得据此关闭问题或制造放行。
 
-## 7. 会话管理与交接
+## 8. 会话管理与交接
 
 会话管理只解决“继续当前 Conversation，还是切换并如何把当前 working set 交给下一会话”，不改变四层 Project Context、Stage / Gate 或持久事实源。
 
@@ -153,7 +166,7 @@ Session Handoff 只保留下一轮可靠继续所需的最小 working set，通�
 
 Session Starter 是新会话的轻量入口，用于指出 Repository、branch、适用 Authority、工作原则、执行边界和当前任务；它不是新的 Framework / Project Contract，也不替代 Handoff。新会话必须重新读取目标 Repository 的当前 Authority / Current State，再核对 Handoff；若冲突，以当前 Authority / Current State 为准。
 
-## 8. 用户报错复核与受影响结论
+## 9. 用户报错复核与受影响结论
 
 用户明确质疑某个 AI/Codex 结论时：
 
@@ -168,7 +181,7 @@ Session Starter 是新会话的轻量入口，用于指出 Repository、branch�
 
 单次、局部错误在当前任务内解决。只有真实重复、高影响或系统性问题才值得进入 Framework maintenance 评估；不得因为一次错误自动增加 Runtime、Agent、Database、Vector Search、Dashboard、多 Agent、错误日志平台或新的复杂 Context Score。
 
-## 9. 完整 Workflow 读取条件
+## 10. 完整 Workflow 读取条件
 
 只在以下情况完整读取 `docs/08_Project_Workflow.md`：
 
