@@ -2,6 +2,31 @@
 
 本文件记录 Framework 方法、结构、Template、Skill、Checklist 与 Validator 的发布级变化。真实 Project 的硬件 revision 和项目 release 由各 Standalone Project Repository 自己维护。
 
+## v1.2.2
+
+### Changed
+
+- 强化 Stage 3 `Calculate → Record → Documentation Convergence` 闭环：文档精简可以删除重复表达，但不得删除支撑关键设计决策的最小可复现工程依据；decision-driving electrical choice 必须在 owning module record 或其明确引用的 supporting analysis 中保持 durable and traceable。
+- 明确 rationale preservation 是 information requirement，而不是固定标题或 schema；ordinary implementation detail 不被强制扩写，Manufacturer-recommended implementation 也不需要为了形式完整制造无工程价值的公式。
+- 允许确有必要的复杂分析外置到 supporting artifact，但不建立默认 Stage 3 artifact 或第二 selected-design authority；owning module record 仍保留 assumptions、selected result、decision conclusion、remaining uncertainty 与引用摘要。
+- 澄清 `Electrical design selected` 与后续 validation state 分离：可追溯 engineering basis 足以记录 selected decision，simulation、PCB implementation 或 hardware validation 可以仍然 pending。
+
+### Compatibility
+
+- Release classification: PATCH — compatible Stage 3 method clarification
+- RC required: NO — low-risk Skill clarification covered by canonical validation
+- Runtime Contract: UNCHANGED
+- Structural Contract: UNCHANGED
+- Project Structure Version: 1 — UNCHANGED
+- `FRAMEWORK.md` schema: UNCHANGED
+- Project `AGENTS.md` routing contract: UNCHANGED
+- Project `PROJECT_RULES.md` Runtime Rules contract: UNCHANGED
+- Required / Conditional / Stage-enabled model: UNCHANGED
+- Stage / Gate architecture: UNCHANGED
+- Project facts authority and repository authority model: UNCHANGED
+- Validator required structure: UNCHANGED
+- Existing Standalone Projects are not automatically rebound by this release; eligible Projects may adopt v1.2.2 through Compatible Framework Sync after project-specific impact validation.
+
 ## v1.2.1
 
 ### Changed

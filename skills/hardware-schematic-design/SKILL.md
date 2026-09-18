@@ -34,6 +34,7 @@
 - 适用时，Manufacturer-recommended implementation、prior field-used design 和 evidence-backed external design 可作为 design starting point 或 qualified reuse input。
 - Reuse 不会转移 qualification；采用前按当前 Project 实际相关项重新核对 voltage、current、logic behavior、load、startup / default state、fault behavior、protection、thermal、package、availability 与 Layout-sensitive constraints。
 - 关键参数仍以 Manufacturer official documentation 为技术权威。
+- 对 Manufacturer-recommended / typical implementation，若没有必要重新推导公式，可以用 official manufacturer recommendation、当前 Project 的 applicability check、selected implementation，以及 remaining uncertainty / validation boundary 形成充分 engineering basis；不得为了满足记录规则制造没有工程价值的公式。
 - 不要仅为追求原创性而重新设计本来合适的成熟实现；若当前 Project 明确要求 independent reimplementation，则该 Project requirement 优先于 Framework 的默认复用许可。
 
 ## 4. Workflow
@@ -49,8 +50,8 @@
 1. **Define**：明确 module responsibility、inputs / outputs、relevant requirements 与 cross-module interfaces。
 2. **Verify**：为全部 required components 定义当前电路所需的 electrical requirements；只用 Manufacturer official documentation 核对当前设计真正需要的 pin behavior、operating conditions、typical application、required peripherals、package 与 Layout 要求。复杂提取转交 datasheet-reading Skill；若这些验证依赖 exact identity，对相关部分调用 component-selection supporting method。
 3. **Design**：确定 pin connections、net naming、power / ground、enable / reset / mode、feedback / sense、protection、required support components 与 unused-pin handling。
-4. **Calculate**：在 schematic freeze 前，为决定关键电气行为的外围值记录 datasheet basis / equation、calculated or selected value、tolerance / assumption、expected behavior 与 remaining uncertainty。适用对象包括 feedback divider、current-limit / charge-current resistor、timing capacitor、inductor、capacitor、filter、NTC 与 gain network。
-5. **Record**：保留可检索的 connection facts、parameter decisions、重要 assumptions、Layout-sensitive notes、open issues 与 capture status；不复制无关 Project Facts，也不把 `.SchDoc` 重写成一整份长期文本副本。
+4. **Calculate**：在 schematic freeze 前，为决定关键电气行为的外围值记录可同时支持当前设计和后续 durable record 的最小可复现 engineering basis，包括适用的 datasheet basis / equation、calculated or selected value、tolerance / assumption、expected behavior 与 remaining uncertainty；不要求保存完整推导或逐步算术。适用对象包括 feedback divider、current-limit / charge-current resistor、timing capacitor、inductor、capacitor、filter、NTC 与 gain network。凡 topology / value / parameter choice 会实质影响 requirement compliance、protection / fault limit、gain / scaling、bandwidth / filtering、accuracy、ADC settling、driver stability、voltage / current margin、reference behavior、timing、thermal、power headroom、startup / shutdown 或 fault behavior，且未来改变时通常需要重新查 datasheet、计算、判断 margin 或确认 applicability，通常属于 decision-driving engineering rationale；ordinary implementation detail 不因此被强制扩写。
+5. **Record**：保留可检索的 connection facts、parameter decisions、重要 assumptions、Layout-sensitive notes、open issues 与 capture status；不复制无关 Project Facts，也不把 `.SchDoc` 重写成一整份长期文本副本。对于 decision-driving electrical choice，`Calculate` 形成的关键依据不得在 Record / documentation convergence 后只剩 final value、final connection 或 final topology。Owning module record 应保留足以重新检查该决策的最小信息：engineering / manufacturer basis、relevant assumptions、适用的 equation 或 decision method、calculated / selected result、expected behavior / margin，以及 remaining uncertainty / validation boundary。这些是 information requirements，不是 mandatory section headings 或 fixed schema；简单设计可以用一两句话满足。
 
 Support component 可随模块设计按实际影响确定，不按器件类别固定 Stage。只有新辅助器件影响 architecture、safety、critical electrical behavior、thermal 或 package / Layout boundary，或 exact identity 是验证这些假设的必要条件时，才对相关部分调用 component-selection Skill；普通低风险实际料无需因此重新执行完整 Stage 2 候选流程。
 
@@ -76,6 +77,10 @@ R22 100kΩ: EN_UVLO ↔ GND
 
 Diagram 用于表达 topology / ambiguity；structured connection record 用于保存长期可检索事实；pin table 只在 completeness 需要时使用。不得机械地把同一连接同时复制到 diagram、pin table、net table、component table 与 prose。Project documentation 只保存真正具有长期追溯价值的 design intent、connections、key values、cross-module interface、open issue 与 evidence boundary。
 
+Documentation concision 可以删除重复表达，避免复制 `.SchDoc`、datasheet 或相同的 diagram / table / prose，但不得删除 decision-driving engineering rationale。尤其不得把有 engineering basis 的 selected value 压缩成只有 final value、无法追溯选择原因的记录。
+
+大型 error budget、noise analysis、stability simulation、thermal model、timing budget、parameter sweep、spreadsheet 或 simulation result 等复杂分析，可在确有必要时放入 supporting analysis artifact；这不是默认 Stage 3 artifact，也不得成为第二个 selected-design authority。Owning module record 仍须保留 assumptions、selected result、decision conclusion、remaining uncertainty 与 supporting analysis reference 的最小摘要：**Complex analysis may be externalized; the design decision must remain recoverable from the owning module record.**
+
 ### Cross-Module Integration
 
 所有主要模块完成设计与 capture 后，在 Stage 3 执行一次轻量 Cross-Module Integration Check，确认模块能够组成完整且自洽的设计，至少覆盖：
@@ -96,7 +101,7 @@ Diagram 用于表达 topology / ambiguity；structured connection record 用于�
 - 主要模块设计完成；
 - 至少一个 owning module design record 已承接当前 detailed design work，additional records 的拆分与复杂度和追溯需求相称；
 - 全部 required components 的 electrical requirements 已定义；尚未确定的 exact procurement identity 不阻断当前 electrical、safety、thermal 或 package / Layout-sensitive validation；
-- 关键连接具有 Manufacturer documentation、计算或显式 engineering basis；
+- 关键连接和 decision-driving electrical choices 具有 durable and traceable 的 Manufacturer documentation、计算或显式 engineering basis，可从 owning module record 或其明确引用的 supporting analysis 中恢复；
 - 必要关键外围参数已确定，或未决项边界清晰且不阻止审查；
 - startup / default / fault behavior 已分析；
 - Cross-Module Integration Check 已完成；
@@ -105,6 +110,8 @@ Diagram 用于表达 topology / ambiguity；structured connection record 用于�
 - 已有当前版本 BOM。
 
 `READY FOR SCHEMATIC REVIEW` 不等于 `ERC PASS`、Stage 4 PASS 或 PCB Layout approved。
+
+`Electrical design selected` 表示相应 electrical decision 已有足够且可追溯的 engineering basis；simulation、PCB implementation 或 hardware validation 可以仍然 pending。不得为了记录 selected design 而假称这些后续验证已经完成，也不为未收敛项新增正式 lifecycle state；继续使用现有自然语言、open issues 与 evidence / validation boundary 表达。
 
 ## 5. Evidence Boundary
 
