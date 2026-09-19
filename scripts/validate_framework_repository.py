@@ -144,6 +144,84 @@ RUNTIME_RULE_SEMANTIC_GUARDS = {
     ),
 }
 
+FIRMWARE_SKILL_SEMANTIC_GUARDS = (
+    (
+        "task-intent activation",
+        (r"Task Intent", r"按需启用"),
+    ),
+    (
+        "Stage 1 planning boundary",
+        (r"Stage 1", r"Firmware", r"(?:不要求|不强制).*Firmware (?:工程|目录)"),
+    ),
+    (
+        "continuous-development prerequisites",
+        (r"持续性 Firmware 开发", r"技术路线", r"源码职责", r"工具链", r"构建入口", r"局部约束"),
+    ),
+    (
+        "optional local-rules boundary",
+        (r"firmware/AGENTS\.md", r"(?:按需|可选|需要时)", r"(?:不.*(?:必须创建|Required)|可不创建)"),
+    ),
+    (
+        "prototype evidence boundary",
+        (r"Stage 2.?3", r"prototype", r"编译", r"烧录", r"运行", r"测量"),
+    ),
+    (
+        "formal Stage 8 responsibility",
+        (r"Stage 8", r"Bring-up", r"Hardware.?Firmware", r"(?:实际验收|acceptance)", r"(?:不得|不能|不应).*Stage 8.*完成"),
+    ),
+    (
+        "layering without a mandatory tree",
+        (r"Core", r"BSP", r"App", r"(?:SYSTEM|Platform|Middleware)", r"(?:不.*强制.*目录树|目录树.*不.*强制)"),
+    ),
+    (
+        "ISR ownership",
+        (r"ISR", r"hardware ownership", r"latency", r"safety requirement", r"(?:不要机械要求|不强制).*BSP"),
+    ),
+    (
+        "bounded-wait discipline",
+        (r"有界等待", r"工程依据", r"最大时间", r"timeout", r"abort path"),
+    ),
+    (
+        "validation evidence separation",
+        (r"Build", r"Flash", r"Runtime", r"Hardware Validation", r"(?:不能替代|不可替代|不等于)"),
+    ),
+    (
+        "hardware Stage and Gate boundary",
+        (
+            r"Firmware 工作",
+            r"Project 当前硬件 Stage",
+            r"(?:不改变|不自动改变|不自动推进|不自动回退)",
+            r"Firmware Gate",
+            r"(?:不建立|不得建立|不新增)",
+        ),
+    ),
+)
+
+OPTIONAL_FIRMWARE_TEMPLATE_SEMANTIC_GUARDS = (
+    (
+        "root routing and bound snapshot",
+        (r"Project 根 `AGENTS\.md`", r"immutable Framework snapshot", r"Framework `main`"),
+    ),
+    (
+        "optional local directory structure",
+        (r"Local Directory Responsibilities", r"不要求创建全部目录"),
+    ),
+    (
+        "validation evidence separation",
+        (r"Build", r"Flash", r"Runtime", r"Hardware Validation", r"不等于"),
+    ),
+)
+
+PROJECT_SPECIFIC_FIRMWARE_VALUE = re.compile(
+    r"\b(?:STM32[A-Z0-9-]+|ESP32[A-Z0-9-]*|(?:TIM|SPI|I2C|USART|UART|DMA|CCR)\d[A-Z0-9_-]*)\b"
+    r"|\b\d+(?:\.\d+)?[-\s]*(?:samples?|bytes?|us|ms|Hz|kHz|MHz)\b",
+    flags=re.IGNORECASE,
+)
+NON_DEFAULT_EXAMPLE_QUALIFIER = re.compile(
+    r"(?:例如|示例|反例|不得|不要|禁止|不作为.*默认|非默认|example|illustrative|not.*default|must not|do not|prohibited)",
+    flags=re.IGNORECASE,
+)
+
 
 class Validator:
     def __init__(self, mode: str) -> None:
@@ -158,6 +236,34 @@ class Validator:
 
     def read(self, relative_path: str) -> str:
         return (ROOT / relative_path).read_text(encoding="utf-8")
+
+
+def check_semantic_guards(
+    validator: Validator,
+    path: str,
+    text: str,
+    guards: tuple[tuple[str, tuple[str, ...]], ...],
+) -> None:
+    for description, patterns in guards:
+        validator.check(
+            all(re.search(pattern, text, flags=re.IGNORECASE) is not None for pattern in patterns),
+            path,
+            f"semantic coverage missing: {description}",
+        )
+
+
+def unqualified_project_specific_firmware_values(text: str) -> list[str]:
+    findings: list[str] = []
+    previous_nonempty = ""
+    for line_number, line in enumerate(text.splitlines(), start=1):
+        if not line.strip():
+            continue
+        match = PROJECT_SPECIFIC_FIRMWARE_VALUE.search(line)
+        context = f"{previous_nonempty}\n{line}" if previous_nonempty.rstrip().endswith((":", "：")) else line
+        if match is not None and NON_DEFAULT_EXAMPLE_QUALIFIER.search(context) is None:
+            findings.append(f"line {line_number}: {match.group(0)}")
+        previous_nonempty = line
+    return findings
 
 
 def normalize_link_target(raw_target: str) -> str:
@@ -293,39 +399,58 @@ def check_firmware_capability(validator: Validator) -> None:
     context = validator.read("docs/AI_Context_Guide.md")
     template_guide = validator.read("docs/Project_Template_Guide.md")
     readme = validator.read("README.md")
-    project_validator = validator.read("scripts/validate_project_repository.py")
 
-    for phrase in (
-        "Task Intent",
-        "Stage 1 只确认项目是否需要 Firmware",
-        "Framework 统一职责原则，不统一强制目录树",
-        "不要机械要求全部 ISR 位于 BSP",
-        "必要的有界等待必须有工程依据",
-        "Build PASS 不能替代 Flash、Runtime、Logic Analyzer 或 Hardware Validation",
-        "不建立新的 Firmware Gate",
-    ):
-        validator.check(phrase in skill, skill_path, f"Firmware method coverage missing: {phrase}")
-
-    for phrase in (
-        "Project 根 `AGENTS.md` 仍是启动入口",
-        "绑定的 immutable Framework snapshot",
-        "不要读取或依赖 Framework `main`",
-        "不要求创建全部目录",
-        "Build PASS 不等于 Flash、Runtime 或 Hardware Validation",
-    ):
-        validator.check(phrase in optional_template, template_path, f"Optional Firmware template boundary missing: {phrase}")
+    check_semantic_guards(validator, skill_path, skill, FIRMWARE_SKILL_SEMANTIC_GUARDS)
+    check_semantic_guards(
+        validator,
+        template_path,
+        optional_template,
+        OPTIONAL_FIRMWARE_TEMPLATE_SEMANTIC_GUARDS,
+    )
 
     for path, text in ((skill_path, skill), (template_path, optional_template)):
         validator.check(ABSOLUTE_LOCAL_PATH.search(text) is None, path, "Firmware capability contains a local absolute path")
-        for forbidden in ("STM32F103", "TIM1", "SPI1", "DMA1", "512-sample", "CCR1", "CCR2", "CCR3", "CCR4"):
-            validator.check(forbidden not in text, path, f"Firmware capability contains project-specific default: {forbidden}")
+        specific_defaults = unqualified_project_specific_firmware_values(text)
+        validator.check(
+            not specific_defaults,
+            path,
+            "Firmware capability contains an unqualified project-specific default: " + ", ".join(specific_defaults),
+        )
 
     validator.check("skills/hardware-firmware-development/SKILL.md" in agents, "AGENTS.md", "Firmware Skill routing missing")
     validator.check("hardware-firmware-development" in context, "docs/AI_Context_Guide.md", "Firmware task-intent routing missing")
     validator.check("templates/optional_firmware/AGENTS.md" in template_guide, "docs/Project_Template_Guide.md", "Optional Firmware template guidance missing")
     validator.check("templates/optional_firmware/AGENTS.md" in readme, "README.md", "Optional Firmware template navigation missing")
     validator.check("firmware/AGENTS.md" not in REQUIRED_TEMPLATE_FILES, "templates/hardware_project_template", "Optional Firmware local rules became a Required Template file")
-    validator.check('"firmware/AGENTS.md"' not in project_validator, "scripts/validate_project_repository.py", "Project Validator requires the optional Firmware local rules")
+
+    isr_guards = tuple(guard for guard in FIRMWARE_SKILL_SEMANTIC_GUARDS if guard[0] == "ISR ownership")
+    rewrite_validator = Validator(validator.mode)
+    check_semantic_guards(
+        rewrite_validator,
+        skill_path,
+        "ISR 归属应由 hardware ownership、latency 和 safety requirement 决定，不强制所有中断处理函数位于 BSP。",
+        isr_guards,
+    )
+    validator.check(
+        len(isr_guards) == 1 and not rewrite_validator.errors,
+        skill_path,
+        "Equivalent ISR wording rewrite must retain Firmware semantic coverage",
+    )
+    validator.check(
+        not unqualified_project_specific_firmware_values("反例（不作为 Framework 默认）：\nTarget MCU: STM32F103"),
+        skill_path,
+        "Explicitly qualified negative examples must not be treated as project-specific defaults",
+    )
+    validator.check(
+        len(
+            unqualified_project_specific_firmware_values(
+                "Target MCU: STM32F103\nPeripheral mapping: SPI1\nBuffer size: 512 samples\nTiming: 10 us"
+            )
+        )
+        == 4,
+        skill_path,
+        "Unqualified MCU, peripheral, buffer, and timing defaults must remain detectable",
+    )
 
 
 def check_template_contract(validator: Validator) -> None:
@@ -546,6 +671,25 @@ def check_project_smoke_tests(validator: Validator) -> None:
         normal_result = run_fixture_validator(clean_project)
         normal_details = (normal_result.stdout + normal_result.stderr).strip()
         validator.check(normal_result.returncode == 0, "Clean Bootstrap Smoke", f"Initialized normal validation failed: {normal_details}")
+
+        optional_firmware_project = temporary_path / "optional-firmware"
+        shutil.copytree(clean_project, optional_firmware_project)
+        firmware_rules = optional_firmware_project / "firmware/AGENTS.md"
+        firmware_rules.parent.mkdir()
+        shutil.copy2(ROOT / "templates/optional_firmware/AGENTS.md", firmware_rules)
+        optional_firmware_result = run_fixture_validator(optional_firmware_project)
+        optional_firmware_details = (optional_firmware_result.stdout + optional_firmware_result.stderr).strip()
+        validator.check(
+            optional_firmware_result.returncode == 0,
+            "Optional Firmware Smoke",
+            f"Valid Project with adapted optional firmware/AGENTS.md failed: {optional_firmware_details}",
+        )
+        validator.check(
+            "firmware/AGENTS.md" not in REQUIRED_TEMPLATE_FILES
+            and all(not path.startswith("firmware/") for path in SMOKE_STAGE_PATHS),
+            "Optional Firmware Smoke",
+            "Optional Firmware changed Required or Stage-enabled classification",
+        )
 
         valid_bindings = (
             "development-v0.9",

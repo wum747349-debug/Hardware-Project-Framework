@@ -7,10 +7,12 @@
 Activation timing：
 
 - Stage 1 只确认项目是否需要 Firmware、Firmware functional boundary、hardware interface requirements 与相关 acceptance criteria，不要求建立 Firmware 工程或目录；
-- 实际开始持续性 Firmware 开发前，先确认或建立 Project `firmware/AGENTS.md` 等局部规则；
+- 实际开始持续性 Firmware 开发前，必须确认 Project 技术路线、源码职责、工具链、可复现构建入口与适用的局部约束；已有适用局部规则时优先复用，不建立竞争权威；
+- `firmware/AGENTS.md` 是按需的局部规则载体：只有工程复杂度、目录隔离或协作需要时才建立。确认上述工程约束不等于必须创建该文件，也不得仅因 Project 包含 Firmware 就把它变成所有 Project 的 Required 内容；局部规则不得把 Project-specific 工具、MCU、目录、协议或参数提升为 Framework 默认要求；
 - 实际工程初始化由编译、可行性原型或开发需求触发，不由固定 Stage 强制触发；
-- Stage 2–3 可在 MCU 资源、外设配置、时序或数据链路无法仅靠静态分析可靠关闭时建立最小 prototype；Stage 4–7 按实际任务继续 Firmware 工作；Stage 8 执行实际烧录、运行、接口联调、功能与性能测试；
-- Firmware 工作不改变 Project 当前硬件 Stage；Stage transition 仍只遵循 `docs/08_Project_Workflow.md`。
+- Stage 2–3 可在 MCU 资源、外设配置、时序或数据链路无法仅靠静态分析可靠关闭时建立最小 prototype，并按硬件方案所需 evidence 执行必要的编译、烧录、运行与测量；Stage 4–7 按实际任务继续 Firmware 工作；
+- Stage 8 仍负责相应的正式整板 Bring-up、Hardware–Firmware 联调及实际验收；早期 prototype 只证明其实际覆盖范围，不得据此提前宣告 Stage 8 完成；
+- Firmware 工作不改变 Project 当前硬件 Stage，也不建立新的 Firmware Gate；Stage transition 仍只遵循 `docs/08_Project_Workflow.md`。
 
 ## 2. Authority 与 Minimum Context
 
