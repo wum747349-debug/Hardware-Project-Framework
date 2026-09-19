@@ -37,6 +37,7 @@
 
 - 第一轮只关注建立 architecture / module direction 所必需的 component identity，不生成完整最终 BOM。
 - 器件何时确定取决于 architecture impact、safety / risk impact、electrical behavior dependency 与 thermal / package / Layout impact，不按器件类别硬编码 Stage；尚不影响当前工程判断的 exact procurement identity 可以后置。
+- 对 MCU / SoC、外置 ADC、通信接口或其他依赖固件配置才能成立的关键器件，选型不能只比较宣传参数或外设数量；应按当前硬件决策风险完成最小固件可实现性筛查，核对 GPIO / alternate function、clock / peripheral mode、Timer / trigger、DMA request / channel、interrupt、数据率、buffer / memory 与输出链路是否存在已知冲突。筛查深度与项目风险相称，不要求在 Stage 2 完成完整固件；若关键可行性只能通过寄存器级或最小 firmware prototype 消除，应保留为明确验证项，未验证前不得把理论吞吐或器件能力写成已实现事实。
 - 对需要候选决策与替代风险管理的选型任务，默认工作流是 `Requirements → JLCPCB / LCSC-first candidate discovery → Manufacturer datasheet qualification → Primary + Alternate decision → purchase-time availability recheck`。Stage 3/4 supporting use 应与当前影响和风险成比例；普通 actual-part、supplier-part、library 或 footprint convergence 不自动要求完整多候选分析。
 - `JLCPCB/LCSC-first` 是现实采购候选池的优先级，不是 `JLCPCB/LCSC-only`。只有满足工程 Hard Requirements 的器件才是有效候选；不得为满足采购优先级而选择明显技术更差或不满足要求的器件。
 - 当前执行环境具备公开 Web/Search 能力时，AI/Codex 可以且应优先搜索公开的 JLCPCB、LCSC 或 JLCPCB Parts 信息进行候选发现；不声明所有环境都具备公网或商城访问能力，也不默认进行受限访问、爬取或批量下载。
@@ -182,9 +183,11 @@ Only generate these when they materially improve the decision, risk handling, or
 
 - 工作电压
 - Flash / RAM
-- GPIO 数量
-- ADC 通道和分辨率
-- UART / I2C / SPI 数量
+- GPIO 数量、alternate function 与 pin-remap 约束
+- ADC 通道和分辨率，以及适用的 trigger / DMA 关系
+- UART / I2C / SPI / USB 数量、工作模式、clock source 与 pin allocation
+- Timer channel、trigger / synchronization、DMA request / fixed-channel mapping 与 interrupt resource 是否可同时成立
+- 目标数据率下的采集、搬运、buffer、memory 与输出链路预算
 - SWD 调试
 - 时钟、复位、BOOT、去耦要求
 - 封装和焊接难度

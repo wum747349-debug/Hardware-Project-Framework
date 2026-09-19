@@ -158,13 +158,13 @@ scripts/validate_project_repository.py
 
 ### 7.2 Conditional — 项目实际需要时存在
 
-- `firmware/`：项目确有固件时；
+- `firmware/`：项目确有固件时；由 Product Project 维护产品固件源码、构建配置和项目局部规则，可按实际复杂度建立 `firmware/AGENTS.md` 等目录级入口；
 - `docs/user/`：需要用户文档时；
 - 专项模块目录、合规资料、测试图片目录；
 - `hardware/outputs/*`、`hardware/images/*` 和 `references/datasheets/*`：实际产生相应内容时；
 - 其他由项目范围触发且职责明确的目录。
 
-`firmware/` 不再是所有项目 Required。无固件的电源板等项目必须能通过 Project Validator。
+`firmware/` 不再是所有项目 Required。无固件的电源板等项目必须能通过 Project Validator。Framework 只定义硬件生命周期所需的通用 Hardware–Firmware collaboration method，不承接产品固件实现或局部编码规则；采用独立 Firmware Framework 不是 Project 启用固件的前置条件。其他 Product Project 的成熟规则可以作为 qualified reference input，但不会自动成为当前 Project 或 Framework 的权威规则。
 
 ### 7.3 Stage-enabled — 在适用 Stage entry 或 Stage activity 时启用
 

@@ -25,6 +25,7 @@
 - 只核对当前连接所需的官方资料；关键连接必须有 Manufacturer documentation、计算或显式 engineering basis。
 - 普通 support components 可在模块设计中按需确定，不因普通外围自动重新进入完整 Stage 2。
 - Stage 3 定义全部 required components 的 electrical requirements。只有 exact identity 对当前 electrical、safety、thermal 或 package / Layout-sensitive validation 必不可少时才必须完成相应 qualification；否则可以保留充分 specification，而不虚构或提前锁定 procurement identity。
+- MCU、ADC、通信接口或其他由固件配置参与实现的硬件决策，在 schematic freeze 前应按风险完成可操作的 firmware feasibility check；核对范围只覆盖当前硬件决策所依赖的资源、时序、数据链路与状态，不要求所有 Project 先完成完整 firmware。
 - 设计时同时明确 startup、shutdown、default 与 fault behavior，并提取 schematic-relevant Layout inputs。
 - Module-specific connections、support values 与 calculations 默认记录在当前 module design context，不自动反向同步 Stage 2 selection artifacts 或 board-level documents；selection、qualification、architecture 或 requirement 实质变化时，更新对应 owner 或返回相关 Stage reevaluation。
 
@@ -54,6 +55,20 @@
 5. **Record**：保留可检索的 connection facts、parameter decisions、重要 assumptions、Layout-sensitive notes、open issues 与 capture status；不复制无关 Project Facts，也不把 `.SchDoc` 重写成一整份长期文本副本。对于 decision-driving electrical choice，`Calculate` 形成的关键依据不得在 Record / documentation convergence 后只剩 final value、final connection 或 final topology。Owning module record 应保留足以重新检查该决策的最小信息：engineering / manufacturer basis、relevant assumptions、适用的 equation 或 decision method、calculated / selected result、expected behavior / margin，以及 remaining uncertainty / validation boundary。这些是 information requirements，不是 mandatory section headings 或 fixed schema；简单设计可以用一两句话满足。
 
 Support component 可随模块设计按实际影响确定，不按器件类别固定 Stage。只有新辅助器件影响 architecture、safety、critical electrical behavior、thermal 或 package / Layout boundary，或 exact identity 是验证这些假设的必要条件时，才对相关部分调用 component-selection Skill；普通低风险实际料无需因此重新执行完整 Stage 2 候选流程。
+
+### Hardware–Firmware Feasibility and Change Impact
+
+对 MCU、ADC、USB / Ethernet / fieldbus、可编程逻辑、复杂时序或持续数据链路等实际依赖固件的模块，在冻结相关硬件连接前，按当前风险核对：
+
+- GPIO、alternate function、pin-remap、debug / boot 与保留引脚是否冲突；
+- clock tree、peripheral mode、Timer channel、trigger / synchronization 是否能同时满足；
+- DMA request / channel、bus access、interrupt priority、latency 与 shared-resource conflict；
+- acquisition → transfer → buffer → processing → output 全链路的数据率，以及 RAM / Flash / endpoint / descriptor 等适用预算；
+- startup、reset、attach / detach、fault recovery 与 hardware default state 是否允许固件安全接管。
+
+检查深度由 current design risk 决定。静态 resource mapping 或 calculation 足以排除风险时不要求写完整 firmware；当 fixed mapping、first-cycle behavior、latency、sustained throughput 或 recovery 无法由资料和分析可靠关闭时，允许用最小 firmware prototype、linker map、logic-analyzer capture 或受控 host test 消除关键硬件风险。Prototype 只证明其实际覆盖的配置与条件；仅有器件宣传参数、理论总线带宽、编译成功或单次寄存器写入，不能单独证明完整方案可实现。
+
+Hardware–firmware interface 发生双向变化时必须做影响检查：硬件改变 pin / peripheral / clock / sample timing / electrical level / protocol / power-up behavior 时，检查对应 firmware configuration、driver、buffer、state machine 与 test impact；firmware prototype 发现资源冲突、时序不足或 recovery 不成立时，反馈硬件设计并更新 owning Project record。优先更新现有 module design / interface owner，不创建与其竞争权威的全局 pin table、protocol definition 或第二份 selected-design record；具体 firmware source 与局部编码规则仍由 Product Project 管理。
 
 ### User EDA Capture
 
@@ -91,6 +106,7 @@ Documentation concision 可以删除重复表达，避免复制 `.SchDoc`、data
 4. Startup / Shutdown / Fault State
 5. Cross-sheet Net Consistency
 6. Missing / Conflicting Responsibility
+7. Applicable Hardware–Firmware Feasibility / Interface Impact
 
 该检查不重复 Stage 4 的完整 schematic checklist、完整 BOM review、全部 pin audit、全部 protection review 或 PCB-layout-entry approval。
 
@@ -104,6 +120,7 @@ Documentation concision 可以删除重复表达，避免复制 `.SchDoc`、data
 - 关键连接和 decision-driving electrical choices 具有 durable and traceable 的 Manufacturer documentation、计算或显式 engineering basis，可从 owning module record 或其明确引用的 supporting analysis 中恢复；
 - 必要关键外围参数已确定，或未决项边界清晰且不阻止审查；
 - startup / default / fault behavior 已分析；
+- 适用的 Hardware–Firmware feasibility、resource conflict 与 interface impact 已检查；无法静态关闭的关键风险已有最小 prototype / test 计划和明确 evidence boundary，不以理论值冒充验证；
 - Cross-Module Integration Check 已完成；
 - 用户已完成当前版本 EDA capture；
 - 已有与当前 `.SchDoc` 对应的完整 schematic PDF；
@@ -130,7 +147,7 @@ Documentation concision 可以删除重复表达，避免复制 `.SchDoc`、data
 1. Module Plan：模块责任、接口、边界和设计顺序
 2. Module Design Record：Define / Verify / Design / Calculate / Record 的关键结果
 3. EDA Capture Guidance：默认依次给出 Schematic-like Connection Diagram、Pin-by-Pin Final Wiring、Component / Parameter Values，以及必要的 engineering notes / open issues；另列 net naming、capture sequence 和待用户确认项
-4. Cross-Module Integration：六类检查的结论、冲突和 open issues
+4. Cross-Module Integration：七类检查的结论、冲突和 open issues
 5. Stage 3 Readiness：`READY FOR SCHEMATIC REVIEW` 或明确列出尚未满足的条件
 
 ## 8. Prohibited Actions

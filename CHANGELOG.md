@@ -2,6 +2,31 @@
 
 本文件记录 Framework 方法、结构、Template、Skill、Checklist 与 Validator 的发布级变化。真实 Project 的硬件 revision 和项目 release 由各 Standalone Project Repository 自己维护。
 
+## v1.3.0
+
+### Changed
+
+- 在 Stage 2 关键器件选型中增加 risk-proportionate firmware feasibility screening：对依赖固件配置的 MCU / ADC / interface 检查 pin multiplexing、clock / peripheral mode、Timer / trigger、DMA / interrupt、数据率和 memory / buffer 资源，避免仅凭宣传参数或外设数量确认方案。
+- 在 Stage 3 schematic design 中增加 Hardware–Firmware feasibility 与双向 interface change impact 方法；允许使用最小 firmware prototype 消除 fixed mapping、timing、latency、throughput 或 recovery 风险，同时禁止把理论带宽、编译或局部 prototype 提升为完整实现证据。
+- 在 Bring-up / Test Checklist 中明确区分 static review、firmware compile、firmware flash、board functional verification 与完整 Hardware–Firmware system / performance validation，并要求关键结果关联实际 Hardware Revision、Firmware identity 与测试条件。
+- 澄清 `firmware/` 继续是按需启用的 Conditional 内容；Product Project 维护产品固件源码、构建配置与局部规则，Framework 只定义硬件生命周期需要的通用协同方法，独立 Firmware Framework 不是前置条件，其他项目规则仅可作为 qualified reference input。
+
+### Compatibility
+
+- Release classification: MINOR — backward-compatible Hardware–Firmware collaboration capability improvement
+- RC required: NO — bounded Skill / Checklist / responsibility clarification covered by canonical validation
+- Runtime Contract: UNCHANGED
+- Structural Contract: UNCHANGED
+- Project Structure Version: 1 — UNCHANGED
+- `FRAMEWORK.md` schema: UNCHANGED
+- Project `AGENTS.md` routing contract: UNCHANGED
+- Project `PROJECT_RULES.md` Runtime Rules contract: UNCHANGED
+- Required / Conditional / Stage-enabled model: UNCHANGED
+- Stage / Gate architecture: UNCHANGED
+- Project facts authority and repository authority model: UNCHANGED
+- Validator required structure: UNCHANGED
+- Existing Standalone Projects are not automatically rebound by this release; eligible Projects may adopt v1.3.0 through Compatible Framework Sync after project-specific impact validation.
+
 ## v1.2.2
 
 ### Changed
