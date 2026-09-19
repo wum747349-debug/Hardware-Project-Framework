@@ -32,12 +32,15 @@ REQUIRED_FRAMEWORK_FILES = (
     "docs/AI_Context_Guide.md",
     "docs/Project_Template_Guide.md",
     "docs/Project_Initialization_Guide.md",
+    "docs/Framework_Maintenance_and_Release_Guide.md",
     "docs/Framework_Migration_Guide.md",
     "skills/hardware-project-initialization/SKILL.md",
+    "skills/hardware-firmware-development/SKILL.md",
     "checklists/project_initialization_checklist.md",
     "scripts/validate_project_repository.py",
     "scripts/validate_framework_repository.py",
     "templates/hardware_project_template/scripts/validate_project_repository.py",
+    "templates/optional_firmware/AGENTS.md",
     ".github/workflows/repository-framework-check.yml",
 )
 
@@ -279,6 +282,50 @@ def check_contract_authorities(validator: Validator) -> None:
         ("Framework v0.9", "README.md", readme),
     ):
         validator.check(phrase in text, path, f"Framework v0.9 alignment missing: {phrase}")
+
+
+def check_firmware_capability(validator: Validator) -> None:
+    skill_path = "skills/hardware-firmware-development/SKILL.md"
+    template_path = "templates/optional_firmware/AGENTS.md"
+    skill = validator.read(skill_path)
+    optional_template = validator.read(template_path)
+    agents = validator.read("AGENTS.md")
+    context = validator.read("docs/AI_Context_Guide.md")
+    template_guide = validator.read("docs/Project_Template_Guide.md")
+    readme = validator.read("README.md")
+    project_validator = validator.read("scripts/validate_project_repository.py")
+
+    for phrase in (
+        "Task Intent",
+        "Stage 1 只确认项目是否需要 Firmware",
+        "Framework 统一职责原则，不统一强制目录树",
+        "不要机械要求全部 ISR 位于 BSP",
+        "必要的有界等待必须有工程依据",
+        "Build PASS 不能替代 Flash、Runtime、Logic Analyzer 或 Hardware Validation",
+        "不建立新的 Firmware Gate",
+    ):
+        validator.check(phrase in skill, skill_path, f"Firmware method coverage missing: {phrase}")
+
+    for phrase in (
+        "Project 根 `AGENTS.md` 仍是启动入口",
+        "绑定的 immutable Framework snapshot",
+        "不要读取或依赖 Framework `main`",
+        "不要求创建全部目录",
+        "Build PASS 不等于 Flash、Runtime 或 Hardware Validation",
+    ):
+        validator.check(phrase in optional_template, template_path, f"Optional Firmware template boundary missing: {phrase}")
+
+    for path, text in ((skill_path, skill), (template_path, optional_template)):
+        validator.check(ABSOLUTE_LOCAL_PATH.search(text) is None, path, "Firmware capability contains a local absolute path")
+        for forbidden in ("STM32F103", "TIM1", "SPI1", "DMA1", "512-sample", "CCR1", "CCR2", "CCR3", "CCR4"):
+            validator.check(forbidden not in text, path, f"Firmware capability contains project-specific default: {forbidden}")
+
+    validator.check("skills/hardware-firmware-development/SKILL.md" in agents, "AGENTS.md", "Firmware Skill routing missing")
+    validator.check("hardware-firmware-development" in context, "docs/AI_Context_Guide.md", "Firmware task-intent routing missing")
+    validator.check("templates/optional_firmware/AGENTS.md" in template_guide, "docs/Project_Template_Guide.md", "Optional Firmware template guidance missing")
+    validator.check("templates/optional_firmware/AGENTS.md" in readme, "README.md", "Optional Firmware template navigation missing")
+    validator.check("firmware/AGENTS.md" not in REQUIRED_TEMPLATE_FILES, "templates/hardware_project_template", "Optional Firmware local rules became a Required Template file")
+    validator.check('"firmware/AGENTS.md"' not in project_validator, "scripts/validate_project_repository.py", "Project Validator requires the optional Firmware local rules")
 
 
 def check_template_contract(validator: Validator) -> None:
@@ -777,6 +824,7 @@ def validate(mode: str) -> Validator:
     check_required_files(validator)
     check_markdown_links(validator)
     check_contract_authorities(validator)
+    check_firmware_capability(validator)
     check_template_contract(validator)
     check_project_runtime_rule_alignment(validator)
     check_validator_snapshot(validator)

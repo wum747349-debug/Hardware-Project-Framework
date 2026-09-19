@@ -52,6 +52,8 @@ Project Bootstrap 位于八阶段之前，不是 Stage 0 或 Stage 1。Stage 1 �
 - [Standalone Project Template](templates/hardware_project_template/README.md)
 - [Synthetic Reference Project](examples/reference_project_v1/README.md)
 - [Project Initialization Skill](skills/hardware-project-initialization/SKILL.md)
+- [MCU Firmware Development Skill](skills/hardware-firmware-development/SKILL.md)
+- [Optional Firmware Local Rules Template](templates/optional_firmware/AGENTS.md)
 - [Gate 1.5 Checklist](checklists/project_initialization_checklist.md)
 - [Bring-up 与硬件测试 Checklist](checklists/bringup_test_checklist.md)
 

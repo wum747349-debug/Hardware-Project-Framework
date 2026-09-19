@@ -58,6 +58,7 @@ Project `AGENTS.md` 不复制 Framework 的完整方法。完整 schema、四层
 | datasheet 阅读 / 资料提取                                               | `skills/hardware-datasheet-reading/SKILL.md`      |
 | 关键器件候选 / 外围器件反推 / BOM 草稿                                          | `skills/hardware-component-selection/SKILL.md`    |
 | 原理图模块设计 / 电路连接 / 参数计算 / Stage 3 schematic planning                  | `skills/hardware-schematic-design/SKILL.md`       |
+| MCU Firmware 可行性原型 / 工程初始化 / 开发 / Build / Runtime / Hardware 联调 | `skills/hardware-firmware-development/SKILL.md` |
 | Scoped schematic review / risk review / Stage 4 Formal Schematic Review | `skills/hardware-schematic-review/SKILL.md`       |
 | PCB Layout Preflight / Interactive Placement / Interactive Routing / Layout-Routing Review | `skills/hardware-pcb-layout-review/SKILL.md`      |
 | PCB Release Review / Manufacturing Preparation | `skills/hardware-pcb-release-review/SKILL.md`      |

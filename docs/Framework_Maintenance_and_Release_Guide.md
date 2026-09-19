@@ -37,6 +37,28 @@ DONE
 
 Routine validation、CI、diff inspection、technical review、documentation review、evidence collection 与普通授权范围内的 commit / push 都不建立额外 Human Gate。Candidate Validation 只输出 `READY` 或 `NOT READY`；`READY` 本身不授权 Publication。Read-only publication review 只报告 readiness 并停止；当前用户任务中的 Explicit Publication request 已经构成 Publication Authorization 时，Candidate Validation 通过后不再请求第二次 approval round-trip。
 
+### Framework Evolution / Improvement Tracking
+
+真实 Project 发现先判断是 Project-specific 还是具有 cross-project 价值。Project-specific issue 留在对应 Project；可复用问题进入 Framework improvement assessment，按以下稳定流程处理：
+
+```text
+Real Project Finding
+    ↓
+Project-specific or Cross-project
+    ↓
+Framework Improvement Issue
+    ↓
+Architecture Review
+    ↓
+Implementation → Validation → Commit
+    ↓
+Release Assessment
+    ↓
+Optional Publication
+```
+
+GitHub Issues 维护尚未完成且值得跟踪的改进需求，不要求每个普通文档修正都先建 Issue；本 Guide 维护稳定流程；Changelog 记录已实施并纳入发布的 release-level changes；Git commit / tag / Release 分别证明实际实现和发布身份。Workspace-Hub 只提供导航，不成为 Framework contract、current state、backlog 或 release identity 的第二权威源。
+
 ## 2. Release Assessment
 
 Release Assessment 在一次评估中回答：`Patch / Minor / Major?`、`target version?`、`RC required?`。它合并高层表达，不删除 Change Classification、Semantic Versioning 或 risk assessment 的安全检查。

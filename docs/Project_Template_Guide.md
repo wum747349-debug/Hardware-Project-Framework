@@ -59,6 +59,12 @@ Template `AGENTS.md` 必须只实现 Structure Standard 的轻量启动路由；
 - 默认读取 Framework `main`；
 - 依赖 Windows 或其他本地绝对路径。
 
+### 5.1 Optional Firmware Local Rules Template
+
+[Optional Firmware AGENTS Template](../templates/optional_firmware/AGENTS.md) 是独立于默认 Project Template 的可选分发源，不属于 Required files，也不复制进 `templates/hardware_project_template/`。Stage 1 确认项目需要 Firmware 时仍不要求创建 `firmware/`；实际开始持续性 Firmware 开发前，Project 才按需把该文件复制为 `firmware/AGENTS.md` 并根据本项目技术路线、目录职责、hardware facts、约束、build 与 validation entry 进行适配。
+
+该 local rules 入口继承 Project 根 `AGENTS.md`、`FRAMEWORK.md` 与 `PROJECT_RULES.md`，并从 Project 绑定的 immutable Framework snapshot 读取 `skills/hardware-firmware-development/SKILL.md`。它不依赖 Framework `main`，不复制完整 Skill，不建立第二套 binding / Runtime Contract / Stage / Gate / Authority，也不得覆盖已有 Project 的 `firmware/AGENTS.md`。
+
 ## 6. Project Validator 发布快照
 
 Framework 中 `scripts/validate_project_repository.py` 是唯一开发源。Template 中 `scripts/validate_project_repository.py` 是发布快照，不允许人工维护另一套逻辑。
