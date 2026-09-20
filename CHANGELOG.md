@@ -2,6 +2,37 @@
 
 本文件记录 Framework 方法、结构、Template、Skill、Checklist 与 Validator 的发布级变化。真实 Project 的硬件 revision 和项目 release 由各 Standalone Project Repository 自己维护。
 
+## v1.4.0
+
+### Added
+
+- 新增按 Task Intent 启用的 `hardware-firmware-development` Skill，覆盖 Firmware 可行性原型、工程初始化、分层职责、实时性与并发、通信、恢复、Hardware–Firmware feedback 及 validation evidence boundary。
+- 新增 Optional Firmware Local Rules Template，供确需持续性 Firmware 开发的 Project 按需建立并适配 `firmware/AGENTS.md`；该文件不属于所有 Project 的 Required 内容。
+
+### Changed
+
+- 明确 Framework 只提供跨项目 Firmware 方法；Project 自己维护目标器件、技术路线、源码职责、工具链、构建配置、局部约束及验证证据，不建立竞争性的硬件事实源或第二套 Framework binding。
+- 明确 Stage 2–3 最小 Firmware prototype 与 Stage 8 正式整板 Bring-up / Hardware–Firmware 联调的职责和证据边界；Build、Flash、Runtime 与 Hardware Validation 结果不得相互替代，也不自动改变硬件 Stage。
+- 增加 Firmware task-intent 路由、README / Template Guide 导航，以及 Firmware Skill、Optional Template、无 Firmware Project 和 Optional Firmware 文件存在合法性的 Validator / smoke-test 覆盖。
+- 精简 Firmware Validator guards，以稳定章节锚点和未填充的 Project-owned template fields 保护明确结构，移除对自然语言语义和 Project-specific 参数上下文的脆弱正则判断。
+- 补充 Framework improvement tracking，区分 Project-specific finding 与 cross-project improvement，并明确 Issue、Changelog、commit、tag 和 Release 的职责边界。
+
+### Compatibility
+
+- Release classification: MINOR — backward-compatible Framework capability improvement
+- RC required: NO — bounded optional capability with canonical validation and compatibility coverage
+- Runtime Contract: UNCHANGED
+- Structural Contract: UNCHANGED
+- Project Structure Version: 1 — UNCHANGED
+- `FRAMEWORK.md` schema: UNCHANGED
+- Project `AGENTS.md` routing contract: UNCHANGED
+- Project `PROJECT_RULES.md` Runtime Rules contract: UNCHANGED
+- Required / Conditional / Stage-enabled model: UNCHANGED
+- Stage / Gate architecture: UNCHANGED
+- Project facts authority and repository authority model: UNCHANGED
+- Validator required structure: UNCHANGED
+- Existing Standalone Projects are not automatically rebound by this release; eligible Projects may adopt v1.4.0 through Compatible Framework Sync after project-specific impact validation.
+
 ## v1.3.0
 
 ### Changed
