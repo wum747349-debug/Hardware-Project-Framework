@@ -30,7 +30,7 @@ Stage 4 Formal Schematic Review 还默认读取当前 Project 的 `requirements.
 
 ### Formal Schematic Review
 
-用于 Stage 4。Formal Review 在剩余 component / footprint convergence 已反映到 authoritative schematic 与当前 BOM 后开始；本 Skill 审查该 post-convergence completed whole-design evidence，不承担前置 procurement workflow。执行适用的完整检查范围，形成 formal findings 和 `docs/schematic_review.md`，并给出明确的 PCB Layout-entry conclusion。可按现有证据复用规则复用 unchanged coverage，但不得削弱 post-convergence 完整原理图 PDF、当前 BOM 和整板适用范围的要求。
+用于 Stage 4。Formal Review 在剩余 component / footprint convergence 已反映到 authoritative schematic 与当前 BOM 后开始；本 Skill 审查该 post-convergence completed whole-design evidence，不承担前置 procurement workflow。执行适用的完整检查范围，形成 formal findings 和 `docs/schematic_review.md`，并给出明确的 PCB Layout-entry conclusion。完整覆盖可以由对当前设计、适用范围和所需结论仍有效的既有 review evidence 与本次必要的增量检查共同满足，不等于重新执行全部检查；这不得削弱 post-convergence 完整原理图 PDF、当前 BOM 和整板适用范围的要求。
 
 ### Scoped Review / Risk Review
 
@@ -47,7 +47,7 @@ Scoped review / risk review 不默认要求完整整板原理图 PDF、完整整
 - ERC 输出不是默认必需审查输入。AI 只有在用户提供 ERC 报告、Messages 导出或相关截图时，才分析 ERC 问题；未提供 ERC 输出时，不声称已经核对 ERC，不记录 ERC 执行或结果状态，也不把“未提供 ERC 输出”本身作为审查未完成或不能进入 PCB Layout 的理由。
 - 网表、元件报告、引脚或封装映射报告和局部截图均为条件触发证据。局部截图可作为 scoped review 的局部证据，但结论必须受其覆盖范围限制；在 Formal Schematic Review 中只能补充局部证据，不能代替完整原理图 PDF。
 - `requirements.md`、`design_notes.md` 和 `docs/module_design/*.md` 是需求和设计意图，不能单独证明 EDA 实现已经同步。
-- Stage 4 可复用可追溯且足以覆盖当前目标的既有 review evidence；无需 schematic、PDF 或 BOM byte- / SHA-identical。对 unchanged coverage 不机械重审，只复核 changed、previously uncovered 或 evidence-insufficient areas。Reuse 不等于跳过 Stage 4，也不得把未验证的 ERC、EDA mapping 或 footprint mapping 升级为 PASS；ERC 未验证不因此自动成为 Stage 4 blocker。
+- Stage 4 可复用可追溯且足以覆盖当前目标的既有 review evidence；无需 schematic、PDF 或 BOM byte- / SHA-identical。复用前应判断该 evidence 与当前设计、适用范围和所需结论的关系；只对 changed、previously uncovered、evidence-insufficient，或因真实错误 / 新 evidence 而失效的受影响部分执行必要检查，不因局部修改机械重审全部模块。Reuse 不等于跳过 Stage 4，也不得因曾完成 Scoped Review 而虚构尚未完成的 Formal Review coverage，或把未验证的 ERC、EDA mapping 或 footprint mapping 升级为 PASS；ERC 未验证不因此自动成为 Stage 4 blocker。
 
 ## 审查目标
 
@@ -119,7 +119,7 @@ Formal Schematic Review 必须按以下完整格式输出：
 - 哪些地方必须修改
 - 哪些地方建议优化
 - 哪些资料需要补充
-- 是否需要重新审查
+- 是否需要重新审查；如需要，明确实际触发原因、受影响范围和必要 evidence，不得只给出“建议再次全面审查”的笼统要求
 - 是否可以进入 PCB Layout
 
 Scoped review / risk review 可使用与 scope 对应的精简 findings，不要求套用上述完整格式；输出至少说明审查 scope、发现与风险、evidence limits 和 recommended action，不给出整板 PCB Layout-entry conclusion。

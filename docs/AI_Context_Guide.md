@@ -130,7 +130,29 @@ Stage 3 中只有当 exact component identity 是验证当前 electrical behavio
 
 执行 Stage transition 时，在构造 bounded transaction scope 前读取 Workflow 的 transition semantics 与 Structure Standard 的 Stage-enabled activation rules，只纳入 target-stage 合法 post-state 立即需要的 artifacts。不要因 transition 默认加载或执行 target Stage 的完整 engineering method；仅在实际 target-stage activity 同时属于当前授权任务时，才按 task intent 加载相应方法与 evidence。
 
-## 7. 条件触发与证据边界
+## 7. 工程结论继承与有边界任务执行
+
+已有工程结论在依据可追溯、适用范围明确且对当前版本与目标仍然有效时，后续任务默认继承。更换 Conversation、Codex 或其他执行工具，普通 documentation convergence，Compatible Framework Sync，Stage 准备或已获授权的 Stage transition，重复读取同一资料，或 AI 在没有新依据时再次产生相同疑问，本身都不构成重新评估的充分理由。继承只覆盖已有依据实际支持的结论：`Electrical design selected` 不得升级为 `Hardware validation PASS`，Scoped Review 也不得升级为 Formal Review PASS。
+
+只有出现以下实际触发时，才重新评估相应范围：
+
+1. 相关设计、需求、假设或适用条件发生实质变化；
+2. 出现可信矛盾证据，或发现原结论存在实际错误；
+3. 现有 evidence 不足以支持当前请求所需的具体结论，包括此前未覆盖的范围；
+4. 用户明确要求重新评估相应问题；
+5. 当前适用的正式 Stage、validation 或 release requirement 存在尚未满足的必要检查。
+
+重新评估只覆盖实际受影响的内容；局部问题不自动升级为整板审查，无设计变更也不能成为拒绝处理真实新错误证据的理由。正式流程要求 complete coverage 时，可以由仍有效的既有 evidence 与当前必要增量共同满足，不等于重新执行全部历史检查。
+
+Documentation convergence 默认读取已确认事实与依据，更新对应 owning document，检查记录忠实性和必要一致性，然后完成。已有记录需要保留工程推理依据时，优先继承并整理现有依据，不自动重做选型、计算、设计、模块审查或整板审查；发现真实矛盾、实际依据缺失或受影响设计变化时，再按具体问题处理。事实归属继续遵循 Single Authority；implementation fact 的同步继续遵循 Workflow 的 No automatic reverse implementation sync，不在本节另建事实源或反向同步规则。
+
+已有有效关闭依据且没有新的失效触发时，不得因后续任务或 AI 重复提出同一疑问而重新打开问题。仍待验证的问题应继承其真实状态和下一项有效行动，不重复执行不能改变结论的相同静态检查，也不得虚构为已关闭；若它按现有规则阻断当前正式放行，阻断必须保留。不得以用户接受风险、修改文档措辞或收窄任务范围绕过高风险关闭要求。本规则不新增 Issue Lifecycle、Risk Acceptance State 或 Decision Lock。
+
+AI 生成 Codex 或其他下游执行任务时，必须在语义上区分作为输入前提继承的已确定事实、本次授权且必须完成的当前工作，以及只有实际触发条件成立时才执行的检查；不要求固定使用三类标题。任务不得先要求“不重复审查”，又无条件要求重新审查全部模块、重新 qualification 全部已确认器件、重新检查完整 schematic / BOM、重放全部历史 Stage 或再次确认全部已关闭问题，也不得用“为保险起见”“再次全面确认”或“必要时完整复核”等模糊措辞绕过 Minimum Sufficient Context。条件触发任务必须说明实际触发原因和必要范围。
+
+用户给出的 Exact Scope 优先；若合法完成当前任务必须越界，应报告 blocker，不得擅自扩权或交付虚假的部分完成。完成获授权工作及其适用的必要 validation 后即停止，不追加没有实际触发依据的工程活动。本节不削弱 Formal Review、Stage transition、Compatible Framework Sync、Framework Contract Migration、Project Validator、Manufacturing Release 或其他现有安全、evidence 与 validation requirement。
+
+## 8. 条件触发与证据边界
 
 - 目标板厂官方能力：仅在制造基线、规则、裕量或下单核对时读取。
 - 关键器件官方资料：仅在当前参数、连接、封装、Layout 或安全判断需要时读取。
@@ -151,7 +173,7 @@ BOM 只在 MPN、value、footprint、rating 或 population 信息与当前问题
 
 无可靠 `.SchDoc` / `.PcbDoc` 解析能力时，只使用用户提供的 PDF、BOM、图片、报告、规则摘要和输出。图片不能证明网络、间距、线宽、孔径、规则命中、铺铜或 DRC 通过。无法确认的实现事项标记“待 EDA 核对”，不得据此关闭问题或制造放行。
 
-## 8. 会话管理与交接
+## 9. 会话管理与交接
 
 会话管理只解决“继续当前 Conversation，还是切换并如何把当前 working set 交给下一会话”，不改变四层 Project Context、Stage / Gate 或持久事实源。
 
@@ -169,7 +191,7 @@ Session Handoff 只保留下一轮可靠继续所需的最小 working set，通�
 
 Session Starter 是新会话的轻量入口，用于指出 Repository、branch、适用 Authority、工作原则、执行边界和当前任务；它不是新的 Framework / Project Contract，也不替代 Handoff。新会话必须重新读取目标 Repository 的当前 Authority / Current State，再核对 Handoff；若冲突，以当前 Authority / Current State 为准。
 
-## 9. 用户报错复核与受影响结论
+## 10. 用户报错复核与受影响结论
 
 用户明确质疑某个 AI/Codex 结论时：
 
@@ -184,7 +206,7 @@ Session Starter 是新会话的轻量入口，用于指出 Repository、branch�
 
 单次、局部错误在当前任务内解决。只有真实重复、高影响或系统性问题才值得进入 Framework maintenance 评估；不得因为一次错误自动增加 Runtime、Agent、Database、Vector Search、Dashboard、多 Agent、错误日志平台或新的复杂 Context Score。
 
-## 10. 完整 Workflow 读取条件
+## 11. 完整 Workflow 读取条件
 
 只在以下情况完整读取 `docs/08_Project_Workflow.md`：
 
