@@ -32,7 +32,7 @@
 - [ ] 通信接口方向清楚
 - [ ] 连接器引脚定义清楚
 - [ ] 关键参数有 datasheet 依据
-- [ ] 关键网络具有明确的测试 / 调试 access strategy；若需要 connector、jumper、0Ω / series break 或其他 schematic-level access hardware，已在原理图中体现
+- [ ] 关键网络具有明确的测试 / 调试 access strategy；若访问需要 connector、jumper、0Ω / series break、debug interface 或其他会改变 schematic connectivity 的硬件，已在原理图中体现
 - [ ] 如用户提供 ERC 报告、Messages 导出或相关截图并要求分析，相关 ERC 问题已记录为补充证据；未提供 ERC 输出时不声称已核对 ERC
 - [ ] 模块划分清晰，电源路径和信号流向容易追踪
 - [ ] 网络命名、接口命名和跨页网络标签一致
@@ -46,7 +46,7 @@
 - [ ] LDO / DC-DC 输入输出电容符合 datasheet
 - [ ] EN / FB / PG / GND 等关键引脚连接正确
 - [ ] 电源指示灯有限流电阻
-- [ ] 关键电源轨有测试点
+- [ ] 关键电源轨已纳入可实现的测试 / 调试 access strategy；不因本项默认要求独立 test-point component
 - [ ] 电源芯片功耗、温升和长期电流边界已评估
 - [ ] 模拟电源和数字电源的滤波或隔离策略明确
 
@@ -65,7 +65,7 @@
 - [ ] 输入限流、RC 滤波、钳位或 TVS 保护符合需求
 - [ ] 分压电阻和信号源阻抗不破坏采样精度
 - [ ] ADC 参考电压稳定，VDDA / VREF 去耦合理
-- [ ] 模拟输入测试点已预留
+- [ ] 模拟输入已纳入可实现的测试 / 调试 access strategy；不因本项默认要求独立 test-point component
 - [ ] 模拟地和数字地处理不会引入明显回流风险
 
 ## MOSFET / 功率输出

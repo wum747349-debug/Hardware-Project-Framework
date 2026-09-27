@@ -182,7 +182,7 @@ Stage 3 entry 至少启用一个 owning module design record，承接当前 deta
 
 ### 目标与活动
 
-Stage 4 先完成剩余 component / footprint convergence；当 exact identity 的技术 qualification 确有必要时，可使用 `hardware-component-selection` 作为 supporting method，但普通 deferred commodity part 不因进入 Stage 4 自动要求完整的多候选 `Primary / Alternate` 分析。实际装配器件必须与当前 schematic / BOM 和 PCB footprint 形成无歧义 mapping；不需要 exact manufacturer / supplier identity 的普通器件仍可由充分 specification、rating 与 footprint 表达。
+Stage 4 先完成剩余 component / footprint convergence；当 exact identity 的技术 qualification 确有必要时，可使用 `hardware-component-selection` 作为 supporting method，但普通 deferred commodity part 不因进入 Stage 4 自动要求完整的多候选 `Primary / Alternate` 分析。该 remaining convergence 可以处理 ordinary actual-part / supplier-part / library / footprint mapping / procurement identity convergence；实际装配器件必须与当前 schematic / BOM 和 PCB footprint 形成无歧义 mapping，不需要 exact manufacturer / supplier identity 的普通器件仍可由充分 specification、rating 与 footprint 表达。
 
 随后由用户更新 authoritative `.SchDoc` 与当前 BOM，并导出对应的完整原理图 PDF；再使用 `hardware-schematic-review` 对该 post-convergence current design 执行 Formal Schematic Review。Formal Review 同时包含 **Independent Engineering Design Verification** 与 **EDA Implementation Verification**：前者独立判断 requirements、topology applicability、operating range / margin、startup / shutdown / fault behavior、protection、power integrity、cross-module interaction 与适用的 hardware–firmware feasibility 是否成立；后者核对 schematic / BOM 中的 pin、net、power、polarity、package / footprint mapping、connector、decoupling 与实现忠实性。独立验证要求独立 acceptance judgment，但不要求在既有 Stage 3 engineering rationale 仍有效时机械重新推导全部设计。只在用户提供 ERC 结果时分析 ERC。该顺序不新增 Stage 4A / Stage 4B、Gate 或 lifecycle state：
 
@@ -192,7 +192,7 @@ remaining component / footprint convergence
 → Formal Schematic Review
 ```
 
-若在 Formal Review 开始前发现本应由 Stage 3 收敛、且会影响设计或实现有效性的 component identity、pinout、package / footprint、connector definition 或其他必要 design definition 仍缺失，则属于 **Formal Review prerequisite 未满足 / Stage 3 convergence incomplete**，不应把“尚未完成设计”伪装成一个已定义实现的 Stage 4 design finding。Stage 4 可以发现并否定已有设计，但不原则性承担本应在 Stage 3 完成的首次 implementation-sensitive selection。
+Stage 4 的 remaining convergence 不用于首次完成本应在 Stage 3 收敛的 implementation-sensitive design definition。若 component identity、pinout / polarity、package / footprint、connector definition、required external components 或其他 actual identity 会影响 electrical validity、safety、thermal、pin mapping 或其他 implementation-sensitive engineering conclusion，则必须在 Stage 3 exit 前完成必要 qualification / convergence；Formal Review 开始前仍缺失上述必要 design definition，属于 **Formal Review prerequisite 未满足 / Stage 3 convergence incomplete**。**Missing required design definition is a readiness failure; a defined implementation proven incorrect is a review finding.** Stage 4 可以发现并否定已经定义的 implementation，但不原则性承担 Stage 3 遗漏的首次 implementation-sensitive selection。
 
 ### 主要输出与退出条件
 
