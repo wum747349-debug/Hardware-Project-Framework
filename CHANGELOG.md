@@ -2,6 +2,32 @@
 
 本文件记录 Framework 方法、结构、Template、Skill、Checklist 与 Validator 的发布级变化。真实 Project 的硬件 revision 和项目 release 由各 Standalone Project Repository 自己维护。
 
+## v1.4.1
+
+### Changed
+
+- 明确 Decision Reuse / Bounded Execution：已有可追溯且仍有效的工程结论默认继承，仅在 requirement / design / assumption 变化、可信矛盾、原结论错误、evidence 不足或此前未覆盖的 mandatory scope 下重新评估受影响范围。
+- 澄清 Stage 3 / Stage 4 convergence boundary：影响 electrical validity、safety / protection、thermal、pinout / polarity、package / footprint、required external components、stability、saturation / ESR / DC-bias behavior 或其他 implementation-sensitive conclusion 的 actual identity，在 Stage 3 exit 前完成必要 qualification / convergence；Stage 4 继续允许 ordinary actual-part / supplier-part / library / footprint mapping / procurement identity convergence。
+- 明确 Stage 4 Formal Schematic Review 同时包含 Independent Engineering Design Verification 与 EDA Implementation Verification，并区分 `Stage 3 convergence incomplete` 的 readiness failure 与已定义 implementation 被证明错误的 review finding。
+- 统一 `Selection Convergence Trigger` 与 Stage 3 supporting-method routing，并允许按复杂度使用 optional Implementation Convergence Table，不新增 mandatory component taxonomy、artifact 或 lifecycle state。
+- 对齐 Stage 3 / 4 / 5 Testability boundary：会改变 schematic connectivity 的 access hardware 在 Stage 3 原理图中体现；普通 PCB test pad 的位置、尺寸、形状、probe clearance 与 physical accessibility 留待 Stage 5 Layout。
+
+### Compatibility
+
+- Release classification: PATCH — backward-compatible Framework clarification
+- RC required: NO — bounded clarification covered by canonical validation and existing compatibility checks
+- Runtime Contract: UNCHANGED
+- Structural Contract: UNCHANGED
+- Project Structure Version: 1 — UNCHANGED
+- `FRAMEWORK.md` schema: UNCHANGED
+- Project `AGENTS.md` routing contract: UNCHANGED
+- Project `PROJECT_RULES.md` Runtime Rules contract: UNCHANGED
+- Required / Conditional / Stage-enabled model: UNCHANGED
+- Stage / Gate architecture: UNCHANGED
+- Project facts authority and repository authority model: UNCHANGED
+- Validator required structure: UNCHANGED
+- Existing Standalone Projects are not automatically rebound by this release; eligible Projects may adopt v1.4.1 through Compatible Framework Sync after project-specific impact validation.
+
 ## v1.4.0
 
 ### Added
