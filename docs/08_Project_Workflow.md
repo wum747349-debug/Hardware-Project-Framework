@@ -164,7 +164,7 @@ Gate 1.5 已 PASS，Requirements Baseline 足以筛选器件。
 
 ### 目标与活动
 
-使用 `skills/hardware-schematic-design/SKILL.md`，依据 Requirements、器件决策和关键资料按需执行 module planning、module-by-module design、parameter calculation、EDA capture guidance 与 Cross-Module Integration Check；定义全部 required components 的 electrical requirements，并完成模块连接、外围参数、startup / fault behavior、保护与专项 Layout 输入。若验证 electrical behavior、safety、thermal behavior 或 package / Layout-sensitive assumption 必须知道 exact component identity，则对相关部分使用 `hardware-component-selection` 作为 supporting method 完成必要 qualification；否则允许以足够 specification 保留尚不需要的 exact procurement identity。由用户在 Altium Designer 中实现正式原理图并导出同版完整原理图 PDF 与当前 BOM。
+使用 `skills/hardware-schematic-design/SKILL.md`，依据 Requirements、器件决策和关键资料按需执行 module planning、module-by-module design、parameter calculation、EDA capture guidance 与 Cross-Module Integration Check；定义全部 required components 的 electrical requirements，并完成模块连接、外围参数、startup / fault behavior、保护与专项 Layout 输入。若验证 electrical behavior、safety、thermal behavior、pinout / polarity、package / footprint、required external components 或其他 implementation-sensitive assumption 必须知道 exact component identity，则对相关部分使用 `hardware-component-selection` 作为 supporting method 完成必要 qualification；只有当剩余 actual identity 不会实质改变上述工程结论时，才允许以足够 specification 保留尚不需要的 exact procurement identity。由用户在 Altium Designer 中实现正式原理图并导出同版完整原理图 PDF 与当前 BOM。
 
 ### 进入条件
 
@@ -172,7 +172,7 @@ Gate 1.5 已 PASS，Requirements Baseline 足以筛选器件。
 
 ### 主要输出与退出条件
 
-Stage 3 entry 至少启用一个 owning module design record，承接当前 detailed design work；是否按模块拆分更多 `docs/module_design/*.md` 仍由复杂度和追溯价值决定，不要求每个模块各有一份文件。形成可追溯模块依据、全部 required components 的 electrical requirement、BOM 草稿、Altium 原理图、同版完整 PDF 与当前 BOM，并完成轻量整板自洽检查；未确定的 exact identity 不得阻断当前 electrical verification。满足 Stage 3 条件时只报告 `READY FOR SCHEMATIC REVIEW`；该结论不等于 ERC PASS、Stage 4 PASS 或 PCB Layout approval，也不自行改变 `Current Project Stage`。AI 不声称完成 EDA 实现。
+Stage 3 entry 至少启用一个 owning module design record，承接当前 detailed design work；是否按模块拆分更多 `docs/module_design/*.md` 仍由复杂度和追溯价值决定，不要求每个模块各有一份文件。形成可追溯模块依据、全部 required components 的 electrical requirement、BOM 草稿、Altium 原理图、同版完整 PDF 与当前 BOM，并完成轻量整板自洽检查。未确定的 exact procurement identity 只有在其不影响当前 electrical、safety、thermal、pin mapping、package / footprint 或其他 implementation-sensitive validation 时才允许保留；任何会实质改变这些结论的 identity 必须在 Stage 3 exit 前收敛。完整 PDF 与当前 BOM 在 Stage 3 中属于 Stage 4 review evidence 的 handoff preparation：只检查版本、完整性与明显缺失，不执行与 Stage 4 等价的 complete content-level Formal Schematic Review。满足 Stage 3 条件时只报告 `READY FOR SCHEMATIC REVIEW`；该结论不等于 ERC PASS、Stage 4 PASS 或 PCB Layout approval，也不自行改变 `Current Project Stage`。AI 不声称完成 EDA 实现。
 
 **No automatic reverse implementation sync：**普通 resistor / capacitor、pull-up、net naming、support component、module pin connection、filter 或 NTC 外围值调整，通常只更新当前 module design record；若 underlying component decision、qualification basis、architecture impact、selection risk 或 requirement 实质变化，则更新对应 owner，并按影响范围返回相关 Stage reevaluation。Stage 2 artifacts 不是 immutable，但不因普通实现调整而机械同步。
 
@@ -184,13 +184,15 @@ Stage 3 entry 至少启用一个 owning module design record，承接当前 deta
 
 Stage 4 先完成剩余 component / footprint convergence；当 exact identity 的技术 qualification 确有必要时，可使用 `hardware-component-selection` 作为 supporting method，但普通 deferred commodity part 不因进入 Stage 4 自动要求完整的多候选 `Primary / Alternate` 分析。实际装配器件必须与当前 schematic / BOM 和 PCB footprint 形成无歧义 mapping；不需要 exact manufacturer / supplier identity 的普通器件仍可由充分 specification、rating 与 footprint 表达。
 
-随后由用户更新 authoritative `.SchDoc` 与当前 BOM，并导出对应的完整原理图 PDF；再使用 `hardware-schematic-review` 对该 post-convergence current design 执行 Formal Schematic Review，审查供电、接口、保护、封装、引脚、板级安全与关键 Layout 输入。只在用户提供 ERC 结果时分析 ERC。该顺序不新增 Stage 4A / Stage 4B、Gate 或 lifecycle state：
+随后由用户更新 authoritative `.SchDoc` 与当前 BOM，并导出对应的完整原理图 PDF；再使用 `hardware-schematic-review` 对该 post-convergence current design 执行 Formal Schematic Review。Formal Review 同时包含 **Independent Engineering Design Verification** 与 **EDA Implementation Verification**：前者独立判断 requirements、topology applicability、operating range / margin、startup / shutdown / fault behavior、protection、power integrity、cross-module interaction 与适用的 hardware–firmware feasibility 是否成立；后者核对 schematic / BOM 中的 pin、net、power、polarity、package / footprint mapping、connector、decoupling 与实现忠实性。独立验证要求独立 acceptance judgment，但不要求在既有 Stage 3 engineering rationale 仍有效时机械重新推导全部设计。只在用户提供 ERC 结果时分析 ERC。该顺序不新增 Stage 4A / Stage 4B、Gate 或 lifecycle state：
 
 ```text
 remaining component / footprint convergence
 → update authoritative schematic + current BOM
 → Formal Schematic Review
 ```
+
+若在 Formal Review 开始前发现本应由 Stage 3 收敛、且会影响设计或实现有效性的 component identity、pinout、package / footprint、connector definition 或其他必要 design definition 仍缺失，则属于 **Formal Review prerequisite 未满足 / Stage 3 convergence incomplete**，不应把“尚未完成设计”伪装成一个已定义实现的 Stage 4 design finding。Stage 4 可以发现并否定已有设计，但不原则性承担本应在 Stage 3 完成的首次 implementation-sensitive selection。
 
 ### 主要输出与退出条件
 

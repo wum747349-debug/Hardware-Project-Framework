@@ -12,6 +12,16 @@
 - [ ] 局部截图只用于补充局部证据，不代替完整原理图 PDF
 - [ ] 设计意图文档与 EDA 实现证据分开记录，不把 `design_notes.md` 当作实现已经同步的证明
 
+## 设计充分性与整板集成
+
+- [ ] 当前 topology 与主要模块职责仍满足 requirements，没有依赖已经失效的 Stage 3 assumption
+- [ ] 关键 operating range、gain / scaling、bandwidth / filtering、ADC acquisition / settling 与 timing 在当前 whole-design context 下成立
+- [ ] 关键 voltage / current / thermal / headroom margin 已按项目风险评估
+- [ ] startup / shutdown / reset / default / fault behavior 与必要 sequencing 已覆盖
+- [ ] protection boundary、power integrity、analog / digital interaction 与跨模块接口不存在未处理的系统级冲突
+- [ ] 适用的 hardware–firmware feasibility 没有被当前硬件资源、时序或接口实现阻断
+- [ ] 对已有 Stage 3 engineering rationale 只在 assumption 变化、evidence 不足、可信矛盾或此前未覆盖的 mandatory scope 下重新深入评估；完整 coverage 不等于机械重新设计
+
 ## 总体结构
 
 - [ ] 电源网络命名清楚
@@ -22,7 +32,7 @@
 - [ ] 通信接口方向清楚
 - [ ] 连接器引脚定义清楚
 - [ ] 关键参数有 datasheet 依据
-- [ ] 关键网络预留测试点
+- [ ] 关键网络具有明确的测试 / 调试 access strategy；若需要 connector、jumper、0Ω / series break 或其他 schematic-level access hardware，已在原理图中体现
 - [ ] 如用户提供 ERC 报告、Messages 导出或相关截图并要求分析，相关 ERC 问题已记录为补充证据；未提供 ERC 输出时不声称已核对 ERC
 - [ ] 模块划分清晰，电源路径和信号流向容易追踪
 - [ ] 网络命名、接口命名和跨页网络标签一致
@@ -72,7 +82,7 @@
 
 - [ ] Formal Review 使用的 post-convergence current design 中，所有实际装配器件与当前 schematic / BOM / PCB footprint mapping 无歧义；不需要具体 MPN 的普通器件已有充分 specification、rating 与 footprint
 - [ ] 极性器件方向、接插件脚位和丝印方向明确
-- [ ] 测试点可接触，覆盖电源、复位、调试、通信、ADC 和关键输出
+- [ ] 电源、复位、调试、通信、ADC 和关键输出具备可实现的测试 / 调试访问方案；普通 PCB test pad 的最终尺寸、位置、探测空间与物理可达性留待 Stage 5 Layout 实现
 - [ ] 器件封装适合当前焊接能力和 PCB 工艺
 - [ ] 必要的跳帽、0Ω 电阻或调试焊盘已评估
 - [ ] 丝印不与安全边界、接口定义或极性标识冲突

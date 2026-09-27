@@ -116,15 +116,18 @@ Documentation concision 可以删除重复表达，避免复制 `.SchDoc`、data
 
 - 主要模块设计完成；
 - 至少一个 owning module design record 已承接当前 detailed design work，additional records 的拆分与复杂度和追溯需求相称；
-- 全部 required components 的 electrical requirements 已定义；尚未确定的 exact procurement identity 不阻断当前 electrical、safety、thermal 或 package / Layout-sensitive validation；
+- 全部 required components 的 electrical requirements 已定义；尚未确定的 exact procurement identity 只有在其不影响当前 electrical、safety、thermal、pinout / polarity、package / footprint 或其他 implementation-sensitive validation 时才允许保留；若 actual identity 会实质改变这些结论，则必须在 Stage 3 exit 前完成必要 qualification 与 convergence；
 - 关键连接和 decision-driving electrical choices 具有 durable and traceable 的 Manufacturer documentation、计算或显式 engineering basis，可从 owning module record 或其明确引用的 supporting analysis 中恢复；
 - 必要关键外围参数已确定，或未决项边界清晰且不阻止审查；
 - startup / default / fault behavior 已分析；
+- schematic-level testability 已明确：需要 connector、jumper、0Ω / series break、debug interface 或其他改变 connectivity 的测试访问已纳入设计；普通 PCB test pad 的最终尺寸、位置与探测空间可留到 Stage 5；
 - 适用的 Hardware–Firmware feasibility、resource conflict 与 interface impact 已检查；无法静态关闭的关键风险已有最小 prototype / test 计划和明确 evidence boundary，不以理论值冒充验证；
 - Cross-Module Integration Check 已完成；
 - 用户已完成当前版本 EDA capture；
 - 已有与当前 `.SchDoc` 对应的完整 schematic PDF；
 - 已有当前版本 BOM。
+
+完整 schematic PDF 与当前 BOM 在 Stage 3 中用于 handoff / review-input generation。Stage 3 可以检查其版本一致性、完整性和明显缺失，但不得基于这组完整证据再执行一次与 Stage 4 等价的 whole-board Formal Schematic Review。
 
 `READY FOR SCHEMATIC REVIEW` 不等于 `ERC PASS`、Stage 4 PASS 或 PCB Layout approved。
 

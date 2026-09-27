@@ -46,6 +46,12 @@
 - JLCPCB/LCSC 没有合理候选时，可扩大到 Manufacturer、Mouser、DigiKey 或其他适当 distributor / sourcing channel。
 - 禁止一上来生成完整最终 BOM。
 
+### Selection Convergence Trigger
+
+器件是否必须在当前 Stage 收敛到 exact identity，不按固定 A / B / C 器件类别决定，而按该 identity 是否会实质改变当前工程结论决定。若 actual identity 会影响 electrical validity、safety / protection、thermal、pinout / polarity、package / footprint、required external components、stability、saturation / ESR / DC-bias behavior 或其他 implementation-sensitive assumption，则必须在相应 design / review conclusion 前完成必要 qualification 与 convergence；若这些结论可由充分 specification 无歧义支撑，则 manufacturer / supplier / C-code 可以继续 deferred。
+
+因此，普通 R/C 不因器件类别自动要求 exact MPN；performance-critical passive 也不因“精密”标签自动要求 exact MPN。应冻结所有驱动 engineering conclusion 的属性，并只在这些属性无法脱离 actual part 可靠表达或验证时强制 exact selection。该规则不新增 mandatory component class taxonomy。
+
 ## Evidence 边界
 
 ### Procurement evidence
@@ -174,6 +180,14 @@ AI/Codex 根据公开搜索结果或用户提供的信息建立精简候选表�
 - Risk Table
 - Pending Datasheet
 - Deferred Peripherals
+- Implementation Convergence Table（仅在用户需要 EDA Device Manager / BOM rebinding / Stage 3–4 convergence 操作清单时）
+
+可选的 Implementation Convergence Table 使用紧凑字段：
+
+| Designator | Current | Target MPN / Spec | JLC/LCSC | Package / Footprint | Action | Basis |
+|---|---|---|---|---|---|---|
+
+`Action` 优先限制为 `KEEP`、`REBIND`、`SELECT`、`REPLACE`、`DEFER`。`DEFER` 只表示当前 sufficiently specified 且 exact procurement identity 不影响当前工程结论，不得用它绕过 implementation-sensitive selection。
 
 Only generate these when they materially improve the decision, risk handling, or traceability.
 

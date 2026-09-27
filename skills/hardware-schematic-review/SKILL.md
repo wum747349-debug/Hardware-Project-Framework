@@ -32,6 +32,15 @@ Stage 4 Formal Schematic Review 还默认读取当前 Project 的 `requirements.
 
 用于 Stage 4。Formal Review 在剩余 component / footprint convergence 已反映到 authoritative schematic 与当前 BOM 后开始；本 Skill 审查该 post-convergence completed whole-design evidence，不承担前置 procurement workflow。执行适用的完整检查范围，形成 formal findings 和 `docs/schematic_review.md`，并给出明确的 PCB Layout-entry conclusion。完整覆盖可以由对当前设计、适用范围和所需结论仍有效的既有 review evidence 与本次必要的增量检查共同满足，不等于重新执行全部检查；这不得削弱 post-convergence 完整原理图 PDF、当前 BOM 和整板适用范围的要求。
 
+Formal Review 包含两个互补层次：
+
+1. **Engineering Design Verification**：独立判断 current whole design 是否满足 requirements，topology 与 operating point 是否适用，关键 voltage / current / thermal / headroom / gain / bandwidth / filtering / ADC settling / timing 是否成立，startup / shutdown / default / fault behavior、protection、power integrity、cross-module interaction 与适用的 hardware–firmware feasibility 是否充分。
+2. **EDA Implementation Verification**：核对当前 schematic / BOM 是否忠实实现上述 design intent，包括 pin / net、power / ground、decoupling、unused-pin handling、polarity、connector definition、symbol、package / footprint、pin-to-pad mapping 与 component identity consistency。
+
+Independent verification 要求 reviewer 对是否接受当前设计作独立判断，但不要求对仍有可追溯依据、assumption 未变且未出现可信矛盾的 Stage 3 engineering rationale 机械重新推导。若发现真实 contradiction、evidence gap、changed assumption 或此前未覆盖的 mandatory review scope，则只重新评估受影响范围。
+
+若 Formal Review 尚未开始就发现会影响设计或实现有效性的必要 component identity、pinout、package / footprint、connector definition 或其他 required design definition 仍未收敛，应报告 `NOT READY FOR FORMAL SCHEMATIC REVIEW — Stage 3 convergence incomplete`。**Missing required design definition is a readiness failure; a defined implementation proven incorrect is a review finding.**
+
 ### Scoped Review / Risk Review
 
 用于一个明确限定的问题、模块、连接或风险。只读取足以判断当前 scope 的 evidence，只执行与该 scope 相关的 review checks，并输出 scope-bounded findings、risk、evidence limits 和 recommended action。
@@ -62,7 +71,7 @@ Scoped review / risk review 不默认要求完整整板原理图 PDF、完整整
 - 锂电池充电与保护是否安全
 - 运放供电、输入输出范围和滤波是否合理
 - 外置 ADC 和参考电压是否匹配
-- 测试点是否足够
+- 关键 bring-up / debug 节点是否具有可实现的 schematic-level testability access strategy；普通 PCB test pad 的最终尺寸、位置和探测空间由 Stage 5 决定
 - 封装、BOM、丝印、接口定义是否一致
 
 ## 审查顺序
