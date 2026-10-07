@@ -23,6 +23,8 @@ Reference Project / Test Fixture
 
 本文是 Project 结构与绑定的权威源。Template 是实现，不得反向定义 Contract；Validator 检查本文要求，不得另造结构；Skill 说明执行方法，Checklist 只列逐项检查。
 
+README、User Guide 与 Initialization Guide 提供解释和导航，不因摘要或操作说明成为第二 Contract。Template / Bootstrap 生成的结构是 Contract 的实现；生成后由 Project 维护的真实事实仍归该 Project。Reference Project 是 Framework 示例与测试样本，Validator 输出只证明其实际检查范围内的符合性，二者都不能反向证明真实 Project 的工程正确性或完成状态。
+
 ## 2. Framework / Project Repository Model
 
 Framework Repository 保存通用运行规则、结构标准、八阶段 Workflow、AI Context Routing、Bootstrap、Gate 1.5、Template、Skill、Checklist、Validator、Changelog、Migration Guide 和轻量 Reference Project。
@@ -228,6 +230,8 @@ Conditional 与 Stage-enabled 内容不在该树中预建。正式 EDA 源通常
 | `scripts/validate_project_repository.py` | Framework 唯一开发源的发布快照，用于独立验证本 Project |
 
 同一事实只在一个主事实源维护（Single Authority），同时允许其他层级保留服务于自身语境的摘要或引用（Contextual Reference）。例如，选型记录维护器件的 Primary 决策，`design_notes.md` 说明其整板职责，module design record 维护具体外围值；这些内容职责不同，不属于有害重复。
+
+这是同一权威源的多种视图（Single Authority, Multiple Views）：摘要、教学解释或派生输出通过链接、文件/章节引用或现有证据索引回源，不因重新表达而拥有底层事实。出现不一致时，回到负责该事实的文档及其适用证据核对，不能用视图覆盖源事实。Project 当前阶段仍只在根 `README.md` 的唯一阶段字段维护；其状态摘要与下一步帮助用户和 AI 恢复进度理解，不替代需求、设计、Review、Bring-up 或 Test 的 owning record，也不新增状态文件或必填字段。
 
 同一个 detailed implementation fact 不应形成多个独立维护源。存在对应 module design record 时，Stage 3 的逐引脚连接、普通 R/C 值和模块计算通常由该 record 维护；`design_notes.md` 不需要并行维护这些细节，但可保留必要的整板摘要和跨模块约定。**Update the owning document, not every document that mentions the fact.** 其他文档仅在其负责的 requirement、architecture、cross-module contract、component selection decision、qualification basis 或 evidence index 实际变化时更新。
 

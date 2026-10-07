@@ -12,6 +12,20 @@ Framework v1.4.1 的 release-level changes、compatibility 与 SemVer 信息记�
 
 请从 [Framework User Guide](docs/Framework_User_Guide.md) 开始：`README → Framework User Guide → 按当前任务进入对应 Contract / Guide`。
 
+本 README 提供概览与导航；摘要、使用解释和实现视图都回到各自负责的权威文档，不另立 Contract。文档分工如下，按当前任务选择入口即可，无须全部预读：
+
+| 内容与用途 | 负责的文档或实现 |
+| --- | --- |
+| Framework 通用规则与 Framework / Project 权威边界 | [PROJECT_RULES.md](PROJECT_RULES.md) |
+| Project 结构、绑定 schema 与文件事实职责 | [Project Structure Standard](docs/Project_Structure_Standard.md) |
+| Bootstrap、Stage / Gate 与阶段转换 | [Project Workflow](docs/08_Project_Workflow.md) |
+| AI 上下文路由、Evidence 使用边界与文档表达指导 | [AI Context Guide](docs/AI_Context_Guide.md) |
+| 帮助用户理解与操作 | 本 README、[Framework User Guide](docs/Framework_User_Guide.md)、[Project Initialization Guide](docs/Project_Initialization_Guide.md)；解释并引用相应 Contract |
+| 执行方法与逐项检查 | `skills/` 提供方法，`checklists/` 提供检查视图；按任务引用上述权威规则，不另存 Project facts 或状态 |
+| Contract 的可复制实现与自动检查 | [Template](templates/hardware_project_template/README.md) 实现结构，Validator 检查可自动判定的 Contract；边界见 [Template Guide](docs/Project_Template_Guide.md) |
+| Framework 示例与验证样本 | [Reference Project](examples/reference_project_v1/README.md) 演示并测试 Framework，不提供真实 Project 的工程事实 |
+| 版本变更与历史追溯 | [CHANGELOG](CHANGELOG.md) 记录发布级变化；下方 Migration 历史入口只供按需追溯，不代表当前运行状态 |
+
 ## 架构边界
 
 ```text

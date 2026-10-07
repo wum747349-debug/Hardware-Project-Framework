@@ -70,6 +70,10 @@ README
 
 当前 Project Repository 始终是项目特定事实的权威源。按已绑定 snapshot 中的 [AI Context Guide](AI_Context_Guide.md) 只加载当前任务所需 Project Facts、Stage Method 和 Evidence；不默认读取 Framework `main` 或其他 Project。
 
+以上是用户了解进度的阅读路径；AI 的启动顺序仍由 Project `AGENTS.md` 指向 `FRAMEWORK.md`、`PROJECT_RULES.md` 和绑定快照中的 AI Context Guide。用户阅读与 AI 执行共用同一批事实，不需要另一份 AI 状态记录。
+
+Project README 用简短说明呈现项目身份、当前阶段、状态摘要、事实导航与下一步。需要理解设计依据时进入 requirements / design 文档，需要核对完成情况时进入对应 Review、Bring-up 或 Test 记录与实际证据。README 的进度摘要帮助理解这些记录，不代替它们，也不把待验证工作写成已完成；具体文件职责见 [Structure Standard](Project_Structure_Standard.md)。
+
 ## 5. AI 可以做什么，哪些动作需要 Human Approval
 
 在已授权的任务范围内，AI 可以直接协助：
@@ -108,7 +112,7 @@ README
 
 ## 7. 应该去哪里查看真实状态和事实
 
-| 问题 | 权威入口 |
+| 问题 | 查阅入口（操作说明仍回源到对应 Contract） |
 | --- | --- |
 | 当前 Framework Binding | Project `FRAMEWORK.md` |
 | 当前 Project Stage | Project `README.md` |

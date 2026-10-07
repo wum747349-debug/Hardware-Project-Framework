@@ -35,6 +35,18 @@ Framework maintenance 的 Authority / Current State 由 Framework 当前权威�
 5. 中文化不得改变 engineering requirement、Project fact、lifecycle state、Stage / Gate meaning、numerical constraint、Evidence meaning 或 authority relationship。
 6. Skill、Template 或 Guide 只引用本节作为执行提示，不复制整套规则，也不成为第二权威源。
 
+Chinese-first 是 Framework 的默认编写约定，不要求所有 Standalone Project 永久采用同一语言。因外部英文读者、双语交付、客户或发表要求，Project 可在自身现有权威记录中明确适用范围、理由与语言选择；无须新增语言配置文件或字段。这种本地覆盖只调整表达，不改变 Framework 的 Stage / Gate、Evidence、Authority 语义，也不翻译固定 schema、identifier 或 validator-sensitive wording。
+
+### 主要读者与表达目的
+
+主要面向 AI（AI-first）、主要面向用户（Human-first）和双方共用（Shared）只说明阅读用途，不决定文档的权威性，也不要求逐文件 metadata 或建立两套目录与事实。
+
+- AI-facing Contract 与启动入口重在精确、稳定地解析 Authority、适用 Contract、Stage / Gate、执行约束、Evidence / Validation 边界和读取路由。教学解释通过链接按需取得，不把入口扩成完整教程，也不复制完整上下文。
+- Human-facing README 与 Guide 重在解释 Framework 是什么、为何这样组织、如何使用、当前应看哪里，以及 AI 能力和事实回源边界；可提供少量摘要与例子，但规范性结论仍回到负责该规则的 Contract，Project 工程结论仍回到对应 Project facts / evidence。
+- Shared 文档可以兼顾易读解释和精确字段。例如 Project `README.md` 同时服务用户理解和 AI 定位当前阶段；其具体权威职责仍由 [Structure Standard](Project_Structure_Standard.md) 定义，不因读者不同产生第二份状态。
+
+AI 上下文通过现有入口和本指南的任务路由取得，不通过复制 Guide、Skill 或 Project facts 建立另一套上下文。上述表达指导不改变默认读取范围、四层上下文或 Project `AGENTS.md` 启动顺序；文档导航见 [Framework README](../README.md)，无需为采用通用原则调整目录结构。
+
 ## 3. Standalone Project 四层上下文
 
 | Layer                       | 默认入口                                                         | 内容                                                             |
