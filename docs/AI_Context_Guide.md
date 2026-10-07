@@ -47,26 +47,11 @@ Framework maintenance 的 Authority / Current State 由 Framework 当前权威�
 
 ### 2.2 Detailed authoring guidance — 文档任务按需
 
-以下细则用于 README、User Guide、Project Facts、human-facing documentation 的创建、审查与改写；普通交流应用上面的基本约定，无须展开完整编写指导：
+创建、审查或改写 README、Guide、Project Facts 时，沿用基本语言约定，保持术语、模块名和状态字段一致；命令、参数符号、固定生命周期字段及取值、validator-sensitive wording 也保持正式原文。语言调整不得改变需求、事实、数值约束、Stage / Gate、Evidence 或 Authority 语义。面向外部英文读者、双语交付等情况，Project 可在现有权威记录中说明语言选择、范围与理由，无须新增配置文件或字段。
 
-1. Human-facing 内容默认以中文为主要解释语言，使普通用户无需依赖完整英文阅读能力也能理解当前流程、状态、职责、风险、推理依据与下一步；明确面向外部英文读者的内容可按其 Audience 使用英文。
-2. 必要英文技术术语、正式 Framework 术语与工程缩写可以保留。不常见术语首次出现时可采用“中文解释 + 英文正式术语”；普通技术术语含义明确后，不反复堆叠英文括注。
-3. 文件名、路径、schema key、identifier、命令、代码、器件型号、网络名、参数符号、protocol / interface abbreviation、fixed lifecycle field 及其值、validator-sensitive wording 保持正式原文，不进行机械翻译。
-4. 同一文档中的术语、模块名称和状态字段保持一致。
-5. 中文化不得改变 engineering requirement、Project fact、lifecycle state、Stage / Gate meaning、numerical constraint、Evidence meaning 或 authority relationship。
-6. Skill、Template 或 Guide 只引用本节作为执行提示，不复制整套规则，也不成为第二权威源。
+AI-facing 入口重在精确表达规则与路由，教学解释通过链接按需读取；Human-facing README / Guide 重在解释用途、组织、使用方法、当前状态、风险、依据与下一步，以及 AI 能力边界。Shared 文档兼顾易读解释和精确字段。读者类型不决定权威性，不要求 metadata、两套目录或第二份事实；摘要和例子回到 owning Contract / Project facts / evidence，不复制完整上下文或教程。
 
-Chinese-first 是 Framework 的默认编写约定，不要求所有 Standalone Project 永久采用同一语言。因外部英文读者、双语交付、客户或发表要求，Project 可在自身现有权威记录中明确适用范围、理由与语言选择；无须新增语言配置文件或字段。这种本地覆盖只调整表达，不改变 Framework 的 Stage / Gate、Evidence、Authority 语义，也不翻译固定 schema、identifier 或 validator-sensitive wording。
-
-### 主要读者与表达目的
-
-主要面向 AI（AI-first）、主要面向用户（Human-first）和双方共用（Shared）只说明阅读用途，不决定文档的权威性，也不要求逐文件 metadata 或建立两套目录与事实。
-
-- AI-facing Contract 与启动入口重在精确、稳定地解析 Authority、适用 Contract、Stage / Gate、执行约束、Evidence / Validation 边界和读取路由。教学解释通过链接按需取得，不把入口扩成完整教程，也不复制完整上下文。
-- Human-facing README 与 Guide 重在解释 Framework 是什么、为何这样组织、如何使用、当前应看哪里，以及 AI 能力和事实回源边界；可提供少量摘要与例子，但规范性结论仍回到负责该规则的 Contract，Project 工程结论仍回到对应 Project facts / evidence。
-- Shared 文档可以兼顾易读解释和精确字段。例如 Project `README.md` 同时服务用户理解和 AI 定位当前阶段；其具体权威职责仍由 [Structure Standard](Project_Structure_Standard.md) 定义，不因读者不同产生第二份状态。
-
-AI 上下文通过现有入口和本指南的任务路由取得，不通过复制 Guide、Skill 或 Project facts 建立另一套上下文。上述表达指导不改变默认读取范围、四层上下文或 Project `AGENTS.md` 启动顺序；文档导航见 [Framework README](../README.md)，无需为采用通用原则调整目录结构。
+Skill、Template 与其他 Guide 只引用本节，不复制语言规则；上述编写指导不改变默认读取范围、四层上下文、Project 启动顺序或文件事实职责。
 
 ## 3. Standalone Project 四层上下文
 
@@ -89,23 +74,13 @@ Project 不默认读取 Framework `main`，不默认读取其他 Project，也�
 
 ### Checklist 的选择与 Project-specific Review Scope
 
-不改变四层上下文：在当前 Facts 与适用 Skill 明确后，选择该任务的 Core Checklist，再结合适用的 domain / module guidance、当前 schematic / BOM / PCB、Manufacturer official documentation 与已知项目风险，形成 Project-specific Review Scope / Checklist。只读取推导当前检查项所需的资料；没有 Framework 专项片段不表示该模块或风险可免检，也不因片段存在就自动加载。
+不改变四层上下文：Applicable Core Checklist + 适用的 domain / module guidance + Current Project Facts + 当前 schematic / BOM / PCB / implementation + Manufacturer official documentation + 已知风险，共同形成 Project-specific Review Scope / Checklist。只读取推导当前检查项所需的资料；conditional fragments 是补充提示，不是完整清单，没有专项片段不表示该模块或风险可免检，也不因片段存在就自动加载。
 
-| Core coverage guard | 适用任务 |
-| --- | --- |
-| [Project Initialization](../checklists/project_initialization_checklist.md) | Bootstrap / Stage 1 的 Gate 1.5 检查 |
-| [Stage Deliverable](../checklists/release_checklist.md) | 当前 Stage 交付 |
-| [Formal Schematic Review Core](../checklists/schematic_checklist.md) | Stage 4；explicit scoped review 只选相应范围 |
-| [PCB Layout Preflight](../checklists/pcb_layout_preflight_checklist.md) | Stage 5 正式布局前 |
-| [PCB Layout / Routing Core](../checklists/pcb_layout_checklist.md) | Stage 5–6 Layout / Routing Review |
-| [PCB Release](../checklists/pcb_release_checklist.md) | Stage 7 制造放行 |
-| [Bring-up / Test Core](../checklists/bringup_test_checklist.md) | Stage 8 装配、上电与测试 |
-
-[STM32](../checklists/stm32_board_checklist.md)、[电池 / 电源](../checklists/power_board_safety_checklist.md)、[模拟前端](../checklists/analog_frontend_checklist.md) 仅保留有复用价值的 conditional reference fragments，不是 Universal Hardware Checklist，也不是整板或某一器件的完整清单。文件名保留以兼容既有引用；不据此扩建每种芯片一份的 Checklist 数据库。
+Core Checklist 通过第 5–6 节所选的初始化、原理图审查、PCB Layout 或 PCB Release Skill 中的明确链接取得，不猜测文件或加载全部清单。当前 Stage 交付另使用 [Stage Deliverable Checklist](../checklists/release_checklist.md)；Stage 8 使用 [Bring-up / Test Core](../checklists/bringup_test_checklist.md)。专项片段按适用 Skill 与实际模块按需选择，不维护每芯片一份的 Checklist 数据库。
 
 项目检查范围应说明实际适用模块、检查依据、已有有效 evidence、本次需补充的检查与未覆盖风险；不适用项注明理由，缺证据不能记为通过。Formal Review 仍要求完整适用覆盖，scoped review 不被扩大为整板门禁。继承已有效结论与增量复核按第 7 节执行。
 
-默认将范围和实际检查结果写入当前 Stage 已有 owning record：Stage 4 的 `docs/schematic_review.md`（可用 `Applicable Review Scope` 小节）；Stage 5–7 的 `docs/pcb_review.md`；Stage 8 的 `docs/bringup_log.md` / `docs/test_report.md`。早期 scoped review 回写当前 owning module / design record，不提前启用后续 Stage 文档；B1 / B2 即时指导仍不要求每轮持久化。只有长期重复执行且有稳定复用价值的 procedure 才考虑独立 Project-local checklist / test procedure。上述是记录指导，不新增 mandatory section、字段、文件、Runtime schema 或结构要求。
+范围与结果写入当前 owning record，具体路径沿用适用 Skill / Workflow 与 Structure Standard；早期 scoped review 回写当前 module / design record，不提前启用后续 Stage 文档。B1 / B2 即时指导不要求每轮持久化；只有长期重复且有稳定复用价值的 procedure 才考虑独立 Project-local checklist。上述不新增 mandatory section、字段、文件、Runtime schema 或结构要求。
 
 ## 4. Framework Repository 维护路由
 
@@ -137,7 +112,7 @@ Repository Architecture Migration 已关闭。普通 Framework maintenance 与 P
 
 ### Bootstrap
 
-默认读取：Layer 0/1、Structure Standard、Workflow 的 Bootstrap 章节、Project Initialization Guide、初始化 Skill、Template、Project 根 Required files。
+默认读取：Layer 0/1、Structure Standard、Workflow 的 Bootstrap 章节、Project Initialization Guide、[初始化 Skill](../skills/hardware-project-initialization/SKILL.md)、Template、Project 根 Required files。
 
 按需读取：专项合规方法、目标 Release 的 Migration Guide。
 
@@ -166,10 +141,10 @@ Gate 1.5 不读取或产生后续阶段设计结果；Validator 结果不能替�
 | Stage 1 — Requirements | Layer 0/1 + 当前项目五个根事实入口 + 初始化 Skill | Workflow Stage 1、专项安全方法 | 其他 Project、全部 datasheet、后续 Skill |
 | Stage 2 — Component Selection | Layer 0/1 + 选型 Skill + Requirements/Design/References | 当前候选官方资料、datasheet Skill、专项 checklist | 原理图/PCB Review Skill、无关资料 |
 | Stage 3 — Schematic Design | Layer 0/1 + schematic-design Skill + 当前需求、设计说明、资料索引、当前模块文档 | 选型/datasheet Skill、BOM 草稿、封装资料、当前模块所需 Manufacturer official documentation | 其他 Project、全部 Skill、全部 datasheet、全部历史记录 |
-| Stage 4 — Formal Schematic Review | Layer 0/1 + Review Skill + Requirements/Design/References + post-convergence 完整 PDF + 当前 BOM + Review 记录 | 当前模块文档；网表/ERC/报告/截图按具体问题触发 | 其他 Project、Template、全部 Skill |
-| Stage 5 — Layout Preflight | Layer 0/1 + PCB Skill + README/Requirements/Design/References + Schematic Review + PCB Rules + 关键 Layout 资料 | PDF/BOM/机械/板厂官方能力 | Batch DRC、制造输出、其他 Project |
+| Stage 4 — Formal Schematic Review | Layer 0/1 + [Schematic Review Skill](../skills/hardware-schematic-review/SKILL.md) + Requirements/Design/References + post-convergence 完整 PDF + 当前 BOM + Review 记录 | 当前模块文档；网表/ERC/报告/截图按具体问题触发 | 其他 Project、Template、全部 Skill |
+| Stage 5 — Layout Preflight | Layer 0/1 + [PCB Layout Skill](../skills/hardware-pcb-layout-review/SKILL.md) + README/Requirements/Design/References + Schematic Review + PCB Rules + 关键 Layout 资料 | PDF/BOM/机械/板厂官方能力 | Batch DRC、制造输出、其他 Project |
 | Stage 5–6 — PCB Layout / Routing Guidance & Review | Layer 0/1 + `hardware-pcb-layout-review` Skill + README/Requirements/Design/PCB Rules + 当前 PCB Evidence | 模块资料、关键 datasheet、已有 PCB 问题 | 全部资料、Release checklist、制造输出 |
-| Stage 7 — PCB Release Review | Layer 0/1 + README + PCB Rules + PCB Review + `hardware-pcb-release-review` Skill + 当前 release candidate evidence + Final Full Batch DRC evidence + actual manufacturing interpretation + PCB Release Checklist | schematic、BOM、模块文档、Stage 5–6 PCB Skill、PCBA data、special fabrication data；只按 unresolved finding / design delta / 实际制造路径触发 | 其他 Project 历史、与当前放行结论无关的全部上游资料 |
+| Stage 7 — PCB Release Review | Layer 0/1 + README + PCB Rules + PCB Review + [PCB Release Skill](../skills/hardware-pcb-release-review/SKILL.md) + 当前 release candidate evidence + Final Full Batch DRC evidence + actual manufacturing interpretation + PCB Release Checklist | schematic、BOM、模块文档、Stage 5–6 PCB Skill、PCBA data、special fabrication data；只按 unresolved finding / design delta / 实际制造路径触发 | 其他 Project 历史、与当前放行结论无关的全部上游资料 |
 | Stage 8 — Bring-up/Test | Layer 0/1 + README + Bring-up/Test 记录 + 原理图与接口说明 | PCB Review、关键 datasheet、安全 checklist、Revision | 其他 Project、Template |
 | Firmware task（任何 Stage，按 Task Intent） | 完成 Project 根启动路由后，读取适用的 `firmware/AGENTS.md`（若存在）+ 绑定快照中的 `hardware-firmware-development` Skill + 当前任务所需 Firmware source / build configuration | Relevant Project hardware facts、official device / toolchain documentation、当前 validation evidence | Framework `main`、其他 Project Firmware、无关 Stage Skill、全部 datasheet |
 
