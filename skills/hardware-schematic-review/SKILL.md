@@ -23,7 +23,7 @@ Stage 4 Formal Schematic Review 还默认读取当前 Project 的 `requirements.
 
 - 当前 Project 已有的 `docs/schematic_review.md`
 - `skills/hardware-datasheet-reading/SKILL.md` 或 `skills/hardware-component-selection/SKILL.md`
-- 相关 checklist
+- [Schematic Core Checklist](../../checklists/schematic_checklist.md)（Formal Review 使用完整适用范围；Scoped Review 只取对应项）
 - 当前问题需要的 netlist、ERC、component / pin / footprint mapping 或 screenshot evidence
 
 ## 使用范围
@@ -58,39 +58,13 @@ Scoped review / risk review 不默认要求完整整板原理图 PDF、完整整
 - `requirements.md`、`design_notes.md` 和 `docs/module_design/*.md` 是需求和设计意图，不能单独证明 EDA 实现已经同步。
 - Stage 4 可复用可追溯且足以覆盖当前目标的既有 review evidence；无需 schematic、PDF 或 BOM byte- / SHA-identical。复用前应判断该 evidence 与当前设计、适用范围和所需结论的关系；只对 changed、previously uncovered、evidence-insufficient，或因真实错误 / 新 evidence 而失效的受影响部分执行必要检查，不因局部修改机械重审全部模块。Reuse 不等于跳过 Stage 4，也不得因曾完成 Scoped Review 而虚构尚未完成的 Formal Review coverage，或把未验证的 ERC、EDA mapping 或 footprint mapping 升级为 PASS；ERC 未验证不因此自动成为 Stage 4 blocker。
 
-## 审查目标
+## 形成检查范围与执行审查
 
-原理图审查不是只判断“能不能连通”，而是要检查：
+按 [AI Context Guide](../../docs/AI_Context_Guide.md) 的 Checklist 分层指导，先从当前架构、能量流、信号流与已知风险确定实际模块，再以 [Schematic Core Checklist](../../checklists/schematic_checklist.md) 防遗漏。按电源与保护、功能模块、跨模块接口、封装与测试访问的依赖顺序审查，不因项目名称或 MCU 品牌固定套用整套清单。
 
-- 电源是否安全可靠
-- MCU 最小系统是否完整
-- 复位、BOOT、时钟、SWD 是否正确
-- UART / I2C / SPI 接口方向和电平是否合理
-- ADC 输入范围、滤波、限流和保护是否可靠
-- MOSFET 驱动和负载保护是否完整
-- 锂电池充电与保护是否安全
-- 运放供电、输入输出范围和滤波是否合理
-- 外置 ADC 和参考电压是否匹配
-- 关键 bring-up / debug 节点是否具有可实现的 schematic-level testability access strategy；普通 PCB test pad 的最终尺寸、位置和探测空间由 Stage 5 决定
-- 封装、BOM、丝印、接口定义是否一致
+对 Core 无法充分表达的器件 / 模块约束，从当前 Project Facts、schematic / BOM、Manufacturer official documentation 和已知风险推导具体检查项及判定依据。适用时参考 [STM32 条件片段](../../checklists/stm32_board_checklist.md)、[电池 / 电源条件片段](../../checklists/power_board_safety_checklist.md)、[模拟前端条件片段](../../checklists/analog_frontend_checklist.md)；这些只提供补充提示，不替代当前型号资料，也不用于无对应模块的项目。
 
-## 审查顺序
-
-按以下模块分类审查，并根据项目类型读取对应 checklist：
-
-| 分类            | 主要用途                               | 推荐 checklist                                                                  |
-| ------------- | ---------------------------------- | ----------------------------------------------------------------------------- |
-| 总体结构          | 模块边界、电源路径、信号流向、网络命名、跨页连接           | `checklists/schematic_checklist.md`                                           |
-| 电源            | 输入保护、稳压、去耦、热耗散、电源测试点               | `checklists/schematic_checklist.md`                                           |
-| MCU 最小系统      | 供电、复位、BOOT、时钟、SWD、未用脚              | `checklists/stm32_board_checklist.md`                                         |
-| 通信接口          | UART / I2C / SPI / USB 方向、电平、保护、丝印 | `checklists/stm32_board_checklist.md`、`checklists/schematic_checklist.md`     |
-| ADC / 模拟输入    | 输入范围、限流、滤波、钳位、参考电压                 | `checklists/schematic_checklist.md`、`checklists/analog_frontend_checklist.md` |
-| MOSFET / 功率输出 | 栅极驱动、默认状态、续流路径、负载接口、散热             | `checklists/schematic_checklist.md`                                           |
-| 电池            | 充电、保护、接口极性、限流上电和测试安全               | `checklists/power_board_safety_checklist.md`                                  |
-| 运放 / 外置 ADC   | 供电范围、共模范围、输出摆幅、带宽、参考电压             | `checklists/analog_frontend_checklist.md`                                     |
-| 封装、测试点和可制造性   | 封装映射、极性、测试可达性、丝印和手焊风险              | `checklists/schematic_checklist.md`                                           |
-
-Skill 只规定审查方法和输出结构；逐项检查句应维护在 `checklists/` 中。
+在 `docs/schematic_review.md` 的现有审查记录中说明 Applicable Review Scope，例如 Core、实际 MCU、ADC / Reference、电池 / 电源、通信、保护与可测试性；项目不具备的模块不自动加入。关联检查依据、适用结论与 evidence gaps，再按上面的两个验证层次作独立判断。Formal Review 保持整板适用覆盖；Scoped Review 按其边界回写当前 owning record，不因此新建 Stage 4 文档。Skill 维护方法、风险和输出，逐项检查维护在 Checklist 或项目当前审查记录中。
 
 ## 输出格式
 

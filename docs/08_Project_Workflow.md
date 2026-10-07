@@ -18,7 +18,7 @@ Stage 2 → Stage 3 → Stage 4 → Stage 5 → Stage 6 → Stage 7 → Stage 8
 
 Bootstrap 位于八阶段之前，不是 Stage 0，也不属于 Stage 1。Gate 1.5 位于 Stage 1 与 Stage 2 之间，只检查初始化和第一版 Requirements Baseline，不产生器件、原理图、PCB、DRC、制造或测试结果。
 
-项目结构、绑定 schema 和 Stage-enabled 路径以 [Project Structure Standard](Project_Structure_Standard.md) 为准；AI 读取范围以 [AI Context Guide](AI_Context_Guide.md) 为准；执行方法由对应 Skill 维护；逐项检查由 checklist 维护。
+项目结构、绑定 schema 和 Stage-enabled 路径以 [Project Structure Standard](Project_Structure_Standard.md) 为准；AI 读取范围以 [AI Context Guide](AI_Context_Guide.md) 为准。Workflow 负责 when（Stage / Gate 与进入、退出条件），Skill 负责 how（执行方法），Checklist 负责 what must not be missed（覆盖与防遗漏）；Project-specific 检查范围按 AI Context Guide 形成并记录到当前 owning review / validation 文档。
 
 ## 2. 通用原则
 
@@ -120,17 +120,7 @@ Gate 1.5 位于 Stage 1 与 Stage 2 之间。它验证 Project 容器、Framewor
 
 ### 检查范围
 
-- Project Identity 唯一且与当前仓库一致；
-- Framework Repository、Release、Commit、Project Structure Version、Repository Model、Initialization Framework Release 与 Status 完整一致；
-- 根事实入口齐全，根 `README.md` 是当前阶段唯一事实源；
-- README Navigation 的必要相对链接有效；
-- Template placeholder 已替换，`TBD` / `待确认` 仅作为真实未决状态存在；
-- 不含未标注的其他 Project facts 或非法旧 monorepo runtime dependency；显式标注的 Source Repository、Legacy Project Path 等 migration provenance 可以保留；
-- Required 齐全，Conditional 未被误判为 Required，Stage-enabled 内容未为目录整齐提前预建；
-- 无职责的空目录和低信息量文件不存在；
-- Stage 1 Requirements Baseline 覆盖目标、不做内容、功能/模块/电源/接口/安全/制造边界、验收标准和待确认问题；
-- 尚未开始的选型、EDA、Review、DRC、Manufacturing、Bring-up、Test 明确保持未开始/未验证状态；
-- 没有提前产生或声称后续阶段结论。
+使用 [Initialization Checklist](../checklists/project_initialization_checklist.md) 覆盖 Identity / Binding、Required structure、事实入口与导航、placeholder / residue、第一版 Requirements Baseline，以及没有提前产生后续阶段结论。Required / Conditional / Stage-enabled 语义保持 Structure Standard 的定义；显式标注的 migration provenance 可以保留，不得误作非法运行时依赖。逐项条件在 Checklist 维护，本节定义 Gate 的通过与授权边界。
 
 ### 结论与授权边界
 
@@ -184,7 +174,7 @@ Stage 3 entry 至少启用一个 owning module design record，承接当前 deta
 
 Stage 4 先完成剩余 component / footprint convergence；当 exact identity 的技术 qualification 确有必要时，可使用 `hardware-component-selection` 作为 supporting method，但普通 deferred commodity part 不因进入 Stage 4 自动要求完整的多候选 `Primary / Alternate` 分析。该 remaining convergence 可以处理 ordinary actual-part / supplier-part / library / footprint mapping / procurement identity convergence；实际装配器件必须与当前 schematic / BOM 和 PCB footprint 形成无歧义 mapping，不需要 exact manufacturer / supplier identity 的普通器件仍可由充分 specification、rating 与 footprint 表达。
 
-随后由用户更新 authoritative `.SchDoc` 与当前 BOM，并导出对应的完整原理图 PDF；再使用 `hardware-schematic-review` 对该 post-convergence current design 执行 Formal Schematic Review。Formal Review 同时包含 **Independent Engineering Design Verification** 与 **EDA Implementation Verification**：前者独立判断 requirements、topology applicability、operating range / margin、startup / shutdown / fault behavior、protection、power integrity、cross-module interaction 与适用的 hardware–firmware feasibility 是否成立；后者核对 schematic / BOM 中的 pin、net、power、polarity、package / footprint mapping、connector、decoupling 与实现忠实性。独立验证要求独立 acceptance judgment，但不要求在既有 Stage 3 engineering rationale 仍有效时机械重新推导全部设计。只在用户提供 ERC 结果时分析 ERC。该顺序不新增 Stage 4A / Stage 4B、Gate 或 lifecycle state：
+随后由用户更新 authoritative `.SchDoc` 与当前 BOM，并导出对应的完整原理图 PDF；再使用 [Schematic Review Skill](../skills/hardware-schematic-review/SKILL.md) 对该 post-convergence current design 执行 Formal Schematic Review。Formal Review 同时包含 **Independent Engineering Design Verification** 与 **EDA Implementation Verification**，保持整板适用覆盖和独立 acceptance judgment；具体分析方法由 Skill 维护，技术覆盖由 [Schematic Core Checklist](../checklists/schematic_checklist.md) 与项目专属范围共同承接。不要求在既有 Stage 3 engineering rationale 仍有效时机械重新推导全部设计，只在用户提供 ERC 结果时分析 ERC。该顺序不新增 Stage 4A / Stage 4B、Gate 或 lifecycle state：
 
 ```text
 remaining component / footprint convergence

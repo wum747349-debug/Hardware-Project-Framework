@@ -7,11 +7,9 @@
 
 ## 使用说明
 
-- 将本清单复制或引用到当前 Project `docs/pcb_review.md` 后填写；Stage 7 方法使用 `skills/hardware-pcb-release-review/SKILL.md`。
+- 将适用检查及结果记录到当前 Project `docs/pcb_review.md`。
 - `状态` 使用：`待核对`、`已确认`、`不通过`、`不适用`、`已豁免`；`不适用` 和 `已豁免` 必须说明依据、风险和批准记录。
-- 用户负责实际 Altium、Repour、Batch DRC、制造数据生成/提交与下单；AI/Codex 只分析用户提供的结果。
-- 已完成的 Stage 5–6 design-quality review 不在此默认重复。只有 unresolved Stage 6 finding 或 Stage 7 design delta 才按影响范围调用 PCB Layout / Routing Review。
-- 审查实际 submission path 所用制造数据的一个 capable and faithful representation；只在 evidence gap 存在时增加其他适当 representation。
+- 方法、evidence readiness、waiver、增量复审与输出格式见 [PCB Release Skill](../skills/hardware-pcb-release-review/SKILL.md)；项目专属范围与持久化按 [AI Context Guide](../docs/AI_Context_Guide.md) 执行。
 - 清单完成率不能自动推导制造放行，必须填写显式 Manufacturing Release Decision。
 
 ## 1. Release Identity / Evidence
@@ -26,19 +24,10 @@
 
 ## 2. Final Full Batch DRC
 
-| 项目 | 结果 |
-| --- | --- |
-| PCB / Git / hardware version |  |
-| 运行日期与 context |  |
-| 规则基线 |  |
-| Warnings / Rule Violations |  |
-| 关键检查类别与问题 |  |
-| 修改 / Repour / rerun 状态 |  |
-| 用户确认完整 Batch DRC 已运行 |  |
-
 | 检查项 | 结论 | 依据 / 证据 | 状态 |
 | --- | --- | --- | --- |
 | Final Full Batch DRC 针对 exact release candidate |  |  |  |
+| 用户确认完整 Batch DRC 已运行，日期 / context 与规则基线可追溯 |  |  |  |
 | 适用规则与关键类别已启用，结果足以支持判断 |  |  |  |
 | Warnings / Rule Violations 已分类处置 |  |  |  |
 | 实际违规已解决或进入明确、合理、可追溯的 waiver |  |  |  |
@@ -96,30 +85,11 @@
 
 ## 8. Findings / Waivers
 
-| ID | 对象 | Finding / waiver | 影响与风险 | 动作 / 验证 | 批准与状态 |
-| --- | --- | --- | --- | --- | --- |
-|  |  |  |  |  |  |
-
-确认修改后已刷新适用输出、重跑 Final Full Batch DRC 并复审受影响的 manufacturing interpretation。只在 delta 影响 placement、routing、via topology、copper 或 critical return/reference geometry 时，才记录 scoped B3 upstream re-review 结果。
+- [ ] Findings / waivers 的对象、影响与风险、技术依据、动作 / 验证、批准与状态可追溯。
+- [ ] 修改后已刷新适用输出、重跑 Final Full Batch DRC 并复审受影响的 manufacturing interpretation。
+- [ ] 影响 placement、routing、via topology、copper 或 critical return/reference geometry 的 delta 已完成 scoped B3 upstream re-review；其他范围未机械重审。
 
 ## 9. Manufacturing Release Decision
-
-| 结论项 | 填写内容 |
-| --- | --- |
-| 当前结论 | `<批准制造 / 有条件批准 / 不批准制造>` |
-| Exact release candidate |  |
-| Final Full Batch DRC 用户确认 |  |
-| Actual manufacturing-data / submission path |  |
-| Final manufacturing interpretation |  |
-| 适用 fabrication / order parameters |  |
-| PCBA / special fabrication applicability |  |
-| 阻断问题与未关闭非阻断问题 |  |
-| 已批准 waivers |  |
-| 有条件批准的条件、风险与责任 |  |
-| Durable summary 的 date / context、limitations 与 decision |  |
-| 下一步 |  |
-
-最终确认：
 
 - [ ] Exact release candidate 已无歧义识别。
 - [ ] 用户已运行并确认该版本的 Final Full Batch DRC。
@@ -127,4 +97,5 @@
 - [ ] 实际 submission path 与一个 capable and faithful final manufacturing interpretation 已确认。
 - [ ] 适用的 bare-PCB、conditional PCBA 与 conditional special-fabrication 项已确认。
 - [ ] `docs/pcb_review.md` 已按 AI Context Guide 留下最小 durable summary。
-- [ ] 已显式填写 Manufacturing Release Decision。
+- [ ] 已按 Skill 显式填写 Manufacturing Release Decision：`批准制造` / `有条件批准` / `不批准制造`。
+- [ ] 阻断问题、未关闭非阻断问题、已批准 waivers 与下一步明确；有条件批准已说明条件、风险和责任。

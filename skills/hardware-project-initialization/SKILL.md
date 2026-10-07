@@ -6,7 +6,7 @@
 
 本 Skill 不定义结构或 Lifecycle；结构以 `docs/Project_Structure_Standard.md` 为准，Gate 以 `docs/08_Project_Workflow.md` 为准，逐项检查使用 `checklists/project_initialization_checklist.md`。
 
-Bootstrap / Stage 1 创建 human-facing Project documentation 时，遵守 Framework `AGENTS.md` 的 Documentation Language / Readability guidance；本 Skill 只传播该执行要求，不另行定义语言规则。
+Bootstrap / Stage 1 创建 human-facing Project documentation 时，遵守绑定快照 [AI Context Guide](../../docs/AI_Context_Guide.md) 的 Documentation Language / Readability guidance；本 Skill 只引用该 owning source，不另行定义语言规则。
 
 ## 最小上下文
 
@@ -41,14 +41,13 @@ Bootstrap / Stage 1 创建 human-facing Project documentation 时，遵守 Frame
 
 ## Gate 1.5 协作
 
-1. 使用 Initialization Checklist 检查 Identity、Binding、Required、Navigation、placeholder、residue 与 Requirements Baseline。
+1. 使用 [Initialization Checklist](../../checklists/project_initialization_checklist.md) 执行覆盖检查，不在本 Skill 重列检查项。
 2. 保持 `Initialization Status: Gate 1.5 Pending`，运行 Project Validator 的 `--gate-1-5` 模式。
 3. 将自动检查与人工事实审查分开报告。
 4. 任一阻断项存在时输出 `NOT READY`，并保持 `Gate 1.5 Pending`。
 5. 全部阻断项关闭时 technical conclusion 为 `READY`。
-6. Read-only request 只报告 `READY / NOT READY`，不得记录 Gate PASS、更新 `Initialization Status` 或推进 Stage。
-7. Explicit execution request 已明确要求执行 Gate 1.5、完成初始化或条件满足后进入下一阶段时，该请求本身构成 execution authorization；若结论为 `READY`，不再请求第二次 approval，直接记录 Gate 1.5 PASS 并将 `Initialization Status` 更新为 `Initialized`。
-8. 更新状态后运行普通 Project Validator；通过后才允许进入 Stage 2。Gate 本身不产生设计结果。
+6. 按 [Workflow](../../docs/08_Project_Workflow.md) 的 Gate 1.5 授权边界处理：read-only 只报告；`READY` 且已有 explicit execution authorization 时记录 Gate PASS 并更新为 `Initialized`，不追加第二次 approval。
+7. 更新状态后运行普通 Project Validator；通过后才允许进入 Stage 2。Gate 本身不产生设计结果。
 
 `READY` 不等于自动执行；只有当前用户任务已明确授权状态变化时才执行 Gate PASS。
 

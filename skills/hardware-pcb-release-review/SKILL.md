@@ -37,13 +37,7 @@ AI/Codex 只分析用户提供的结果，不声称自行运行 Altium、Repour 
 
 Manufacturing interpretation verifies that the actual manufacturing-data path faithfully represents the intended manufacturing geometry. DRC 是 EDA / design-rule verification，CAM / Gerber interpretation 是 manufacturing translation verification；两者互补，不重复、不可互换。例如 pad-level Solder Mask override 可能不按用户预期被普通 DRC 暴露，而最终 manufacturing interpretation 可直接显示异常开窗。
 
-按制造意图检查，不依赖 viewer 的具体 layer naming：
-
-1. Copper / layer mapping：层数、正反面、铜层完整性与预期一致。
-2. Solder Mask：开窗、遮盖、mask sliver 与特殊 override 符合意图。
-3. Drill / Slot / PTH / NPTH：数量、位置、形状、孔类与 plating semantics 正确。
-4. Board Outline / Cutout / routed geometry：外形、内挖、槽和铣切几何完整无歧义。
-5. Composite / Registration：作为 cross-layer sanity check，确认铜、阻焊、钻孔与外形的对位关系；不将其定义为独立 manufacturing primitive。
+按 [PCB Release Checklist](../../checklists/pcb_release_checklist.md) 的 Core Manufacturing Interpretation 覆盖制造特征，以制造意图判断，不依赖 viewer 的具体 layer naming。Composite / Registration 是跨层对位检查，不是独立 manufacturing primitive。项目特有制造特征按 [AI Context Guide](../../docs/AI_Context_Guide.md) 的分层指导补充到当前 `docs/pcb_review.md`；保留所有适用 Core checks。
 
 对 plated slot 等 feature，问题是最终制造数据是否包含正确数量、位置、形状和 plating semantics，而不是它是否与 round drill 显示在同一 viewer layer。
 

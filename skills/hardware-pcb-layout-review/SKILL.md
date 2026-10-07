@@ -20,6 +20,8 @@ description: Guide and review PCB placement, routing, copper, return paths, and 
 
 项目规则值写入 `docs/pcb_design_rules.md`；需要跨回合追踪的 Layout / Routing 问题与 Formal Review 结论写入 `docs/pcb_review.md`。Stage 7 由 `hardware-pcb-release-review` 负责。
 
+按 [AI Context Guide](../../docs/AI_Context_Guide.md) 的 Checklist 分层指导，将适用 Core 与当前 PCB、规则基线、官方 Layout 资料和已知风险结合，形成项目专属检查范围；在现有 `docs/pcb_review.md` 中记录范围与结果，不复制全部 domain 清单或默认新建文件。B1 / B2 仍只处理本轮问题，不要求每轮持久化或执行整板 Checklist。
+
 ## 2. 选择模式
 
 | 用户请求                                                        | 模式                                      | 必需结论                                              |
@@ -48,13 +50,7 @@ description: Guide and review PCB placement, routing, copper, return paths, and 
 
 ## 5. 模式 A 方法：Layout Preflight
 
-1. 确认项目、硬件版本、原理图审查结论和未关闭高风险问题。
-2. 确认目标板厂、材料、层数、板厚、铜厚、装配方式、板框、安装孔和机械边界。
-3. 核对关键封装、Pin/Pad mapping、极性、Pin 1、机械模型和器件 Layout 要求。
-4. 根据项目需求形成规则基线，区分板厂制造能力、项目设计默认值和制造极限。
-5. 选择必要的 Net Class 或明确 Scope，记录规则值、依据、单位、Scope、Altium Rule Priority 和覆盖关系。
-6. 由用户确认 Altium 实际规则已配置，并人工核对关键 Scope 与 Altium Rule Priority。
-7. 使用 Preflight Checklist 记录阻断项与结论。
+使用 Preflight Checklist 核对输入与前置条件，再根据已确认的制造、机械、封装和器件约束形成项目规则基线。区分板厂制造能力、项目设计默认值和制造极限；按下述方法选择 Scope 与 Altium Rule Priority，由用户确认实际配置及匹配范围，最后记录阻断项与结论。
 
 Rule organization principle：使用能够准确表达工程意图的最简单 Scope，并保持最小且可维护的规则集。
 

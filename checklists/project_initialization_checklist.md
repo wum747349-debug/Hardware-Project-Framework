@@ -1,5 +1,7 @@
 # Gate 1.5 — Project Initialization & Requirements Baseline Checklist
 
+本表负责 Gate 1.5 覆盖；进入、通过与授权条件以 [Workflow](../docs/08_Project_Workflow.md) 为准，执行方法见 [Initialization Skill](../skills/hardware-project-initialization/SKILL.md)。
+
 ## Identity
 
 - [ ] Project Identity 唯一，并与当前 Standalone Repository 一致。
@@ -55,7 +57,6 @@
 - [ ] 执行 Gate Validator 前真实保持 `Initialization Status: Gate 1.5 Pending`。
 - [ ] `python scripts/validate_project_repository.py --gate-1-5` 通过。
 - [ ] 人工事实审查无阻断项；technical conclusion 为 `READY`。
-- [ ] 若当前任务只是 read-only review，只报告 `READY / NOT READY`，不记录 Gate PASS、不更新 `Initialization Status`、不推进 Stage。
-- [ ] 若当前任务已明确要求执行 Gate 1.5、完成初始化或条件满足后进入下一阶段，该请求视为 execution authorization；无需第二次 approval round-trip。
+- [ ] Read-only review 未改变 Gate、`Initialization Status` 或 Stage；执行时已按 Workflow 确认当前授权范围。
 - [ ] 只有在 `READY` 且当前任务已有 execution authorization 时，才记录 Gate 1.5 PASS 并将 `Initialization Status` 更新为 `Initialized`。
 - [ ] 更新状态后的 `python scripts/validate_project_repository.py` 通过，才允许进入 Stage 2。

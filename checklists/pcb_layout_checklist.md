@@ -7,13 +7,7 @@
 
 ## 使用说明
 
-- 本 Checklist 用于 PCB Skill 的 `Layout / Routing Review` 模式，可复制或引用到当前项目的审查过程。
-- `状态` 建议使用：`待核对`、`已确认`、`不通过`、`不适用`、`待 EDA 核对`；`不适用` 应说明理由。
-- AI/Codex 只分析用户提供的 PCB 图片和其他实现证据。图片不能证明网络连接、精确间距、线宽、孔径、环宽、规则命中、铺铜状态或 DRC 通过。
-- 阶段 5 和阶段 6 不要求正式 Batch DRC；阶段 6 不要求保存、导出或归档中间 DRC。用户可按需使用实时检查或临时检查，但中间 DRC 不是仓库门禁。
-- 用户负责在 Altium Designer 中实际布局、布线、换层、铺铜和 Repour，并确认当前实现版本。
-- 只把需要跨回合追踪的重要问题记录到 `docs/pcb_review.md`；普通即时建议不强制写入项目审查记录。
-- 无法由当前证据确认的实现项标记为 `待 EDA 核对`，不得仅凭视觉整洁判定电气正确或可制造。
+本表供 [PCB Layout Skill](../skills/hardware-pcb-layout-review/SKILL.md) B3 使用，方法、风险与输出由 Skill 维护。按 [AI Context Guide](../docs/AI_Context_Guide.md) 确定证据与项目专属范围，并记录到 `docs/pcb_review.md`；普通即时建议不要求每轮持久化。状态可用 `待核对`、`已确认`、`不通过`、`不适用`、`待 EDA 核对`；不适用注明理由，视觉判断不升级为精确 EDA 验证。
 
 ## 1. 审查对象与版本
 
@@ -101,14 +95,7 @@
 
 ## 8. 阶段结论
 
-| 结论项 | 填写内容 |
-|---|---|
-| 用户确认 |  |
-| 确认日期 |  |
-| 阻断项 |  |
-| 待 EDA 核对项 |  |
-| 需要写入 `pcb_review.md` 的问题 |  |
-| 最终结论 | `<可进入 PCB Release Review / 修改后复审 / 存在高风险，停止推进>` |
-| 下一步 |  |
+- [ ] 已按 Skill 显式给出 `可进入 PCB Release Review` / `修改后复审` / `存在高风险，停止推进`。
+- [ ] 用户确认、日期、阻断项、待 EDA 核对项与下一步已记录，正式结论与重要问题可追溯到 `docs/pcb_review.md`。
 
 本 Checklist 不要求完整 Batch DRC。完整 Batch DRC 由用户在阶段 7 的 PCB Release Review 中针对当前版本运行并确认。

@@ -16,39 +16,19 @@
 
 ## 权威优先级与会话连续性
 
-本节属于 AI collaboration / context-use guidance，不新增 Project Runtime Rule、Structural Contract、Stage / Gate、Project `AGENTS.md` routing step 或持久化 schema。详细规则以 `docs/AI_Context_Guide.md` 为准。
-
-- Framework maintenance 中，当前 Repository Authority / Git state 高于 Session Handoff、Conversation history 与 AI memory。
-- Standalone Project 中，当前 Project Authority 与其 `FRAMEWORK.md` 绑定的 immutable Framework snapshot 高于 Session Handoff、Conversation history 与 AI memory。
-- Session Handoff 只传递当前工作集，不是事实权威；Session Starter 只说明新会话如何开始，也不是新的 Contract。
-- 目标、阶段、Authority 组成与 working set 连续且清楚时继续当前会话；目标或阶段明显变化、关键决策已冻结、旧讨论大量失效或当前状态开始混淆时，先形成最小 Handoff，再考虑新会话。
-- 消息数量、token 数量或“对话看起来很长”不能单独作为换会话理由；不得建立固定 Context Score、自动 Session 切换、Session database、runtime 或 agent 机制。
+日常工作始终应用 [AI Context Guide](docs/AI_Context_Guide.md) 的 Authority 优先级、结论继承、有边界执行与会话管理指导。当前 Authority / Current State 高于 Handoff 和聊天记忆；工作集连续清楚时继续当前会话，发生实质变化或混淆时形成最小 Handoff，再考虑新会话。完整规则由该指南维护，不按“会话管理任务”才启用。
 
 ## 用户报错复核与影响分析
 
-用户明确质疑 AI/Codex 的某个结论时，先暂停把该结论作为后续可靠前提，再回到完成复核所需的最小 Framework / Project Authority、当前 Git / EDA / Evidence state 与可靠来源独立核对。用户质疑不等于结论自动错误。
-
-复核结果使用：`Confirmed`（复核后原结论成立）、`Corrected`（原结论被确认错误）或 `Unresolved`（当前证据不足）。`Unresolved` 不得继续作为已确认前提。
-
-若结果为 `Corrected`，必须检查该错误是否已传播到后续推理、建议、Stage / Gate 判断、文件修改、Validation、Release / Manufacturing decision 或其他依赖结论，明确 Affected Conclusions。未传播时可说明影响仅限当前结论；已传播时只修复实际失效的最小范围，并重新验证所有受影响结果。不得因单个错误自动扩建 Failure Taxonomy、错误数据库、Runtime、Agent、Vector Search 或其他平台能力。
+用户质疑结论时暂停依赖它，按 [AI Context Guide](docs/AI_Context_Guide.md) 的用户报错复核流程输出 `Confirmed` / `Corrected` / `Unresolved`；纠错时追踪 Affected Conclusions 并重新验证实际受影响结果。未解决结论不得恢复为可靠前提。
 
 ## 文档语言与可读性
 
-Framework 与 Standalone Project 的 human-facing authoring 遵循 [AI Context Guide](docs/AI_Context_Guide.md) 中的 Documentation Language / Readability guidance。该指导属于 authoring / usability guidance，不新增 Project Runtime Rule、Structural Contract 或 Standalone Project `AGENTS.md` context-routing step。
+日常沟通始终应用 [AI Context Guide](docs/AI_Context_Guide.md) 的基本语言约定：默认中文、必要技术术语自然保留英文、正式字段与标识符保持原文。文档编写或改写时再应用该指南的详细 Documentation Language / Readability guidance。
 
 ## Standalone Project `AGENTS.md` Contract
 
-Project Template 中的轻量 `AGENTS.md` 只负责启动路由，必须要求 AI/Codex：
-
-1. 先读取 Project `FRAMEWORK.md`；
-2. 再读取 Project `PROJECT_RULES.md`；
-3. 从 `FRAMEWORK.md` 获得绑定的 Framework Release + Commit；
-4. 从该绑定快照读取 `docs/AI_Context_Guide.md`；
-5. 只读取当前任务需要的 Project Facts、Stage Method 与 Evidence；
-6. 不默认读取 Framework `main`；
-7. 不默认读取其他 Project。
-
-Project `AGENTS.md` 不复制 Framework 的完整方法。完整 schema、四层上下文和 Project Runtime Rules 以 `docs/Project_Structure_Standard.md` 为准。
+七步启动 Contract 由 [Project Structure Standard](docs/Project_Structure_Standard.md) 维护，[Project Template](templates/hardware_project_template/AGENTS.md) 实现：`FRAMEWORK.md → PROJECT_RULES.md → bound Framework snapshot 的 AI Context Guide → 当前任务 Facts / Method / Evidence`。不默认读取 Framework `main` 或其他 Project，也不在 Project `AGENTS.md` 复制完整方法。
 
 ## Skill 路由
 
@@ -78,28 +58,15 @@ Project `AGENTS.md` 不复制 Framework 的完整方法。完整 schema、四层
 
 ## 关键能力与证据边界
 
-- `.SchDoc` 和 `.PcbDoc` 分别是原理图和 PCB 的权威设计源。没有可靠解析能力时，不得声称已读取或核对其内部对象、规则、铺铜或 DRC 状态。
-- 不得声称运行过 Altium、ERC、Repour、Batch DRC、制造输出、焊接或测试；只有用户提供实际结果时才分析，并明确结果来源。
-- Evidence sufficiency、minimum missing evidence 与缺证据时的 continuation behavior 按 `docs/AI_Context_Guide.md` 执行；证据不足时必须说明结论限制，不得无证据关闭依赖该证据的相应问题、确认相应结论或批准相应制造动作。
-- Framework 文档、Template 或 Reference Project 不证明任何真实 Project 的 EDA 实现或测试状态。
+EDA、制造与实测的基础边界以 [PROJECT_RULES.md](PROJECT_RULES.md) 为准；evidence sufficiency、minimum missing evidence 与受限继续方式以 [AI Context Guide](docs/AI_Context_Guide.md) 为准。没有相应实际证据不得声称实现或验证已完成，不得关闭依赖该证据的问题或放行制造；Framework 文档与 Template 不证明真实 Project 的实现状态。
 
 ## Git 安全与默认交付
 
-实施类任务在用户未明确禁止提交或推送时：
-
-1. 修改前和交付前检查 `git status`、分支、远端、上游与最终 diff。
-2. 保留用户已有修改和未跟踪资料；无法安全分离时停止。
-3. 只显式暂存本次文件，禁止 `git add .` 和 `git add -A`。
-4. 提交前检查 staged diff，使用职责清楚的提交信息。
-5. 推送当前分支；不自动创建 PR，不 force push，不破坏性处理非 fast-forward、冲突或认证异常。
-6. 不把无关修改、日志、临时项目、缓存、数据库、敏感信息或 `.git/config` 混入提交。
+始终遵守 [PROJECT_RULES.md](PROJECT_RULES.md) 的 Git 安全规则，包括前后状态检查、保留用户修改和显式暂存。实施类任务在用户未明确禁止提交或推送时，检查 staged diff、以职责清楚的信息提交并推送当前分支；不自动创建 PR，不破坏性处理非 fast-forward、冲突或认证异常。
 
 ## 必要禁止事项
 
-- 不把商品页、教程、博客或开源项目作为关键参数唯一依据。
-- 不在缺少官方资料时确定关键硬件参数。
-- 不伪造 EDA、ERC、DRC、制造、焊接或实测结果。
-- 不删除真实 Project 或迁移源，除非用户明确授权相应迁移阶段的删除动作。
+资料依据、禁止伪造结果与迁移源保护按 [PROJECT_RULES.md](PROJECT_RULES.md) 执行；未获用户明确授权，不删除真实 Project 或迁移源。
 
 ## 输出偏好
 

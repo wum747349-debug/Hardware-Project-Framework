@@ -1,6 +1,6 @@
 # 原理图通用检查表
 
-本 checklist 默认支持 Stage 4 Formal Schematic Review。Formal Review 使用适用的完整检查范围，并遵守完整 PDF / BOM 输入要求。用于 explicit scoped review / risk review 时，只应用与当前 scope 相关的 checklist items，证据要求与 scope 匹配；完整整板 PDF / BOM 和整板 Layout-entry decision 不因此成为 scoped review 的默认要求。
+本表是 Stage 4 Formal Schematic Review 的 Core coverage guard。Formal / Scoped 方法、输入边界、风险与输出见 [Schematic Review Skill](../skills/hardware-schematic-review/SKILL.md)；scoped review 只选当前范围。模块项只在实际存在相应电路时适用。按 [AI Context Guide](../docs/AI_Context_Guide.md) 补充项目专属检查，在当前 owning record 记录依据、结果、未覆盖项及不适用理由。
 
 ## 审查输入
 
@@ -20,7 +20,7 @@
 - [ ] startup / shutdown / reset / default / fault behavior 与必要 sequencing 已覆盖
 - [ ] protection boundary、power integrity、analog / digital interaction 与跨模块接口不存在未处理的系统级冲突
 - [ ] 适用的 hardware–firmware feasibility 没有被当前硬件资源、时序或接口实现阻断
-- [ ] 对已有 Stage 3 engineering rationale 只在 assumption 变化、evidence 不足、可信矛盾或此前未覆盖的 mandatory scope 下重新深入评估；完整 coverage 不等于机械重新设计
+- [ ] 完整适用范围由仍有效的既有 evidence 与本次必要检查覆盖，未覆盖项和证据限制明确
 
 ## 总体结构
 
@@ -29,6 +29,8 @@
 - [ ] 所有芯片地脚已连接
 - [ ] 去耦电容完整
 - [ ] 复位、启动、调试接口完整
+- [ ] 适用的时钟、未用脚、外设复用和默认 IO 状态符合当前器件资料与项目 pin map
+- [ ] 用户 LED / 按键等实际 IO 的引脚、限流 / 上下拉和有效电平明确
 - [ ] 通信接口方向清楚
 - [ ] 连接器引脚定义清楚
 - [ ] 关键参数有 datasheet 依据
@@ -41,7 +43,8 @@
 ## 电源
 
 - [ ] 输入电压范围符合需求
-- [ ] USB-C 供电时 CC 电阻配置符合当前用途
+- [ ] USB-C 供电时 VBUS 连接与 CC 配置符合当前角色和用途
+- [ ] 各实际电源轨的电压、供电能力与负载需求匹配；外引电源用途、保护与反灌风险明确
 - [ ] 输入端保险丝、TVS、ESD 或反接保护已按风险评估
 - [ ] LDO / DC-DC 输入输出电容符合 datasheet
 - [ ] EN / FB / PG / GND 等关键引脚连接正确
@@ -52,7 +55,7 @@
 
 ## 通信接口
 
-- [ ] UART / I2C / SPI 方向从 MCU 视角标注清楚
+- [ ] UART / I2C / SPI 等实际接口的方向、角色与片选定义清楚
 - [ ] I2C 上拉电阻、上拉电压或依赖外部上拉的说明明确
 - [ ] 接口电平与外接设备匹配
 - [ ] 外部接口的 ESD 保护需求已评估
@@ -71,8 +74,8 @@
 ## MOSFET / 功率输出
 
 - [ ] MOSFET 类型、Vds、Id、Rds(on)、Vgs 满足需求并有 datasheet 依据
-- [ ] MCU GPIO 可在当前电压下可靠驱动 MOSFET
-- [ ] 栅极串联电阻和默认下拉电阻合理
+- [ ] 实际控制器 / 驱动器可在当前电压与动态条件下可靠驱动 MOSFET
+- [ ] 栅极串联电阻与默认偏置符合当前驱动方式和安全状态
 - [ ] 感性负载有续流路径或保护说明
 - [ ] 负载接口极性、电压范围和共地要求明确
 - [ ] 大电流回路不会明显干扰 MCU、ADC 或通信接口
