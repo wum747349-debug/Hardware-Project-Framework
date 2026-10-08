@@ -2,6 +2,45 @@
 
 本文件记录 Framework 方法、结构、Template、Skill、Checklist 与 Validator 的发布级变化。真实 Project 的硬件 revision 和项目 release 由各 Standalone Project Repository 自己维护。
 
+## v1.5.0
+
+### Changed / Improved
+
+- 明确 Documentation Responsibility / Rule Ownership：Contract 定义规则，Workflow 定义生命周期，Skill 提供执行方法，Checklist 覆盖防遗漏项，Guide 提供解释和导航，Template 实现 Contract，Validator 检查 Contract；摘要和派生视图继续回源到 owning authority，不建立第二事实源。
+- 对齐 Workflow / Skill / Checklist 职责：Workflow 负责 when（Stage / Gate / lifecycle），Skill 负责 how（执行方法），Checklist 负责 what must not be missed（检查覆盖与防遗漏），不互相重定义规则或门禁。
+- 明确 Project-specific Review Scope 由以下输入共同形成，按实际适用范围和证据开展检查：
+
+  ```text
+  Applicable Core Checklist
+  + Applicable domain / module guidance
+  + Current Project Facts
+  + Current schematic / BOM / PCB / implementation
+  + Manufacturer official documentation
+  + Known risks
+  ↓
+  Project-specific Review Scope
+  ```
+
+- 简化 Framework Core / conditional Checklist 分层：analog frontend、power、STM32 等专项 checklist 是按需使用的 conditional reference fragments，不建立每芯片一份的 Framework Checklist database；没有专项 fragment 不代表对应模块或风险可免检。
+- 明确 owning record model：Project-specific review scope 和结果写入当前 Stage 既有 owning records；普通项目专属检查不机械创建额外 checklist 文件，早期 scoped review 不提前启用后续 Stage 文档。
+- 优化 AI Context：减少 always-on AI context weight，保留 Authority、Decision Reuse、Bounded Execution、Evidence Boundary 和 context routing，不改变 Project startup route 或四层上下文模型。
+
+### Compatibility
+
+- Release classification: MINOR — backward-compatible Framework capability improvement
+- RC required: NO — bounded method and documentation improvements covered by canonical validation and existing compatibility checks
+- Runtime Contract: UNCHANGED
+- Structural Contract: UNCHANGED
+- Project Structure Version: 1 — UNCHANGED
+- `FRAMEWORK.md` schema: UNCHANGED
+- Project `AGENTS.md` routing contract: UNCHANGED
+- Project `PROJECT_RULES.md` Runtime Rules contract: UNCHANGED
+- Required / Conditional / Stage-enabled model: UNCHANGED
+- Stage / Gate architecture: UNCHANGED
+- Project facts authority and repository authority model: UNCHANGED
+- Validator required structure: UNCHANGED
+- Existing Standalone Projects are not automatically rebound by this release; eligible Projects may adopt v1.5.0 through Compatible Framework Sync after project-specific impact validation.
+
 ## v1.4.1
 
 ### Changed
