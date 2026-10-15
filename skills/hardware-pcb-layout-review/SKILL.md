@@ -52,19 +52,40 @@ description: Guide and review PCB placement, routing, copper, return paths, and 
 
 使用 Preflight Checklist 核对输入与前置条件，再根据已确认的制造、机械、封装和器件约束形成项目规则基线。区分板厂制造能力、项目设计默认值和制造极限；按下述方法选择 Scope 与 Altium Rule Priority，由用户确认实际配置及匹配范围，最后记录阻断项与结论。
 
-Rule organization principle：使用能够准确表达工程意图的最简单 Scope，并保持最小且可维护的规则集。
+### Rule Necessity 与 Minimum Effective Rule Set
 
-- 多个对象共享相同 electrical、routing 或 manufacturing behavior，且形成稳定、有工程意义的类别时，优先使用对应的 Net Class 或 Object Class scope，避免重复成员 Query。
-- 单个特殊 Net、Object、Layer 或例外情况，使用最简单准确的 Explicit Scope 或 Custom Query；不要仅因工具支持复杂 Query 就增加复杂度。
-- 只有存在真实的 electrical、routing、manufacturing、mechanical 或 verification / traceability difference 时，才新增 Altium Rule Priority 更高的 exception rule；不要创建行为完全相同的重复 Rule。
+采用 **Minimum Effective Rule Set**：用尽可能简单、可准确检查、违反后真正值得处理的 DRC Rules 守住制造、电气、安全、机械及其他真实硬约束；其余设计意图通过 Placement、Routing 和 Layout Review 实现，在满足硬约束后尽量保留 Layout / Routing freedom。这不追求 Rule 数量绝对最少：删除一条会明显增加真实错误漏检风险，继续增加则主要增加配置、维护或 nuisance violations。
+
+对拟进入 Rule 的约束依次做两道判断（Rule Necessity Test，不是新增 Stage / Gate）：
+
+1. **Gate 1 — Enforcement Worthiness**：违反后是否通常应要求用户修正，或经过明确审查后豁免？制造要求、电气硬限值、安全 / 隔离、载流、机械硬边界、强制 impedance / length / topology / interface requirement，以及简单且真实有价值的 project-wide default guardrail 可以满足此条件。仅仅更理想、更漂亮、一般建议、可能略微改善 EMI / coupling 或 functional zoning preference，默认不足以建立 DRC Rule。
+2. **Gate 2 — DRC Suitability**：Altium Rule 能否准确检查，且 Rule 是否是控制该问题的正确手段？例如 minimum trace width、minimum electrical clearance、可准确检查的 mechanical keepout 通常适合；敏感模拟区远离开关区、switching loop 紧凑、reference path 安静，通常作为 Placement Guidance、Routing Guidance 或 Layout Review Criterion，除非当前 Project 有更具体且可准确检查的硬性 requirement。
+
+仅 `Gate 1 = YES + Gate 2 = YES` 才成为 DRC Rule candidate；否则优先转为 Guidance / Review Criterion。真实硬约束即使不适合 DRC，也必须通过适用的实现与核对手段守住。
+
+**DRC 是 enforcement system，不是 engineering-intent database。** 保持 `DRC violation ≈ 用户真正应处理、核对或明确豁免的问题`：不让 soft layout / ideal routing preference 或 arbitrary extra margin 大量产生 violation，不为“保险”机械增加特殊 Clearance / Width / Via / Priority；也不得削弱必要的 manufacturing / electrical / safety / mechanical constraints。
+
+### Rule organization 与 Scope
+
+通过 Rule Necessity 判断后，先判断简单 Project Default 能否覆盖，再判断是否需要 Exception，最后选择最简单准确的 Scope：
+
+- 采用 `Broad Default → 少数真正不同的对象 → Minimal Specific Exception`；只有默认规则确实不能满足其必要约束时才增加 exception rule，并在与默认规则重叠时明确 Altium Rule Priority；不要创建行为完全相同的重复 Rule。
+- 单个特殊 Net 或少数仅被一条 Rule 使用的对象，优先 simple Explicit Scope、`InNet()` 或简单 Custom Query；不要为一个 Net 创建单成员 Class，也不要仅因工具支持复杂 Query 就增加复杂度。
+- **Net Class / Object Class 是 Rule scope reuse 工具，不是功能标签系统。** 默认建 Class 应同时具备多个稳定成员、当前确实共享相同 Rule behavior、至少一个当前实际 Rule consumer；不要求被多个 Rule 使用。没有 consumer 默认不建；仅能命名为 `REFERENCE`、`ADC_DIGITAL`、`ANALOG_SENSITIVE` 或 `POWER` 不构成理由，不先建立大量 functional Class 再为其寻找 Rule。
+
+### Initial baseline 与 Incremental Configuration
 
 当当前任务意图主要是 PCB rule preparation、EDA rule preparation、Altium rule configuration 或 Layout Preflight rule baseline 时，Mode A 默认采用 configuration-first 输出：先给出已知的 manufacturer / stackup baseline，再给出当前证据可支持、可直接配置的规则表示，随后补充简短工程依据、例外和真正未决项；若制造与 stackup baseline 已明确，不机械重复完整背景说明。不要先长篇解释全部 rule category，也不要因为 EDA tool 或 checklist 中存在某类 rule 就逐项展开。
 
-规则表示优先使用紧凑表格或等价结构，使用户不需要从散文中重新拼装配置。字段可按规则类型调整，通常应让 `Rule`、`Scope`、`Value / Range / Setting`、`Unit`、`Priority / Note` 清楚可见；使用 Net Class、Differential Pair Class 或 Object Class 时，列出当前可靠 evidence 已确认的实际 members，无法可靠确认的成员标记为 `待 Project / netlist / EDA evidence 核对`，不得猜测。存在重叠规则时，应明确 default rule、exception rule 及其覆盖 / priority 关系；不要求所有规则使用数字 Priority，也不要求所有规则都建立 Class。
+规则表示优先使用紧凑表格或等价结构，使用户不需要从散文中重新拼装配置。字段可按规则类型调整，通常应让 `Rule`、`Scope`、`Value / Range / Setting`（含单位）、`Why it exists`、`Exception / Priority / Note` 清楚可见；使用 Net Class、Differential Pair Class 或 Object Class 时，列出当前可靠 evidence 已确认的实际 members，无法可靠确认的成员标记为 `待 Project / netlist / EDA evidence 核对`，不得猜测。存在重叠规则时，应明确 default rule、exception rule 及其覆盖 / priority 关系；不要求所有规则使用数字 Priority，也不要求所有规则都建立 Class。
 
-第一轮 rule baseline 只展开当前项目真正适用的 electrical、routing、placement、plane-copper、mechanical 或 manufacturing constraints。普通项目中 Clearance、Width、Routing Via Style、Component Clearance，以及使用 polygon / copper pour 时的 Polygon Connect Style 等可能常见；Differential Pair、Impedance、Length / Matched Length、creepage / isolation、Board Outline / mechanical clearance、hole / drilling、mask / paste / silkscreen 或其他特殊制造约束只在项目需求、资料或制造基线实际触发时展开。这些只是 examples，不是固定分类或强制清单。
+第一次建立 rule baseline 时，可以一次性给出完整的 **minimal applicable rule set**，不要求 one-rule-per-turn，也不套用 B1 的一次一个 Placement 变更。只展开当前项目真正适用且通过 Rule Necessity 判断的约束。普通项目中 Clearance、Width、Routing Via Style、Component Clearance，以及使用 polygon / copper pour 时的 Polygon Connect Style 等可能常见；Differential Pair、Impedance、Length / Matched Length、creepage / isolation、Board Outline / mechanical clearance、hole / drilling、mask / paste / silkscreen 或其他特殊制造约束只在项目需求、资料或制造基线实际触发时展开。这些只是 examples，不是固定分类或强制清单。
 
-Rule Preparation 默认回答 `what to configure`，不主动输出 Altium click-by-click UI tutorial；只有用户明确询问设置位置、提供 AD 截图要求操作指导，或配置问题需要 Interactive EDA Guidance 时，才说明具体 UI 操作。单纯 Rule Preparation 也不自动扩展到 placement、routing sequence、GND stitching、polygon geometry、copper shape 或铺铜实现建议，除非规则定义本身依赖这些内容，或用户明确询问。
+后续 Incremental Configuration 默认只回答 `Current decision + 必要理由 + 直接受影响的 exception / existing rule`；例如用户只问 Default Width 能否调整，不重新输出无关的 Clearance、Via、Polygon、Board Edge 或 power / reference rules。仅在用户要求一步一步、当前 UI 状态不清楚、Scope 命中异常、Priority / overlap 冲突、截图操作判断或配置需要 feedback loop 时，采用逐步交互。
+
+Rule Preparation 默认回答 `What / Why / Directly relevant exceptions`，不主动输出菜单、Query / Priority 设置步骤或 click-by-click UI tutorial；只有用户明确询问设置位置、Query 写法、Priority 调整或根据截图下一步操作时，才展开 UI guidance。单纯 Rule Preparation 也不自动扩展到 placement、routing sequence、GND stitching、polygon geometry、copper shape 或铺铜实现建议，除非规则定义本身依赖这些内容，或用户明确询问。
+
+继承 [AI Context Guide](../../docs/AI_Context_Guide.md) 的 Engineering Conclusion Inheritance：用户已经确认并实际配置的 Class / Rule / Scope / 数值属于当前 Working Baseline；没有该指南定义的有效 re-evaluation trigger 时，不得仅因 AI 下一回合想到另一种方案就重新设计。
 
 Layout Preflight 不要求初始 DRC。用户可以使用 Altium 在线规则检查或临时检查，但不得把 DRC 结果作为批准开始正式布局的默认仓库门禁。
 

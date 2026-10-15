@@ -65,10 +65,10 @@
 | 检查项 | 结论 | 依据 / 证据 | 状态 |
 |---|---|---|---|
 | `docs/pcb_design_rules.md` 已形成，包含单位、依据、规则值、Scope 和 Priority |  |  |  |
-| 仅在存在真实 electrical behavior、routing behavior、manufacturing requirement、mechanical 或 verification / traceability need 差异时，已建立必要分类或明确 Scope |  |  |  |
-| Net Class 或明确网络 Scope 的选择与项目需求一致 |  |  |  |
+| 默认规则与必要例外使用最简单准确的 Scope，不建立行为相同的重复规则 |  |  |  |
+| Class 具备多个稳定成员、相同 Rule behavior 和至少一个当前实际 Rule consumer，不仅为 functional label 建 Class |  |  |  |
 | 当前项目实际适用的 electrical、routing、placement、plane-copper、mechanical 与 manufacturing constraints 已形成必要规则基线 |  |  |  |
-| 只有存在真实专项 electrical、routing、signal-integrity、power、isolation 或其他约束时才定义专项规则；不因类别名称机械逐项建立或标记规则 |  |  |  |
+| 专项 Rule 已通过 PCB Layout Skill Mode A 的 Rule Necessity 判断，不因类别名称机械逐项建立或标记规则 |  |  |  |
 | 用户已在 Altium Designer 中配置关键实际规则 |  |  |  |
 | 用户已人工核对关键 Scope 仅匹配预期对象，默认规则无覆盖空洞 |  |  |  |
 | 用户已人工核对专项规则 Priority 高于重叠默认规则，文档与 AD 配置一致 |  |  |  |
