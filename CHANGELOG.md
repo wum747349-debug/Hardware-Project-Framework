@@ -2,6 +2,33 @@
 
 本文件记录 Framework 方法、结构、Template、Skill、Checklist 与 Validator 的发布级变化。真实 Project 的硬件 revision 和项目 release 由各 Standalone Project Repository 自己维护。
 
+## v1.5.1
+
+### Fixed
+
+- 明确 Minimum Effective Rule Set：使用简单、可准确检查且违反后值得处理的 DRC Rules 守住真实工程约束，在满足硬约束后保留 Layout / Routing freedom，不追求规则数量绝对最少。
+- 增加 Rule Necessity Test：依次判断 Enforcement Worthiness 与 DRC Suitability；真实有价值的 project-wide default guardrail 仍可保留，不新增生命周期 Stage / Gate。
+- 明确 DRC 是 enforcement system，不是 engineering-intent database；减少 soft preference 和 arbitrary extra margin 导致的 nuisance violations，不削弱必要制造、电气、安全或机械约束。
+- 明确 Net Class / Object Class 是 Rule scope reuse 工具，不是 functional label system；默认要求多个稳定成员、相同 Rule behavior 和至少一个实际 Rule consumer。单个或少量特殊对象优先使用 `InNet()`、Explicit Scope 或简单 Custom Query。
+- 采用 Broad Default → Minimal Specific Exception；soft intent 优先转为 Placement Guidance、Routing Guidance 或 Layout Review Criterion，避免不必要的 Clearance / Width / Via exception 与 Priority chain。
+- 区分首次完整 minimal applicable rule baseline 与后续单项增量配置，保持按需 UI guidance，并直接继承 AI Context Guide 的 Engineering Conclusion Inheritance。
+
+### Compatibility
+
+- Release classification: PATCH — backward-compatible Framework guidance fix
+- RC required: NO — bounded Skill / Checklist clarification without Runtime / Structural Contract changes
+- Runtime Contract: UNCHANGED
+- Structural Contract: UNCHANGED
+- Project Structure Version: 1 — UNCHANGED
+- `FRAMEWORK.md` schema: UNCHANGED
+- Project `AGENTS.md` routing contract: UNCHANGED
+- Project `PROJECT_RULES.md` Runtime Rules contract: UNCHANGED
+- Required / Conditional / Stage-enabled model: UNCHANGED
+- Stage / Gate architecture: UNCHANGED
+- Project facts authority and repository authority model: UNCHANGED
+- Validator required structure: UNCHANGED
+- Existing Standalone Projects are not automatically rebound by this release; eligible Projects may adopt v1.5.1 through Compatible Framework Sync after project-specific impact validation.
+
 ## v1.5.0
 
 ### Changed / Improved
